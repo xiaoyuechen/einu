@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <mutex>
 
 namespace ecs {
 class Free_index_stack {
@@ -15,6 +16,7 @@ class Free_index_stack {
 
  private:
   std::vector<value_type> stack_;
+  std::mutex mutex_;
 };
 
 inline typename Free_index_stack::size_type Free_index_stack::size() const

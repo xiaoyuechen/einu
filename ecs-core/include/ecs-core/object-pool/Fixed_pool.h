@@ -32,8 +32,8 @@ class Fixed_pool {
   size_type size() const noexcept;
   size_type free_size() const noexcept;
 
-  [[nodiscard]] pointer aquire();
-  void recall(pointer obj);
+  [[nodiscard]] reference aquire();
+  void recall(const_reference obj);
 
  private:
   Free_index_stack free_index_stack_;
@@ -82,14 +82,14 @@ Fixed_pool<T, Allocator>::free_size() const noexcept {
 }
 
 template <typename T, typename Allocator>
-inline typename Fixed_pool<T, Allocator>::pointer
+inline typename Fixed_pool<T, Allocator>::reference
 Fixed_pool<T, Allocator>::aquire() {
-  return object_arr_.data() + free_index_stack_.aquire();
+  return object_arr_[free_index_stack_.aquire()];
 }
 
 template <typename T, typename Allocator>
-inline void Fixed_pool<T, Allocator>::recall(pointer obj) {
-  auto index = obj - object_arr_.data();
+inline void Fixed_pool<T, Allocator>::recall(const_reference obj) {
+  auto index = &obj - object_arr_.data();
   free_index_stack_.recall(index);
 }
 }  // namespace ecs

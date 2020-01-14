@@ -2,6 +2,7 @@
 #include "ecs-core/entities/Entity.h"
 #include "ecs-core/object-pool/Fixed_pool.h"
 #include <map>
+#include <mutex>
 
 namespace ecs {
 template <typename T>
@@ -22,6 +23,7 @@ class Component_manager {
  private:
   Pool& pool_;
   Map map_;
+  std::mutex mutex_;
 };
 
 template <typename T>
@@ -30,6 +32,9 @@ class Component_manager<T>::Handle {
   Handle(T& comp, const Entity& entity, Component_manager<T>& manager);
   T* operator->();
   const T* operator->() const;
+  T& operator*();
+  const T& operator*() const;
+  const Entity& get_owner() const;
   void destroy();
 
  private:
@@ -51,6 +56,21 @@ inline const T* Component_manager<T>::Handle::operator->() const {
 }
 
 template <typename T>
+inline T& Component_manager<T>::Handle::operator*() {
+  return comp_;
+}
+
+template <typename T>
+inline const T& Component_manager<T>::Handle::operator*() const {
+  return comp_;
+}
+
+template <typename T>
+inline const Entity& Component_manager<T>::Handle::get_owner() const {
+  return entity_;
+}
+
+template <typename T>
 inline void Component_manager<T>::Handle::destroy() {
   manager_.remove(entity_);
 }
@@ -69,7 +89,11 @@ inline Component_manager<T>::Component_manager(Pool& pool)
 
 template <typename T>
 inline void Component_manager<T>::add(const Entity& entity) {
-  map_[entity] = pool_.aquire();
+  assert(map_.find(entity) == std::end(map_) &&
+         "entity already have component");
+  auto& comp = pool_.aquire();
+  auto lock = std::scoped_lock(mutex_);
+  map_[entity] = &comp;
 }
 
 template <typename T>
@@ -82,9 +106,9 @@ inline typename Component_manager<T>::Handle Component_manager<T>::get(
 
 template <typename T>
 inline void Component_manager<T>::remove(const Entity& entity) {
-  auto found = map_.find(entity);
-  assert(found != std::end(map_) && "entity does not have component");
-  pool_.recall(found->second);
-  map_.erase(found);
+  auto handle = get(entity);
+  pool_.recall(*handle);
+  auto lock = std::scoped_lock(mutex_);
+  map_.erase(entity);
 }
 }  // namespace ecs

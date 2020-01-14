@@ -13,6 +13,7 @@ class Entity {
  public:
   constexpr explicit Entity(size_type id) noexcept;
   constexpr size_type id() const noexcept;
+  constexpr bool operator==(const Entity& rhs) const noexcept;
 
  private:
   size_type id_;
@@ -23,6 +24,10 @@ inline constexpr Entity::Entity(size_type id) noexcept
 
 inline constexpr typename Entity::size_type Entity::id() const noexcept {
   return id_;
+}
+
+inline constexpr bool Entity::operator==(const Entity& rhs) const noexcept {
+  return id() == rhs.id();
 }
 }  // namespace ecs
 
