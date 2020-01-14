@@ -48,6 +48,9 @@
     <ClInclude Include="include\ecs-core\object-pool\Free_index_stack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\ecs-core\managers\World.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Entity.cpp">
@@ -63,6 +66,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\Entity_manager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\World.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

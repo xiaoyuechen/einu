@@ -141,6 +141,7 @@
     <ClInclude Include="include\ecs-core\entities\Entity.h" />
     <ClInclude Include="include\ecs-core\managers\Component_manager.h" />
     <ClInclude Include="include\ecs-core\managers\Entity_manager.h" />
+    <ClInclude Include="include\ecs-core\managers\World.h" />
     <ClInclude Include="include\ecs-core\object-pool\Fixed_pool.h" />
     <ClInclude Include="include\ecs-core\object-pool\Free_index_stack.h" />
     <ClInclude Include="include\ecs-core\systems\System.h" />
@@ -153,6 +154,7 @@
     <ClCompile Include="source\Entity.cpp" />
     <ClCompile Include="source\Entity_manager.cpp" />
     <ClCompile Include="source\Free_index_stack.cpp" />
+    <ClCompile Include="source\World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".clang-format" />
