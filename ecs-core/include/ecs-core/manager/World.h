@@ -17,7 +17,7 @@ class World {
  private:
   using Sys_ptr = std::unique_ptr<I_system>;
   std::vector<Sys_ptr> system_arr_;
-  EntityManager entity_manager_;
+  Entity_manager entity_manager_;
 };
 }  // namespace ecs
 

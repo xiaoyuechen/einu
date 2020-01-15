@@ -5,10 +5,10 @@
 #include "ecs-core/entity/Entity.h"
 #include "ecs-core/manager/Component_manager.h"
 #include "ecs-core/manager/Entity_id_manager.h"
+#include "ecs-core/admin/Component_admin.h"
 
 namespace ecs {
-
-class EntityManager {
+class Entity_manager {
  public:
   class Handle;
 
@@ -17,29 +17,28 @@ class EntityManager {
       std::map<Component_type, std::unique_ptr<I_component_manager>>;
 
  public:
-  template <typename T>
-  void add_component_manager(
-      std::unique_ptr<Component_manager<T>> m);
+  Entity_manager(std::unique_ptr<Component_admin> comp_admin);
 
   [[nodiscard]] Handle spawn_entity();
 
   template <typename T>
-  std::optional<typename Component_manager<T>::Handle> get_component(const Entity& e);
+  std::optional<typename Component_manager<T>::Handle> get_component(
+      const Entity& e);
 
   template <typename T>
   typename Component_manager<T>::Handle add_component(const Entity& e);
 
-  template<typename T>
+  template <typename T>
   void remove_component(const Entity& e);
 
  private:
   Entity_id_manager id_manager_;
-  Component_manager_map component_manager_map_;
+  std::unique_ptr<Component_admin> comp_admin_;
 };
 
-class EntityManager::Handle {
+class Entity_manager::Handle {
  public:
-  Handle(const Entity& e, EntityManager& m);
+  Handle(const Entity& e, Entity_manager& m);
 
   Entity* operator->();
   const Entity* operator->() const;
@@ -49,63 +48,73 @@ class EntityManager::Handle {
   template <typename T>
   typename Component_manager<T>::Handle add_component();
 
+  template <typename T>
+  void remove_component();
+
+  template <typename T>
+  std::optional<typename Component_manager<T>::Handle> get_component();
+
  private:
   Entity entity_;
-  EntityManager& manager_;
+  Entity_manager& manager_;
 };
 }  // namespace ecs
 
 namespace ecs {
 template <typename T>
-inline void EntityManager::add_component_manager(
-    std::unique_ptr<Component_manager<T>> m) {
-  auto comp_type = type_of<T>();
-
-  assert(component_manager_map_.find(comp_type) ==
-             std::end(component_manager_map_) &&
-         "component manager already exists");
-
-  component_manager_map_[comp_type] = std::move(m);
-}
-
-template <typename T>
 inline std::optional<typename Component_manager<T>::Handle>
-EntityManager::get_component(
-    const Entity& e) {
-  auto comp_type = type_of<T>();
-  auto found = component_manager_map_.find(comp_type);
-  if (found != std::end(component_manager_map_)) {
-    auto& m =
-      static_cast<Component_manager<T>&>(*component_manager_map_[comp_type]);
-    auto c = m.get(e);
+Entity_manager::get_component(const Entity& e) {
+  auto m = comp_admin_->get_manager<T>();
+  if (m.has_value()) {
+    auto c = m.value()->get(e);
     if (c.has_value()) {
-      return Component_manager<T>::Handle(*c.value(), e, m);
+      return c.value();
     }
   }
   return std::nullopt;
 }
 
 template <typename T>
-inline typename Component_manager<T>::Handle EntityManager::add_component(
+inline typename Component_manager<T>::Handle Entity_manager::add_component(
     const Entity& e) {
-    assert(!get_component<T>(e).has_value() && "entity already has component");
-  auto comp_type = type_of<T>();
-  auto& m =
-      static_cast<Component_manager<T>&>(*component_manager_map_[comp_type]);
-  auto c = m.add(e);
-  return Component_manager<T>::Handle(*c, e, m);
+  assert(!get_component<T>(e).has_value() && "entity already has component");
+  auto m = comp_admin_->get_manager<T>();
+  assert(m.has_value() && "component manager not found in component admin");
+  return m.value()->add(e);
 }
 
 template <typename T>
-inline void EntityManager::remove_component(const Entity& e) {}
+inline void Entity_manager::remove_component(const Entity& e) {
+  auto c = get_component<T>(e);
+  assert(c.has_value() && "enitity does not have component");
+  c.value().destroy();
+}
 
-inline typename Entity* EntityManager::Handle::operator->() { return &entity_; }
-inline typename const Entity* EntityManager::Handle::operator->() const { return &entity_; }
-inline typename Entity& EntityManager::Handle::operator*() { return entity_; }
-inline typename const Entity& EntityManager::Handle::operator*() const { return entity_; }
+inline typename Entity* Entity_manager::Handle::operator->() {
+  return &entity_;
+}
+inline typename const Entity* Entity_manager::Handle::operator->() const {
+  return &entity_;
+}
+inline typename Entity& Entity_manager::Handle::operator*() { return entity_; }
+inline typename const Entity& Entity_manager::Handle::operator*() const {
+  return entity_;
+}
 
 template <typename T>
-inline typename Component_manager<T>::Handle EntityManager::Handle::add_component() {
+inline typename Component_manager<T>::Handle
+Entity_manager::Handle::add_component() {
   return manager_.add_component<T>(entity_);
+}
+
+template <typename T>
+inline void Entity_manager::Handle::remove_component() {
+  manager_.remove_component<T>(entity_);
+}
+
+template <typename T>
+inline std::optional<typename Component_manager<T>::Handle>
+Entity_manager::Handle::get_component() {
+  return manager_.get_component<T>(entity_);
 }
 }  // namespace ecs

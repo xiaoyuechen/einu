@@ -153,6 +153,7 @@
     <ClInclude Include="include\ecs-core\utility\util.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\Component_admin.cpp" />
     <ClCompile Include="source\Component_mask.cpp" />
     <ClCompile Include="source\Component_type.cpp" />
     <ClCompile Include="source\Entity.cpp" />

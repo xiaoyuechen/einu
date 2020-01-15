@@ -13,7 +13,6 @@ template <typename T>
 class Component_manager : public I_component_manager {
   static_assert(std::is_base_of<I_component, T>() &&
                 "T must inherit from Component class");
-
  public:
   class Handle;
 
@@ -25,7 +24,7 @@ class Component_manager : public I_component_manager {
   Component_manager(std::unique_ptr<Pool> pool);
   ~Component_manager() = default;
 
-  [[nodiscard]] Handle add(const Entity& entity);
+  Handle add(const Entity& entity);
   [[nodiscard]] std::optional<Handle> get(const Entity& entity);
   void remove(const Entity& entity);
 
@@ -52,10 +51,44 @@ class Component_manager<T>::Handle {
   Component_manager<T>& manager_;
 };
 
-
+template<typename T>
+std::unique_ptr<Component_manager<T>> create_component_manager(
+    size_t pool_size);
 }  // namespace ecs
 
 namespace ecs {
+template <typename T>
+inline Component_manager<T>::Component_manager(std::unique_ptr<Pool> pool)
+    : pool_(std::move(pool)) {}
+
+template <typename T>
+inline typename Component_manager<T>::Handle Component_manager<T>::add(
+    const Entity& entity) {
+  assert(!get(entity).has_value() && "entity already have component");
+  auto& comp = pool_->aquire();
+  auto lock = std::scoped_lock(mutex_);
+  map_[entity] = &comp;
+  return Handle(comp, entity, *this);
+}
+
+template <typename T>
+inline std::optional<typename Component_manager<T>::Handle>
+Component_manager<T>::get(const Entity& entity) {
+  if (map_.find(entity) != std::end(map_)) {
+    return Handle(*map_[entity], entity, *this);
+  }
+  return std::nullopt;
+}
+
+template <typename T>
+inline void Component_manager<T>::remove(const Entity& entity) {
+  assert(get(entity).has_value() && "entity does not have component");
+  auto handle = get(entity).value();
+  pool_->recall(*handle);
+  auto lock = std::scoped_lock(mutex_);
+  map_.erase(entity);
+}
+
 template <typename T>
 inline T* Component_manager<T>::Handle::operator->() {
   return &comp_;
@@ -95,37 +128,10 @@ inline Component_manager<T>::Handle::Handle(T& comp,
     , manager_(manager) {}
 
 template <typename T>
-inline Component_manager<T>::Component_manager(std::unique_ptr<Pool> pool)
-    : pool_(std::move(pool)) {}
-
-template <typename T>
-inline typename Component_manager<T>::Handle Component_manager<T>::add(
-    const Entity& entity) {
-  assert(!get(entity).has_value() &&
-         "entity already have component");
-  auto& comp = pool_->aquire();
-  auto lock = std::scoped_lock(mutex_);
-  map_[entity] = &comp;
-  return Handle(comp, entity, *this);
-}
-
-template <typename T>
-inline std::optional<typename Component_manager<T>::Handle>
-Component_manager<T>::get(
-    const Entity& entity) {
-  if (map_.find(entity) != std::end(map_))
-  {
-    return Handle(*map_[entity], entity, *this);
-  }
-  return std::nullopt;
-}
-
-template <typename T>
-inline void Component_manager<T>::remove(const Entity& entity) {
-  assert(get(entity).has_value() && "entity does not have component");
-  auto handle = get(entity).value();
-  pool_->recall(*handle);
-  auto lock = std::scoped_lock(mutex_);
-  map_.erase(entity);
+std::unique_ptr<Component_manager<T>> create_component_manager(
+    size_t pool_size) {
+  auto p = std::make_unique<typename Component_manager<T>::Pool>(pool_size);
+  auto m = std::make_unique<Component_manager<T>>(std::move(p));
+  return m;
 }
 }  // namespace ecs

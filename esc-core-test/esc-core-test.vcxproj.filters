@@ -8,18 +8,19 @@
     <ClCompile Include="Fixed_pool.cpp">
       <Filter>tests</Filter>
     </ClCompile>
-    <ClCompile Include="Entity_manager.cpp">
-      <Filter>tests</Filter>
-    </ClCompile>
     <ClCompile Include="component_mask.cpp">
       <Filter>tests</Filter>
     </ClCompile>
     <ClCompile Include="component_admin.cpp">
       <Filter>tests</Filter>
     </ClCompile>
+    <ClCompile Include="entity_manager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Test_component.h">
+      <Filter>tests</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
