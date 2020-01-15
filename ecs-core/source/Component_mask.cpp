@@ -10,6 +10,14 @@ void Component_mask::set(const Component_type& ct) { mask_.insert(ct); }
 
 void Component_mask::reset(const Component_type& ct) { mask_.erase(ct); }
 
+typename Component_mask::iterator Component_mask::cbegin() {
+  return std::cbegin(mask_);
+}
+
+typename Component_mask::iterator Component_mask::cend() {
+  return std::cend(mask_);
+}
+
 bool Component_mask::operator==(const Component_mask& rhs) const noexcept {
   return mask_ == rhs.mask_;
 }

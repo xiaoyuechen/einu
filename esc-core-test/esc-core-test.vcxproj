@@ -34,10 +34,11 @@
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
     <ClInclude Include="pch.h" />
-    <ClInclude Include="Test_component.h" />
+    <ClInclude Include="Test_class_collection.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="component_admin.cpp" />
+    <ClCompile Include="component_mask_manager.cpp" />
     <ClCompile Include="entity_manager.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -48,6 +49,7 @@
     <ClCompile Include="component_mask.cpp" />
     <ClCompile Include="Component_type.cpp" />
     <ClCompile Include="Fixed_pool.cpp" />
+    <ClCompile Include="world.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

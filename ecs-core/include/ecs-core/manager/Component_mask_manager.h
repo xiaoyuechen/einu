@@ -1,37 +1,85 @@
 #pragma once
 #include "ecs-core/component/Component_mask.h"
-#include "ecs-core/entity/Entity.h"
+#include "ecs-core/entity/Entity_id.h"
+#include "ecs-core/utility/pattern.h"
 #include <map>
 
 namespace ecs {
 class Component_mask_manager {
+ public:
+  struct Subject;
+
  private:
-  using map = std::map<Entity, Component_mask>;
+  using mask_map = std::map<Entity_id, Component_mask>;
+  using subject_map = std::map<Component_type, Subject>;
 
  public:
   template <typename T>
-  void add(const Entity& e);
+  void add(const Entity_id& e);
   template <typename T>
-  void remove(const Entity& e);
-  const Component_mask& get(const Entity& e) const;
+  void remove(const Entity_id& e);
+  const Component_mask& get(const Entity_id& e) const;
+
+  template <typename... Args>
+  bool has_components(const Entity_id& e) const;
+
+  bool has_components(const Entity_id& e, const Component_mask& m) const;
+
+  template <typename T>
+  patt::I_subject& get_subject();
 
  private:
-  map map_;
+  mask_map mask_map_;
+  subject_map sbj_map_;
+};
+
+struct Component_mask_manager::Subject : public patt::I_subject {
+  enum class Action { ADD, REMOVE } action;
+  Entity_id entity;
 };
 }  // namespace ecs
 
-namespace ecs{
+namespace ecs {
 template <typename T>
-inline void Component_mask_manager::add(const Entity& e) {  
-  map_[e].set(type_of<T>());
+inline void Component_mask_manager::add(const Entity_id& e) {
+  auto type = type_of<T>();
+  mask_map_[e].set(type);
+
+  auto& sbj = sbj_map_[type];
+  sbj.action = Component_mask_manager::Subject::Action::ADD;
+  sbj.entity = e;
+  sbj.broadcast();
 }
 
 template <typename T>
-inline void Component_mask_manager::remove(const Entity& e) {
-  map_[e].reset(type_of<T>());
+inline void Component_mask_manager::remove(const Entity_id& e) {
+  auto type = type_of<T>();
+  mask_map_[e].reset(type);
+
+  auto& sbj = sbj_map_[type];
+  sbj.action = Component_mask_manager::Subject::Action::ADD;
+  sbj.entity = e;
+  sbj.broadcast();
 }
 
-inline const Component_mask& ecs::Component_mask_manager::get(const Entity& e) const {
-  return map_.at(e);
+inline const Component_mask& Component_mask_manager::get(
+    const Entity_id& e) const {
+  return mask_map_.at(e);
+}
+
+template <typename... Args>
+inline bool Component_mask_manager::has_components(const Entity_id& e) const {
+  auto m = Component_mask{type_of<Args>()...};
+  return has_components(e, m);
+}
+
+inline bool Component_mask_manager::has_components(const Entity_id& e,
+                                            const Component_mask& m) const {
+  return (m & mask_map_.at(e)) == m;
+}
+
+template <typename T>
+inline patt::I_subject& Component_mask_manager::get_subject() {
+  return sbj_map_[type_of<T>()];
 }
 }  // namespace ecs

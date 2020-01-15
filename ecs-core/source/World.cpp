@@ -1,6 +1,4 @@
-#include "ecs-core/manager/World.h"
+#include "ecs-core/admin/World.h"
 
 namespace ecs {
-
-
-}
+}  // namespace ecs

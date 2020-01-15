@@ -1,17 +1,16 @@
 #include "pch.h"
 #include "ecs-core/manager/Entity_manager.h"
 #include "ecs-core/component/I_component.h"
-#include "Test_component.h"
+#include "Test_class_collection.h"
 
 namespace ecs {
 struct Entity_manager_test : testing::Test {
   Entity_manager_test()
-      : manager([] {
-        auto comp_admin = std::make_unique<Component_admin>();
-        comp_admin->add_manager(create_component_manager<C_0>(100));
-        comp_admin->add_manager(create_component_manager<C_1>(400));
-        return comp_admin;
-      }()) {}
+      : manager() {
+    auto& component_admin = manager.get_component_admin();
+    component_admin.add_manager(create_component_manager<C_0>(100));
+    component_admin.add_manager(create_component_manager<C_1>(400));
+  }
 
   Entity_manager manager;
 };

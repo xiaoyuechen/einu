@@ -1,9 +1,8 @@
 #include "pch.h"
 #include "ecs-core/admin/Component_admin.h"
-#include "Test_component.h"
+#include "Test_class_collection.h"
 
 namespace ecs {
-
 struct Component_admin_test : testing::Test {
   Component_admin_test()
   {

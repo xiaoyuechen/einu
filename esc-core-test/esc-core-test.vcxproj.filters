@@ -15,10 +15,16 @@
       <Filter>tests</Filter>
     </ClCompile>
     <ClCompile Include="entity_manager.cpp" />
+    <ClCompile Include="world.cpp">
+      <Filter>tests</Filter>
+    </ClCompile>
+    <ClCompile Include="component_mask_manager.cpp">
+      <Filter>tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
-    <ClInclude Include="Test_component.h">
+    <ClInclude Include="Test_class_collection.h">
       <Filter>tests</Filter>
     </ClInclude>
   </ItemGroup>

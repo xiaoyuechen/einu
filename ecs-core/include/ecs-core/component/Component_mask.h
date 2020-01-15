@@ -4,12 +4,12 @@
 
 namespace ecs {
 class Component_mask {
+ private:
+  using Mask = std::set<Component_type>;
  public:
   using size_type = std::size_t;
   using init_list = std::initializer_list<Component_type>;
-
- private:
-  using Mask = std::set<Component_type>;
+  using iterator = Mask::iterator;
 
  public:
   Component_mask() = default;
@@ -17,6 +17,9 @@ class Component_mask {
 
   void set(const Component_type& ct);
   void reset(const Component_type& ct);
+
+  iterator cbegin();
+  iterator cend();
 
   bool operator==(const Component_mask& rhs) const noexcept;
   bool operator!=(const Component_mask& rhs) const noexcept;

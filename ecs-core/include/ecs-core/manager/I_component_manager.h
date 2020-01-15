@@ -2,7 +2,7 @@
 namespace ecs {
 class I_component_manager {
  public:
-  virtual ~I_component_manager() = 0;
+  virtual ~I_component_manager();
 };
 }
 

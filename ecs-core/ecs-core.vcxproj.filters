@@ -33,9 +33,6 @@
     <ClInclude Include="include\ecs-core\component\I_component.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\ecs-core\entity\Entity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\ecs-core\manager\Component_manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -43,9 +40,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\ecs-core\manager\I_component_manager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ecs-core\manager\World.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\ecs-core\system\I_system.h">
@@ -66,11 +60,17 @@
     <ClInclude Include="include\ecs-core\manager\Component_mask_manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\ecs-core\utility\pattern.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-core\admin\World.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-core\entity\Entity_id.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\Entity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="source\Component_type.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -87,6 +87,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\Component_admin.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\pattern.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Entity_id.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

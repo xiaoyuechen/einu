@@ -1,6 +1,6 @@
 #pragma once
 #include <atomic>
-#include "ecs-core/entity/Entity.h"
+#include "ecs-core/entity/Entity_id.h"
 
 namespace ecs {
 class Entity_id_manager {
@@ -8,15 +8,15 @@ class Entity_id_manager {
   using size_type = std::size_t;
 
  public:
-  Entity create_entity();
+  Entity_id create_entity();
 
  private:
-  std::atomic<size_type> free_entity{0};
+  std::atomic<size_type> free_id_{0};
 };
 }  // namespace ecs
 
 namespace ecs {
-inline Entity Entity_id_manager::create_entity() {
-  return Entity{free_entity++};
+inline Entity_id Entity_id_manager::create_entity() {
+  return Entity_id{free_id_++};
 }
 }  // namespace ecs

@@ -136,30 +136,32 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="include\ecs-core\admin\Component_admin.h" />
+    <ClInclude Include="include\ecs-core\admin\World.h" />
     <ClInclude Include="include\ecs-core\component\I_component.h" />
     <ClInclude Include="include\ecs-core\component\Component_mask.h" />
     <ClInclude Include="include\ecs-core\component\Component_type.h" />
-    <ClInclude Include="include\ecs-core\entity\Entity.h" />
+    <ClInclude Include="include\ecs-core\entity\Entity_id.h" />
     <ClInclude Include="include\ecs-core\manager\Component_manager.h" />
     <ClInclude Include="include\ecs-core\manager\Component_mask_manager.h" />
     <ClInclude Include="include\ecs-core\manager\Entity_id_manager.h" />
     <ClInclude Include="include\ecs-core\manager\Entity_manager.h" />
     <ClInclude Include="include\ecs-core\manager\I_component_manager.h" />
-    <ClInclude Include="include\ecs-core\manager\World.h" />
     <ClInclude Include="include\ecs-core\object-pool\Fixed_pool.h" />
     <ClInclude Include="include\ecs-core\object-pool\Free_index_stack.h" />
     <ClInclude Include="include\ecs-core\system\RenderingSystem.h" />
     <ClInclude Include="include\ecs-core\system\I_system.h" />
     <ClInclude Include="include\ecs-core\utility\algorithm.h" />
+    <ClInclude Include="include\ecs-core\utility\pattern.h" />
     <ClInclude Include="include\ecs-core\utility\util.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Component_admin.cpp" />
     <ClCompile Include="source\Component_mask.cpp" />
     <ClCompile Include="source\Component_type.cpp" />
-    <ClCompile Include="source\Entity.cpp" />
+    <ClCompile Include="source\Entity_id.cpp" />
     <ClCompile Include="source\Entity_manager.cpp" />
     <ClCompile Include="source\Free_index_stack.cpp" />
+    <ClCompile Include="source\pattern.cpp" />
     <ClCompile Include="source\World.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

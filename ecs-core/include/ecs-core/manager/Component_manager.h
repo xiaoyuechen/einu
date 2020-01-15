@@ -3,7 +3,7 @@
 #include <mutex>
 #include <memory>
 #include <optional>
-#include "ecs-core/entity/Entity.h"
+#include "ecs-core/entity/Entity_id.h"
 #include "ecs-core/manager/I_component_manager.h"
 #include "ecs-core/component/I_component.h"
 #include "ecs-core/object-pool/Fixed_pool.h"
@@ -17,16 +17,16 @@ class Component_manager : public I_component_manager {
   class Handle;
 
  public:
-  using Map = std::map<Entity, T*>;
+  using Map = std::map<Entity_id, T*>;
   using Pool = Fixed_pool<T>;
 
  public:
   Component_manager(std::unique_ptr<Pool> pool);
   ~Component_manager() = default;
 
-  Handle add(const Entity& entity);
-  [[nodiscard]] std::optional<Handle> get(const Entity& entity);
-  void remove(const Entity& entity);
+  Handle add(const Entity_id& entity);
+  [[nodiscard]] std::optional<Handle> get(const Entity_id& entity);
+  void remove(const Entity_id& entity);
 
  private:
   std::unique_ptr<Pool> pool_;
@@ -37,17 +37,17 @@ class Component_manager : public I_component_manager {
 template <typename T>
 class Component_manager<T>::Handle {
  public:
-  Handle(T& comp, const Entity& entity, Component_manager<T>& manager);
+  Handle(T& comp, const Entity_id& entity, Component_manager<T>& manager);
   T* operator->();
   const T* operator->() const;
   T& operator*();
   const T& operator*() const;
-  const Entity& get_owner() const;
+  const Entity_id& get_owner() const;
   void destroy();
 
  private:
   T& comp_;
-  Entity entity_;
+  Entity_id entity_;
   Component_manager<T>& manager_;
 };
 
@@ -63,7 +63,7 @@ inline Component_manager<T>::Component_manager(std::unique_ptr<Pool> pool)
 
 template <typename T>
 inline typename Component_manager<T>::Handle Component_manager<T>::add(
-    const Entity& entity) {
+    const Entity_id& entity) {
   assert(!get(entity).has_value() && "entity already have component");
   auto& comp = pool_->aquire();
   auto lock = std::scoped_lock(mutex_);
@@ -73,7 +73,7 @@ inline typename Component_manager<T>::Handle Component_manager<T>::add(
 
 template <typename T>
 inline std::optional<typename Component_manager<T>::Handle>
-Component_manager<T>::get(const Entity& entity) {
+Component_manager<T>::get(const Entity_id& entity) {
   if (map_.find(entity) != std::end(map_)) {
     return Handle(*map_[entity], entity, *this);
   }
@@ -81,7 +81,7 @@ Component_manager<T>::get(const Entity& entity) {
 }
 
 template <typename T>
-inline void Component_manager<T>::remove(const Entity& entity) {
+inline void Component_manager<T>::remove(const Entity_id& entity) {
   assert(get(entity).has_value() && "entity does not have component");
   auto handle = get(entity).value();
   pool_->recall(*handle);
@@ -110,7 +110,7 @@ inline const T& Component_manager<T>::Handle::operator*() const {
 }
 
 template <typename T>
-inline const Entity& Component_manager<T>::Handle::get_owner() const {
+inline const Entity_id& Component_manager<T>::Handle::get_owner() const {
   return entity_;
 }
 
@@ -121,7 +121,7 @@ inline void Component_manager<T>::Handle::destroy() {
 
 template <typename T>
 inline Component_manager<T>::Handle::Handle(T& comp,
-                                            const Entity& entity,
+                                            const Entity_id& entity,
                                             Component_manager<T>& manager)
     : comp_(comp)
     , entity_(entity)

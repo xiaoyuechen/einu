@@ -1,5 +1,6 @@
 #pragma once
 #include "ecs-core/component/I_component.h"
+#include "ecs-core/system/I_system.h"
 
 namespace ecs {
 struct C_0 : I_component {};
