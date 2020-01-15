@@ -6,19 +6,24 @@ namespace ecs {
 class Component_mask {
  public:
   using size_type = std::size_t;
-  using Init_list = std::initializer_list<Component_type>;
+  using init_list = std::initializer_list<Component_type>;
 
  private:
   using Mask = std::set<Component_type>;
 
  public:
   Component_mask() = default;
-  explicit Component_mask(Init_list l);
+  explicit Component_mask(init_list l);
+
+  void set(const Component_type& ct);
+  void reset(const Component_type& ct);
 
   bool operator==(const Component_mask& rhs) const noexcept;
   bool operator!=(const Component_mask& rhs) const noexcept;
   Component_mask operator&(const Component_mask& rhs) const;
   Component_mask operator|(const Component_mask& rhs) const;
+  Component_mask& operator&=(const Component_mask& rhs);
+  Component_mask& operator|=(const Component_mask& rhs);
 
  private:
   Component_mask(const Mask& mask);

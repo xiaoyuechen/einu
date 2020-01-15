@@ -63,6 +63,9 @@
     <ClInclude Include="include\ecs-core\manager\Entity_manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\ecs-core\manager\Component_mask_manager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Entity.cpp">

@@ -34,5 +34,9 @@ TEST_F(Test_component_mask, bit_wise_and)
   EXPECT_EQ(mask_arr[2] & mask_arr[3], e);
 }
 
-
+TEST_F(Test_component_mask, and_eq) {
+  EXPECT_EQ(mask_arr[0] &= mask_arr[1], Component_mask());
+  EXPECT_EQ(mask_arr[0] &= mask_arr[2], Component_mask());
+  EXPECT_EQ(mask_arr[1] &= mask_arr[2], Component_mask{type_of<S2>()});
+}
 }

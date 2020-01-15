@@ -1,11 +1,9 @@
 #pragma once
 #include <atomic>
 #include <optional>
-#include "ecs-core/component/Component_type.h"
-#include "ecs-core/entity/Entity.h"
-#include "ecs-core/manager/Component_manager.h"
 #include "ecs-core/manager/Entity_id_manager.h"
 #include "ecs-core/admin/Component_admin.h"
+#include "ecs-core/manager/Component_mask_manager.h"
 
 namespace ecs {
 class Entity_manager {
@@ -13,8 +11,7 @@ class Entity_manager {
   class Handle;
 
  private:
-  using Component_manager_map =
-      std::map<Component_type, std::unique_ptr<I_component_manager>>;
+  using entity_component_mask_map = std::map<Entity, Component_mask>;
 
  public:
   Entity_manager(std::unique_ptr<Component_admin> comp_admin);
@@ -34,6 +31,7 @@ class Entity_manager {
  private:
   Entity_id_manager id_manager_;
   std::unique_ptr<Component_admin> comp_admin_;
+  Component_mask_manager comp_mask_manager_;
 };
 
 class Entity_manager::Handle {
@@ -80,14 +78,17 @@ inline typename Component_manager<T>::Handle Entity_manager::add_component(
   assert(!get_component<T>(e).has_value() && "entity already has component");
   auto m = comp_admin_->get_manager<T>();
   assert(m.has_value() && "component manager not found in component admin");
-  return m.value()->add(e);
+  auto c = m.value()->add(e);
+  comp_mask_manager_.add<T>(e);
+  return c;
 }
 
 template <typename T>
 inline void Entity_manager::remove_component(const Entity& e) {
   auto c = get_component<T>(e);
-  assert(c.has_value() && "enitity does not have component");
-  c.value().destroy();
+  assert(c.has_value() && "entity does not have component");
+  c->destroy();
+  comp_mask_manager_.remove<T>(e);
 }
 
 inline typename Entity* Entity_manager::Handle::operator->() {

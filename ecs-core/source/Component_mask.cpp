@@ -3,9 +3,12 @@
 #include <iterator>
 
 namespace ecs {
-Component_mask::Component_mask(Init_list l)
-    : mask_(l) {
-}
+Component_mask::Component_mask(init_list l)
+    : mask_(l) {}
+
+void Component_mask::set(const Component_type& ct) { mask_.insert(ct); }
+
+void Component_mask::reset(const Component_type& ct) { mask_.erase(ct); }
 
 bool Component_mask::operator==(const Component_mask& rhs) const noexcept {
   return mask_ == rhs.mask_;
@@ -33,6 +36,16 @@ Component_mask Component_mask::operator|(const Component_mask& rhs) const {
                  std::end(rhs.mask_),
                  std::inserter(result, std::begin(result)));
   return Component_mask(result);
+}
+
+Component_mask& Component_mask::operator&=(const Component_mask& rhs) {
+  *this = *this & rhs;
+  return *this;
+}
+
+Component_mask& Component_mask::operator|=(const Component_mask& rhs) {
+  *this = *this | rhs;
+  return *this;
 }
 
 }  // namespace ecs
