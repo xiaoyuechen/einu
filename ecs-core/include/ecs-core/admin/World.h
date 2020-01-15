@@ -11,14 +11,22 @@ namespace ecs {
 class World {
  private:
   using sys_ptr = std::unique_ptr<I_system>;
+  template<typename T>
+  using mgr_ptr = std::unique_ptr<T>;
+  using ett_handle = Entity_manager::Entity_handle;
   using time = float;
 
  public:
   World() = default;
 
   void add_system(sys_ptr s);
-  Entity_manager& get_entity_manager() noexcept;
+  template<typename T>
+  void add_component_manager(mgr_ptr<T> mgr);
+  ett_handle create_entity();
+
   void update(time dt);
+
+  Entity_manager& get_entity_manager() noexcept;
 
  private:
   std::vector<sys_ptr> system_arr_;

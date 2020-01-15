@@ -1,13 +1,13 @@
 #include "ecs-core/manager/Entity_manager.h"
 
 namespace ecs {
-Entity_manager::Handle::Handle(const Entity_id& e, Entity_manager& m)
+Entity_manager::Entity_handle::Entity_handle(const Entity_id& e, Entity_manager& m)
     : entity_(e)
     , manager_(m) {}
 
-typename Entity_manager::Handle Entity_manager::spawn_entity() {
+typename Entity_manager::Entity_handle Entity_manager::spawn_entity() {
   auto e = id_manager_.create_entity();
-  return Handle(e, *this);
+  return Entity_handle(e, *this);
 }
 
 Component_admin& Entity_manager::get_component_admin() { return comp_admin_; }

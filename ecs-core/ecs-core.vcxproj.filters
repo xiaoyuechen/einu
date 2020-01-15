@@ -69,6 +69,9 @@
     <ClInclude Include="include\ecs-core\entity\Entity_id.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\ecs-core\manager\Component_handle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Component_type.cpp">
