@@ -1,3 +1,3 @@
-#include "ecs-core/components/Component_type.h"
+#include "ecs-core/component/Component_type.h"
 
 namespace ecs {}  // namespace ecs

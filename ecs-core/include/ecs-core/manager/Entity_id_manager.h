@@ -1,9 +1,9 @@
 #pragma once
 #include <atomic>
-#include "ecs-core/entities/Entity.h"
+#include "ecs-core/entity/Entity.h"
 
 namespace ecs {
-class Entity_manager {
+class Entity_id_manager {
  public:
   using size_type = std::size_t;
 
@@ -16,5 +16,7 @@ class Entity_manager {
 }  // namespace ecs
 
 namespace ecs {
-inline Entity Entity_manager::create_entity() { return Entity{free_entity++}; }
+inline Entity Entity_id_manager::create_entity() {
+  return Entity{free_entity++};
+}
 }  // namespace ecs

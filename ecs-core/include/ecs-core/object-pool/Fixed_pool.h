@@ -3,7 +3,7 @@
 #include <functional>
 #include <vector>
 #include "Free_index_stack.h"
-#include "ecs-core/utilities/algorithm.h"
+#include "ecs-core/utility/algorithm.h"
 
 namespace ecs {
 template <typename T, typename Allocator = std::allocator<T>>

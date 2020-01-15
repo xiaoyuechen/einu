@@ -1,9 +1,6 @@
 #pragma once
-#include <map>
-#include <typeindex>
-#include <vector>
-#include "ecs-core/components/Component.h"
-#include "ecs-core/components/Component_mask.h"
+#include <cstddef>
+#include <functional>
 
 namespace ecs {
 class Entity {
@@ -14,6 +11,7 @@ class Entity {
   constexpr explicit Entity(size_type id) noexcept;
   constexpr size_type id() const noexcept;
   constexpr bool operator==(const Entity& rhs) const noexcept;
+  constexpr bool operator!=(const Entity& rhs) const noexcept;
 
  private:
   size_type id_;
@@ -28,6 +26,9 @@ inline constexpr typename Entity::size_type Entity::id() const noexcept {
 
 inline constexpr bool Entity::operator==(const Entity& rhs) const noexcept {
   return id() == rhs.id();
+}
+inline constexpr bool Entity::operator!=(const Entity& rhs) const noexcept {
+  return !(*this == rhs);
 }
 }  // namespace ecs
 

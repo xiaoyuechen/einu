@@ -1,7 +1,7 @@
 #include "ecs-core/object-pool/Free_index_stack.h"
 #include <algorithm>
 #include <cassert>
-#include "ecs-core/utilities/algorithm.h"
+#include "ecs-core/utility/algorithm.h"
 
 namespace ecs {
 Free_index_stack::Free_index_stack(size_type count)

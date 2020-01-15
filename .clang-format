@@ -8,6 +8,7 @@ DerivePointerAlignment: false
 PointerAlignment: Left
 
 IncludeBlocks: Merge
+SortIncludes: false
 
 #BreakBeforeBraces: Stroustrup
 BreakConstructorInitializers: BeforeComma
