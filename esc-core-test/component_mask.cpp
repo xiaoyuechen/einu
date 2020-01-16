@@ -3,12 +3,12 @@
 
 namespace ecs {
 namespace {
-struct S1:I_component {};
-struct S2:I_component {};
-struct S3:I_component {};
-struct S4:I_component {};
-struct S5:I_component {};
-struct S6:I_component {};
+struct S1:Component {};
+struct S2:Component {};
+struct S3:Component {};
+struct S4:Component {};
+struct S5:Component {};
+struct S6:Component {};
 }
 
 namespace {

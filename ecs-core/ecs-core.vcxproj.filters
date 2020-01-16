@@ -21,16 +21,7 @@
     <ClInclude Include="include\ecs-core\object-pool\Free_index_stack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\ecs-core\admin\Component_admin.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\ecs-core\component\Component_mask.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ecs-core\component\Component_type.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ecs-core\component\I_component.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\ecs-core\manager\Component_manager.h">
@@ -63,20 +54,23 @@
     <ClInclude Include="include\ecs-core\utility\pattern.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\ecs-core\admin\World.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\ecs-core\entity\Entity_id.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\ecs-core\manager\Component_handle.h">
+    <ClInclude Include="include\ecs-core\manager\Entity_handle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-core\admin\Component_manager_admin.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-core\public-interface\World_public.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-core\public-interface\Component.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\Component_type.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="source\Component_mask.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -86,16 +80,7 @@
     <ClCompile Include="source\Entity_manager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\World.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Component_admin.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="source\pattern.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Entity_id.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

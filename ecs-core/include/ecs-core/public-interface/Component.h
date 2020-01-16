@@ -1,5 +1,5 @@
 #pragma once
 
 namespace ecs {
-struct I_component {};
+struct Component {};
 }  // namespace ecs

@@ -37,19 +37,18 @@
     <ClInclude Include="Test_class_collection.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="component_admin.cpp" />
+    <ClCompile Include="Component_manager.cpp" />
+    <ClCompile Include="component_manager_admin.cpp" />
+    <ClCompile Include="component_mask.cpp" />
     <ClCompile Include="component_mask_manager.cpp" />
-    <ClCompile Include="entity_manager.cpp" />
+    <ClCompile Include="Component_type.cpp" />
+    <ClCompile Include="Fixed_pool.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="component_mask.cpp" />
-    <ClCompile Include="Component_type.cpp" />
-    <ClCompile Include="Fixed_pool.cpp" />
-    <ClCompile Include="world.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

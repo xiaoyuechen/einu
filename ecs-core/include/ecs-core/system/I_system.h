@@ -1,5 +1,5 @@
 #pragma once
-#include "ecs-core/manager/Entity_manager.h"
+#include "ecs-core/admin/World.h"
 #include "ecs-core/utility/pattern.h"
 #include "ecs-core/utility/algorithm.h"
 

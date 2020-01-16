@@ -2,31 +2,16 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="Component_type.cpp">
-      <Filter>tests</Filter>
-    </ClCompile>
-    <ClCompile Include="Fixed_pool.cpp">
-      <Filter>tests</Filter>
-    </ClCompile>
-    <ClCompile Include="component_mask.cpp">
-      <Filter>tests</Filter>
-    </ClCompile>
-    <ClCompile Include="component_admin.cpp">
-      <Filter>tests</Filter>
-    </ClCompile>
-    <ClCompile Include="entity_manager.cpp" />
-    <ClCompile Include="world.cpp">
-      <Filter>tests</Filter>
-    </ClCompile>
-    <ClCompile Include="component_mask_manager.cpp">
-      <Filter>tests</Filter>
-    </ClCompile>
+    <ClCompile Include="component_mask_manager.cpp" />
+    <ClCompile Include="component_mask.cpp" />
+    <ClCompile Include="Component_type.cpp" />
+    <ClCompile Include="Fixed_pool.cpp" />
+    <ClCompile Include="Component_manager.cpp" />
+    <ClCompile Include="component_manager_admin.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
-    <ClInclude Include="Test_class_collection.h">
-      <Filter>tests</Filter>
-    </ClInclude>
+    <ClInclude Include="Test_class_collection.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

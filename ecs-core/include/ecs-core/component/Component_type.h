@@ -5,7 +5,7 @@
 #include <unordered_map>
 #include <type_traits>
 #include "ecs-core/utility/util.h"
-#include "I_component.h"
+#include "ecs-core/public-interface/Component.h"
 
 namespace ecs {
 class Component_type {
@@ -53,7 +53,7 @@ inline constexpr typename Component_type::id_type Component_type::id() const
 
 template <typename T>
 Component_type type_of() {
-  static_assert(std::is_base_of<I_component, T>() &&
+  static_assert(std::is_base_of<Component, T>() &&
                 "T must inherit from Component class");
   return Component_type(typeid(T).hash_code());
 }

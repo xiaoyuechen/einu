@@ -1,44 +1,37 @@
 #include "pch.h"
-#include "ecs-core/managers/Component_manager.h"
+#include "ecs-core/manager/Component_manager.h"
+#include "Test_class_collection.h"
+#include <stdexcept>
+
 namespace ecs {
-struct Comp : I_component {
-  float x, y, z;
+struct Component_manager_test : testing::Test {
+  Component_manager_test() { manager = create_component_manager<C_0>(100); }
+  std::unique_ptr<Component_manager<C_0>> manager;
+  Entity_id entity{0};
 };
 
-TEST(ComponentManager, Add) {
-  auto pool = Fixed_pool<Comp>(969);
-  auto manager = Component_manager(pool);
-  manager.add(Entity(0));
+TEST_F(Component_manager_test, get_component) {
+  try {
+    auto& c = manager->get_component(entity);
+    c;
+  } catch (std::out_of_range&) {
+    SUCCEED();
+  }
+}
+TEST_F(Component_manager_test, add_component) {
+  auto& c_a = manager->add_component(entity);
+  auto& c_g = manager->get_component(entity);
+  EXPECT_EQ(&c_a, &c_g);
 }
 
-TEST(ComponentManager, Get) {
-  auto pool = Fixed_pool<Comp>(969);
-  auto manager = Component_manager(pool);
-  auto e = Entity(0);
-  manager.add(e);
-  auto comp = manager.get(e);
-  EXPECT_EQ(pool.free_size(), 968);
+TEST_F(Component_manager_test, remove_component) {
+  manager->add_component(entity);
+  manager->remove_component(entity);
+  try {
+    auto& c = manager->get_component(entity);
+    c;
+  } catch (const std::out_of_range&) {
+    SUCCEED();
+  }
 }
-
-TEST(ComponentManager, Remove) {
-  auto pool = Fixed_pool<Comp>(969);
-  auto manager = Component_manager(pool);
-  auto e = Entity(0);
-  manager.add(e);
-  auto comp = manager.get(e);
-  EXPECT_EQ(pool.free_size(), 968);
-  manager.remove(e);
-  EXPECT_EQ(pool.free_size(), 969);
-}
-
-TEST(ComponentManager, HandleDestroy) {
-  auto pool = Fixed_pool<Comp>(969);
-  auto manager = Component_manager(pool);
-  auto e = Entity(0);
-  manager.add(e);
-  auto comp = manager.get(e);
-  EXPECT_EQ(pool.free_size(), 968);
-  comp.destroy();
-  EXPECT_EQ(pool.free_size(), 969);
-}
-}  // namespace MyNamespace
+}  // namespace ecs

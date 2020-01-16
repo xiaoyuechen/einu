@@ -3,8 +3,8 @@
 
 namespace ecs {
 namespace {
-struct Comp_a : I_component{};
-struct Comp_b : I_component{};
+struct Comp_a : Component{};
+struct Comp_b : Component{};
 }
 TEST(ComponentType, Construct)
 {
