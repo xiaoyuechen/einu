@@ -1,13 +1,13 @@
 #include "pch.h"
-#include "ecs-core/manager/Component_manager.h"
+#include "ecs-core/Component_manager.h"
 #include "Test_class_collection.h"
 #include <stdexcept>
 
 namespace ecs {
 struct Component_manager_test : testing::Test {
   Component_manager_test() { manager = create_component_manager<C_0>(100); }
-  std::unique_ptr<Component_manager<C_0>> manager;
-  Entity_id entity{0};
+  std::unique_ptr<ComponentManager<C_0>> manager;
+  EntityID entity{0};
 };
 
 TEST_F(Component_manager_test, get_component) {

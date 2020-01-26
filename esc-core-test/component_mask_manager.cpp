@@ -4,7 +4,7 @@
 
 namespace ecs {
 struct Component_mask_manager_test : testing::Test {
-  Entity_id e;
+  EntityID e;
   Component_mask_manager m;
 };
 

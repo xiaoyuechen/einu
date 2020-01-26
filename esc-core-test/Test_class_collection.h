@@ -1,13 +1,16 @@
-#pragma once
-#include "ecs-core/public-interface/Component.h"
-#include "ecs-core/system/I_system.h"
+#ifndef TEST_CLASS_COLLECTION_H_
+#define TEST_CLASS_COLLECTION_H_
+
+#include "ecs-core/i_component.h"
 
 namespace ecs {
-struct C_0 : Component {};
-struct C_1 : Component {};
-struct C_2 : Component {};
-struct C_3 : Component {};
-struct C_4 : Component {};
-struct C_5 : Component {};
-struct C_6 : Component {};
+struct C_0 : IComponent {};
+struct C_1 : IComponent {};
+struct C_2 : IComponent {};
+struct C_3 : IComponent {};
+struct C_4 : IComponent {};
+struct C_5 : IComponent {};
+struct C_6 : IComponent {};
 }
+
+#endif  // TEST_CLASS_COLLECTION_H_

@@ -1,13 +1,28 @@
-#include "ecs-core/manager/Entity_manager.h"
+#include "ecs-core/entity_manager.h"
 
 namespace ecs {
-Entity_id Entity_manager::spawn_entity() {
-  return id_manager_.create_entity();
+
+EntityID EntityManager::SpawnEntity() {
+  return entity_id_manager_.GenEntityID();
 }
 
-Component_manager_admin& Entity_manager::get_component_admin() { return comp_admin_; }
-
-Component_mask_manager& Entity_manager::get_component_mask_manager() {
-  return comp_mask_manager_;
+void EntityManager::GetMatchingEntityIDs(std::vector<EntityID>* dest,
+                                         const ComponentMask& mask) const {
+  for (auto it = id_to_mask_map_.cbegin(); it != id_to_mask_map_.cend(); ++it) {
+    if ((it->second & mask) == mask) {
+      dest->push_back(it->first);
+    }
+  }
 }
+
+//void EntityManager::GetMatchingComponents(
+//    std::vector<std::map<ComponentTypeIndex, IComponent*>>* dest,
+//    const ComponentMask& mask) {}
+
+void EntityManager::AddSystem(std::unique_ptr<ISystem> system) {
+  //entity_id_cache_.insert(
+  //    {system->GetComponentMask(), std::vector<EntityID>{}});
+  system_arr_.push_back(std::move(system));
+}
+
 }  // namespace ecs

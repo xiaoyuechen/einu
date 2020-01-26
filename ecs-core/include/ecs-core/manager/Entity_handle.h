@@ -7,12 +7,12 @@ class Component_handle;
 
 class Entity_handle {
  public:
-  Entity_handle(const Entity_id& entity, Entity_manager& manager);
+  Entity_handle(const EntityID& entity, Entity_manager& manager);
 
-  Entity_id* operator->();
-  const Entity_id* operator->() const;
-  Entity_id& operator*();
-  const Entity_id& operator*() const;
+  EntityID* operator->();
+  const EntityID* operator->() const;
+  EntityID& operator*();
+  const EntityID& operator*() const;
 
   template <typename T>
   Component_handle<T> add_component();
@@ -22,7 +22,7 @@ class Entity_handle {
   Component_handle<T> get_component();
 
  private:
-  Entity_id entity_;
+  EntityID entity_;
   Entity_manager& manager_;
 };
 
@@ -84,15 +84,15 @@ inline const Entity_handle& Component_handle<T>::get_owner() const {
 }  // namespace ecs
 
 namespace ecs {
-inline Entity_handle::Entity_handle(const Entity_id& entity,
+inline Entity_handle::Entity_handle(const EntityID& entity,
                                     Entity_manager& manager)
     : entity_(entity)
     , manager_(manager) {}
 
-inline Entity_id* Entity_handle::operator->() { return &entity_; }
-inline const Entity_id* Entity_handle::operator->() const { return &entity_; }
-inline Entity_id& Entity_handle::operator*() { return entity_; }
-inline const Entity_id& Entity_handle::operator*() const { return entity_; }
+inline EntityID* Entity_handle::operator->() { return &entity_; }
+inline const EntityID* Entity_handle::operator->() const { return &entity_; }
+inline EntityID& Entity_handle::operator*() { return entity_; }
+inline const EntityID& Entity_handle::operator*() const { return entity_; }
 
 template <typename T>
 inline Component_handle<T> Entity_handle::add_component() {

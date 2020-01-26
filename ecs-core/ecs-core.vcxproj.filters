@@ -15,72 +15,69 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\ecs-core\object-pool\Fixed_pool.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ecs-core\object-pool\Free_index_stack.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ecs-core\component\Component_mask.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ecs-core\manager\Component_manager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ecs-core\manager\Entity_id_manager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ecs-core\manager\I_component_manager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ecs-core\system\I_system.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ecs-core\system\RenderingSystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\ecs-core\utility\algorithm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\ecs-core\utility\util.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\ecs-core\manager\Entity_manager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ecs-core\manager\Component_mask_manager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\ecs-core\utility\pattern.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\ecs-core\entity\Entity_id.h">
+    <ClInclude Include="include\ecs-core\type_mask.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\ecs-core\manager\Entity_handle.h">
+    <ClInclude Include="include\ecs-core\entity_id.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\ecs-core\admin\Component_manager_admin.h">
+    <ClInclude Include="include\ecs-core\component_type_index.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\ecs-core\public-interface\World_public.h">
+    <ClInclude Include="include\ecs-core\component_mask.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\ecs-core\public-interface\Component.h">
+    <ClInclude Include="include\ecs-core\component_manager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-core\object-pool\fixed_size_pool.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-core\object-pool\free_index_stack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-core\i_component_manager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-core\i_component.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-core\entity_id_manager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-core\entity_manager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-core\i_system.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-core\utility\type_list.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\Component_mask.cpp">
+    <ClCompile Include="source\pattern.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\Free_index_stack.cpp">
+    <ClCompile Include="source\type_mask.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\component_mask.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\free_index_stack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\Entity_manager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\pattern.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

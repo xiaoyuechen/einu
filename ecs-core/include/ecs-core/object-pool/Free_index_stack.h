@@ -1,27 +1,27 @@
-#pragma once
-#include <vector>
+#ifndef FREE_INDEX_STACK_H_
+#define FREE_INDEX_STACK_H_
+
 #include <mutex>
+#include <vector>
 
 namespace ecs {
-class Free_index_stack {
- public:
-  using value_type = std::size_t;
-  using size_type = std::size_t;
 
+class FreeIndexStack {
  public:
-  Free_index_stack(size_type count);
-  value_type aquire() noexcept;
-  void recall(value_type value);
-  size_type size() const noexcept;
+  FreeIndexStack(std::size_t count);
+  std::size_t Aquire() noexcept;
+  void Recall(std::size_t value);
+  std::size_t Size() const noexcept;
 
  private:
-  std::vector<value_type> stack_;
+  std::vector<std::size_t> stack_;
   std::mutex mutex_;
 };
 
-inline typename Free_index_stack::size_type Free_index_stack::size() const
-    noexcept
-{
+inline std::size_t FreeIndexStack::Size() const noexcept {
   return stack_.size();
 }
+
 }  // namespace ecs
+
+#endif  // FREE_INDEX_STACK_H_

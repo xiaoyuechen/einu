@@ -1,5 +1,5 @@
 #pragma once
-#include "ecs-core/system/I_system.h"
+#include "ecs-core/I_system.h"
 #include "ecs-core/manager/Component_manager.h"
 #include "ecs-core/manager/Entity_handle.h"
 #include <memory>
