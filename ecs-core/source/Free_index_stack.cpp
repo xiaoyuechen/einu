@@ -12,7 +12,7 @@ FreeIndexStack::FreeIndexStack(std::size_t count) {
   algo::repeat(count, [&] { stack_.push_back(--count); });
 }
 
-typename std::size_t FreeIndexStack::Aquire() noexcept {
+typename std::size_t FreeIndexStack::Acquire() noexcept {
   assert(!stack_.empty() && "no index is free");
   auto lock = std::scoped_lock(mutex_);
   auto value = stack_.back();

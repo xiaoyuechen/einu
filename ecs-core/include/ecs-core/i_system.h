@@ -1,7 +1,6 @@
 #pragma once
 #include <tuple>
 
-#include "component_mask.h"
 #include "ecs-core/utility/algorithm.h"
 #include "ecs-core/utility/pattern.h"
 #include "ecs-core/utility/type_list.h"
@@ -13,8 +12,6 @@ class ISystem {
   virtual ~ISystem();
   virtual void Update(float dt);
 };
-
-
 
 class ExStoragePolicy {
  public:

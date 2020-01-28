@@ -1,8 +1,11 @@
 #include "ecs-core/utility/pattern.h"
+
 #include <algorithm>
 
 namespace ecs {
+
 namespace patt {
+
 void I_subject::add_to_broadcast_list(I_observer& obs) {
   observer_arr_.push_back(&obs);
 }
@@ -30,6 +33,7 @@ void I_observer::unsubscribe(I_subject& sbj) {
   subject_arr_.erase(new_end, std::end(subject_arr_));
   sbj.remove_from_broadcast_list(*this);
 }
+
 }  // namespace patt
 
 }  // namespace ecs

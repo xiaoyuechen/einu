@@ -77,7 +77,7 @@ inline std::size_t FixedSizePool<T, Allocator>::FreeSize() const noexcept {
 
 template <typename T, typename Allocator>
 inline T& FixedSizePool<T, Allocator>::Acquire() {
-  return object_arr_[free_index_stack_.Aquire()];
+  return object_arr_[free_index_stack_.Acquire()];
 }
 
 template <typename T, typename Allocator>

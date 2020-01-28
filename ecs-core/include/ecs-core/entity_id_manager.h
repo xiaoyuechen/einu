@@ -11,8 +11,7 @@ class EntityIDManager {
  public:
   using size_type = std::size_t;
 
- public:
-  EntityID GenEntityID();
+  EntityID GenEntityID() noexcept;
 
  private:
   std::atomic<size_type> free_id_{0};
@@ -20,7 +19,9 @@ class EntityIDManager {
 
 //////////////////////////////////////////////////////////////////////////
 
-inline EntityID EntityIDManager::GenEntityID() { return EntityID{free_id_++}; }
+inline EntityID EntityIDManager::GenEntityID() noexcept {
+  return EntityID{free_id_++};
+}
 
 }  // namespace ecs
 

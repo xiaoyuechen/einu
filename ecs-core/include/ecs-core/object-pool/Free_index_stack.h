@@ -9,7 +9,7 @@ namespace ecs {
 class FreeIndexStack {
  public:
   FreeIndexStack(std::size_t count);
-  std::size_t Aquire() noexcept;
+  std::size_t Acquire() noexcept;
   void Recall(std::size_t value);
   std::size_t Size() const noexcept;
 

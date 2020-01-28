@@ -1,170 +1,106 @@
 #ifndef ENTITY_MANAGER_H_
 #define ENTITY_MANAGER_H_
 
-#include <atomic>
 #include <map>
-#include <memory>
-#include <optional>
-#include <vector>
 
 #include "ecs-core/component_manager.h"
-#include "ecs-core/component_mask.h"
-#include "ecs-core/component_type_index.h"
+#include "ecs-core/component_setting.h"
+#include "ecs-core/entity.h"
 #include "ecs-core/entity_id_manager.h"
-#include "ecs-core/i_system.h"
 #include "ecs-core/utility/type_list.h"
+#include "ecs-core/utility/type_mapping.h"
+#include "ecs-core/component_cache_manager.h"
 
 namespace ecs {
 
-template <typename SystemPolicy, typename ComponentPolicy>
-class World : SystemPolicy, ComponentPolicy {
+
+template <typename ComponentSetting, typename ComponentManagerPolicy>
+class EntityManager : public ComponentManagerPolicy {
  public:
-  void Update(float dt) { SystemPolicy::Update(dt); }
-};
-
-template <typename ComponentType, std::size_t Count>
-struct ComponentSetting {
-  using Type = ComponentType;
-  static constexpr std::size_t count = Count;
-};
-
-template <typename... ComponentSettings>
-using ComponentSettingList = TypeList<ComponentSettings...>;
-
-template <typename ComponentSettingList>
-struct ComponentSettingListToTuple;
-
-template <typename... ComponentSettings>
-struct ComponentSettingListToTuple<ComponentSettingList<ComponentSettings...>> {
-  using Tuple = std::tuple<typename ComponentSettings::Type...>;
-};
-
-template <typename ComponentSettingList>
-class ComponentPolicy {
- public:
-  template <typename ComponentType>
-  ComponentManager<ComponentType>& GetComponentManager();
-
- private:
-  typename ComponentSettingListToTuple<ComponentSettingList>::Tuple tuple_;
-};
-
-using MyComponentSettingList =
-    ComponentSettingList<ComponentSetting<IComponent, 10>,
-                         ComponentSetting<IComponent, 666>>;
-
-class SystemA {};
-class SystemB {};
-class SystemC {};
-
-class MySystemPolicy {
- public:
-  //void Update(float dt) {
-  //  system_a.Update(dt);
-  //  ...
-  //}
-
- private:
-  SystemA system_a;
-  SystemB system_b;
-  SystemC system_c;
-};
-
-//////////////////////////////////////////////////////////////////////////
-
-class EntityManager {
- public:
-  EntityManager() = default;
-
-  [[nodiscard]] EntityID SpawnEntity();
-
-  template <typename T>
-  const T& GetComponent(const EntityID& entity_id) const;
-  template <typename T>
-  T& GetComponent(const EntityID& entity_id);
-  template <typename T>
-  T& AddComponent(const EntityID& entity_id);
-  template <typename T>
-  void RemoveComponent(const EntityID& entity_id);
-
-  void GetMatchingEntityIDs(std::vector<EntityID>* dest,
-                            const ComponentMask& mask) const;
-  void GetMatchingComponents(
-      std::vector<std::map<ComponentTypeIndex, IComponent*>>* dest,
-      const ComponentMask& mask);
-
-  void AddSystem(std::unique_ptr<ISystem> system);
-
- private:
   template <typename T>
   const ComponentManager<T>& GetComponentManager() const;
+
   template <typename T>
   ComponentManager<T>& GetComponentManager();
 
- private:
-  std::map<ComponentTypeIndex, IComponentManager> component_manager_map_;
-  std::map<EntityID, ComponentMask> id_to_mask_map_;
-  EntityIDManager entity_id_manager_;
+  EntityID SpawnEntity() {
+    auto eid = ett_id_mgr_.GenEntityID();
+    ett_map_.insert({eid, Entity<ComponentSetting>()});
+    return eid;
+  }
 
-  std::vector<std::unique_ptr<ISystem>> system_arr_;
-  // std::map<ComponentMask, std::vector<EntityID>> entity_id_cache_;
+  template <typename T>
+  void AddComponent(const EntityID& eid) {
+    auto& mgr = GetComponentManager<T>();
+    auto& comp = mgr.AddComponent(eid);
+    auto& ett = ett_map_.at(eid);
+    ett.AddComponent<T>(comp);
+
+    comp_cache_mgr_.AddEntity(
+        eid, ett.GetComponentMask(), ett.GetComponentArray());
+  }
+
+  template <typename T>
+  void RemoveComponent(const EntityID& eid) {
+    auto& ett = ett_map_.at(eid);
+
+    comp_cache_mgr_.RemoveEntity(eid, ett.GetComponentMask());
+
+    auto& mgr = GetComponentManager<T>();
+    mgr.RemoveComponent(eid);
+    ett.RemoveComponent<T>();
+  }
+
+  const Entity<ComponentSetting>& GetEntity(const EntityID& eid) const {
+    return ett_map_.at(eid);
+  }
+
+  Entity<ComponentSetting>& GetEntity(const EntityID& eid) {
+    return const_cast<Entity<ComponentSetting>&>(
+        static_cast<const EntityManager&>(*this).GetEntity(eid));
+  }
+
+  template <typename... Ts>
+  void GetMatchingComponents(std::vector<std::tuple<Ts&...>>& dest) {
+    auto comp_mask = ComponentSetting::template GetComponentMask<Ts...>();
+    auto& comp_arrs = comp_cache_mgr_.GetComponentArrays(comp_mask);
+
+    dest.clear();
+    for (auto&& comp_arr : comp_arrs) {
+      dest.emplace_back(comp_arr.Get<Ts>()...);
+    }
+  }
+
+  template <typename... Ts>
+  void RegisterInterest() {
+    const auto comp_mask = ComponentSetting::template GetComponentMask<Ts...>();
+    comp_cache_mgr_.RegisterComponentMask(comp_mask);
+  }
+
+ private:
+  EntityIDManager ett_id_mgr_;
+  std::map<EntityID, Entity<ComponentSetting>> ett_map_;
+  ComponentCacheManager<ComponentSetting> comp_cache_mgr_;
 };
 
 //////////////////////////////////////////////////////////////////////////
 
+template <typename ComponentSetting, typename ComponentManagerPolicy>
 template <typename T>
-const T& EntityManager::GetComponent(const EntityID& entity_id) const {
-  const auto& component_manager = GetComponentManager<T>();
-  return component_manager.GetComponent(entity_id);
+inline const ComponentManager<T>&
+EntityManager<ComponentSetting, ComponentManagerPolicy>::GetComponentManager()
+    const {
+  return ComponentManagerPolicy::GetComponentManager(Type2Type<T>{});
 }
 
+template <typename ComponentSetting, typename ComponentManagerPolicy>
 template <typename T>
-T& EntityManager::GetComponent(const EntityID& entity_id) {
-  return const_cast<T&>(
-      static_cast<const EntityManager&>(*this).GetComponent<T>(entity_id));
+inline ComponentManager<T>&
+EntityManager<ComponentSetting, ComponentManagerPolicy>::GetComponentManager() {
+  return ComponentManagerPolicy::GetComponentManager(Type2Type<T>{});
 }
 
-template <typename T>
-T& EntityManager::AddComponent(const EntityID& entity_id) {
-  id_to_mask_map_[entity_id].Insert(GetComponentTypeIndex<T>());
 
-  // for (auto&& pair : entity_id_cache_) {
-  //  if (pair.first.HasType(GetComponentTypeIndex<T>()) &&
-  //      (id_to_mask_map_[entity_id] & pair.first) == pair.first) {
-  //    pair.second.push_back(entity_id);
-  //  }
-  //}
-
-  auto& component_manager = GetComponentManager<T>();
-  return component_manager.AddComponent(entity_id);
-}  // namespace ecs
-
-template <typename T>
-void EntityManager::RemoveComponent(const EntityID& entity_id) {
-  id_to_mask_map_[entity_id].Remove(GetComponentTypeIndex<T>());
-
-  // for (auto&& pair : entity_id_cache_) {
-  //  if (pair.first.HasType(GetComponentTypeIndex<T>())) {
-  //    algo::erase_remove(
-  //        pair.second, pair.second.begin(), pair.second.end(), entity_id);
-  //  }
-  //}
-
-  auto& component_manager = GetComponentManager<T>();
-  component_manager.RemoveComponent(entity_id);
-}
-
-template <typename T>
-const ComponentManager<T>& EntityManager::GetComponentManager() const {
-  return static_cast<const ComponentManager<T>&>(
-      component_manager_map_.at(GetComponentTypeIndex<T>()));
-}
-
-template <typename T>
-ComponentManager<T>& EntityManager::GetComponentManager() {
-  return const_cast<ComponentManager<T>&>(
-      static_cast<const EntityManager&>(*this).GetComponentManager<T>());
-}
 
 }  // namespace ecs
 

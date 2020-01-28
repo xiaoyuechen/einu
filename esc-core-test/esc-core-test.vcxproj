@@ -37,7 +37,6 @@
     <ClInclude Include="Test_class_collection.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="component_mask_test.cpp" />
     <ClCompile Include="Fixed_pool.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

@@ -4,14 +4,14 @@
 #include <map>
 #include <mutex>
 
+#include "ecs-core/entity_id.h"
 #include "ecs-core/i_component.h"
-#include "ecs-core/i_component_manager.h"
 #include "ecs-core/object-pool/fixed_size_pool.h"
 
 namespace ecs {
 
 template <typename T>
-class ComponentManager : public IComponentManager {
+class ComponentManager {
   static_assert(std::is_base_of<IComponent, T>() &&
                 "T must inherit from Component");
 
@@ -23,10 +23,10 @@ class ComponentManager : public IComponentManager {
   ComponentManager(std::unique_ptr<Pool> pool);
   ~ComponentManager() = default;
 
-  T& AddComponent(const EntityID& entity);
-  [[nodiscard]] const T& GetComponent(const EntityID& entity) const;
-  [[nodiscard]] T& GetComponent(const EntityID& entity);
-  virtual void RemoveComponent(const EntityID& entity) override;
+  T& AddComponent(const EntityID& eid);
+  [[nodiscard]] const T& GetComponent(const EntityID& eid) const;
+  [[nodiscard]] T& GetComponent(const EntityID& eid);
+  void RemoveComponent(const EntityID& eid);
 
  private:
   std::unique_ptr<Pool> pool_;
@@ -50,15 +50,14 @@ T& ComponentManager<T>::AddComponent(const EntityID& entity) {
 }
 
 template <typename T>
-const T& ComponentManager<T>::GetComponent(
-    const EntityID& entity) const {
+const T& ComponentManager<T>::GetComponent(const EntityID& entity) const {
   return *map_.at(entity);
 }
 
 template <typename T>
 T& ComponentManager<T>::GetComponent(const EntityID& entity) {
   return const_cast<T&>(
-      static_cast<ComponentManager<T>&>(*this).GetComponent(entity));
+      static_cast<const ComponentManager<T>&>(*this).GetComponent(entity));
 }
 
 template <typename T>

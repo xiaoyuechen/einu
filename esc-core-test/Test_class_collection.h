@@ -11,6 +11,12 @@ struct C_3 : IComponent {};
 struct C_4 : IComponent {};
 struct C_5 : IComponent {};
 struct C_6 : IComponent {};
+
+struct S_0 {};
+struct S_1 {};
+struct S_2 {};
+struct S_3 {};
+struct S_4 {};
 }
 
 #endif  // TEST_CLASS_COLLECTION_H_
