@@ -1,6 +1,12 @@
-#pragma once
+#ifndef ALGORITHM_H_
+#define ALGORITHM_H_
+
+#include <algorithm>
+
 namespace ecs {
+
 namespace algo {
+
 template <typename Size, typename Predicate>
 constexpr void repeat(Size count, Predicate&& pred);
 
@@ -12,11 +18,9 @@ constexpr void erase_remove(Container&& c,
                             ForwardIterator first,
                             ForwardIterator last,
                             const T& val);
-}  // namespace algo
-}  // namespace ecs
 
-namespace ecs {
-namespace algo {
+//////////////////////////////////////////////////////////////////////////
+
 template <typename Size, typename Predicate>
 constexpr void repeat(Size count, Predicate&& pred) {
   while (count--) pred();
@@ -46,5 +50,9 @@ constexpr void erase_remove(Container&& c,
                             const T& val) {
   c.erase(std::remove(first, last, val), last);
 }
+
 }  // namespace algo
+
 }  // namespace ecs
+
+#endif  // ALGORITHM_H_

@@ -143,18 +143,18 @@
     <ClInclude Include="include\ecs-core\component_manager.h" />
     <ClInclude Include="include\ecs-core\entity_id_manager.h" />
     <ClInclude Include="include\ecs-core\entity_manager.h" />
-    <ClInclude Include="include\ecs-core\i_system.h" />
     <ClInclude Include="include\ecs-core\object-pool\fixed_size_pool.h" />
     <ClInclude Include="include\ecs-core\object-pool\free_index_stack.h" />
     <ClInclude Include="include\ecs-core\entity_id.h" />
+    <ClInclude Include="include\ecs-core\threading_model.h" />
     <ClInclude Include="include\ecs-core\utility\algorithm.h" />
     <ClInclude Include="include\ecs-core\utility\pattern.h" />
     <ClInclude Include="include\ecs-core\utility\type_list.h" />
     <ClInclude Include="include\ecs-core\utility\type_mapping.h" />
     <ClInclude Include="include\ecs-core\utility\util.h" />
+    <ClInclude Include="include\ecs-core\system.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\free_index_stack.cpp" />
     <ClCompile Include="source\pattern.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

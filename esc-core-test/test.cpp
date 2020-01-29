@@ -5,7 +5,9 @@
 #include "Test_class_collection.h"
 #include "ecs-core/component_setting.h"
 #include "ecs-core/entity_manager.h"
+#include "ecs-core/system.h"
 #include "ecs-core/utility/type_list.h"
+#include "ecs-core/threading_model.h"
 
 namespace ecs {
 
@@ -66,37 +68,37 @@ TEST_F(TypeListTest, EraseAll) {
 // WolrdTest:
 //////////////////////////////////////////////////////////////////////////
 
-using MyComponentList = ComponentList<C_0, C_1, C_3, C_4>;
+using MyComponentList = ComponentList<C_0, C_1>;
 using MyComponentSetting = ComponentSetting<MyComponentList>;
 
-class MyComponentManagerPolicy {
+class MyComponentManagerPolicy
+    : public ComponentManagerPolicy<MyComponentSetting, SingleThreaded> {
  public:
   MyComponentManagerPolicy()
-      : c_0_manager_{std::make_unique<FixedSizePool<C_0>>(100)}
-      , c_1_manager_{std::make_unique<FixedSizePool<C_1>>(666)} {}
-
-  const auto& GetComponentManager(Type2Type<C_0>) const { return c_0_manager_; }
-  auto& GetComponentManager(Type2Type<C_0>) { return c_0_manager_; }
-  const auto& GetComponentManager(Type2Type<C_1>) const { return c_1_manager_; }
-  auto& GetComponentManager(Type2Type<C_1>) { return c_1_manager_; }
+      : c_0_manager_{100}
+      , c_1_manager_{666}
+      , ComponentManagerPolicy(c_0_manager_, c_1_manager_) {}
 
  private:
   ComponentManager<C_0> c_0_manager_;
   ComponentManager<C_1> c_1_manager_;
 };
 
+using MyEntityManager =
+    EntityManager<MyComponentSetting, MyComponentManagerPolicy>;
+
 struct EntityManagerTest : testing::Test {
-  EntityManager<MyComponentSetting, MyComponentManagerPolicy> ett_mgr;
+  MyEntityManager ett_mgr;
 };
 
-TEST_F(EntityManagerTest, GetComponentManager) {
-  auto& m = ett_mgr.GetComponentManager<C_1>();
-  constexpr bool r = std::is_same<decltype(m), ComponentManager<C_1>&>::value;
-  EXPECT_EQ(r, true);
-
-  const auto& mgr_cref = ett_mgr;
-  mgr_cref.GetComponentManager<C_1>();
-}
+// TEST_F(EntityManagerTest, GetComponentManager) {
+//  auto& m = ett_mgr.GetComponentManager<C_1>();
+//  constexpr bool r = std::is_same<decltype(m), ComponentManager<C_1>&>::value;
+//  EXPECT_EQ(r, true);
+//
+//  const auto& mgr_cref = ett_mgr;
+//  mgr_cref.GetComponentManager<C_1>();
+//}
 
 TEST_F(EntityManagerTest, AddComponent) {
   auto eid = ett_mgr.SpawnEntity();
@@ -115,7 +117,7 @@ TEST_F(EntityManagerTest, GetEntity) {
 }
 
 TEST_F(EntityManagerTest, GetMatchingComponents) {
-  ett_mgr.RegisterInterest<const C_0, const C_1>();
+  ett_mgr.RegisterInterest(Type2Type<ComponentList<C_0, C_1>>{});
   auto eid = ett_mgr.SpawnEntity();
   ett_mgr.AddComponent<C_0>(eid);
   ett_mgr.AddComponent<C_1>(eid);
@@ -124,4 +126,36 @@ TEST_F(EntityManagerTest, GetMatchingComponents) {
   ett_mgr.GetMatchingComponents(comp_buffer);
 }
 
+//////////////////////////////////////////////////////////////////////////
+// SystemTest:
+//////////////////////////////////////////////////////////////////////////
+
+using MyRequiredComponentList = RequiredComponentList<C_0, C_1>;
+using MySystem = System<MyEntityManager, MyRequiredComponentList>;
+
+struct SystemTest : testing::Test {
+  SystemTest()
+      : sys(ett_mgr) {}
+
+  MyEntityManager ett_mgr;
+  MySystem sys;
+};
+
+TEST_F(SystemTest, GetMatchingComponentTuples) {
+  EXPECT_EQ(sys.GetMatchingComponentTuples().size(), 0);
+  for (auto i = std::size_t(0); i != 100; ++i) {
+    auto eid = ett_mgr.SpawnEntity();
+    ett_mgr.AddComponent<C_0>(eid);
+    ett_mgr.AddComponent<C_1>(eid);
+  }
+
+  EXPECT_EQ(sys.GetMatchingComponentTuples().size(), 100);
+
+  for (auto i = std::size_t(0); i != 500; ++i) {
+    auto eid = ett_mgr.SpawnEntity();
+    ett_mgr.AddComponent<C_1>(eid);
+  }
+
+  EXPECT_EQ(sys.GetMatchingComponentTuples().size(), 100);
+}
 }  // namespace ecs

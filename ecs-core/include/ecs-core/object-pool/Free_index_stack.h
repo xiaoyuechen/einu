@@ -1,25 +1,57 @@
 #ifndef FREE_INDEX_STACK_H_
 #define FREE_INDEX_STACK_H_
 
+#include <cassert>
 #include <mutex>
 #include <vector>
 
+#include "ecs-core/utility/algorithm.h"
+
 namespace ecs {
 
-class FreeIndexStack {
+template <typename IndexType,
+          typename ThreadingModel>
+class FreeIndexStack : public ThreadingModel {
  public:
-  FreeIndexStack(std::size_t count);
-  std::size_t Acquire() noexcept;
-  void Recall(std::size_t value);
-  std::size_t Size() const noexcept;
+  FreeIndexStack(IndexType count);
+  IndexType Acquire();
+  void Recall(IndexType value);
+  IndexType Size() const noexcept;
 
  private:
-  std::vector<std::size_t> stack_;
-  std::mutex mutex_;
+  std::vector<IndexType> stack_;
 };
 
-inline std::size_t FreeIndexStack::Size() const noexcept {
+//////////////////////////////////////////////////////////////////////////
+
+template <typename IndexType, typename ThreadingModel>
+inline IndexType FreeIndexStack<IndexType, ThreadingModel>::Size() const
+    noexcept {
   return stack_.size();
+}
+
+template <typename IndexType, typename ThreadingModel>
+FreeIndexStack<IndexType, ThreadingModel>::FreeIndexStack(IndexType count) {
+  stack_.reserve(count);
+  algo::repeat(count, [&] { stack_.push_back(--count); });
+}
+
+template <typename IndexType, typename ThreadingModel>
+typename IndexType FreeIndexStack<IndexType, ThreadingModel>::Acquire() {
+  assert(!stack_.empty() && "no index is free");
+  ThreadingModel::Lock lock(*this);
+  auto value = stack_.back();
+  stack_.pop_back();
+  return value;
+}
+
+template <typename IndexType, typename ThreadingModel>
+void FreeIndexStack<IndexType, ThreadingModel>::Recall(IndexType value) {
+  assert(std::find(std::begin(stack_), std::end(stack_), value) ==
+             std::end(stack_) &&
+         "the recalling value exists in stack");
+  ThreadingModel::Lock lock(*this);
+  stack_.push_back(value);
 }
 
 }  // namespace ecs

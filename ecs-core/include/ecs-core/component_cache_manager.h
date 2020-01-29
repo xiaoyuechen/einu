@@ -41,6 +41,8 @@ class ComponentCacheManager {
   std::map<ComponentMask, ComponentCache, ComponentMaskCompare> cache_map_{};
 };
 
+//////////////////////////////////////////////////////////////////////////
+
 template <typename ComponentSetting>
 inline void ComponentCacheManager<ComponentSetting>::RegisterComponentMask(
     const ComponentMask& mask) {

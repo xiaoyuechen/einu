@@ -45,9 +45,6 @@
     <ClInclude Include="include\ecs-core\entity_manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\ecs-core\i_system.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\ecs-core\utility\type_list.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -66,12 +63,15 @@
     <ClInclude Include="include\ecs-core\component_cache_manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\ecs-core\system.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-core\threading_model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\pattern.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\free_index_stack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

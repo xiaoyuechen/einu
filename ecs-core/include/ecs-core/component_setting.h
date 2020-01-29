@@ -27,6 +27,12 @@ struct ComponentSetting {
 //////////////////////////////////////////////////////////////////////////
 
 template <typename ComponentList>
+inline constexpr std::size_t
+ComponentSetting<ComponentList>::GetComponentTypeCount() {
+  return Size<ComponentList>::value;
+}
+
+template <typename ComponentList>
 template <typename T>
 inline constexpr typename ComponentSetting<ComponentList>::ComponentTypeIndex
 ComponentSetting<ComponentList>::GetComponentTypeIndex() {
@@ -40,12 +46,6 @@ ComponentSetting<ComponentList>::GetComponentMask() {
   ComponentMask mask;
   (mask.set(GetComponentTypeIndex<Ts>()), ...);
   return mask;
-}
-
-template <typename ComponentList>
-inline constexpr std::size_t
-ComponentSetting<ComponentList>::GetComponentTypeCount() {
-  return Size<ComponentList>::value;
 }
 
 }  // namespace ecs
