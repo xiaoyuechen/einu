@@ -10,7 +10,9 @@
 
 namespace ecs {
 
-template <typename T, typename ThreadingModel, typename Allocator = std::allocator<T>>
+template <typename T,
+          typename ThreadingModel,
+          typename Allocator = std::allocator<T>>
 class FixedSizePool {
  public:
   explicit FixedSizePool(std::size_t count,
@@ -40,15 +42,14 @@ class FixedSizePool {
 //////////////////////////////////////////////////////////////////////////
 
 template <typename T, typename ThreadingModel, typename Allocator>
-inline FixedSizePool<T, ThreadingModel, Allocator>::FixedSizePool(std::size_t count,
-                                                  const Allocator& alloc)
+inline FixedSizePool<T, ThreadingModel, Allocator>::FixedSizePool(
+    std::size_t count, const Allocator& alloc)
     : object_arr_(count, alloc)
     , free_index_stack_(count) {}
 
 template <typename T, typename ThreadingModel, typename Allocator>
-inline FixedSizePool<T, ThreadingModel, Allocator>::FixedSizePool(std::size_t count,
-                                                  const T& value,
-                                                  const Allocator& alloc)
+inline FixedSizePool<T, ThreadingModel, Allocator>::FixedSizePool(
+    std::size_t count, const T& value, const Allocator& alloc)
     : object_arr_(count, value, alloc)
     , free_index_stack_(count) {}
 
@@ -59,19 +60,21 @@ inline FixedSizePool<T, ThreadingModel, Allocator>::FixedSizePool(
     : object_arr_(alloc)
     , free_index_stack_(count) {
   auto init_object_arr = [&, count](Args&&... args) {
-    algo::repeat(
+    algo::Repeat(
         count, [&] { object_arr_.emplace_back(std::forward<Args>(args)...); });
   };
-  algo::apply(init_object_arr, args_tup);
+  algo::Apply(init_object_arr, args_tup);
 }
 
 template <typename T, typename ThreadingModel, typename Allocator>
-inline std::size_t FixedSizePool<T, ThreadingModel, Allocator>::Size() const noexcept {
+inline std::size_t FixedSizePool<T, ThreadingModel, Allocator>::Size() const
+    noexcept {
   return object_arr_.size();
 }
 
 template <typename T, typename ThreadingModel, typename Allocator>
-inline std::size_t FixedSizePool<T, ThreadingModel, Allocator>::FreeSize() const noexcept {
+inline std::size_t FixedSizePool<T, ThreadingModel, Allocator>::FreeSize() const
+    noexcept {
   return free_index_stack_.Size();
 }
 

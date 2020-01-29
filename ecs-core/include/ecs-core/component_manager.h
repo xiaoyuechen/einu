@@ -5,7 +5,7 @@
 #include <mutex>
 
 #include "ecs-core/entity_id.h"
-#include "ecs-core/i_component.h"
+#include "ecs-core/component_tag.h"
 #include "ecs-core/object-pool/fixed_size_pool.h"
 #include "ecs-core/threading_model.h"
 
@@ -15,7 +15,7 @@ template <typename T,
           typename ThreadingModel,
           typename PoolPolicy = FixedSizePool<T, ThreadingModel>>
 class ComponentManager : public ThreadingModel, public PoolPolicy {
-  static_assert(std::is_base_of<IComponent, T>() &&
+  static_assert(std::is_base_of<ComponentTag, T>() &&
                 "T must inherit from Component");
 
  public:

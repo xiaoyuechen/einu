@@ -6,8 +6,9 @@
 #include "ecs-core/component_setting.h"
 #include "ecs-core/entity_manager.h"
 #include "ecs-core/system.h"
-#include "ecs-core/utility/type_list.h"
 #include "ecs-core/threading_model.h"
+#include "ecs-core/utility/type_list.h"
+#include "ecs-core/entity_manager.h"
 
 namespace ecs {
 
@@ -65,72 +66,46 @@ TEST_F(TypeListTest, EraseAll) {
 }
 
 //////////////////////////////////////////////////////////////////////////
-// WolrdTest:
+// EntityManagerTest:
 //////////////////////////////////////////////////////////////////////////
 
-using MyComponentList = ComponentList<C_0, C_1>;
+using MyComponentList = ComponentList<C_0, C_1, C_2>;
 using MyComponentSetting = ComponentSetting<MyComponentList>;
 
 class MyComponentManagerPolicy
-    : public ComponentManagerPolicy<MyComponentSetting, SingleThreaded> {
+    : public ComponentManagerPolicy<MyComponentSetting, MultiThreaded> {
  public:
   MyComponentManagerPolicy()
-      : c_0_manager_{100}
+      : c_0_manager_{99}
       , c_1_manager_{666}
-      , ComponentManagerPolicy(c_0_manager_, c_1_manager_) {}
+      , c_2_manager_{99999}
+      , ComponentManagerPolicy(c_0_manager_, c_1_manager_,c_2_manager_) {}
 
  private:
   ComponentManager<C_0> c_0_manager_;
   ComponentManager<C_1> c_1_manager_;
+  ComponentManager<C_2> c_2_manager_;
 };
 
 using MyEntityManager =
-    EntityManager<MyComponentSetting, MyComponentManagerPolicy>;
+    EntityManager<MyComponentSetting, MyComponentManagerPolicy, MultiThreaded>;
 
 struct EntityManagerTest : testing::Test {
   MyEntityManager ett_mgr;
 };
 
-// TEST_F(EntityManagerTest, GetComponentManager) {
-//  auto& m = ett_mgr.GetComponentManager<C_1>();
-//  constexpr bool r = std::is_same<decltype(m), ComponentManager<C_1>&>::value;
-//  EXPECT_EQ(r, true);
-//
-//  const auto& mgr_cref = ett_mgr;
-//  mgr_cref.GetComponentManager<C_1>();
-//}
-
-TEST_F(EntityManagerTest, AddComponent) {
-  auto eid = ett_mgr.SpawnEntity();
-  ett_mgr.AddComponent<C_1>(eid);
-}
-
-TEST_F(EntityManagerTest, RemoveComponent) {
-  auto eid = ett_mgr.SpawnEntity();
-  ett_mgr.AddComponent<C_1>(eid);
-  ett_mgr.RemoveComponent<C_1>(eid);
-}
-
-TEST_F(EntityManagerTest, GetEntity) {
-  auto eid = ett_mgr.SpawnEntity();
-  /*auto& ett = */ ett_mgr.GetEntity(eid);
-}
-
-TEST_F(EntityManagerTest, GetMatchingComponents) {
-  ett_mgr.RegisterInterest(Type2Type<ComponentList<C_0, C_1>>{});
-  auto eid = ett_mgr.SpawnEntity();
-  ett_mgr.AddComponent<C_0>(eid);
-  ett_mgr.AddComponent<C_1>(eid);
-
-  auto comp_buffer = std::vector<std::tuple<C_0&, C_1&>>{};
-  ett_mgr.GetMatchingComponents(comp_buffer);
+TEST_F(EntityManagerTest, CreateEntity) {
+  for (auto i = std::size_t{0}; i != 9999; ++i) {
+    ett_mgr.CreateEntity();
+  }
+  EXPECT_EQ(ett_mgr.GetEntityCount(), 9999);
 }
 
 //////////////////////////////////////////////////////////////////////////
 // SystemTest:
 //////////////////////////////////////////////////////////////////////////
 
-using MyRequiredComponentList = RequiredComponentList<C_0, C_1>;
+using MyRequiredComponentList = RequiredComponentList<C_2, C_1>;
 using MySystem = System<MyEntityManager, MyRequiredComponentList>;
 
 struct SystemTest : testing::Test {
@@ -143,19 +118,19 @@ struct SystemTest : testing::Test {
 
 TEST_F(SystemTest, GetMatchingComponentTuples) {
   EXPECT_EQ(sys.GetMatchingComponentTuples().size(), 0);
-  for (auto i = std::size_t(0); i != 100; ++i) {
-    auto eid = ett_mgr.SpawnEntity();
-    ett_mgr.AddComponent<C_0>(eid);
-    ett_mgr.AddComponent<C_1>(eid);
+  for (auto i = std::size_t(0); i != 666; ++i) {
+    auto ett = ett_mgr.CreateEntity();
+    ett.AddComponent<C_1>();
+    ett.AddComponent<C_2>();
   }
 
-  EXPECT_EQ(sys.GetMatchingComponentTuples().size(), 100);
+  EXPECT_EQ(sys.GetMatchingComponentTuples().size(), 666);
 
-  for (auto i = std::size_t(0); i != 500; ++i) {
-    auto eid = ett_mgr.SpawnEntity();
-    ett_mgr.AddComponent<C_1>(eid);
+  for (auto i = std::size_t(0); i != 99; ++i) {
+    auto ett = ett_mgr.CreateEntity();
+    ett.AddComponent<C_0>();
   }
 
-  EXPECT_EQ(sys.GetMatchingComponentTuples().size(), 100);
+  EXPECT_EQ(sys.GetMatchingComponentTuples().size(), 666);
 }
 }  // namespace ecs

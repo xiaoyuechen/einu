@@ -22,6 +22,9 @@ struct ComponentSetting {
 
   template <typename... Ts>
   static ComponentMask GetComponentMask();
+
+  template<ComponentTypeIndex index>
+  using ComponentTypeAt = typename TypeAt<ComponentList, index>::Type;
 };
 
 //////////////////////////////////////////////////////////////////////////

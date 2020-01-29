@@ -4,7 +4,7 @@
 #include <array>
 
 #include "ecs-core/component_setting.h"
-#include "ecs-core/i_component.h"
+#include "ecs-core/component_tag.h"
 
 namespace ecs {
 
@@ -24,7 +24,7 @@ class ComponentArray {
  private:
   static constexpr auto kComponentTypeCount =
       ComponentSetting::GetComponentTypeCount();
-  std::array<IComponent*, kComponentTypeCount> arr_{nullptr};
+  std::array<ComponentTag*, kComponentTypeCount> arr_{nullptr};
 };
 
 //////////////////////////////////////////////////////////////////////////

@@ -10,8 +10,8 @@
 
 namespace ecs {
 
-template <typename ComponentSetting>
-class ComponentCacheManager {
+template <typename ComponentSetting, typename ThreadingModel>
+class ComponentCacheManager : public ThreadingModel {
  public:
   using ComponentMask = typename ComponentSetting::ComponentMask;
   using ComponentArray = ComponentArray<ComponentSetting>;
@@ -43,17 +43,20 @@ class ComponentCacheManager {
 
 //////////////////////////////////////////////////////////////////////////
 
-template <typename ComponentSetting>
-inline void ComponentCacheManager<ComponentSetting>::RegisterComponentMask(
+template <typename ComponentSetting, typename ThreadingModel>
+inline void
+ComponentCacheManager<ComponentSetting, ThreadingModel>::RegisterComponentMask(
     const ComponentMask& mask) {
+  ThreadingModel::Lock lock(*this);
   cache_map_.insert({mask, ComponentCache{}});
 }
 
-template <typename ComponentSetting>
-inline void ComponentCacheManager<ComponentSetting>::AddEntity(
+template <typename ComponentSetting, typename ThreadingModel>
+inline void ComponentCacheManager<ComponentSetting, ThreadingModel>::AddEntity(
     const EntityID& eid,
     const ComponentMask& mask,
     const ComponentArray& components) {
+  ThreadingModel::Lock lock(*this);
   for (auto&& [required_mask, cache] : cache_map_) {
     if ((mask & required_mask) == required_mask) {
       cache.ett_comp_map.insert({eid, components});
@@ -62,9 +65,11 @@ inline void ComponentCacheManager<ComponentSetting>::AddEntity(
   }
 }
 
-template <typename ComponentSetting>
-inline void ComponentCacheManager<ComponentSetting>::RemoveEntity(
+template <typename ComponentSetting, typename ThreadingModel>
+inline void
+ComponentCacheManager<ComponentSetting, ThreadingModel>::RemoveEntity(
     const EntityID& eid, const ComponentMask& mask) {
+  ThreadingModel::Lock lock(*this);
   for (auto&& [required_mask, cache] : cache_map_) {
     if ((mask & required_mask) == required_mask) {
       cache.ett_comp_map.erase(eid);
@@ -73,10 +78,11 @@ inline void ComponentCacheManager<ComponentSetting>::RemoveEntity(
   }
 }
 
-template <typename ComponentSetting>
+template <typename ComponentSetting, typename ThreadingModel>
 inline const std::vector<
-    typename ComponentCacheManager<ComponentSetting>::ComponentArray>&
-ComponentCacheManager<ComponentSetting>::GetComponentArrays(
+    typename ComponentCacheManager<ComponentSetting,
+                                   ThreadingModel>::ComponentArray>&
+ComponentCacheManager<ComponentSetting, ThreadingModel>::GetComponentArrays(
     const ComponentMask& mask) const {
   const auto& cache = cache_map_.at(mask);
 
@@ -92,20 +98,21 @@ ComponentCacheManager<ComponentSetting>::GetComponentArrays(
   return cache.comp_arrs;
 }
 
-template <typename ComponentSetting>
+template <typename ComponentSetting, typename ThreadingModel>
 inline std::vector<
-    typename ComponentCacheManager<ComponentSetting>::ComponentArray>&
-ComponentCacheManager<ComponentSetting>::GetComponentArrays(
+    typename ComponentCacheManager<ComponentSetting,
+                                   ThreadingModel>::ComponentArray>&
+ComponentCacheManager<ComponentSetting, ThreadingModel>::GetComponentArrays(
     const ComponentMask& mask) {
   return const_cast<std::vector<ComponentArray>&>(
       static_cast<const ComponentCacheManager&>(*this).GetComponentArrays(
           mask));
 }
 
-template <typename ComponentSetting>
-inline bool
-ComponentCacheManager<ComponentSetting>::ComponentMaskCompare::operator()(
-    const ComponentMask& lhs, const ComponentMask& rhs) const noexcept {
+template <typename ComponentSetting, typename ThreadingModel>
+inline bool ComponentCacheManager<ComponentSetting, ThreadingModel>::
+    ComponentMaskCompare::operator()(const ComponentMask& lhs,
+                                     const ComponentMask& rhs) const noexcept {
   /**
    * Comparators require strict weak orderings:
    * For all a, comp(a,a)==false

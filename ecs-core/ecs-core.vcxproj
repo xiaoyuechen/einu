@@ -137,9 +137,10 @@
   <ItemGroup>
     <ClInclude Include="include\ecs-core\component_array.h" />
     <ClInclude Include="include\ecs-core\component_cache_manager.h" />
+    <ClInclude Include="include\ecs-core\component_manager_policy.h" />
     <ClInclude Include="include\ecs-core\component_setting.h" />
     <ClInclude Include="include\ecs-core\entity.h" />
-    <ClInclude Include="include\ecs-core\i_component.h" />
+    <ClInclude Include="include\ecs-core\component_tag.h" />
     <ClInclude Include="include\ecs-core\component_manager.h" />
     <ClInclude Include="include\ecs-core\entity_id_manager.h" />
     <ClInclude Include="include\ecs-core\entity_manager.h" />
@@ -148,14 +149,9 @@
     <ClInclude Include="include\ecs-core\entity_id.h" />
     <ClInclude Include="include\ecs-core\threading_model.h" />
     <ClInclude Include="include\ecs-core\utility\algorithm.h" />
-    <ClInclude Include="include\ecs-core\utility\pattern.h" />
     <ClInclude Include="include\ecs-core\utility\type_list.h" />
     <ClInclude Include="include\ecs-core\utility\type_mapping.h" />
-    <ClInclude Include="include\ecs-core\utility\util.h" />
     <ClInclude Include="include\ecs-core\system.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="source\pattern.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

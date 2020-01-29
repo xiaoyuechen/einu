@@ -9,8 +9,7 @@
 
 namespace ecs {
 
-template <typename IndexType,
-          typename ThreadingModel>
+template <typename IndexType, typename ThreadingModel>
 class FreeIndexStack : public ThreadingModel {
  public:
   FreeIndexStack(IndexType count);
@@ -33,7 +32,7 @@ inline IndexType FreeIndexStack<IndexType, ThreadingModel>::Size() const
 template <typename IndexType, typename ThreadingModel>
 FreeIndexStack<IndexType, ThreadingModel>::FreeIndexStack(IndexType count) {
   stack_.reserve(count);
-  algo::repeat(count, [&] { stack_.push_back(--count); });
+  algo::Repeat(count, [&] { stack_.push_back(--count); });
 }
 
 template <typename IndexType, typename ThreadingModel>

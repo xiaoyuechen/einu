@@ -33,21 +33,24 @@ class Entity {
 
 template <typename ComponentSetting>
 template <typename T>
-inline void Entity<ComponentSetting>::AddComponent(T& comp) noexcept {
-  mask_[ComponentSetting::template GetComponentTypeIndex<T>()] = true;
+inline void Entity<ComponentSetting>::AddComponent(
+    T& comp) noexcept {
   comp_arr_.Insert(comp);
+  mask_[ComponentSetting::template GetComponentTypeIndex<T>()] = true;
 }
 
 template <typename ComponentSetting>
 template <typename T>
-inline void Entity<ComponentSetting>::RemoveComponent() noexcept {
-  mask_[ComponentSetting::template GetComponentTypeIndex<T>()] = false;
+inline void
+Entity<ComponentSetting>::RemoveComponent() noexcept {
   comp_arr_.Erase<T>();
+  mask_[ComponentSetting::template GetComponentTypeIndex<T>()] = false;
 }
 
 template <typename ComponentSetting>
 template <typename T>
-inline const T& Entity<ComponentSetting>::GetComponent() const noexcept {
+inline const T& Entity<ComponentSetting>::GetComponent() const
+    noexcept {
   return comp_arr_.Get<T>();
 }
 
@@ -58,7 +61,7 @@ inline T& Entity<ComponentSetting>::GetComponent() noexcept {
 }
 
 template <typename ComponentSetting>
-inline const typename Entity<ComponentSetting>::ComponentMask& 
+inline const typename Entity<ComponentSetting>::ComponentMask&
 Entity<ComponentSetting>::GetComponentMask() const noexcept {
   return mask_;
 }

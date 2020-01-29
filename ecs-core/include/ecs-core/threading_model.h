@@ -44,9 +44,7 @@ inline MultiThreaded::Lock::Lock(MultiThreaded& host)
   host_.mutex_.lock();
 }
 
-inline MultiThreaded::Lock::~Lock() {
-  host_.mutex_.unlock();
-}
+inline MultiThreaded::Lock::~Lock() { host_.mutex_.unlock(); }
 
 }  // namespace ecs
 
