@@ -3,12 +3,13 @@
 #include <type_traits>
 
 #include "Test_class_collection.h"
-#include "ecs-core/component_setting.h"
-#include "ecs-core/entity_manager.h"
-#include "ecs-core/system.h"
-#include "ecs-core/threading_model.h"
-#include "ecs-core/utility/type_list.h"
-#include "ecs-core/entity_manager.h"
+#include "ecs-engine/window/context.h"
+#include "ecs-engine/window/window.h"
+#include "ecs-engine/core/component_setting.h"
+#include "ecs-engine/core/entity_manager.h"
+#include "ecs-engine/core/system.h"
+#include "ecs-engine/core/threading_model.h"
+#include "ecs-engine/utility/type_list.h"
 
 namespace ecs {
 
@@ -79,7 +80,7 @@ class MyComponentManagerPolicy
       : c_0_manager_{99}
       , c_1_manager_{666}
       , c_2_manager_{99999}
-      , ComponentManagerPolicy(c_0_manager_, c_1_manager_,c_2_manager_) {}
+      , ComponentManagerPolicy(c_0_manager_, c_1_manager_, c_2_manager_) {}
 
  private:
   ComponentManager<C_0> c_0_manager_;
@@ -133,4 +134,16 @@ TEST_F(SystemTest, GetMatchingComponentTuples) {
 
   EXPECT_EQ(sys.GetMatchingComponentTuples().size(), 666);
 }
+
+//////////////////////////////////////////////////////////////////////////
+// WindowTest:
+//////////////////////////////////////////////////////////////////////////
+struct WindowTest : testing::Test {
+  WindowTest()
+      : window(Window::Mode::WINDOWED, 1280, 720, "application") {}
+  Window window;
+};
+
+TEST_F(WindowTest, Construct) { getchar(); }
+
 }  // namespace ecs

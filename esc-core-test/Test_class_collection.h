@@ -1,7 +1,7 @@
 #ifndef TEST_CLASS_COLLECTION_H_
 #define TEST_CLASS_COLLECTION_H_
 
-#include "ecs-core/component_tag.h"
+#include "ecs-engine/core/component_tag.h"
 
 namespace ecs {
 struct C_0 : ComponentTag {};
