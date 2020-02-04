@@ -90,6 +90,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalIncludeDirectories>include/;../external/glm/include/;../external/glfw-3.3/include/;../external/glad/include/;../external/stb-image/include/</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -104,6 +105,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalIncludeDirectories>include/;../external/glm/include/;../external/glfw-3.3/include/;../external/glad/include/;../external/stb-image/include/</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -146,8 +148,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="include\ecs-engine\window\context.h" />
-    <ClInclude Include="include\ecs-engine\window\input.h" />
+    <ClInclude Include="include\ecs-engine\input\input_fn.h" />
+    <ClInclude Include="include\ecs-engine\utility\file_reader.h" />
+    <ClInclude Include="include\ecs-engine\window\gl_context.h" />
+    <ClInclude Include="include\ecs-engine\input\input.h" />
     <ClInclude Include="include\ecs-engine\core\component_array.h" />
     <ClInclude Include="include\ecs-engine\core\component_cache_manager.h" />
     <ClInclude Include="include\ecs-engine\core\component_manager_policy.h" />
@@ -181,28 +185,29 @@
     <ClInclude Include="include\ecs-engine\utility\pattern.h" />
     <ClInclude Include="include\ecs-engine\utility\type_list.h" />
     <ClInclude Include="include\ecs-engine\utility\type_mapping.h" />
-    <ClInclude Include="include\ecs-engine\file-system\file_system.h" />
     <ClInclude Include="include\glad\glad.h" />
     <ClInclude Include="include\KHR\khrplatform.h" />
     <ClInclude Include="include\ecs-engine\window\window.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\ecs-application\context.cpp" />
-    <ClCompile Include="source\ecs-application\window.cpp" />
-    <ClCompile Include="source\ecs-graphics\bitmap_font.cpp" />
-    <ClCompile Include="source\ecs-graphics\camera.cpp" />
-    <ClCompile Include="source\file-system\file_system.cpp" />
-    <ClCompile Include="source\ecs-graphics\glad.c" />
-    <ClCompile Include="source\ecs-graphics\gl_error.cpp" />
-    <ClCompile Include="source\ecs-graphics\shader_program.cpp" />
-    <ClCompile Include="source\ecs-graphics\sampler.cpp" />
-    <ClCompile Include="source\ecs-graphics\shader.cpp" />
-    <ClCompile Include="source\ecs-graphics\shader_util.cpp" />
-    <ClCompile Include="source\ecs-graphics\texture.cpp" />
-    <ClCompile Include="source\ecs-graphics\vertex_array.cpp" />
-    <ClCompile Include="source\ecs-graphics\vertex_buffer.cpp" />
-    <ClCompile Include="source\ecs-graphics\vertex_format.cpp" />
-    <ClCompile Include="source\ecs-utility\pattern.cpp" />
+    <ClCompile Include="source\ecs-engine\input\input.cpp" />
+    <ClCompile Include="source\ecs-engine\input\input_fn.cpp" />
+    <ClCompile Include="source\ecs-engine\window\gl_context.cpp" />
+    <ClCompile Include="source\ecs-engine\window\window.cpp" />
+    <ClCompile Include="source\ecs-engine\graphics\bitmap_font.cpp" />
+    <ClCompile Include="source\ecs-engine\graphics\camera.cpp" />
+    <ClCompile Include="source\ecs-engine\utility\file_reader.cpp" />
+    <ClCompile Include="source\ecs-engine\graphics\glad.c" />
+    <ClCompile Include="source\ecs-engine\graphics\gl_error.cpp" />
+    <ClCompile Include="source\ecs-engine\graphics\shader_program.cpp" />
+    <ClCompile Include="source\ecs-engine\graphics\sampler.cpp" />
+    <ClCompile Include="source\ecs-engine\graphics\shader.cpp" />
+    <ClCompile Include="source\ecs-engine\graphics\shader_util.cpp" />
+    <ClCompile Include="source\ecs-engine\graphics\texture.cpp" />
+    <ClCompile Include="source\ecs-engine\graphics\vertex_array.cpp" />
+    <ClCompile Include="source\ecs-engine\graphics\vertex_buffer.cpp" />
+    <ClCompile Include="source\ecs-engine\graphics\vertex_format.cpp" />
+    <ClCompile Include="source\ecs-engine\utility\pattern.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

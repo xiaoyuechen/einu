@@ -3,7 +3,7 @@
 #include <stdexcept>
 
 #include "ecs-engine/graphics/stb_image.h"
-#include "ecs-engine/file-system/file_system.h"
+#include "ecs-engine/utility/file_reader.h"
 
 namespace ecs {
 
@@ -28,8 +28,9 @@ class Image {
 };
 
 Image::Image(const char* filename) {
-  auto content = file_system::ReadFileContent(filename, std::ios_base::binary);
-  auto data = reinterpret_cast<uint8_t*>(content.data());
+  auto file_reader = FileReader(filename, FileReader::Mode::BINARY);
+  const auto& content = file_reader.GetContent();
+  const auto data = reinterpret_cast<const uint8_t*>(content.data());
   auto size = static_cast<int>(content.size());
   image_ = stbi_load_from_memory(
       data, size, &width_, &height_, &components_, STBI_rgb_alpha);

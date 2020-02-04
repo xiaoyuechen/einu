@@ -3,14 +3,15 @@
 #include <stdexcept>
 
 #include "ecs-engine/graphics/shader_util.h"
-#include "ecs-engine/file-system/file_system.h"
+#include "ecs-engine/utility/file_reader.h"
 
 namespace ecs {
 
 namespace {
 
 auto read_file(const char* filename) {
-  auto data = file_system::ReadFileContent(filename);
+  auto file_reader = FileReader(filename);
+  auto data = file_reader.GetContent();
   data.push_back(0);
   return data;
 }

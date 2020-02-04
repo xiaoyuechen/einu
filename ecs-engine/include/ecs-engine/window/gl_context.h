@@ -1,5 +1,5 @@
-#ifndef CONTEXT_H_
-#define CONTEXT_H_
+#ifndef GL_CONTEXT_H_
+#define GL_CONTEXT_H_
 
 #include <glad/glad.h>
 
@@ -8,12 +8,12 @@
 
 namespace ecs {
 
-class Context {
+class GLContext {
  public:
-  Context();
-  ~Context();
+  GLContext();
+  ~GLContext();
 };
 
 }  // namespace ecs
 
-#endif  // CONTEXT_H_
+#endif  // GL_CONTEXT_H_

@@ -159,11 +159,7 @@ enum class KeyboardKey {
   LAST = GLFW_KEY_LAST,
 };
 
-using KeyCallback = std::function<void(KeyboardKey, Action, ModifierKey)>;
-using MouseButtonCallback =
-    std::function<void(MouseButton, Action, ModifierKey)>;
-using CursorPosCallback = std::function<void(double, double)>;
-using ScrollCallback = std::function<void(double, double)>;
+const char* GetKeyName(KeyboardKey key);
 
 // TODO(Xiaoyue Chen): add joystick support
 

@@ -1,4 +1,4 @@
-#include "ecs-engine/window/context.h"
+#include "ecs-engine/window/gl_context.h"
 
 #include "ecs-engine/graphics/gl_error.h"
 
@@ -20,10 +20,10 @@ void InitializeGLAD() {
 }
 }  // namespace
 
-Context::Context() {
+GLContext::GLContext() {
   InitializeGLFW();
 }
 
-Context::~Context() { glfwTerminate(); }
+GLContext::~GLContext() { glfwTerminate(); }
 
 }  // namespace ecs
