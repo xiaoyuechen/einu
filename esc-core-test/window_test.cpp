@@ -53,14 +53,14 @@ TEST_F(WindowTest, Render) {
 
   // clang-format off
   constexpr float verts[] = {
-      -0.5f, -0.5f, 0.0f, 
-      0.5f, -0.5f, 0.0f,  
-      0.0f, 0.5f, 0.0f,   
+      -0.5f, -0.5f,
+      0.5f, -0.5f,
+      0.0f, 0.5f, 
   };
   // clang-format on
 
   vbo.Set(sizeof(verts), verts);
-  format.AddAttribute(0, 3, GL_FLOAT, GL_FALSE);
+  format.AddAttribute(0, 2, GL_FLOAT, GL_FALSE);
 
   while (!window.ShouldClose()) {
     window.PollEvents();

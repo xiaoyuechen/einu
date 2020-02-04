@@ -135,6 +135,25 @@ TEST_F(SystemTest, GetMatchingComponentTuples) {
   EXPECT_EQ(sys.GetMatchingComponentTuples().size(), 666);
 }
 
+TEST_F(SystemTest, GetEntityHandle) {
+  EXPECT_EQ(sys.GetMatchingComponentTuples().size(), 0);
+  for (auto i = std::size_t(0); i != 666; ++i) {
+    auto ett = ett_mgr.CreateEntity();
+    ett.AddComponent<C_1>();
+    ett.AddComponent<C_2>();
+  }
+
+  EXPECT_EQ(sys.GetMatchingComponentTuples().size(), 666);
+
+  for (auto&& tuple : sys.GetMatchingComponentTuples()) {
+    auto ett_handle = sys.GetEntityHandle(tuple);
+    ett_handle.Destory();
+  }
+
+  EXPECT_EQ(sys.GetMatchingComponentTuples().size(), 0);
+  
+}
+
 
 
 }  // namespace ecs

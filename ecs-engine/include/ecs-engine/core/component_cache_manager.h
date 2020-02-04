@@ -16,21 +16,26 @@ class ComponentCacheManager : public ThreadingModel {
   using ComponentMask = typename ComponentSetting::ComponentMask;
   using ComponentArray = ComponentArray<ComponentSetting>;
 
+  struct CacheData {
+    std::vector<EntityID> eid_arr;
+    std::vector<ComponentArray> comp_arrs;
+    void Clear() noexcept;
+  };
+
   void RegisterComponentMask(const ComponentMask& mask);
   void AddEntity(const EntityID& eid,
                  const ComponentMask& mask,
                  const ComponentArray& components);
   void RemoveEntity(const EntityID& eid, const ComponentMask& mask);
 
-  const std::vector<ComponentArray>& GetComponentArrays(
-      const ComponentMask& mask) const;
-  std::vector<ComponentArray>& GetComponentArrays(const ComponentMask& mask);
+  const CacheData& GetCacheData(const ComponentMask& mask) const;
+  CacheData& GetCacheData(const ComponentMask& mask);
 
  private:
   struct ComponentCache {
     std::map<EntityID, ComponentArray> ett_comp_map{};
-    mutable std::vector<ComponentArray> comp_arrs{};
     mutable bool is_expired = false;
+    mutable CacheData cache_data{};
   };
 
   struct ComponentMaskCompare {
@@ -79,34 +84,30 @@ ComponentCacheManager<ComponentSetting, ThreadingModel>::RemoveEntity(
 }
 
 template <typename ComponentSetting, typename ThreadingModel>
-inline const std::vector<
-    typename ComponentCacheManager<ComponentSetting,
-                                   ThreadingModel>::ComponentArray>&
-ComponentCacheManager<ComponentSetting, ThreadingModel>::GetComponentArrays(
+const typename ComponentCacheManager<ComponentSetting,
+                                     ThreadingModel>::CacheData&
+ComponentCacheManager<ComponentSetting, ThreadingModel>::GetCacheData(
     const ComponentMask& mask) const {
   const auto& cache = cache_map_.at(mask);
 
-  // refresh the component arrays if cache is expired
+  // refresh the cache data if expired
   if (cache.is_expired) {
-    cache.comp_arrs.clear();
+    cache.cache_data.Clear();
     for (const auto& [eid, comp_arr] : cache.ett_comp_map) {
-      cache.comp_arrs.push_back(comp_arr);
+      cache.cache_data.eid_arr.push_back(eid);
+      cache.cache_data.comp_arrs.push_back(comp_arr);
     }
     cache.is_expired = false;
   }
-
-  return cache.comp_arrs;
+  return cache.cache_data;
 }
 
 template <typename ComponentSetting, typename ThreadingModel>
-inline std::vector<
-    typename ComponentCacheManager<ComponentSetting,
-                                   ThreadingModel>::ComponentArray>&
-ComponentCacheManager<ComponentSetting, ThreadingModel>::GetComponentArrays(
+typename ComponentCacheManager<ComponentSetting, ThreadingModel>::CacheData&
+ComponentCacheManager<ComponentSetting, ThreadingModel>::GetCacheData(
     const ComponentMask& mask) {
-  return const_cast<std::vector<ComponentArray>&>(
-      static_cast<const ComponentCacheManager&>(*this).GetComponentArrays(
-          mask));
+  return const_cast<CacheData&>(
+      static_cast<const ComponentCacheManager&>(*this).GetCacheData(mask));
 }
 
 template <typename ComponentSetting, typename ThreadingModel>
@@ -120,6 +121,13 @@ inline bool ComponentCacheManager<ComponentSetting, ThreadingModel>::
    * if comp(a,b)==true and comp(b,c)==true then comp(a,c)==true
    */
   return (lhs & rhs) != lhs;
+}
+
+template <typename ComponentSetting, typename ThreadingModel>
+inline void ComponentCacheManager<ComponentSetting,
+                                  ThreadingModel>::CacheData::Clear() noexcept {
+  eid_arr.clear();
+  comp_arrs.clear();
 }
 
 }  // namespace ecs

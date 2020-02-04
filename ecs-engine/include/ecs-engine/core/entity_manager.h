@@ -41,7 +41,8 @@ class EntityManager : public ComponentManagerPolicy, public ThreadingModel {
   EntityHandle CreateEntity();
 
   template <typename... Ts>
-  void GetMatchingComponents(std::vector<std::tuple<Ts&...>>& dest);
+  void GetMatchingComponents(std::vector<std::tuple<Ts&...>>* tuple_dest,
+                             std::vector<EntityID>* eid_dest);
 
   template <typename... Ts>
   void RegisterInterest(Type2Type<ComponentList<Ts...>>);
@@ -165,14 +166,16 @@ template <typename ComponentSetting,
 template <typename... Ts>
 inline void
 EntityManager<ComponentSetting, ComponentManagerPolicy, ThreadingModel>::
-    GetMatchingComponents(std::vector<std::tuple<Ts&...>>& dest) {
+    GetMatchingComponents(std::vector<std::tuple<Ts&...>>* tuple_dest,
+                          std::vector<EntityID>* eid_dest) {
   auto comp_mask = ComponentSetting::template GetComponentMask<Ts...>();
-  auto& comp_arrs = comp_cache_mgr_.GetComponentArrays(comp_mask);
+  auto& cache_data = comp_cache_mgr_.GetCacheData(comp_mask);
 
-  dest.clear();
-  for (auto&& comp_arr : comp_arrs) {
-    dest.emplace_back(comp_arr.Get<Ts>()...);
+  tuple_dest->clear();
+  for (auto&& comp_arr : cache_data.comp_arrs) {
+    tuple_dest->emplace_back(comp_arr.Get<Ts>()...);
   }
+  *eid_dest = cache_data.eid_arr;
 }
 
 template <typename ComponentSetting,

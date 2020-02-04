@@ -28,7 +28,7 @@ class Window {
   template <typename Fn>
   void SetInputCallback(const Fn& callback);
 
-  void SetWindowShouldClose(bool should_close);
+  void SetWindowShouldClose(bool should_close = true);
   bool ShouldClose() const;
   void SwapBuffer();
   void PollEvents();
