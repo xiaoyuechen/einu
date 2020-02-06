@@ -10,7 +10,7 @@ FileReader::FileReader(const char* file_name, Mode mode) {
     throw std::runtime_error("could not open file: " + std::string(file_name));
   }
   file.seekg(0, file.end);
-  size_t length = file.tellg();
+  size_t length = static_cast<size_t>(file.tellg());
   file.seekg(0, file.beg);
   content_.resize(length);
   file.read(content_.data(), length);
