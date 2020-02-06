@@ -169,7 +169,7 @@ inline void EntityManager<ComponentSetting,
   auto& mgr = GetComponentManager<T>();
   auto& comp = mgr.AddComponent(eid);
   auto& ett = ett_map_.at(eid);
-  ThreadingModel::Lock lock(*this);
+  typename ThreadingModel::Lock lock(*this);
   ett.AddComponent<T>(comp);
 
   comp_cache_mgr_.AddEntity(
@@ -189,7 +189,7 @@ EntityManager<ComponentSetting, ComponentManagerPolicy, ThreadingModel>::
 
   auto& mgr = GetComponentManager<T>();
   mgr.RemoveComponent(eid);
-  ThreadingModel::Lock lock(*this);
+  typename ThreadingModel::Lock lock(*this);
   ett.RemoveComponent<T>();
 }
 
@@ -241,7 +241,7 @@ template <typename T>
 inline const T& EntityManager<ComponentSetting,
                               ComponentManagerPolicy,
                               ThreadingModel>::GetSingletonComponent() const {
-  return ComponentManagerPolicy::GetSingletonComponent<T>();
+  return ComponentManagerPolicy::template GetSingletonComponent<T>();
 }
 
 template <typename ComponentSetting,
@@ -283,7 +283,7 @@ inline EntityID EntityManager<ComponentSetting,
                               ComponentManagerPolicy,
                               ThreadingModel>::CreateEntityID() {
   auto eid = ett_id_mgr_.GenEntityID();
-  ThreadingModel::Lock lock(*this);
+  typename ThreadingModel::Lock lock(*this);
   ett_map_.insert({eid, Entity{}});
   return eid;
 }

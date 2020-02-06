@@ -38,7 +38,7 @@ FreeIndexStack<IndexType, ThreadingModel>::FreeIndexStack(IndexType count) {
 template <typename IndexType, typename ThreadingModel>
 typename IndexType FreeIndexStack<IndexType, ThreadingModel>::Acquire() {
   assert(!stack_.empty() && "no index is free");
-  ThreadingModel::Lock lock(*this);
+  typename ThreadingModel::Lock lock(*this);
   auto value = stack_.back();
   stack_.pop_back();
   return value;
@@ -49,7 +49,7 @@ void FreeIndexStack<IndexType, ThreadingModel>::Recall(IndexType value) {
   assert(std::find(std::begin(stack_), std::end(stack_), value) ==
              std::end(stack_) &&
          "the recalling value exists in stack");
-  ThreadingModel::Lock lock(*this);
+  typename ThreadingModel::Lock lock(*this);
   stack_.push_back(value);
 }
 

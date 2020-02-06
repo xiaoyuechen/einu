@@ -7,7 +7,7 @@
 #include "ecs-engine/core/entity_manager.h"
 #include "ecs-engine/extension/policy/component_manager_policy.h"
 #include "ecs-engine/core/system.h"
-#include "ecs-engine/core/threading_model.h"
+#include "ecs-engine/extension/policy/threading_model.h"
 #include "ecs-engine/utility/type_list.h"
 #include "ecs-engine/window/gl_context.h"
 #include "ecs-engine/window/window.h"

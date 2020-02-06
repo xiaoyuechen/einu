@@ -10,6 +10,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "esc-core-test", "esc-core-t
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ecs-engine", "ecs-engine\ecs-engine.vcxproj", "{D906108D-FE8B-4313-A317-ECD094A7398A}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "the-event-loop-of-life", "the-event-loop-of-life\the-event-loop-of-life.vcxproj", "{2CB8F362-0350-456D-B0C8-69E065CC33C2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -34,6 +36,14 @@ Global
 		{D906108D-FE8B-4313-A317-ECD094A7398A}.Release|x64.Build.0 = Release|x64
 		{D906108D-FE8B-4313-A317-ECD094A7398A}.Release|x86.ActiveCfg = Release|x64
 		{D906108D-FE8B-4313-A317-ECD094A7398A}.Release|x86.Build.0 = Release|x64
+		{2CB8F362-0350-456D-B0C8-69E065CC33C2}.Debug|x64.ActiveCfg = Debug|x64
+		{2CB8F362-0350-456D-B0C8-69E065CC33C2}.Debug|x64.Build.0 = Debug|x64
+		{2CB8F362-0350-456D-B0C8-69E065CC33C2}.Debug|x86.ActiveCfg = Debug|Win32
+		{2CB8F362-0350-456D-B0C8-69E065CC33C2}.Debug|x86.Build.0 = Debug|Win32
+		{2CB8F362-0350-456D-B0C8-69E065CC33C2}.Release|x64.ActiveCfg = Release|x64
+		{2CB8F362-0350-456D-B0C8-69E065CC33C2}.Release|x64.Build.0 = Release|x64
+		{2CB8F362-0350-456D-B0C8-69E065CC33C2}.Release|x86.ActiveCfg = Release|Win32
+		{2CB8F362-0350-456D-B0C8-69E065CC33C2}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -51,9 +51,6 @@
     <ClInclude Include="include\ecs-engine\core\system.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\ecs-engine\core\threading_model.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\ecs-engine\graphics\bitmap_font.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -151,6 +148,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\ecs-engine\extension\component\transform_component.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-engine\extension\policy\threading_model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -168,7 +168,7 @@
     <ClInclude Include="include\ecs-engine\core\entity_id_manager.h" />
     <ClInclude Include="include\ecs-engine\core\entity_manager.h" />
     <ClInclude Include="include\ecs-engine\core\entity_id.h" />
-    <ClInclude Include="include\ecs-engine\core\threading_model.h" />
+    <ClInclude Include="include\ecs-engine\extension\policy\threading_model.h" />
     <ClInclude Include="include\ecs-engine\core\system.h" />
     <ClInclude Include="include\ecs-engine\graphics\bitmap_font.h" />
     <ClInclude Include="include\ecs-engine\graphics\camera.h" />

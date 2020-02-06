@@ -86,7 +86,7 @@ template <typename EntityManager>
 inline void InstancedSpriteRenderingSystem<EntityManager>::Render() {
   program_.Bind();
   auto& camera =
-      GetEntityManager().GetSingletonComponent<SingletonCameraComponent>();
+      System::GetEntityManager().GetSingletonComponent<SingletonCameraComponent>();
   auto camera_matrix = camera.GetCameraMatrix();
   program_.SetUniform("camera", camera_matrix);
 
@@ -158,7 +158,7 @@ InstancedSpriteRenderingSystem<EntityManager>::GetVerts(
 template <typename EntityManager>
 inline void InstancedSpriteRenderingSystem<EntityManager>::UpdateTupleMap() {
   tuple_map_.clear();
-  for (const auto& tuple : GetMatchingComponentTuples()) {
+  for (const auto& tuple : System::GetMatchingComponentTuples()) {
     const auto& [instanced_sprite, transform] = tuple;
     auto sprite = instanced_sprite.sprite;
     if (sprite) {

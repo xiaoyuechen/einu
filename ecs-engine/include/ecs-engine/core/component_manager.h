@@ -6,7 +6,7 @@
 
 #include "ecs-engine/core/component_tag.h"
 #include "ecs-engine/core/entity_id.h"
-#include "ecs-engine/core/threading_model.h"
+#include "ecs-engine/extension/policy/threading_model.h"
 #include "ecs-engine/utility/fixed_size_pool.h"
 
 namespace ecs {
@@ -46,7 +46,7 @@ T& ComponentManager<T, ThreadingModel, PoolPolicy>::AddComponent(
     const EntityID& eid) {
   assert(map_.find(eid) == map_.end() && "eid already have component");
   auto& comp = PoolPolicy::Acquire();
-  ThreadingModel::Lock lock(*this);
+  typename ThreadingModel::Lock lock(*this);
   map_.insert({eid, comp});
   return comp;
 }
@@ -70,7 +70,7 @@ void ComponentManager<T, ThreadingModel, PoolPolicy>::RemoveComponent(
     const EntityID& eid) {
   auto& comp = GetComponent(eid);
   PoolPolicy::Recall(comp);
-  ThreadingModel::Lock lock(*this);
+  typename ThreadingModel::Lock lock(*this);
   map_.erase(eid);
 }
 

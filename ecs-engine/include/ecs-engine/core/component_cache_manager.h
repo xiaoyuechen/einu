@@ -52,7 +52,7 @@ template <typename ComponentSetting, typename ThreadingModel>
 inline void
 ComponentCacheManager<ComponentSetting, ThreadingModel>::RegisterComponentMask(
     const ComponentMask& mask) {
-  ThreadingModel::Lock lock(*this);
+  typename ThreadingModel::Lock lock(*this);
   cache_map_.insert({mask, ComponentCache{}});
 }
 
@@ -61,7 +61,7 @@ inline void ComponentCacheManager<ComponentSetting, ThreadingModel>::AddEntity(
     const EntityID& eid,
     const ComponentMask& mask,
     const ComponentArray& components) {
-  ThreadingModel::Lock lock(*this);
+  typename ThreadingModel::Lock lock(*this);
   for (auto&& [required_mask, cache] : cache_map_) {
     if ((mask & required_mask) == required_mask) {
       cache.ett_comp_map.insert({eid, components});
@@ -74,7 +74,7 @@ template <typename ComponentSetting, typename ThreadingModel>
 inline void
 ComponentCacheManager<ComponentSetting, ThreadingModel>::RemoveEntity(
     const EntityID& eid, const ComponentMask& mask) {
-  ThreadingModel::Lock lock(*this);
+  typename ThreadingModel::Lock lock(*this);
   for (auto&& [required_mask, cache] : cache_map_) {
     if ((mask & required_mask) == required_mask) {
       cache.ett_comp_map.erase(eid);
