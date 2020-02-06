@@ -28,6 +28,9 @@ class System {
   typename EntityManager::EntityHandle GetEntityHandle(
       const ComponentTuple& tuple);
 
+  const EntityManager& GetEntityManager() const;
+  EntityManager& GetEntityManager();
+
  private:
   EntityManager& ett_mgr_;
   mutable ComponentTupleBuffer matching_comps_;
@@ -74,6 +77,19 @@ System<EntityManager, RequiredComponentList>::GetEntityHandle(
     const ComponentTuple& tuple) {
   const auto handle = static_cast<const System&>(*this).GetEntityHandle(tuple);
   return *const_cast<typename EntityManager::EntityHandle*>(&handle);
+}
+
+template <typename EntityManager, typename RequiredComponentList>
+inline const EntityManager&
+System<EntityManager, RequiredComponentList>::GetEntityManager() const {
+  return ett_mgr_;
+}
+
+template <typename EntityManager, typename RequiredComponentList>
+inline EntityManager&
+System<EntityManager, RequiredComponentList>::GetEntityManager() {
+  return const_cast<EntityManager&>(
+      static_cast<const System&>(*this).GetEntityManager());
 }
 
 }  // namespace ecs

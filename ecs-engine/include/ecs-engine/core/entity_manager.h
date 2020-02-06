@@ -5,7 +5,6 @@
 #include <tuple>
 
 #include "ecs-engine/core/component_cache_manager.h"
-#include "ecs-engine/core/component_manager_policy.h"
 #include "ecs-engine/core/component_setting.h"
 #include "ecs-engine/core/entity.h"
 #include "ecs-engine/core/entity_id_manager.h"
@@ -30,6 +29,10 @@ class EntityManager : public ComponentManagerPolicy, public ThreadingModel {
     void AddComponent();
     template <typename T>
     void RemoveComponent();
+    template <typename T>
+    const T& GetComponent() const;
+    template <typename T>
+    T& GetComponent();
 
     void Destory();
 
@@ -43,6 +46,11 @@ class EntityManager : public ComponentManagerPolicy, public ThreadingModel {
   template <typename... Ts>
   void GetMatchingComponents(std::vector<std::tuple<Ts&...>>* tuple_dest,
                              std::vector<EntityID>* eid_dest);
+
+  template <typename T>
+  const T& GetSingletonComponent() const;
+  template <typename T>
+  T& GetSingletonComponent();
 
   template <typename... Ts>
   void RegisterInterest(Type2Type<ComponentList<Ts...>>);
@@ -60,6 +68,10 @@ class EntityManager : public ComponentManagerPolicy, public ThreadingModel {
   void AddComponent(const EntityID& eid);
   template <typename T>
   void RemoveComponent(const EntityID& eid);
+  template <typename T>
+  const T& GetComponent(const EntityID& eid) const;
+  template <typename T>
+  T& GetComponent(const EntityID& eid);
 
   const Entity& GetEntity(const EntityID& eid) const;
   Entity& GetEntity(const EntityID& eid);
@@ -118,6 +130,27 @@ inline void EntityManager<ComponentSetting,
 template <typename ComponentSetting,
           typename ComponentManagerPolicy,
           typename ThreadingModel>
+template <typename T>
+inline const T& EntityManager<ComponentSetting,
+                              ComponentManagerPolicy,
+                              ThreadingModel>::EntityHandle::GetComponent()
+    const {
+  return ett_mgr_.GetComponent<T>(eid_);
+}
+
+template <typename ComponentSetting,
+          typename ComponentManagerPolicy,
+          typename ThreadingModel>
+template <typename T>
+inline T& EntityManager<ComponentSetting,
+                        ComponentManagerPolicy,
+                        ThreadingModel>::EntityHandle::GetComponent() {
+  return ett_mgr_.GetComponent<T>(eid_);
+}
+
+template <typename ComponentSetting,
+          typename ComponentManagerPolicy,
+          typename ThreadingModel>
 inline typename EntityManager<ComponentSetting,
                               ComponentManagerPolicy,
                               ThreadingModel>::EntityHandle
@@ -163,6 +196,29 @@ EntityManager<ComponentSetting, ComponentManagerPolicy, ThreadingModel>::
 template <typename ComponentSetting,
           typename ComponentManagerPolicy,
           typename ThreadingModel>
+template <typename T>
+inline const T& EntityManager<ComponentSetting,
+                              ComponentManagerPolicy,
+                              ThreadingModel>::GetComponent(const EntityID& eid)
+    const {
+  const auto& comp_mgr = GetComponentManager<T>();
+  return comp_mgr.GetComponent(eid);
+}
+
+template <typename ComponentSetting,
+          typename ComponentManagerPolicy,
+          typename ThreadingModel>
+template <typename T>
+inline T& EntityManager<ComponentSetting,
+                        ComponentManagerPolicy,
+                        ThreadingModel>::GetComponent(const EntityID& eid) {
+  return const_cast<T&>(
+      static_cast<const EntityManager&>(*this).GetComponent<T>(eid));
+}
+
+template <typename ComponentSetting,
+          typename ComponentManagerPolicy,
+          typename ThreadingModel>
 template <typename... Ts>
 inline void
 EntityManager<ComponentSetting, ComponentManagerPolicy, ThreadingModel>::
@@ -176,6 +232,27 @@ EntityManager<ComponentSetting, ComponentManagerPolicy, ThreadingModel>::
     tuple_dest->emplace_back(comp_arr.Get<Ts>()...);
   }
   *eid_dest = cache_data.eid_arr;
+}
+
+template <typename ComponentSetting,
+          typename ComponentManagerPolicy,
+          typename ThreadingModel>
+template <typename T>
+inline const T& EntityManager<ComponentSetting,
+                              ComponentManagerPolicy,
+                              ThreadingModel>::GetSingletonComponent() const {
+  return ComponentManagerPolicy::GetSingletonComponent<T>();
+}
+
+template <typename ComponentSetting,
+          typename ComponentManagerPolicy,
+          typename ThreadingModel>
+template <typename T>
+inline T& EntityManager<ComponentSetting,
+                        ComponentManagerPolicy,
+                        ThreadingModel>::GetSingletonComponent() {
+  return const_cast<T&>(
+      static_cast<const EntityManager&>(*this).GetSingletonComponent<T>());
 }
 
 template <typename ComponentSetting,

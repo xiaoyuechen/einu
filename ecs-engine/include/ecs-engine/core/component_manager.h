@@ -4,10 +4,10 @@
 #include <map>
 #include <mutex>
 
-#include "ecs-engine/core/entity_id.h"
 #include "ecs-engine/core/component_tag.h"
-#include "ecs-engine/utility/fixed_size_pool.h"
+#include "ecs-engine/core/entity_id.h"
 #include "ecs-engine/core/threading_model.h"
+#include "ecs-engine/utility/fixed_size_pool.h"
 
 namespace ecs {
 

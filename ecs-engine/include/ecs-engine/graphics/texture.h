@@ -16,8 +16,13 @@ class Texture : Noncopyable {
   void Bind() const;
   GLuint Get() const;
 
+  const int Width() const;
+  const int Height() const;
+
  private:
-  GLuint texture_;
+  GLuint texture_ = 0;
+  int width_ = 0;
+  int height_ = 0;
 };
 }  // namespace ecs
 

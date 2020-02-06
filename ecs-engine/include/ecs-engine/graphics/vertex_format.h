@@ -3,12 +3,10 @@
 
 #include <glad/glad.h>
 
-#include <array>
 #include <cstdint>
+#include <vector>
 
 namespace ecs {
-
-constexpr uint32_t kAttributeCount = 4;
 
 class VertexFormat {
  public:
@@ -17,21 +15,21 @@ class VertexFormat {
     GLuint size = 0;
     GLenum type = 0;
     GLboolean normalized = false;
-    uint64_t offset = 0;
+    std::size_t offset = 0;
+    uint32_t divisor = 0;
   };
 
   void AddAttribute(uint32_t index,
-                     uint32_t size,
-                     GLenum type,
-                     bool normalized);
-  void AddAttribute(const Attribute& attribute);
+                    uint32_t size,
+                    GLenum type,
+                    bool normalized,
+                    uint32_t divisor = 0);
   bool IsValid() const;
-  void Bind() const;
+  void Enable();
+  void Disable();
 
- private:
   GLsizei stride_ = 0;
-  uint32_t attribute_count_ = 0;
-  std::array<Attribute, kAttributeCount> attributes_{};
+  std::vector<Attribute> attributes_{};
 };
 
 }  // namespace ecs

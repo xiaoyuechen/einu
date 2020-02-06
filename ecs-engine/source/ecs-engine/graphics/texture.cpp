@@ -55,10 +55,17 @@ void Texture::LoadFromFile(const char* filename) {
                GL_RGBA,
                GL_UNSIGNED_BYTE,
                bitmap.Data());
+
+  width_ = bitmap.Width();
+  height_ = bitmap.Height();
 }
 
 void Texture::Bind() const { glBindTexture(GL_TEXTURE_2D, texture_); }
 
 GLuint Texture::Get() const { return texture_; }
+
+const int Texture::Width() const { return width_; }
+
+const int Texture::Height() const { return height_; }
 
 }  // namespace ecs

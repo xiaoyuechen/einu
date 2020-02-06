@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <string>
 
 #include "ecs-engine/graphics/camera.h"
 #include "ecs-engine/graphics/sampler.h"

@@ -5,6 +5,7 @@
 #include "Test_class_collection.h"
 #include "ecs-engine/core/component_setting.h"
 #include "ecs-engine/core/entity_manager.h"
+#include "ecs-engine/extension/policy/component_manager_policy.h"
 #include "ecs-engine/core/system.h"
 #include "ecs-engine/core/threading_model.h"
 #include "ecs-engine/utility/type_list.h"
@@ -74,13 +75,13 @@ using MyComponentList = ComponentList<C_0, C_1, C_2>;
 using MyComponentSetting = ComponentSetting<MyComponentList>;
 
 class MyComponentManagerPolicy
-    : public ComponentManagerPolicy<MyComponentSetting, MultiThreaded> {
+    : public ComponentManagerPolicy<MyComponentSetting, ComponentList<>, MultiThreaded> {
  public:
   MyComponentManagerPolicy()
       : c_0_manager_{99}
       , c_1_manager_{666}
       , c_2_manager_{99999}
-      , ComponentManagerPolicy(c_0_manager_, c_1_manager_, c_2_manager_) {}
+      , ComponentManagerPolicy(std::forward_as_tuple(c_0_manager_, c_1_manager_, c_2_manager_), std::make_tuple<>()) {}
 
  private:
   ComponentManager<C_0> c_0_manager_;

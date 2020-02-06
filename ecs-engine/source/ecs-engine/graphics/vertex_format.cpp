@@ -6,50 +6,52 @@ namespace ecs {
 
 namespace {
 
-constexpr uint32_t SizeOfGLType(GLenum type)
-{
-	switch (type) {
-	case GL_FLOAT:
-		return sizeof(GLfloat);
-	case GL_UNSIGNED_BYTE:
-		return sizeof(uint8_t);
-	}
-	assert(false && "incorrect type");
-	return 0;
+constexpr uint32_t SizeOfGLType(GLenum type) {
+  switch (type) {
+    case GL_FLOAT:
+      return sizeof(GLfloat);
+    case GL_UNSIGNED_BYTE:
+      return sizeof(uint8_t);
+  }
+  assert(false && "incorrect type");
+  return 0;
 }
-}
+}  // namespace
 
-void VertexFormat::AddAttribute(uint32_t index, uint32_t size, GLenum type, bool normalized)
-{
-	const Attribute attribute{ index, size, type, normalized };
-	AddAttribute(attribute);
-}
-
-void VertexFormat::AddAttribute(const Attribute& attribute) {
-	assert(attribute_count_ < kAttributeCount);
-	uint32_t at = attribute_count_++;
-	attributes_[at] = attribute;
-	attributes_[at].offset = stride_;
-
-	stride_ += attribute.size * SizeOfGLType(attribute.type);
-}
-
-bool VertexFormat::IsValid() const
-{
-	return attribute_count_ > 0;
+void VertexFormat::AddAttribute(uint32_t index,
+                                uint32_t size,
+                                GLenum type,
+                                bool normalized,
+                                uint32_t divisor) {
+  const Attribute attrib{index,
+                         size,
+                         type,
+                         normalized,
+                         static_cast<std::size_t>(stride_),
+                         divisor};
+  attributes_.push_back(attrib);
+  stride_ += size * SizeOfGLType(type);
 }
 
-void VertexFormat::Bind() const
-{
-	for (uint32_t index = 0; index != kAttributeCount; ++index) {
-		glDisableVertexAttribArray(index);
-	}
+bool VertexFormat::IsValid() const { return attributes_.size() > 0; }
 
-	for (uint32_t index = 0; index != attribute_count_; ++index) {
-		const Attribute& attrib = attributes_[index];
-		glEnableVertexAttribArray(attrib.index);
-		glVertexAttribPointer(attrib.index, attrib.size, attrib.type, attrib.normalized, stride_, (const void*)attrib.offset);
-	}
+void VertexFormat::Enable() {
+  for (const auto& attrib : attributes_) {
+    glEnableVertexAttribArray(attrib.index);
+    glVertexAttribPointer(attrib.index,
+                          attrib.size,
+                          attrib.type,
+                          attrib.normalized,
+                          stride_,
+                          (const void*)attrib.offset);
+    glVertexAttribDivisor(attrib.index, attrib.divisor);
+  }
 }
 
+void VertexFormat::Disable() {
+  for (const auto& attrib : attributes_) {
+    glDisableVertexAttribArray(attrib.index);
+  }
 }
+
+}  // namespace ecs

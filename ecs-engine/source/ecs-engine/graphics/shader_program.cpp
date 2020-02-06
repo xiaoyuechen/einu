@@ -33,7 +33,7 @@ void ShaderProgram::Bind() const { glUseProgram(program_); }
 GLuint ShaderProgram::GetAttributeLocation(const char* name) const {
   Bind();
   auto location = glGetAttribLocation(program_, name);
-  if (location < -1) {
+  if (location < 0) {
     throw GLError("failed to get shader attribute");
   }
   return location;

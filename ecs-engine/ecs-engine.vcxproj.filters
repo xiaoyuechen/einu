@@ -30,9 +30,6 @@
     <ClInclude Include="include\ecs-engine\core\component_manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\ecs-engine\core\component_manager_policy.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\ecs-engine\core\component_setting.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -135,6 +132,27 @@
     <ClInclude Include="include\ecs-engine\input\input_fn.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\ecs-engine\graphics\rect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-engine\graphics\sprite.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-engine\extension\policy\component_manager_policy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-engine\extension\system\instanced_sprite_rendering_system.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-engine\extension\component\instanced_sprite_component.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-engine\extension\component\singleton_camera_component.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-engine\extension\component\transform_component.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\ecs-engine\graphics\bitmap_font.cpp">
@@ -191,5 +209,12 @@
     <ClCompile Include="source\ecs-engine\input\input_fn.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="source\ecs-engine\graphics\sprite.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resource\instanced_sprite_vertex_shader.glsl" />
+    <None Include="resource\instanced_sprite_fragment_shader.glsl" />
   </ItemGroup>
 </Project>

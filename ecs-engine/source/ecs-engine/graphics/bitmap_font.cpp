@@ -56,7 +56,7 @@ void BitmapFont::Flush(const Camera& camera) {
   program_.Bind();
   program_.SetUniform("camera", camera.get_camera_matrix());
   buffer_.Bind();
-  format_.Bind();
+  format_.Enable();
   texture_.Bind();
   glDrawArrays(GL_TRIANGLES, 0, (GLsizei)vertices_.size());
   vertices_.clear();

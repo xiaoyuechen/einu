@@ -4,6 +4,7 @@
 #include "ecs-engine/graphics/graphics.h"
 #include "ecs-engine/window/window.h"
 
+
 namespace ecs {
 //////////////////////////////////////////////////////////////////////////
 // WindowTest:
