@@ -118,12 +118,21 @@ inline bool ComponentCacheManager<ComponentSetting, ThreadingModel>::
    * If comp(a,b)==true then comp(b,a)==false
    * if comp(a,b)==true and comp(b,c)==true then comp(a,c)==true
    */
-  auto bit_and = lhs & rhs;
-  if (bit_and == rhs) {
-    if ((bit_and.flip() & lhs) != ComponentMask{}) {
-      return true;
-    }
+
+  // TODO(Xiaoyue Chen): find out why the algorithm below doesn't work
+  // auto bit_and = lhs & rhs;
+  // if (bit_and == rhs) {
+  //  if ((bit_and.flip() & lhs) != ComponentMask{}) {
+  //    return true;
+  //  }
+  //}
+  // return false;
+
+  for (std::size_t i = 0; i != lhs.size(); ++i) {
+    auto bit = lhs.size() - i - 1;
+    if (lhs[bit] ^ rhs[bit]) return rhs[bit];
   }
+
   return false;
 }
 
