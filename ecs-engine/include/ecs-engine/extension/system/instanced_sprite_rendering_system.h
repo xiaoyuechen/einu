@@ -26,7 +26,7 @@ class InstancedSpriteRenderingSystem
  private:
   struct InstanceState {
     std::array<uint8_t, 4> color;
-    TransformComponent transform;
+    glm::mat4 transform;
   };
 
   struct Vertex {
@@ -141,10 +141,10 @@ InstancedSpriteRenderingSystem<EntityManager, UnitPolicy>::SetInstanceVBOData(
     const TupArr& tup_arr) {
   instance_state_cache_.clear();
   for (const auto& [sprite, transform] : tup_arr) {
-    auto pos = math::GetPosition(transform) * UnitPolicy::PixelPerUnit();
-    auto pix_transform = transform;
-    math::SetPosition(pix_transform, pos);
-    auto state = InstanceState{sprite.color, pix_transform};
+    auto copy_transform = transform;
+    copy_transform.SetPosition(copy_transform.GetPosition() *
+                               UnitPolicy::PixelPerUnit());
+    auto state = InstanceState{sprite.color, copy_transform.GetTransform()};
     instance_state_cache_.push_back(state);
   }
   instance_vbo_.Set(sizeof(InstanceState) * instance_state_cache_.size(),
