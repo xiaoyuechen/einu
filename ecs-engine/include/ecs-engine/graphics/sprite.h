@@ -11,8 +11,11 @@ struct Sprite {
   Sprite(const Texture& tex);
   Sprite(const Texture& tex, const IntRect& rect);
 
+  void UpdateTextureRect() noexcept;
+  void CenterOrigin() noexcept;
+
   const Texture& texture;
-  IntRect tex_rect{};
+  IntRect texture_rect{};
   glm::mat4 transform = glm::mat4{1.0f};
 };
 

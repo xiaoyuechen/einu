@@ -55,6 +55,10 @@ void Window::SwapBuffer() { glfwSwapBuffers(&window_); }
 
 void Window::PollEvents() { glfwPollEvents(); }
 
+double Window::GetTime() const { return glfwGetTime(); }
+
+void Window::SetTime(double time) { glfwSetTime(time); }
+
 void Window::SetInputCallback(Type2Type<input::KeyFn>, GLFWkeyfun callback) {
   glfwSetKeyCallback(&window_, callback);
 }

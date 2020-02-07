@@ -150,12 +150,16 @@
   <ItemGroup>
     <ClInclude Include="include\ecs-engine\extension\component\singleton_camera_component.h" />
     <ClInclude Include="include\ecs-engine\extension\component\instanced_sprite_component.h" />
+    <ClInclude Include="include\ecs-engine\extension\policy\default_unit_policy.h" />
     <ClInclude Include="include\ecs-engine\extension\system\instanced_sprite_rendering_system.h" />
+    <ClInclude Include="include\ecs-engine\graphics\projection.h" />
     <ClInclude Include="include\ecs-engine\graphics\rect.h" />
     <ClInclude Include="include\ecs-engine\extension\component\transform_component.h" />
     <ClInclude Include="include\ecs-engine\graphics\sprite.h" />
+    <ClInclude Include="include\ecs-engine\graphics\view.h" />
     <ClInclude Include="include\ecs-engine\input\input_fn.h" />
     <ClInclude Include="include\ecs-engine\utility\file_reader.h" />
+    <ClInclude Include="include\ecs-engine\utility\random.h" />
     <ClInclude Include="include\ecs-engine\window\gl_context.h" />
     <ClInclude Include="include\ecs-engine\input\input.h" />
     <ClInclude Include="include\ecs-engine\core\component_array.h" />
@@ -196,7 +200,9 @@
     <ClInclude Include="include\ecs-engine\window\window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\ecs-engine\graphics\projection.cpp" />
     <ClCompile Include="source\ecs-engine\graphics\sprite.cpp" />
+    <ClCompile Include="source\ecs-engine\graphics\view.cpp" />
     <ClCompile Include="source\ecs-engine\input\input.cpp" />
     <ClCompile Include="source\ecs-engine\input\input_fn.cpp" />
     <ClCompile Include="source\ecs-engine\window\gl_context.cpp" />

@@ -33,6 +33,9 @@ class Window {
   void SwapBuffer();
   void PollEvents();
 
+  double GetTime() const;
+  void SetTime(double time);
+
  private:
   void SetInputCallback(Type2Type<input::KeyFn>, GLFWkeyfun callback);
   void SetInputCallback(Type2Type<input::MouseButtonFn>,

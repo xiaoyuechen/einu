@@ -4,11 +4,12 @@
 #include <random>
 
 #include "ecs-engine/core/entity_manager.h"
-#include "ecs-engine/extension/policy/component_manager_policy.h"
 #include "ecs-engine/extension/component/instanced_sprite_component.h"
-#include "ecs-engine/extension/system/instanced_sprite_rendering_system.h"
 #include "ecs-engine/extension/component/singleton_camera_component.h"
 #include "ecs-engine/extension/component/transform_component.h"
+#include "ecs-engine/extension/policy/component_manager_policy.h"
+#include "ecs-engine/extension/policy/threading_model.h"
+#include "ecs-engine/extension/system/instanced_sprite_rendering_system.h"
 #include "ecs-engine/graphics/graphics.h"
 #include "ecs-engine/window/window.h"
 
@@ -22,8 +23,7 @@ struct ISRTest : testing::Test {
 
   class MyComponentManagerPolicy
       : public ComponentManagerPolicy<MyComponentSetting,
-                                      MySingletonComponentList,
-                                      MultiThreaded> {
+                                      MySingletonComponentList, MultiThreaded> {
    public:
     MyComponentManagerPolicy()
         : transform_manager_{99}
@@ -38,9 +38,9 @@ struct ISRTest : testing::Test {
     SingletonCameraComponent s_camera_;
   };
 
-  using MyEntityManager = EntityManager<MyComponentSetting,
-                                        MyComponentManagerPolicy,
-                                        MultiThreaded>;
+  using MyEntityManager =
+      EntityManager<MyComponentSetting, MyComponentManagerPolicy,
+                    MultiThreaded>;
 
   ISRTest()
       : window(Window::Mode::WINDOWED, 1920, 1080, "application")
@@ -55,9 +55,6 @@ struct ISRTest : testing::Test {
 };
 
 TEST_F(ISRTest, Render) {
-  auto& cam = ett_mgr.GetSingletonComponent<SingletonCameraComponent>();
-  // cam.view = glm::mat4(1);
-  cam.projection = glm::ortho(0.f, 1920.f, 0.f, 1080.f, 0.01f, 1000.f);
   Sampler sampler{};
   sampler.Set(GL_NEAREST, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
   sampler.Bind();
@@ -73,8 +70,8 @@ TEST_F(ISRTest, Render) {
     auto ett_handle = ett_mgr.CreateEntity();
     ett_handle.AddComponent<TransformComponent>();
     ett_handle.GetComponent<TransformComponent>() *=
-        (glm::translate(glm::vec3(
-             distribution_x(generator), distribution_y(generator), 0)) *
+        (glm::translate(glm::vec3(distribution_x(generator),
+                                  distribution_y(generator), 0)) *
          glm::rotate(glm::radians(distribution_rotate(generator)),
                      glm::vec3(0, 0, 1)) *
          glm::scale(glm::vec3(0.05f, 0.1f, 1.f)));

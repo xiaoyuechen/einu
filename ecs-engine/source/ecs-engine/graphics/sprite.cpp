@@ -7,6 +7,15 @@ Sprite::Sprite(const Texture& tex)
 
 Sprite::Sprite(const Texture& tex, const IntRect& rect)
     : texture(tex)
-    , tex_rect(rect) {}
+    , texture_rect(rect) {}
+
+void Sprite::UpdateTextureRect() noexcept {
+  texture_rect = IntRect{0, 0, texture.Width(), texture.Height()};
+}
+
+void Sprite::CenterOrigin() noexcept {
+  transform = glm::translate(
+      glm::vec3(-texture_rect.width / 2.f, -texture_rect.height / 2.f, 0.f));
+}
 
 }  // namespace ecs

@@ -11,6 +11,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ecs-engine", "ecs-engine\ecs-engine.vcxproj", "{D906108D-FE8B-4313-A317-ECD094A7398A}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "the-event-loop-of-life", "the-event-loop-of-life\the-event-loop-of-life.vcxproj", "{2CB8F362-0350-456D-B0C8-69E065CC33C2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D906108D-FE8B-4313-A317-ECD094A7398A} = {D906108D-FE8B-4313-A317-ECD094A7398A}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

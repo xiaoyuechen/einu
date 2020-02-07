@@ -7,13 +7,14 @@
 #include "ecs-engine/extension/component/instanced_sprite_component.h"
 #include "ecs-engine/extension/component/singleton_camera_component.h"
 #include "ecs-engine/extension/component/transform_component.h"
+#include "ecs-engine/extension/policy/default_unit_policy.h"
 
 namespace ecs {
 
 using InstancedSpriteRenderingSystemComponentList =
     RequiredComponentList<InstancedSpriteComponent, TransformComponent>;
 
-template <typename EntityManager>
+template <typename EntityManager, typename UnitPolicy = DefaultUnitPolicy>
 class InstancedSpriteRenderingSystem
     : public System<EntityManager,
                     InstancedSpriteRenderingSystemComponentList> {
@@ -33,7 +34,14 @@ class InstancedSpriteRenderingSystem
     glm::vec2 uv;
   };
 
-  using TupArr = std::vector<typename System::ComponentTuple>;
+  using TupArr = std::vector<typename System<
+      EntityManager,
+      InstancedSpriteRenderingSystemComponentList>::ComponentTuple>;
+
+  using System =
+      System<EntityManager, InstancedSpriteRenderingSystemComponentList>;
+
+  void SetCameraUniform();
   void UpdateTupleMap();
   void SetQuadVBOData(const ecs::IntRect& rect);
   void SetInstanceVBOData(const TupArr& tup_arr);
@@ -50,9 +58,9 @@ class InstancedSpriteRenderingSystem
 
 //////////////////////////////////////////////////////////////////////////
 
-template <typename EntityManager>
-inline InstancedSpriteRenderingSystem<
-    EntityManager>::InstancedSpriteRenderingSystem(EntityManager& ett_mgr)
+template <typename EntityManager, typename UnitPolicy>
+inline InstancedSpriteRenderingSystem<EntityManager, UnitPolicy>::
+    InstancedSpriteRenderingSystem(EntityManager& ett_mgr)
     : System(ett_mgr) {
   VertexShader vertex_shader(
       "../ecs-engine/resource/instanced_sprite_vertex_shader.glsl");
@@ -82,22 +90,17 @@ inline InstancedSpriteRenderingSystem<
   instance_format.Enable();
 }
 
-template <typename EntityManager>
-inline void InstancedSpriteRenderingSystem<EntityManager>::Render() {
+template <typename EntityManager, typename UnitPolicy>
+inline void
+InstancedSpriteRenderingSystem<EntityManager, UnitPolicy>::Render() {
   program_.Bind();
-  auto& camera =
-      System::GetEntityManager().GetSingletonComponent<SingletonCameraComponent>();
-  auto camera_matrix = camera.GetCameraMatrix();
-  program_.SetUniform("camera", camera_matrix);
-
+  SetCameraUniform();
   vao_.Bind();
-
   UpdateTupleMap();
-
   for (const auto& [sprite_ptr, tuple_arr] : tuple_map_) {
     program_.SetUniform("local_transform", sprite_ptr->transform);
     sprite_ptr->texture.Bind();
-    const IntRect& rect = sprite_ptr->tex_rect;
+    const IntRect& rect = sprite_ptr->texture_rect;
 
     SetQuadVBOData(rect);
     SetInstanceVBOData(tuple_arr);
@@ -108,29 +111,51 @@ inline void InstancedSpriteRenderingSystem<EntityManager>::Render() {
   }
 }
 
-template <typename EntityManager>
-inline void InstancedSpriteRenderingSystem<EntityManager>::SetQuadVBOData(
+template <typename EntityManager, typename UnitPolicy>
+inline void
+InstancedSpriteRenderingSystem<EntityManager, UnitPolicy>::SetCameraUniform() {
+  const auto& ett_mgr = System::GetEntityManager();
+  const auto& camera =
+      ett_mgr.GetSingletonComponent<SingletonCameraComponent>();
+  auto view = camera.view;
+  view.position *= UnitPolicy::PixelPerUnit();
+  view.target *= UnitPolicy::PixelPerUnit();
+  auto view_matrix = view.GetViewMatrix();
+  const auto projection = camera.projection * UnitPolicy::PixelPerUnit();
+  auto projection_matrix = projection.GetProjectionMatrix();
+  auto cam_matrix = projection_matrix * view_matrix;
+  program_.SetUniform("camera", cam_matrix);
+}
+
+template <typename EntityManager, typename UnitPolicy>
+inline void
+InstancedSpriteRenderingSystem<EntityManager, UnitPolicy>::SetQuadVBOData(
     const ecs::IntRect& rect) {
   auto verts = GetVerts(rect);
   quad_vbo_.Set(verts.size() * sizeof(Vertex), verts.data());
 }
 
-template <typename EntityManager>
-inline void InstancedSpriteRenderingSystem<EntityManager>::SetInstanceVBOData(
+template <typename EntityManager, typename UnitPolicy>
+inline void
+InstancedSpriteRenderingSystem<EntityManager, UnitPolicy>::SetInstanceVBOData(
     const TupArr& tup_arr) {
   instance_state_cache_.clear();
   for (const auto& [sprite, transform] : tup_arr) {
-    auto state = InstanceState{sprite.color, transform};
+    auto pos = math::GetPosition(transform) * UnitPolicy::PixelPerUnit();
+    auto pix_transform = transform;
+    math::SetPosition(pix_transform, pos);
+    auto state = InstanceState{sprite.color, pix_transform};
     instance_state_cache_.push_back(state);
   }
   instance_vbo_.Set(sizeof(InstanceState) * instance_state_cache_.size(),
                     instance_state_cache_.data());
 }
 
-template <typename EntityManager>
+template <typename EntityManager, typename UnitPolicy>
 inline std::array<
-    typename InstancedSpriteRenderingSystem<EntityManager>::Vertex, 6>
-InstancedSpriteRenderingSystem<EntityManager>::GetVerts(
+    typename InstancedSpriteRenderingSystem<EntityManager, UnitPolicy>::Vertex,
+    6>
+InstancedSpriteRenderingSystem<EntityManager, UnitPolicy>::GetVerts(
     const ecs::IntRect& rect) const {
   /**
    * a  ------ d
@@ -155,8 +180,9 @@ InstancedSpriteRenderingSystem<EntityManager>::GetVerts(
   return verts;
 }
 
-template <typename EntityManager>
-inline void InstancedSpriteRenderingSystem<EntityManager>::UpdateTupleMap() {
+template <typename EntityManager, typename UnitPolicy>
+inline void
+InstancedSpriteRenderingSystem<EntityManager, UnitPolicy>::UpdateTupleMap() {
   tuple_map_.clear();
   for (const auto& tuple : System::GetMatchingComponentTuples()) {
     const auto& [instanced_sprite, transform] = tuple;

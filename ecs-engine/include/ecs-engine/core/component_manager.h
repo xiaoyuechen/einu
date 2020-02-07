@@ -6,7 +6,6 @@
 
 #include "ecs-engine/core/component_tag.h"
 #include "ecs-engine/core/entity_id.h"
-#include "ecs-engine/extension/policy/threading_model.h"
 #include "ecs-engine/utility/fixed_size_pool.h"
 
 namespace ecs {

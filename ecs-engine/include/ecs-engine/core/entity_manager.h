@@ -26,7 +26,7 @@ class EntityManager : public ComponentManagerPolicy, public ThreadingModel {
     EntityHandle(const EntityID& eid, EntityManager& ett_mgr);
 
     template <typename T>
-    void AddComponent();
+    T& AddComponent();
     template <typename T>
     void RemoveComponent();
     template <typename T>
@@ -65,7 +65,7 @@ class EntityManager : public ComponentManagerPolicy, public ThreadingModel {
   EntityID CreateEntityID();
 
   template <typename T>
-  void AddComponent(const EntityID& eid);
+  T& AddComponent(const EntityID& eid);
   template <typename T>
   void RemoveComponent(const EntityID& eid);
   template <typename T>
@@ -111,10 +111,10 @@ template <typename ComponentSetting,
           typename ComponentManagerPolicy,
           typename ThreadingModel>
 template <typename T>
-inline void EntityManager<ComponentSetting,
+inline T& EntityManager<ComponentSetting,
                           ComponentManagerPolicy,
                           ThreadingModel>::EntityHandle::AddComponent() {
-  ett_mgr_.AddComponent<T>(eid_);
+  return ett_mgr_.AddComponent<T>(eid_);
 }
 
 template <typename ComponentSetting,
@@ -163,7 +163,7 @@ template <typename ComponentSetting,
           typename ComponentManagerPolicy,
           typename ThreadingModel>
 template <typename T>
-inline void EntityManager<ComponentSetting,
+inline T& EntityManager<ComponentSetting,
                           ComponentManagerPolicy,
                           ThreadingModel>::AddComponent(const EntityID& eid) {
   auto& mgr = GetComponentManager<T>();
@@ -174,6 +174,8 @@ inline void EntityManager<ComponentSetting,
 
   comp_cache_mgr_.AddEntity(
       eid, ett.GetComponentMask(), ett.GetComponentArray());
+
+  return comp;
 }
 
 template <typename ComponentSetting,

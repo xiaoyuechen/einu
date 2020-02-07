@@ -6,6 +6,8 @@
 
 #include "ecs-engine/core/component_manager.h"
 #include "ecs-engine/core/component_setting.h"
+#include "ecs-engine/core/entity_id_manager.h"
+#include "ecs-engine/utility/type_mapping.h"
 
 namespace ecs {
 
