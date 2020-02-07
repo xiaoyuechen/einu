@@ -23,8 +23,7 @@ class ComponentCacheManager : public ThreadingModel {
   };
 
   void RegisterComponentMask(const ComponentMask& mask);
-  void AddEntity(const EntityID& eid,
-                 const ComponentMask& mask,
+  void AddEntity(const EntityID& eid, const ComponentMask& mask,
                  const ComponentArray& components);
   void RemoveEntity(const EntityID& eid, const ComponentMask& mask);
 
@@ -58,8 +57,7 @@ ComponentCacheManager<ComponentSetting, ThreadingModel>::RegisterComponentMask(
 
 template <typename ComponentSetting, typename ThreadingModel>
 inline void ComponentCacheManager<ComponentSetting, ThreadingModel>::AddEntity(
-    const EntityID& eid,
-    const ComponentMask& mask,
+    const EntityID& eid, const ComponentMask& mask,
     const ComponentArray& components) {
   typename ThreadingModel::Lock lock(*this);
   for (auto&& [required_mask, cache] : cache_map_) {
@@ -120,7 +118,13 @@ inline bool ComponentCacheManager<ComponentSetting, ThreadingModel>::
    * If comp(a,b)==true then comp(b,a)==false
    * if comp(a,b)==true and comp(b,c)==true then comp(a,c)==true
    */
-  return (lhs & rhs) != lhs;
+  auto bit_and = lhs & rhs;
+  if (bit_and == rhs) {
+    if ((bit_and.flip() & lhs) != ComponentMask{}) {
+      return true;
+    }
+  }
+  return false;
 }
 
 template <typename ComponentSetting, typename ThreadingModel>
