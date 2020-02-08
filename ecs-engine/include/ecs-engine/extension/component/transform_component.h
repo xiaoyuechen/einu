@@ -6,7 +6,7 @@
 
 namespace ecs {
 struct TransformComponent : public ComponentTag,
-                            public Transform<transform_policy::UseCache> {};
+                            public Transform<transform_policy::NoCache> {};
 }
 
 

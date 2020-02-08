@@ -27,7 +27,9 @@ class InstancedSpriteRenderingSystem
  private:
   struct InstanceState {
     std::array<uint8_t, 4> color;
-    glm::mat4 transform;
+    glm::vec2 pos;
+    glm::vec4 quat;
+    glm::vec2 scale;
   };
 
   struct Vertex {
@@ -72,24 +74,29 @@ inline InstancedSpriteRenderingSystem<EntityManager, UnitPolicy>::
 
   vao_.Bind();
 
-  auto pos_loc = program_.GetAttributeLocation("a_pos");
-  auto tex_coord_loc = program_.GetAttributeLocation("a_texcoord");
-  VertexFormat format{};
-  format.AddAttribute(pos_loc, 2, GL_FLOAT, false);
-  format.AddAttribute(tex_coord_loc, 2, GL_FLOAT, false);
-  quad_vbo_.Bind();
-  format.Enable();
-
-  VertexFormat instance_format{};
-  auto color_loc = program_.GetAttributeLocation("a_color");
-  instance_format.AddAttribute(color_loc, 4, GL_UNSIGNED_BYTE, false, 1);
-  auto transform_loc = program_.GetAttributeLocation("a_transform");
-  for (auto i = 0; i != 4; ++i) {
-    auto loc = transform_loc + i;
-    instance_format.AddAttribute(loc, 4, GL_FLOAT, false, 1);
+  {
+    VertexFormat format{};
+    auto pos_loc = program_.GetAttributeLocation("a_pos");
+    auto tex_coord_loc = program_.GetAttributeLocation("a_texcoord");
+    format.AddAttribute(pos_loc, 2, GL_FLOAT, false);
+    format.AddAttribute(tex_coord_loc, 2, GL_FLOAT, false);
+    quad_vbo_.Bind();
+    format.Enable();
   }
-  instance_vbo_.Bind();
-  instance_format.Enable();
+
+  {
+    VertexFormat instance_format{};
+    auto color_loc = program_.GetAttributeLocation("a_instance_color");
+    auto pos_loc = program_.GetAttributeLocation("a_instance_pos");
+    auto quat_loc = program_.GetAttributeLocation("a_instance_quat");
+    auto scale_loc = program_.GetAttributeLocation("a_instance_scale");
+    instance_format.AddAttribute(color_loc, 4, GL_UNSIGNED_BYTE, false, 1);
+    instance_format.AddAttribute(pos_loc, 2, GL_FLOAT, false, 1);
+    instance_format.AddAttribute(quat_loc, 4, GL_FLOAT, false, 1);
+    instance_format.AddAttribute(scale_loc, 2, GL_FLOAT, false, 1);
+    instance_vbo_.Bind();
+    instance_format.Enable();
+  }
 }
 
 template <typename EntityManager, typename UnitPolicy>
@@ -144,10 +151,11 @@ InstancedSpriteRenderingSystem<EntityManager, UnitPolicy>::SetInstanceVBOData(
     const TupArr& tup_arr) {
   instance_state_cache_.clear();
   for (const auto& [sprite, transform] : tup_arr) {
-    auto copy_transform = transform;
-    copy_transform.SetPosition(copy_transform.GetPosition() *
-                               UnitPolicy::PixelPerUnit());
-    auto state = InstanceState{sprite.color, copy_transform.GetCachedTransform()};
+    auto pos = transform.GetPosition() * UnitPolicy::PixelPerUnit();
+    const auto& quat = transform.GetRotation();
+    auto quat_vec = glm::vec4{quat.x, quat.y, quat.z, quat.w};
+    auto scale = transform.GetScale();
+    auto state = InstanceState{sprite.color, pos, quat_vec, scale};
     instance_state_cache_.push_back(state);
   }
   instance_vbo_.Set(sizeof(InstanceState) * instance_state_cache_.size(),
