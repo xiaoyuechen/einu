@@ -147,7 +147,7 @@ InstancedSpriteRenderingSystem<EntityManager, UnitPolicy>::SetInstanceVBOData(
     auto copy_transform = transform;
     copy_transform.SetPosition(copy_transform.GetPosition() *
                                UnitPolicy::PixelPerUnit());
-    auto state = InstanceState{sprite.color, copy_transform.GetTransform()};
+    auto state = InstanceState{sprite.color, copy_transform.GetCachedTransform()};
     instance_state_cache_.push_back(state);
   }
   instance_vbo_.Set(sizeof(InstanceState) * instance_state_cache_.size(),

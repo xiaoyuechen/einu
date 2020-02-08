@@ -4,6 +4,7 @@ in vec2 a_pos;
 in vec2 a_texcoord;
 in vec4 a_color;
 in mat4 a_transform;
+in vec3 a_scale;
 
 uniform mat4 camera;
 uniform mat4 local_transform;

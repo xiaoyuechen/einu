@@ -161,6 +161,7 @@
     <ClInclude Include="include\ecs-engine\math\intersection.h" />
     <ClInclude Include="include\ecs-engine\math\linear_algebra.h" />
     <ClInclude Include="include\ecs-engine\math\primitive.h" />
+    <ClInclude Include="include\ecs-engine\math\transform.h" />
     <ClInclude Include="include\ecs-engine\utility\file_reader.h" />
     <ClInclude Include="include\ecs-engine\utility\random.h" />
     <ClInclude Include="include\ecs-engine\window\gl_context.h" />
