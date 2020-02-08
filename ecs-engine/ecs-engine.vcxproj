@@ -154,11 +154,13 @@
     <ClInclude Include="include\ecs-engine\extension\policy\default_unit_policy.h" />
     <ClInclude Include="include\ecs-engine\extension\system\instanced_sprite_rendering_system.h" />
     <ClInclude Include="include\ecs-engine\graphics\projection.h" />
-    <ClInclude Include="include\ecs-engine\graphics\rect.h" />
     <ClInclude Include="include\ecs-engine\extension\component\transform_component.h" />
     <ClInclude Include="include\ecs-engine\graphics\sprite.h" />
     <ClInclude Include="include\ecs-engine\graphics\view.h" />
     <ClInclude Include="include\ecs-engine\input\input_fn.h" />
+    <ClInclude Include="include\ecs-engine\math\intersection.h" />
+    <ClInclude Include="include\ecs-engine\math\linear_algebra.h" />
+    <ClInclude Include="include\ecs-engine\math\primitive.h" />
     <ClInclude Include="include\ecs-engine\utility\file_reader.h" />
     <ClInclude Include="include\ecs-engine\utility\random.h" />
     <ClInclude Include="include\ecs-engine\window\gl_context.h" />
@@ -206,6 +208,7 @@
     <ClCompile Include="source\ecs-engine\graphics\view.cpp" />
     <ClCompile Include="source\ecs-engine\input\input.cpp" />
     <ClCompile Include="source\ecs-engine\input\input_fn.cpp" />
+    <ClCompile Include="source\ecs-engine\math\glm.cpp" />
     <ClCompile Include="source\ecs-engine\window\gl_context.cpp" />
     <ClCompile Include="source\ecs-engine\window\window.cpp" />
     <ClCompile Include="source\ecs-engine\graphics\bitmap_font.cpp" />

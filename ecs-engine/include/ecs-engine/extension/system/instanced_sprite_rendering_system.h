@@ -8,6 +8,7 @@
 #include "ecs-engine/extension/component/singleton_camera_component.h"
 #include "ecs-engine/extension/component/transform_component.h"
 #include "ecs-engine/extension/policy/default_unit_policy.h"
+#include "ecs-engine/math/primitive.h"
 
 namespace ecs {
 
@@ -43,9 +44,10 @@ class InstancedSpriteRenderingSystem
 
   void SetCameraUniform();
   void UpdateTupleMap();
-  void SetQuadVBOData(const ecs::IntRect& rect);
+  void SetQuadVBOData(const ecs::IntRect& rect, const glm::ivec2& tex_extent);
   void SetInstanceVBOData(const TupArr& tup_arr);
-  std::array<Vertex, 6> GetVerts(const ecs::IntRect& rect) const;
+  std::array<Vertex, 6> GetVerts(const ecs::IntRect& rect,
+                                 const glm::ivec2& tex_extent) const;
 
   ShaderProgram program_;
   VertexBuffer quad_vbo_;
@@ -99,10 +101,11 @@ InstancedSpriteRenderingSystem<EntityManager, UnitPolicy>::Render() {
   UpdateTupleMap();
   for (const auto& [sprite_ptr, tuple_arr] : tuple_map_) {
     program_.SetUniform("local_transform", sprite_ptr->transform);
-    sprite_ptr->texture.Bind();
-    const IntRect& rect = sprite_ptr->texture_rect;
-
-    SetQuadVBOData(rect);
+    auto& texture = sprite_ptr->texture;
+    texture.Bind();
+    const auto& rect = sprite_ptr->texture_rect;
+    const auto tex_extent = glm::ivec2(texture.Width(), texture.Height());
+    SetQuadVBOData(rect, tex_extent);
     SetInstanceVBOData(tuple_arr);
 
     quad_vbo_.Bind();
@@ -130,8 +133,8 @@ InstancedSpriteRenderingSystem<EntityManager, UnitPolicy>::SetCameraUniform() {
 template <typename EntityManager, typename UnitPolicy>
 inline void
 InstancedSpriteRenderingSystem<EntityManager, UnitPolicy>::SetQuadVBOData(
-    const ecs::IntRect& rect) {
-  auto verts = GetVerts(rect);
+    const ecs::IntRect& rect, const glm::ivec2& tex_extent) {
+  auto verts = GetVerts(rect, tex_extent);
   quad_vbo_.Set(verts.size() * sizeof(Vertex), verts.data());
 }
 
@@ -156,25 +159,28 @@ inline std::array<
     typename InstancedSpriteRenderingSystem<EntityManager, UnitPolicy>::Vertex,
     6>
 InstancedSpriteRenderingSystem<EntityManager, UnitPolicy>::GetVerts(
-    const ecs::IntRect& rect) const {
+    const ecs::IntRect& rect, const glm::ivec2& tex_extent) const {
   /**
-   * a  ------ d
+   * 3  ------ 2
    *   |      |
-   * b  ------ c
+   * 0  ------ 1
    */
-  auto vert_a_pos = glm::vec2{rect.left, rect.top};
-  auto vert_b_pos = vert_a_pos + glm::vec2{0, rect.height};
-  auto vert_c_pos = vert_b_pos + glm::vec2{rect.width, 0};
-  auto vert_d_pos = vert_a_pos + glm::vec2{rect.width, 0};
 
-  auto vert_a = Vertex{vert_a_pos, glm::vec2{0, 1}};
-  auto vert_b = Vertex{vert_b_pos, glm::vec2{0, 0}};
-  auto vert_c = Vertex{vert_c_pos, glm::vec2{1, 0}};
-  auto vert_d = Vertex{vert_d_pos, glm::vec2{1, 1}};
+  std::array<Vertex, 4> rect_verts{};
+  rect_verts[0].pos = glm::vec2{rect.left, rect.buttom};
+  rect_verts[1].pos = rect_verts[0].pos + glm::vec2{rect.width, 0};
+  rect_verts[2].pos = rect_verts[1].pos + glm::vec2{0, rect.height};
+  rect_verts[3].pos = rect_verts[0].pos + glm::vec2{0, rect.height};
+
+  for (auto&& rect_vert : rect_verts) {
+    rect_vert.uv = rect_vert.pos;
+    rect_vert.uv.x /= tex_extent.x;
+    rect_vert.uv.y /= tex_extent.y;
+  }
 
   std::array<Vertex, 6> verts = {
-      vert_a, vert_b, vert_d,  // triangle 1
-      vert_d, vert_b, vert_c,  // triangle 2
+      rect_verts[0], rect_verts[1], rect_verts[2],  // triangle 1
+      rect_verts[2], rect_verts[3], rect_verts[0],  // triangle 2
   };
 
   return verts;

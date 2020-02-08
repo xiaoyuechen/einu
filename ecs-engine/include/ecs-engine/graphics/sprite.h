@@ -1,7 +1,7 @@
 #ifndef SPRITE_H_
 #define SPRITE_H_
 
-#include "ecs-engine/graphics/rect.h"
+#include "ecs-engine/math/primitive.h"
 #include "ecs-engine/graphics/texture.h"
 #include "ecs-engine/math/glm.h"
 

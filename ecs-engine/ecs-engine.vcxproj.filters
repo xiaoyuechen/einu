@@ -90,9 +90,6 @@
     <ClInclude Include="include\ecs-engine\graphics\vertex_format.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\ecs-engine\math\glm.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\ecs-engine\utility\algorithm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -129,9 +126,6 @@
     <ClInclude Include="include\ecs-engine\input\input_fn.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\ecs-engine\graphics\rect.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\ecs-engine\graphics\sprite.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -166,6 +160,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\ecs-engine\extension\component\movement_component.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-engine\math\linear_algebra.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-engine\math\primitive.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-engine\math\glm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-engine\math\intersection.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -231,6 +237,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\ecs-engine\graphics\view.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ecs-engine\math\glm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

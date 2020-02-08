@@ -2,7 +2,6 @@
 
 #include "ecs-engine/graphics/bitmap_font.h"
 #include "ecs-engine/graphics/camera.h"
-#include "ecs-engine/graphics/rect.h"
 #include "ecs-engine/graphics/sampler.h"
 #include "ecs-engine/graphics/shader.h"
 #include "ecs-engine/graphics/shader_program.h"

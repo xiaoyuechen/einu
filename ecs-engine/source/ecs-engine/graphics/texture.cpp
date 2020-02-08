@@ -13,7 +13,7 @@ Texture::~Texture() { glDeleteTextures(1, &texture_); }
 
 namespace {
 
-class Image {
+class Image : Noncopyable {
   uint8_t* image_ = nullptr;
   int width_ = 0, height_ = 0, components_ = 0;
 
@@ -32,8 +32,10 @@ Image::Image(const char* filename) {
   const auto& content = file_reader.GetContent();
   const auto data = reinterpret_cast<const uint8_t*>(content.data());
   auto size = static_cast<int>(content.size());
-  image_ = stbi_load_from_memory(
-      data, size, &width_, &height_, &components_, STBI_rgb_alpha);
+  // flip to match openGL texture coords
+  stbi_set_flip_vertically_on_load(true);
+  image_ = stbi_load_from_memory(data, size, &width_, &height_, &components_,
+                                 STBI_rgb_alpha);
   if (!image_) {
     throw std::runtime_error("could not read image: " + std::string(filename));
   }
@@ -46,15 +48,8 @@ void Texture::LoadFromFile(const char* filename) {
   auto bitmap = Image(filename);
 
   glBindTexture(GL_TEXTURE_2D, texture_);
-  glTexImage2D(GL_TEXTURE_2D,
-               0,
-               GL_RGBA,
-               bitmap.Width(),
-               bitmap.Height(),
-               0,
-               GL_RGBA,
-               GL_UNSIGNED_BYTE,
-               bitmap.Data());
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bitmap.Width(), bitmap.Height(), 0,
+               GL_RGBA, GL_UNSIGNED_BYTE, bitmap.Data());
 
   width_ = bitmap.Width();
   height_ = bitmap.Height();
