@@ -26,8 +26,8 @@ struct ISRTest : testing::Test {
                                       MySingletonComponentList, MultiThreaded> {
    public:
     MyComponentManagerPolicy()
-        : transform_manager_{99}
-        , IS_manager_{666}
+        : transform_manager_{10000}
+        , IS_manager_{10000}
         , ComponentManagerPolicy(
               std::forward_as_tuple(transform_manager_, IS_manager_),
               std::forward_as_tuple(s_camera_)) {}
@@ -59,6 +59,10 @@ TEST_F(ISRTest, Render) {
   sampler.Set(GL_NEAREST, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
   sampler.Bind();
   Sprite sprite{tex, {0, 0, tex.Width(), tex.Height()}};
+  auto& cam = ett_mgr.GetSingletonComponent<SingletonCameraComponent>();
+  cam.projection =
+      ecs::Projection{ecs::Projection::Type::ORTHOGRAPHIC,
+                      ecs::Projection::OrthographicAttrib{0, 1920, 0, 1080}};
 
   std::random_device device;
   std::mt19937 generator(device());
@@ -68,15 +72,14 @@ TEST_F(ISRTest, Render) {
 
   for (auto i = std::size_t(0); i != 50; ++i) {
     auto ett_handle = ett_mgr.CreateEntity();
-    ett_handle.AddComponent<TransformComponent>();
-    ett_handle.GetComponent<TransformComponent>() *=
-        (glm::translate(glm::vec3(distribution_x(generator),
-                                  distribution_y(generator), 0)) *
-         glm::rotate(glm::radians(distribution_rotate(generator)),
-                     glm::vec3(0, 0, 1)) *
-         glm::scale(glm::vec3(0.05f, 0.1f, 1.f)));
-    ett_handle.AddComponent<InstancedSpriteComponent>();
-    ett_handle.GetComponent<InstancedSpriteComponent>().sprite = &sprite;
+    auto& transform = ett_handle.AddComponent<TransformComponent>();
+    transform.SetPosition(
+        glm::vec3(distribution_x(generator), distribution_y(generator), 0));
+    transform.SetRotation(glm::quat(
+        glm::vec3(0, 0, glm::radians(distribution_rotate(generator)))));
+    transform.SetScale(glm::vec3(0.05f, 0.1f, 1.f));
+    auto& inst_sprite = ett_handle.AddComponent<InstancedSpriteComponent>();
+    inst_sprite.sprite = &sprite;
   }
 
   while (!window.ShouldClose()) {

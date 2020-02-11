@@ -148,6 +148,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\ecs-engine\utility\grid.h" />
     <ClInclude Include="include\ecs-engine\extension\component\movement_component.h" />
     <ClInclude Include="include\ecs-engine\extension\component\singleton_camera_component.h" />
     <ClInclude Include="include\ecs-engine\extension\component\instanced_sprite_component.h" />

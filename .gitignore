@@ -1,4 +1,5 @@
 *.vs
 **Debug
+**Release
 **Build
 the-event-loop-of-life/
