@@ -38,6 +38,12 @@ struct TupleRefOf;
 template <typename TypeList>
 struct TuplePtrOf;
 
+template <template <typename... Args> typename Wrapper, typename TypeList>
+struct TupleWrapperOf;
+
+template <template <typename... Args> typename Wrapper, typename TypeList>
+struct ListWrapperOf;
+
 //////////////////////////////////////////////////////////////////////////
 
 template <typename... Ts>
@@ -82,8 +88,7 @@ struct Erase<TypeList<T, Rest...>, T> {
 template <typename T, typename Head, typename... Rest>
 struct Erase<TypeList<Head, Rest...>, T> {
   using Result = typename Concatenate<
-      TypeList<Head>,
-      typename Erase<TypeList<Rest...>, T>::Result>::Result;
+      TypeList<Head>, typename Erase<TypeList<Rest...>, T>::Result>::Result;
 };
 
 template <typename T>
@@ -104,8 +109,7 @@ struct EraseAll<TypeList<T, Rest...>, T> {
 template <typename T, typename Head, typename... Rest>
 struct EraseAll<TypeList<Head, Rest...>, T> {
   using Result = typename Concatenate<
-      TypeList<Head>,
-      typename EraseAll<TypeList<Rest...>, T>::Result>::Result;
+      TypeList<Head>, typename EraseAll<TypeList<Rest...>, T>::Result>::Result;
 };
 
 template <typename... Ts>
@@ -122,6 +126,17 @@ template <typename... Ts>
 struct TuplePtrOf<TypeList<Ts...>> {
   using Type = std::tuple<Ts*...>;
 };
+
+template <template <typename... Args> typename Wrapper, typename... Ts>
+struct TupleWrapperOf<Wrapper, TypeList<Ts...>> {
+  using Type = std::tuple<Wrapper<Ts>...>;
+};
+
+template <template <typename... Args> typename Wrapper, typename... Ts>
+struct ListWrapperOf<Wrapper, TypeList<Ts...>> {
+  using Type = TypeList<Wrapper<Ts>...>;
+};
+
 
 }  // namespace ecs
 #endif  // TYPE_LIST_H_

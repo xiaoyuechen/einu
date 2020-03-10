@@ -41,6 +41,9 @@ class EntityManager : public ComponentManagerPolicy, public ThreadingModel {
     EntityManager& ett_mgr_;
   };
 
+  template<typename ...ComponentManagerPolicyArgs>
+  EntityManager(ComponentManagerPolicyArgs&&... comp_mgr_args);
+
   EntityHandle CreateEntity();
 
   template <typename... Ts>
@@ -217,6 +220,13 @@ inline T& EntityManager<ComponentSetting,
   return const_cast<T&>(
       static_cast<const EntityManager&>(*this).GetComponent<T>(eid));
 }
+
+template <typename ComponentSetting, typename ComponentManagerPolicy,
+          typename ThreadingModel>
+template <typename... ComponentManagerPolicyArgs>
+inline EntityManager<ComponentSetting, ComponentManagerPolicy, ThreadingModel>::
+    EntityManager(ComponentManagerPolicyArgs&&... comp_mgr_args)
+    : ComponentManagerPolicy(std::forward<ComponentManagerPolicyArgs>(comp_mgr_args)...) {}
 
 template <typename ComponentSetting,
           typename ComponentManagerPolicy,

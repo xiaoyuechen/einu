@@ -18,24 +18,21 @@ namespace ecs {
 struct ISRTest : testing::Test {
   using MyComponentList =
       ComponentList<TransformComponent, InstancedSpriteComponent>;
-  using MyComponentSetting = ComponentSetting<MyComponentList>;
   using MySingletonComponentList = ComponentList<SingletonCameraComponent>;
+  using MyComponentSetting =
+      ComponentSetting<MyComponentList, MySingletonComponentList>;
 
   class MyComponentManagerPolicy
-      : public ComponentManagerPolicy<MyComponentSetting,
-                                      MySingletonComponentList, MultiThreaded> {
+      : public ComponentManagerPolicy<MyComponentSetting, MultiThreaded> {
    public:
-    MyComponentManagerPolicy()
-        : transform_manager_{10000}
-        , IS_manager_{10000}
-        , ComponentManagerPolicy(
-              std::forward_as_tuple(transform_manager_, IS_manager_),
-              std::forward_as_tuple(s_camera_)) {}
-
-   private:
-    ComponentManager<TransformComponent> transform_manager_;
-    ComponentManager<InstancedSpriteComponent> IS_manager_;
-    SingletonCameraComponent s_camera_;
+    MyComponentManagerPolicy() {
+      ComponentManagerPolicy::SetComponentManager(
+          std::make_unique<ComponentManager<TransformComponent>>(10000));
+      ComponentManagerPolicy::SetComponentManager(
+          std::make_unique<ComponentManager<InstancedSpriteComponent>>(10000));
+      ComponentManagerPolicy::SetSingletonComponent(
+          std::make_unique<SingletonCameraComponent>());
+    }
   };
 
   using MyEntityManager =

@@ -10,8 +10,11 @@ namespace ecs {
 template <typename... Ts>
 using ComponentList = TypeList<Ts...>;
 
-template <typename ComponentList>
+template <typename ComponentList, typename SingletonComponentList>
 struct ComponentSetting {
+  using Components = ComponentList;
+  using SingletonComponents = SingletonComponentList;
+
   static constexpr std::size_t GetComponentTypeCount();
 
   using ComponentMask = std::bitset<GetComponentTypeCount()>;
@@ -23,29 +26,32 @@ struct ComponentSetting {
   template <typename... Ts>
   static ComponentMask GetComponentMask();
 
-  template<ComponentTypeIndex index>
+  template <ComponentTypeIndex index>
   using ComponentTypeAt = typename TypeAt<ComponentList, index>::Type;
 };
 
 //////////////////////////////////////////////////////////////////////////
 
-template <typename ComponentList>
-inline constexpr std::size_t
-ComponentSetting<ComponentList>::GetComponentTypeCount() {
+template <typename ComponentList, typename SingletonComponentList>
+inline constexpr std::size_t ComponentSetting<
+    ComponentList, SingletonComponentList>::GetComponentTypeCount() {
   return Size<ComponentList>::value;
 }
 
-template <typename ComponentList>
+template <typename ComponentList, typename SingletonComponentList>
 template <typename T>
-inline constexpr typename ComponentSetting<ComponentList>::ComponentTypeIndex
-ComponentSetting<ComponentList>::GetComponentTypeIndex() {
+inline constexpr
+    typename ComponentSetting<ComponentList,
+                              SingletonComponentList>::ComponentTypeIndex
+    ComponentSetting<ComponentList,
+                     SingletonComponentList>::GetComponentTypeIndex() {
   return IndexOf<ComponentList, std::remove_const<T>::type>::value;
 }
 
-template <typename ComponentList>
+template <typename ComponentList, typename SingletonComponentList>
 template <typename... Ts>
-typename ComponentSetting<ComponentList>::ComponentMask
-ComponentSetting<ComponentList>::GetComponentMask() {
+typename ComponentSetting<ComponentList, SingletonComponentList>::ComponentMask
+ComponentSetting<ComponentList, SingletonComponentList>::GetComponentMask() {
   ComponentMask mask;
   (mask.set(GetComponentTypeIndex<Ts>()), ...);
   return mask;
