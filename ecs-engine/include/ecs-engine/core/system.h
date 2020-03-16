@@ -30,6 +30,8 @@ class System {
   typename EntityManager::EntityHandle GetEntityHandle(
       const ComponentTuple& tuple);
 
+  const EntityID& GetEntityID(const ComponentTuple& tuple) const;
+
   const EntityManager& GetEntityManager() const;
   EntityManager& GetEntityManager();
 
@@ -68,8 +70,7 @@ template <typename EntityManager, typename RequiredComponentList>
 const typename EntityManager::EntityHandle
 System<EntityManager, RequiredComponentList>::GetEntityHandle(
     const ComponentTuple& tuple) const {
-  auto index = &tuple - matching_comps_.data();
-  const auto& eid = eid_arr_[index];
+  const auto& eid = GetEntityID(tuple);
   return EntityManager::EntityHandle(eid, ett_mgr_);
 }
 
@@ -79,6 +80,14 @@ System<EntityManager, RequiredComponentList>::GetEntityHandle(
     const ComponentTuple& tuple) {
   const auto handle = static_cast<const System&>(*this).GetEntityHandle(tuple);
   return *const_cast<typename EntityManager::EntityHandle*>(&handle);
+}
+
+template <typename EntityManager, typename RequiredComponentList>
+inline const EntityID&
+System<EntityManager, RequiredComponentList>::GetEntityID(
+    const ComponentTuple& tuple) const {
+  auto index = &tuple - matching_comps_.data();
+  return eid_arr_[index];
 }
 
 template <typename EntityManager, typename RequiredComponentList>
