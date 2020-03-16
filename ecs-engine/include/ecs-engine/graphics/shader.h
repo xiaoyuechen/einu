@@ -10,12 +10,12 @@ namespace ecs {
 class Shader : Noncopyable {
  public:
   Shader() = default;
+  Shader(Shader&& other);
+
   virtual ~Shader();
   void LoadFromFile(const char* filename);
+  void LoadFromMemory(const char* source);
   GLuint Get() const;
-
- private:
-  void Set(const GLchar* source);
 
  protected:
   GLuint shader_ = 0;
@@ -24,16 +24,18 @@ class Shader : Noncopyable {
   friend void swap(Shader& lhs, Shader& rhs) noexcept;
 };
 
+void swap(Shader& lhs, Shader& rhs) noexcept;
+
 class VertexShader : public Shader {
  public:
   VertexShader();
-  explicit VertexShader(const char* filename);
+  VertexShader(VertexShader&& other);
 };
 
 class FragmentShader : public Shader {
  public:
   FragmentShader();
-  explicit FragmentShader(const char* filename);
+  FragmentShader(FragmentShader&& other);
 };
 
 }  // namespace ecs

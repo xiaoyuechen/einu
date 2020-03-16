@@ -20,7 +20,8 @@ class InstancedSpriteRenderingSystem
     : public System<EntityManager,
                     InstancedSpriteRenderingSystemComponentList> {
  public:
-  InstancedSpriteRenderingSystem(EntityManager& ett_mgr);
+  InstancedSpriteRenderingSystem(EntityManager& ett_mgr,
+                                 ShaderProgram& program);
 
   void Render();
 
@@ -51,9 +52,9 @@ class InstancedSpriteRenderingSystem
   std::array<Vertex, 6> GetVerts(const ecs::IntRect& rect,
                                  const glm::ivec2& tex_extent) const;
 
-  ShaderProgram program_;
-  VertexBuffer quad_vbo_;
+  ShaderProgram& program_;
   VertexArray vao_;
+  VertexBuffer quad_vbo_;
   VertexBuffer instance_vbo_;
 
   std::vector<InstanceState> instance_state_cache_;
@@ -64,13 +65,10 @@ class InstancedSpriteRenderingSystem
 
 template <typename EntityManager, typename UnitPolicy>
 inline InstancedSpriteRenderingSystem<EntityManager, UnitPolicy>::
-    InstancedSpriteRenderingSystem(EntityManager& ett_mgr)
-    : System(ett_mgr) {
-  VertexShader vertex_shader(
-      "../ecs-engine/resource/instanced_sprite_vertex_shader.glsl");
-  FragmentShader fragment_shader(
-      "../ecs-engine/resource/instanced_sprite_fragment_shader.glsl");
-  program_.Set(vertex_shader, fragment_shader);
+    InstancedSpriteRenderingSystem(EntityManager& ett_mgr,
+                                   ShaderProgram& program)
+    : System(ett_mgr)
+    , program_(program) {
 
   vao_.Bind();
 

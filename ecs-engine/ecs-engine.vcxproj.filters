@@ -180,6 +180,9 @@
     <ClInclude Include="include\ecs-engine\utility\grid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\ecs-engine\utility\container\inlined_vector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\ecs-engine\graphics\bitmap_font.cpp">
@@ -252,5 +255,7 @@
   <ItemGroup>
     <None Include="resource\instanced_sprite_vertex_shader.glsl" />
     <None Include="resource\instanced_sprite_fragment_shader.glsl" />
+    <None Include="include\ecs-engine\shader\instanced_sprite_fragment_shader.glsl" />
+    <None Include="include\ecs-engine\shader\instanced_sprite_vertex_shader.glsl" />
   </ItemGroup>
 </Project>

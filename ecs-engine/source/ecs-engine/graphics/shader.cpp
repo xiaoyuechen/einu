@@ -17,37 +17,39 @@ auto read_file(const char* filename) {
 }
 }  // namespace
 
-Shader::~Shader() { glDeleteShader(shader_); }
+Shader::Shader(Shader&& other) { swap(*this, other); }
+
+Shader::~Shader() {
+  if (shader_) {
+    glDeleteShader(shader_);
+  }
+}
 
 void Shader::LoadFromFile(const char* filename) {
   const auto data = read_file(filename);
   const auto source = data.data();
-  Set(source);
+  LoadFromMemory(source);
 }
 
-GLuint Shader::Get() const { return shader_; }
-
-void Shader::Set(const GLchar* source) {
+void Shader::LoadFromMemory(const char* source) {
   glShaderSource(shader_, 1, &source, nullptr);
   glCompileShader(shader_);
   shader_util::CheckStatus(shader_util::Type::SHADER, shader_);
 }
 
+GLuint Shader::Get() const { return shader_; }
+
 VertexShader::VertexShader() { shader_ = glCreateShader(GL_VERTEX_SHADER); }
 
-VertexShader::VertexShader(const char* filename)
-    : VertexShader() {
-  LoadFromFile(filename);
-}
+VertexShader::VertexShader(VertexShader&& other)
+    : Shader(std::move(other)) {}
 
 FragmentShader::FragmentShader() {
   shader_ = glCreateShader(GL_FRAGMENT_SHADER);
 }
 
-FragmentShader::FragmentShader(const char* filename)
-    : FragmentShader() {
-  LoadFromFile(filename);
-}
+FragmentShader::FragmentShader(FragmentShader&& other)
+    : Shader(std::move(other)) {}
 
 void swap(Shader& lhs, Shader& rhs) noexcept {
   std::swap(lhs.shader_, rhs.shader_);

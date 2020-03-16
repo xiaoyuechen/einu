@@ -21,32 +21,46 @@ struct ISRTest : testing::Test {
   using MySingletonComponentList = ComponentList<SingletonCameraComponent>;
   using MyComponentSetting =
       ComponentSetting<MyComponentList, MySingletonComponentList>;
-
-  class MyComponentManagerPolicy
-      : public ComponentManagerPolicy<MyComponentSetting, MultiThreaded> {
-   public:
-    MyComponentManagerPolicy() {
-      ComponentManagerPolicy::SetComponentManager(
-          std::make_unique<ComponentManager<TransformComponent>>(10000));
-      ComponentManagerPolicy::SetComponentManager(
-          std::make_unique<ComponentManager<InstancedSpriteComponent>>(10000));
-      ComponentManagerPolicy::SetSingletonComponent(
-          std::make_unique<SingletonCameraComponent>());
-    }
-  };
-
+  using MyComponentManagerPolicy =
+      ComponentManagerPolicy<MyComponentSetting, MultiThreaded>;
   using MyEntityManager =
       EntityManager<MyComponentSetting, MyComponentManagerPolicy,
                     MultiThreaded>;
 
   ISRTest()
       : window(Window::Mode::WINDOWED, 1920, 1080, "application")
-      , sys(ett_mgr) {
-    tex.LoadFromFile("resource/white-triangle.png");
+      , ett_mgr([] {
+        auto builder = MyComponentManagerPolicy::Builder{};
+        builder
+            .SetComponentManager(
+                std::make_unique<MyComponentManagerPolicy::ComponentManager<
+                    TransformComponent>>(10000))
+            .SetComponentManager(
+                std::make_unique<MyComponentManagerPolicy::ComponentManager<
+                    InstancedSpriteComponent>>(10000))
+            .SetSingletonComponent(
+                std::make_unique<SingletonCameraComponent>());
+        return builder.Build();
+      }())
+      , instanced_sprite_shader(
+            [] {
+              auto vertex_shader = VertexShader{};
+              vertex_shader.LoadFromFile("ecs-engine/resource/shader/instanced_sprite_vertex_shader.glsl");
+              return vertex_shader;
+            }(),
+            [] {
+              auto fragment_shader = FragmentShader{};
+              fragment_shader.LoadFromFile(
+                  "ecs-engine/resource/shader/instanced_sprite_fragment_shader.glsl");
+              return fragment_shader;
+            }())
+      , sys(ett_mgr, instanced_sprite_shader) {
+    tex.LoadFromFile("ecs-engine-test/resource/white-triangle.png");
   }
 
   Window window;
   MyEntityManager ett_mgr;
+  ShaderProgram instanced_sprite_shader;
   InstancedSpriteRenderingSystem<MyEntityManager> sys;
   Texture tex;
 };
