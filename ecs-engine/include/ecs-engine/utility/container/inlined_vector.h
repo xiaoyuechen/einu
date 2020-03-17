@@ -57,6 +57,7 @@ class InlinedVector {
 
   // Modifiers
   void clear() noexcept;
+  iterator insert(const_iterator pos, const T& value);
   iterator insert(const_iterator pos, T&& value);
   iterator insert(const_iterator pos, size_type count, const T& value);
   template <class InputIt>
@@ -65,6 +66,7 @@ class InlinedVector {
   iterator emplace(const_iterator pos, Args&&... args);
   iterator erase(const_iterator pos);
   iterator erase(const_iterator first, const_iterator last);
+  void push_back(const T& value);
   void push_back(T&& value);
   template <class... Args>
   reference emplace_back(Args&&... args);
@@ -96,7 +98,7 @@ template <typename T, std::size_t N>
 inline typename InlinedVector<T, N>::reference InlinedVector<T, N>::at(
     size_type pos) noexcept {
   return const_cast<reference>(
-      static_cast(const InlinedVector&)(*this).at(pos));
+      static_cast<const InlinedVector&>(*this).at(pos));
 }
 
 template <typename T, std::size_t N>
@@ -229,6 +231,12 @@ inline void InlinedVector<T, N>::clear() noexcept {
 
 template <typename T, std::size_t N>
 inline typename InlinedVector<T, N>::iterator InlinedVector<T, N>::insert(
+    const_iterator pos, const T& value) {
+  return emplace(pos, value);
+}
+
+template <typename T, std::size_t N>
+inline typename InlinedVector<T, N>::iterator InlinedVector<T, N>::insert(
     const_iterator pos, T&& value) {
   return emplace(pos, std::move(value));
 }
@@ -297,6 +305,11 @@ inline typename InlinedVector<T, N>::iterator InlinedVector<T, N>::erase(
   std::rotate(first_it, last_it, end());
   size_ -= std::distance(first_it, last_it);
   return first_it;
+}
+
+template <typename T, std::size_t N>
+inline void InlinedVector<T, N>::push_back(const T& value) {
+  insert(end(), value);
 }
 
 template <typename T, std::size_t N>

@@ -31,27 +31,27 @@ struct ISRTest : testing::Test {
       : window(Window::Mode::WINDOWED, 1920, 1080, "application")
       , ett_mgr([] {
         auto builder = MyComponentManagerPolicy::Builder{};
-        builder
-            .SetComponentManager(
-                std::make_unique<MyComponentManagerPolicy::ComponentManager<
-                    TransformComponent>>(10000))
-            .SetComponentManager(
-                std::make_unique<MyComponentManagerPolicy::ComponentManager<
-                    InstancedSpriteComponent>>(10000))
-            .SetSingletonComponent(
-                std::make_unique<SingletonCameraComponent>());
+        builder.MakeComponentManager<
+            MyComponentManagerPolicy::ComponentManager<TransformComponent>>(
+            10000);
+        builder.MakeComponentManager<MyComponentManagerPolicy::ComponentManager<
+            InstancedSpriteComponent>>(10000);
+        builder.MakeSingletonComponent<SingletonCameraComponent>();
         return builder.Build();
       }())
       , instanced_sprite_shader(
             [] {
               auto vertex_shader = VertexShader{};
-              vertex_shader.LoadFromFile("ecs-engine/resource/shader/instanced_sprite_vertex_shader.glsl");
+              vertex_shader.LoadFromFile(
+                  "ecs-engine/resource/shader/"
+                  "instanced_sprite_vertex_shader.glsl");
               return vertex_shader;
             }(),
             [] {
               auto fragment_shader = FragmentShader{};
               fragment_shader.LoadFromFile(
-                  "ecs-engine/resource/shader/instanced_sprite_fragment_shader.glsl");
+                  "ecs-engine/resource/shader/"
+                  "instanced_sprite_fragment_shader.glsl");
               return fragment_shader;
             }())
       , sys(ett_mgr, instanced_sprite_shader) {

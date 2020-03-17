@@ -67,11 +67,11 @@ inline T* Grid<T>::end() noexcept {
 }
 
 template <typename T>
-inline void Grid<T>::GetCells(std::size_t x, std::size_t y, std::size_t x_count,
-                              std::size_t y_count, const T** dest) const {
-  for (std::size_t y_index = 0; y_index != y_count; ++y_index) {
-    for (std::size_t x_index = 0; x_index != x_count; ++x_index) {
-      dest[x_index + y_index * x_count] = &(*this)[x + x_index][y + y_index];
+inline void Grid<T>::GetCells(std::size_t pos_x, std::size_t pos_y, std::size_t count_x,
+                              std::size_t count_y, const T** dest) const {
+  for (std::size_t y_index = 0; y_index != count_y; ++y_index) {
+    for (std::size_t x_index = 0; x_index != count_x; ++x_index) {
+      dest[x_index + y_index * count_x] = &(*this)[pos_y + y_index][pos_x + x_index];
     }
   }
 }

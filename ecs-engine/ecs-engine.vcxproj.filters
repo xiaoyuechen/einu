@@ -183,6 +183,9 @@
     <ClInclude Include="include\ecs-engine\utility\container\inlined_vector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\ecs-engine\utility\enum_util.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\ecs-engine\graphics\bitmap_font.cpp">

@@ -149,6 +149,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="include\ecs-engine\utility\container\inlined_vector.h" />
+    <ClInclude Include="include\ecs-engine\utility\enum_util.h" />
     <ClInclude Include="include\ecs-engine\utility\grid.h" />
     <ClInclude Include="include\ecs-engine\extension\component\movement_component.h" />
     <ClInclude Include="include\ecs-engine\extension\component\singleton_camera_component.h" />

@@ -47,11 +47,11 @@ class ComponentManagerPolicy {
 template <typename ComponentSetting, typename ThreadingModel>
 class ComponentManagerPolicy<ComponentSetting, ThreadingModel>::Builder {
  public:
-  template <typename T>
-  Builder& SetComponentManager(std::unique_ptr<T> mgr);
+  template <typename T, typename... Args>
+  T& MakeComponentManager(Args&&... args);
 
-  template <typename T>
-  Builder& SetSingletonComponent(std::unique_ptr<T> singleton_comp);
+  template <typename T, typename... Args>
+  T& MakeSingletonComponent(Args&&... args);
 
   ComponentManagerPolicy Build();
 
@@ -98,23 +98,23 @@ inline T& ComponentManagerPolicy<
 }
 
 template <typename ComponentSetting, typename ThreadingModel>
-template <typename T>
-inline
-    typename ComponentManagerPolicy<ComponentSetting, ThreadingModel>::Builder&
-    ComponentManagerPolicy<ComponentSetting, ThreadingModel>::Builder::
-        SetComponentManager(std::unique_ptr<T> mgr) {
+template <typename T, typename... Args>
+inline T& ComponentManagerPolicy<ComponentSetting, ThreadingModel>::Builder::
+    MakeComponentManager(Args&&... args) {
+  auto mgr = std::make_unique<T>(std::forward<Args>(args)...);
+  auto& ref = *mgr;
   std::get<std::unique_ptr<T>>(manager_ptr_tup_) = std::move(mgr);
-  return *this;
+  return ref;
 }
 
 template <typename ComponentSetting, typename ThreadingModel>
-template <typename T>
-inline
-    typename ComponentManagerPolicy<ComponentSetting, ThreadingModel>::Builder&
-    ComponentManagerPolicy<ComponentSetting, ThreadingModel>::Builder::
-        SetSingletonComponent(std::unique_ptr<T> singleton_comp) {
+template <typename T, typename... Args>
+inline T& ComponentManagerPolicy<ComponentSetting, ThreadingModel>::Builder::
+    MakeSingletonComponent(Args&&... args) {
+  auto singleton_comp = std::make_unique<T>(std::forward<Args>(args)...);
+  auto& ref = *singleton_comp;
   std::get<std::unique_ptr<T>>(singleton_comp_tup_) = std::move(singleton_comp);
-  return *this;
+  return ref;
 }
 
 namespace detail {
