@@ -148,6 +148,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\ecs-engine\extension\manager\resource_manager.h" />
     <ClInclude Include="include\ecs-engine\utility\container\inlined_vector.h" />
     <ClInclude Include="include\ecs-engine\utility\enum_util.h" />
     <ClInclude Include="include\ecs-engine\utility\grid.h" />

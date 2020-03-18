@@ -1,5 +1,4 @@
-#ifndef ENTITY_MANAGER_IMPL_H_
-#define ENTITY_MANAGER_IMPL_H_
+#pragma once
 
 #include <map>
 #include <tuple>
@@ -337,5 +336,3 @@ EntityManager<ComponentSetting, ComponentManagerPolicy,
 }
 
 }  // namespace ecs
-
-#endif  // ENTITY_MANAGER_IMPL_H_

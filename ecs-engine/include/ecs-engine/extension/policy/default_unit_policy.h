@@ -1,5 +1,4 @@
-#ifndef DEFAULT_UNIT_POLICY_H_
-#define DEFAULT_UNIT_POLICY_H_
+#pragma once
 
 namespace ecs {
 
@@ -16,5 +15,3 @@ class DefaultUnitPolicy {
 constexpr float ecs::DefaultUnitPolicy::PixelPerUnit() { return kPixPerUnit; }
 
 }  // namespace ecs
-
-#endif  // DEFAULT_UNIT_POLICY_H_

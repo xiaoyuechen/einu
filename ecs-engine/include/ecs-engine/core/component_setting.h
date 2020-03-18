@@ -1,5 +1,4 @@
-#ifndef COMPONENT_SETTING_H_
-#define COMPONENT_SETTING_H_
+#pragma once
 
 #include <bitset>
 
@@ -58,5 +57,3 @@ ComponentSetting<ComponentList, SingletonComponentList>::GetComponentMask() {
 }
 
 }  // namespace ecs
-
-#endif  // COMPONENT_SETTING_H_

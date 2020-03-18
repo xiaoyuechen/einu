@@ -1,5 +1,4 @@
-#ifndef ENTITY_H_
-#define ENTITY_H_
+#pragma once
 
 #include "ecs-engine/core/component_array.h"
 #include "ecs-engine/core/component_setting.h"
@@ -74,4 +73,3 @@ Entity<ComponentSetting>::GetComponentArray() const noexcept {
 
 }  // namespace ecs
 
-#endif  // ENTITY_H_

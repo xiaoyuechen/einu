@@ -1,5 +1,4 @@
-#ifndef INSTANCED_SPRITE_RENDERING_SYSTEM_H_
-#define INSTANCED_SPRITE_RENDERING_SYSTEM_H_
+#pragma once
 
 #include <array>
 
@@ -15,6 +14,7 @@ namespace ecs {
 using InstancedSpriteRenderingSystemComponentList =
     RequiredComponentList<InstancedSpriteComponent, TransformComponent>;
 
+// TODO(Xiaoyue Chen): System should not have any state
 template <typename EntityManager, typename UnitPolicy = DefaultUnitPolicy>
 class InstancedSpriteRenderingSystem
     : public System<EntityManager,
@@ -206,5 +206,3 @@ InstancedSpriteRenderingSystem<EntityManager, UnitPolicy>::UpdateTupleMap() {
 }
 
 }  // namespace ecs
-
-#endif  // INSTANCED_SPRITE_RENDERING_SYSTEM_H_

@@ -1,5 +1,4 @@
-#ifndef PROGRAM_H_
-#define PROGRAM_H_
+#pragma once
 
 #include "ecs-engine/math/glm.h"
 #include "ecs-engine/utility/Noncopyable.h"
@@ -29,5 +28,3 @@ class ShaderProgram : Noncopyable {
 };
 
 }  // namespace ecs
-
-#endif  // PROGRAM_H_

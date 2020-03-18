@@ -1,5 +1,4 @@
-#ifndef SYSTEM_H_
-#define SYSTEM_H_
+#pragma once
 
 #include <tuple>
 #include <vector>
@@ -104,5 +103,3 @@ System<EntityManager, RequiredComponentList>::GetEntityManager() {
 }
 
 }  // namespace ecs
-
-#endif  // SYSTEM_H_

@@ -1,5 +1,4 @@
-#ifndef SAMPLER_H_
-#define SAMPLER_H_
+#pragma once
 
 #include <glad/glad.h>
 
@@ -20,5 +19,3 @@ class Sampler : Noncopyable {
   GLuint sampler_ = 0;
 };
 }  // namespace ecs
-
-#endif  // SAMPLER_H_

@@ -1,5 +1,4 @@
-#ifndef SINGLETON_CAMERA_COMPONENT_H_
-#define SINGLETON_CAMERA_COMPONENT_H_
+#pragma once
 
 #include "ecs-engine/core/component_tag.h"
 #include "ecs-engine/graphics/projection.h"
@@ -12,4 +11,3 @@ struct SingletonCameraComponent : public ComponentTag {
 };
 }  // namespace ecs
 
-#endif  // SINGLETON_CAMERA_COMPONENT_H_

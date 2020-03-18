@@ -1,5 +1,4 @@
-#ifndef COMPONENT_ARRAY_H_
-#define COMPONENT_ARRAY_H_
+#pragma once
 
 #include <array>
 
@@ -57,5 +56,3 @@ inline T& ComponentArray<ComponentSetting>::Get() noexcept {
 }
 
 }  // namespace ecs
-
-#endif  // COMPONENT_ARRAY_H_

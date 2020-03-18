@@ -1,5 +1,4 @@
-#ifndef COMPONENT_MANAGER_H_
-#define COMPONENT_MANAGER_H_
+#pragma once
 
 #include <map>
 #include <mutex>
@@ -10,8 +9,7 @@
 
 namespace ecs {
 
-template <typename T,
-          typename ThreadingModel,
+template <typename T, typename ThreadingModel,
           typename PoolPolicy = FixedSizePool<T, ThreadingModel>>
 class ComponentManager : public ThreadingModel, public PoolPolicy {
   static_assert(std::is_base_of<ComponentTag, T>() &&
@@ -74,5 +72,3 @@ void ComponentManager<T, ThreadingModel, PoolPolicy>::RemoveComponent(
 }
 
 }  // namespace ecs
-
-#endif  // COMPONENT_MANAGER_H_

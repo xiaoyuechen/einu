@@ -1,5 +1,4 @@
-#ifndef ENTITY_ID_MANAGER_H_
-#define ENTITY_ID_MANAGER_H_
+#pragma once
 
 #include <atomic>
 
@@ -25,4 +24,3 @@ inline EntityID EntityIDManager::GenEntityID() noexcept {
 
 }  // namespace ecs
 
-#endif  // ENTITY_ID_MANAGER_H_

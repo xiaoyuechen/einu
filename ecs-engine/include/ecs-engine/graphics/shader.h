@@ -1,5 +1,4 @@
-#ifndef SHADER_H_
-#define SHADER_H_
+#pragma once
 
 #include <glad/glad.h>
 
@@ -39,5 +38,3 @@ class FragmentShader : public Shader {
 };
 
 }  // namespace ecs
-
-#endif  // SHADER_H_

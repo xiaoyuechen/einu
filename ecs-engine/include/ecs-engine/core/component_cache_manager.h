@@ -1,5 +1,4 @@
-#ifndef COMPONENT_CACHE_MANAGER_H_
-#define COMPONENT_CACHE_MANAGER_H_
+#pragma once
 
 #include <map>
 #include <vector>
@@ -144,5 +143,3 @@ inline void ComponentCacheManager<ComponentSetting,
 }
 
 }  // namespace ecs
-
-#endif  // COMPONENT_CACHE_MANAGER_H_

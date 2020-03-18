@@ -1,5 +1,4 @@
-#ifndef INSTANCED_SPRITE_COMPONENT_H_
-#define INSTANCED_SPRITE_COMPONENT_H_
+#pragma once
 
 #include <array>
 
@@ -14,5 +13,3 @@ struct InstancedSpriteComponent : public ComponentTag {
   std::array<uint8_t, 4> color{0xff, 0xff, 0xff, 0xff};
 };
 }  // namespace ecs
-
-#endif  // INSTANCED_SPRITE_COMPONENT_H_

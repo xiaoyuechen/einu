@@ -1,5 +1,4 @@
-#ifndef COMPONENT_MANAGER_POLICY_H_
-#define COMPONENT_MANAGER_POLICY_H_
+#pragma once
 
 #include <cassert>
 
@@ -150,5 +149,3 @@ ComponentManagerPolicy<ComponentSetting, ThreadingModel>::Builder::Build() {
 }
 
 }  // namespace ecs
-
-#endif  // COMPONENT_MANAGER_POLICY_H_

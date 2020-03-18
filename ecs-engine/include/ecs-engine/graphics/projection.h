@@ -1,5 +1,4 @@
-#ifndef PROJECTION_H_
-#define PROJECTION_H_
+#pragma once
 
 #include "ecs-engine/math/glm.h"
 
@@ -38,4 +37,3 @@ Projection operator*(float ratio, const Projection& projection);
 
 }  // namespace ecs
 
-#endif  // PROJECTION_H_

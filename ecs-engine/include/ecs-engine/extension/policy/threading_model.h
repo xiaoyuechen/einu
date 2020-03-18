@@ -1,5 +1,4 @@
-#ifndef THREADING_MODEL_H_
-#define THREADING_MODEL_H_
+#pragma once
 
 #include <mutex>
 
@@ -47,5 +46,3 @@ inline MultiThreaded::Lock::Lock(MultiThreaded& host)
 inline MultiThreaded::Lock::~Lock() { host_.mutex_.unlock(); }
 
 }  // namespace ecs
-
-#endif  // THREADING_MODEL_H_

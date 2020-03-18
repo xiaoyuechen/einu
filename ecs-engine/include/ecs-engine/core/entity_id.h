@@ -1,5 +1,4 @@
-#ifndef ENTITY_ID_H_
-#define ENTITY_ID_H_
+#pragma once
 
 #include <cstddef>
 #include <functional>
@@ -57,4 +56,3 @@ struct less<ecs::EntityID> {
 };
 }  // namespace std
 
-#endif  // ENTITY_ID_H_
