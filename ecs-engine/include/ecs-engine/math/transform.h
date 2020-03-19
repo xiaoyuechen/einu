@@ -1,5 +1,4 @@
-#ifndef TRANSFORM_H_
-#define TRANSFORM_H_
+#pragma once
 
 #include "ecs-engine/math/glm.h"
 
@@ -106,4 +105,3 @@ inline void Transform<CachePolicy>::SetScale(const glm::vec3& scale) {
 
 }  // namespace ecs
 
-#endif  // TRANSFORM_H_

@@ -1,5 +1,4 @@
-#ifndef FREE_INDEX_STACK_H_
-#define FREE_INDEX_STACK_H_
+#pragma once
 
 #include <cassert>
 #include <mutex>
@@ -55,4 +54,3 @@ void FreeIndexStack<IndexType, ThreadingModel>::Recall(IndexType value) {
 
 }  // namespace ecs
 
-#endif  // FREE_INDEX_STACK_H_

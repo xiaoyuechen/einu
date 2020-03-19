@@ -1,5 +1,4 @@
-#ifndef INTERSECTION_H_
-#define INTERSECTION_H_
+#pragma once
 
 #include <array>
 
@@ -108,4 +107,3 @@ inline constexpr float LineLineIntersectTest::GetU() const noexcept {
 
 }  // namespace ecs
 
-#endif  // INTERSECTION_H_

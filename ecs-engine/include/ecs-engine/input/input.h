@@ -1,5 +1,4 @@
-#ifndef INPUT_H_
-#define INPUT_H_
+#pragma once
 
 #include <GLFW/glfw3.h>
 
@@ -166,4 +165,3 @@ const char* GetKeyName(KeyboardKey key);
 }  // namespace input
 }  // namespace ecs
 
-#endif  // INPUT_H_

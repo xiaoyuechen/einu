@@ -1,5 +1,4 @@
-#ifndef TYPE_LIST_H_
-#define TYPE_LIST_H_
+#pragma once
 
 #include <tuple>
 
@@ -139,4 +138,3 @@ struct ListWrapperOf<Wrapper, TypeList<Ts...>> {
 
 
 }  // namespace ecs
-#endif  // TYPE_LIST_H_

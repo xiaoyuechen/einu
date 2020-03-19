@@ -1,5 +1,4 @@
-#ifndef FILE_READER_H_
-#define FILE_READER_H_
+#pragma once
 
 #include <fstream>
 #include <vector>
@@ -40,4 +39,3 @@ class FileWriter {
 
 }  // namespace ecs
 
-#endif  // FILE_READER_H_

@@ -1,5 +1,4 @@
-#ifndef VERTEX_ARRAY_H_
-#define VERTEX_ARRAY_H_
+#pragma once
 
 #include <glad/glad.h>
 
@@ -19,4 +18,3 @@ class VertexArray : Noncopyable {
 
 }  // namespace ecs
 
-#endif  // VERTEX_ARRAY_H_

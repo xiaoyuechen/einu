@@ -1,5 +1,4 @@
-#ifndef SPRITE_H_
-#define SPRITE_H_
+#pragma once
 
 #include "ecs-engine/math/primitive.h"
 #include "ecs-engine/graphics/texture.h"
@@ -21,4 +20,3 @@ struct Sprite {
 
 }  // namespace ecs
 
-#endif  // SPRITE_H_

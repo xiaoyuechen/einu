@@ -1,5 +1,4 @@
-#ifndef GRID_H_
-#define GRID_H_
+#pragma once
 
 #include <vector>
 
@@ -88,4 +87,3 @@ inline std::size_t Grid<T>::GetTotalCellCount() const noexcept {
 
 }  // namespace ecs
 
-#endif  // GRID_H_

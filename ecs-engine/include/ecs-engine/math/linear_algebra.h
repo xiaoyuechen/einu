@@ -1,5 +1,4 @@
-#ifndef LINEAR_ALGEBRA_H_
-#define LINEAR_ALGEBRA_H_
+#pragma once
 
 #include "ecs-engine/math/glm.h"
 
@@ -81,4 +80,3 @@ void SetRotation(glm::mat<4, 4, T>& transform, const glm::tquat<T>& rotation) {
 }  // namespace linalg
 }  // namespace ecs
 
-#endif  // LINEAR_ALGEBRA_H_

@@ -1,5 +1,4 @@
-#ifndef GL_CONTEXT_H_
-#define GL_CONTEXT_H_
+#pragma once
 
 #include <glad/glad.h>
 
@@ -16,4 +15,3 @@ class GLContext {
 
 }  // namespace ecs
 
-#endif  // GL_CONTEXT_H_

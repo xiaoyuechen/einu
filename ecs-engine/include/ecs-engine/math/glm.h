@@ -1,5 +1,4 @@
-#ifndef GLM_H_
-#define GLM_H_
+#pragma once
 
 #include <codeanalysis\warnings.h>
 
@@ -15,5 +14,3 @@
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtx/transform.hpp>
 #pragma warning(pop)
-
-#endif  // GLM_H_

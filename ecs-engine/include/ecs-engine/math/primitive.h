@@ -1,5 +1,4 @@
-#ifndef PRIMITIVE_H_
-#define PRIMITIVE_H_
+#pragma once
 
 #include "ecs-engine/math/glm.h"
 
@@ -34,4 +33,3 @@ Rect<T> operator*(const glm::mat<4, 4, T>& transform, const Rect<T>& rhs) {
 
 }  // namespace ecs
 
-#endif  // PRIMITIVE_H_

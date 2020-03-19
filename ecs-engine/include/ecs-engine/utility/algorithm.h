@@ -1,5 +1,4 @@
-#ifndef ALGORITHM_H_
-#define ALGORITHM_H_
+#pragma once
 
 #include <algorithm>
 #include <tuple>
@@ -73,4 +72,3 @@ constexpr void StaticFor(Predicate&& pred) {
 
 }  // namespace ecs
 
-#endif  // ALGORITHM_H_

@@ -1,5 +1,4 @@
-#ifndef WINDOW_H_
-#define WINDOW_H_
+#pragma once
 
 #include <tuple>
 
@@ -69,4 +68,3 @@ inline void Window::SetInputCallback(const Fn& callback) {
 
 }  // namespace ecs
 
-#endif  // WINDOW_H_

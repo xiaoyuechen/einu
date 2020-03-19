@@ -1,5 +1,4 @@
-#ifndef TEXTURE_H_
-#define TEXTURE_H_
+#pragma once
 
 #include <glad/glad.h>
 
@@ -26,4 +25,3 @@ class Texture : Noncopyable {
 };
 }  // namespace ecs
 
-#endif  // TEXTURE_H_

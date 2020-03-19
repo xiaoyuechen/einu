@@ -1,5 +1,4 @@
-#ifndef VERTEX_BUFFER_H_
-#define VERTEX_BUFFER_H_
+#pragma once
 
 #include <glad/glad.h>
 #include <cstddef>
@@ -26,4 +25,3 @@ class VertexBuffer : Noncopyable {
 };
 }  // namespace ecs
 
-#endif  // VERTEX_BUFFER_H_

@@ -1,5 +1,4 @@
-#ifndef VERTEX_FORMAT_H_
-#define VERTEX_FORMAT_H_
+#pragma once
 
 #include <glad/glad.h>
 
@@ -34,4 +33,3 @@ class VertexFormat {
 
 }  // namespace ecs
 
-#endif  // VERTEX_FORMAT_H_

@@ -1,5 +1,4 @@
-#ifndef STB_IMAGE_H_
-#define STB_IMAGE_H_
+#pragma once
 
 #include <codeanalysis\warnings.h>
 #pragma warning(push)
@@ -12,4 +11,3 @@
 #include <stb-image/stb_image.h>
 #pragma warning(pop)
 
-#endif  // STB_IMAGE_H_

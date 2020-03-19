@@ -1,5 +1,4 @@
-#ifndef FIXED_SIZE_POOL_H_
-#define FIXED_SIZE_POOL_H_
+#pragma once
 
 #include <cassert>
 #include <functional>
@@ -91,4 +90,3 @@ inline void FixedSizePool<T, ThreadingModel, Allocator>::Recall(const T& obj) {
 
 }  // namespace ecs
 
-#endif  // FIXED_SIZE_POOL_H_

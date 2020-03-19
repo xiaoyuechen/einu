@@ -1,5 +1,4 @@
-#ifndef SHADER_UTIL_H_
-#define SHADER_UTIL_H_
+#pragma once
 
 #include <glad/glad.h>
 
@@ -14,4 +13,3 @@ void CheckStatus(Type type, GLuint id);
 }  // namespace shader_util
 }  // namespace ecs
 
-#endif  // SHADER_UTIL_H_

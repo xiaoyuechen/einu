@@ -1,5 +1,4 @@
-#ifndef TYPE_MAPPING_H_
-#define TYPE_MAPPING_H_
+#pragma once
 
 namespace ecs {
 
@@ -23,4 +22,3 @@ struct Type2Type {
 
 }  // namespace ecs
 
-#endif  // TYPE_MAPPING_H_

@@ -1,5 +1,4 @@
-#ifndef VIEW_H_
-#define VIEW_H_
+#pragma once
 
 #include "ecs-engine/math/glm.h"
 
@@ -14,4 +13,3 @@ struct View {
 
 }  // namespace ecs
 
-#endif  // VIEW_H_

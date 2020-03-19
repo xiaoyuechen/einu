@@ -2,9 +2,9 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="source\pch.cpp" />
-    <ClCompile Include="source\inlined_vector_test.cc" />
-    <ClCompile Include="source\instanced_sprite_rendering_system_test.cc" />
-    <ClCompile Include="source\resource_manager_test.cc" />
+    <ClCompile Include="source\inlined_vector_test.cpp" />
+    <ClCompile Include="source\instanced_sprite_rendering_system_test.cpp" />
+    <ClCompile Include="source\resource_manager_test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Test_class_collection.h" />

@@ -1,5 +1,4 @@
-#ifndef ENUM_UTIL_H_
-#define ENUM_UTIL_H_
+#pragma once
 
 #include <cstddef>
 
@@ -11,4 +10,3 @@ constexpr std::size_t GetEnumCount() {
 
 }  // namespace ecs
 
-#endif  // ENUM_UTIL_H_

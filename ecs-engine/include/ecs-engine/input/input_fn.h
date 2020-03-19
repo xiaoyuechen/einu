@@ -1,5 +1,4 @@
-#ifndef INPUT_FN_H_
-#define INPUT_FN_H_
+#pragma once
 
 #include <functional>
 
@@ -61,4 +60,3 @@ inline InputFn<FnArgs...>::InputFn(const Fn& fn)
 
 }  // namespace ecs
 
-#endif  // INPUT_FN_H_
