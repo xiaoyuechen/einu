@@ -2,17 +2,14 @@
 
 #include <bitset>
 
-#include "ecs-engine/utility/type_list.h"
+#include "ecs-engine/core/component_list.h"
 
 namespace ecs {
 
-template <typename... Ts>
-using ComponentList = TypeList<Ts...>;
-
 template <typename ComponentList, typename SingletonComponentList>
 struct ComponentSetting {
-  using Components = ComponentList;
-  using SingletonComponents = SingletonComponentList;
+  using Components = typename ComponentList::TypeList;
+  using SingletonComponents = typename SingletonComponentList::TypeList;
 
   static constexpr std::size_t GetComponentTypeCount();
 
@@ -26,7 +23,7 @@ struct ComponentSetting {
   static ComponentMask GetComponentMask();
 
   template <ComponentTypeIndex index>
-  using ComponentTypeAt = typename TypeAt<ComponentList, index>::Type;
+  using ComponentTypeAt = typename tmp::TypeAt<Components, index>::Type;
 };
 
 //////////////////////////////////////////////////////////////////////////
@@ -34,7 +31,7 @@ struct ComponentSetting {
 template <typename ComponentList, typename SingletonComponentList>
 inline constexpr std::size_t ComponentSetting<
     ComponentList, SingletonComponentList>::GetComponentTypeCount() {
-  return Size<ComponentList>::value;
+  return tmp::Size<Components>::value;
 }
 
 template <typename ComponentList, typename SingletonComponentList>
@@ -44,7 +41,7 @@ inline constexpr
                               SingletonComponentList>::ComponentTypeIndex
     ComponentSetting<ComponentList,
                      SingletonComponentList>::GetComponentTypeIndex() {
-  return IndexOf<ComponentList, std::remove_const<T>::type>::value;
+  return tmp::IndexOf<Components, std::remove_const<T>::type>::value;
 }
 
 template <typename ComponentList, typename SingletonComponentList>

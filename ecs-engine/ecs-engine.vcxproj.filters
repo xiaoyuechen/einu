@@ -105,12 +105,6 @@
     <ClInclude Include="include\ecs-engine\utility\pattern.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\ecs-engine\utility\type_list.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ecs-engine\utility\type_mapping.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\ecs-engine\window\window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -186,7 +180,22 @@
     <ClInclude Include="include\ecs-engine\utility\enum_util.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\ecs-engine\extension\manager\resource_manager.h">
+    <ClInclude Include="include\ecs-engine\core\component_list.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-engine\utility\tmp\type_mapping.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-engine\utility\tmp\type_list.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-engine\extension\entity\entity_prototype.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-engine\extension\component\singleton_entity_prototype_map_component.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-engine\extension\component\singleton_spawn_queue_component.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -263,5 +272,6 @@
     <None Include="resource\instanced_sprite_fragment_shader.glsl" />
     <None Include="include\ecs-engine\shader\instanced_sprite_fragment_shader.glsl" />
     <None Include="include\ecs-engine\shader\instanced_sprite_vertex_shader.glsl" />
+    <None Include="include\ecs-engine\extension\component\singleton_resource_component.h" />
   </ItemGroup>
 </Project>

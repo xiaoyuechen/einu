@@ -3,10 +3,10 @@
 #include <tuple>
 #include <vector>
 
+#include "ecs-engine/core/component_list.h"
 #include "ecs-engine/core/component_manager.h"
-#include "ecs-engine/core/component_setting.h"
 #include "ecs-engine/core/entity_id_manager.h"
-#include "ecs-engine/utility/type_mapping.h"
+#include "ecs-engine/utility/tmp/type_mapping.h"
 
 namespace ecs {
 
@@ -16,7 +16,8 @@ using RequiredComponentList = ComponentList<Ts...>;
 template <typename EntityManager, typename RequiredComponentList>
 class System {
  public:
-  using ComponentTuple = typename TupleRefOf<RequiredComponentList>::Type;
+  using ComponentTuple =
+      typename tmp::TupleRefOf<typename RequiredComponentList::TypeList>::Type;
   using ComponentTupleBuffer = std::vector<ComponentTuple>;
 
   System(EntityManager& ett_mgr);
@@ -46,7 +47,7 @@ template <typename EntityManager, typename RequiredComponentList>
 inline System<EntityManager, RequiredComponentList>::System(
     EntityManager& ett_mgr)
     : ett_mgr_(ett_mgr) {
-  ett_mgr_.RegisterInterest(Type2Type<RequiredComponentList>{});
+  ett_mgr_.RegisterInterest(tmp::Type2Type<RequiredComponentList>{});
 }
 
 template <typename EntityManager, typename RequiredComponentList>

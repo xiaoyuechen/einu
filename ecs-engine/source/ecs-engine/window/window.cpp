@@ -59,21 +59,22 @@ double Window::GetTime() const { return glfwGetTime(); }
 
 void Window::SetTime(double time) { glfwSetTime(time); }
 
-void Window::SetInputCallback(Type2Type<input::KeyFn>, GLFWkeyfun callback) {
+void Window::SetInputCallback(tmp::Type2Type<input::KeyFn>,
+                              GLFWkeyfun callback) {
   glfwSetKeyCallback(&window_, callback);
 }
 
-void Window::SetInputCallback(Type2Type<input::MouseButtonFn>,
+void Window::SetInputCallback(tmp::Type2Type<input::MouseButtonFn>,
                               GLFWmousebuttonfun callback) {
   glfwSetMouseButtonCallback(&window_, callback);
 }
 
-void Window::SetInputCallback(Type2Type<input::ScrollFn>,
+void Window::SetInputCallback(tmp::Type2Type<input::ScrollFn>,
                               GLFWscrollfun callback) {
   glfwSetScrollCallback(&window_, callback);
 }
 
-void Window::SetInputCallback(Type2Type<input::CursorPosFn>,
+void Window::SetInputCallback(tmp::Type2Type<input::CursorPosFn>,
                               GLFWcursorposfun callback) {
   glfwSetCursorPosCallback(&window_, callback);
 }

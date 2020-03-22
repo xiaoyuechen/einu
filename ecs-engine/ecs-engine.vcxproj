@@ -148,8 +148,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="include\ecs-engine\extension\resource_manager\resource_manager.h" />
-    <ClInclude Include="include\ecs-engine\extension\resource_manager\texture_manager.h" />
+    <ClInclude Include="include\ecs-engine\core\component_list.h" />
+    <ClInclude Include="include\ecs-engine\extension\component\singleton_entity_prototype_map_component.h" />
+    <ClInclude Include="include\ecs-engine\extension\component\singleton_spawn_queue_component.h" />
+    <ClInclude Include="include\ecs-engine\extension\entity\entity_prototype.h" />
     <ClInclude Include="include\ecs-engine\utility\container\inlined_vector.h" />
     <ClInclude Include="include\ecs-engine\utility\enum_util.h" />
     <ClInclude Include="include\ecs-engine\utility\grid.h" />
@@ -169,6 +171,7 @@
     <ClInclude Include="include\ecs-engine\math\transform.h" />
     <ClInclude Include="include\ecs-engine\utility\file_reader.h" />
     <ClInclude Include="include\ecs-engine\utility\random.h" />
+    <ClInclude Include="include\ecs-engine\utility\tmp\type_list.h" />
     <ClInclude Include="include\ecs-engine\window\gl_context.h" />
     <ClInclude Include="include\ecs-engine\input\input.h" />
     <ClInclude Include="include\ecs-engine\core\component_array.h" />
@@ -202,8 +205,7 @@
     <ClInclude Include="include\ecs-engine\utility\fixed_size_pool.h" />
     <ClInclude Include="include\ecs-engine\utility\free_index_stack.h" />
     <ClInclude Include="include\ecs-engine\utility\pattern.h" />
-    <ClInclude Include="include\ecs-engine\utility\type_list.h" />
-    <ClInclude Include="include\ecs-engine\utility\type_mapping.h" />
+    <ClInclude Include="include\ecs-engine\utility\tmp\type_mapping.h" />
     <ClInclude Include="include\glad\glad.h" />
     <ClInclude Include="include\KHR\khrplatform.h" />
     <ClInclude Include="include\ecs-engine\window\window.h" />
@@ -233,6 +235,7 @@
     <ClCompile Include="source\ecs-engine\utility\pattern.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="include\ecs-engine\extension\component\singleton_resource_component.h" />
     <None Include="include\ecs-engine\shader\instanced_sprite_fragment_shader.glsl" />
     <None Include="include\ecs-engine\shader\instanced_sprite_vertex_shader.glsl" />
     <None Include="resource\instanced_sprite_fragment_shader.glsl" />

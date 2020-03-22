@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include <cstddef>
 #include <tuple>
 #include <utility>
 
@@ -15,10 +16,8 @@ template <typename F, typename Tuple>
 constexpr auto Apply(F&& f, Tuple&& t);
 
 template <typename Container, typename T, typename ForwardIterator>
-constexpr void EraseRemove(Container&& c,
-                           ForwardIterator first,
-                           ForwardIterator last,
-                           const T& val);
+constexpr void EraseRemove(Container&& c, ForwardIterator first,
+                           ForwardIterator last, const T& val);
 
 template <std::size_t count, typename Predicate>
 constexpr void StaticFor(Predicate&& pred);
@@ -41,17 +40,14 @@ constexpr auto ApplyImpl(F&& f, Tuple&& t, std::index_sequence<I...>) {
 template <typename F, typename Tuple>
 constexpr auto Apply(F&& f, Tuple&& t) {
   return detail::ApplyImpl(
-      std::forward<F>(f),
-      std::forward<Tuple>(t),
+      std::forward<F>(f), std::forward<Tuple>(t),
       std::make_index_sequence<
           std::tuple_size_v<std::remove_reference_t<Tuple>>>{});
 }
 
 template <typename Container, typename T, typename ForwardIterator>
-constexpr void EraseRemove(Container&& c,
-                           ForwardIterator first,
-                           ForwardIterator last,
-                           const T& val) {
+constexpr void EraseRemove(Container&& c, ForwardIterator first,
+                           ForwardIterator last, const T& val) {
   c.erase(std::remove(first, last, val), last);
 }
 
@@ -71,4 +67,3 @@ constexpr void StaticFor(Predicate&& pred) {
 }  // namespace algo
 
 }  // namespace ecs
-

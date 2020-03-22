@@ -1,6 +1,7 @@
 #pragma once
 
 namespace ecs {
+namespace tmp {
 
 template <int v>
 struct Int2Type;
@@ -20,5 +21,5 @@ struct Type2Type {
   using Type = T;
 };
 
+}  // namespace tmp
 }  // namespace ecs
-

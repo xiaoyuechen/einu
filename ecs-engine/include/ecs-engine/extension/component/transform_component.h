@@ -4,6 +4,10 @@
 #include "ecs-engine/math/transform.h"
 
 namespace ecs {
-struct TransformComponent : public ComponentTag,
-                            public Transform<transform_policy::NoCache> {};
-}
+
+struct TransformComponent : public ComponentTag {
+  using Transform = Transform<transform_policy::NoCache>;
+  Transform transform{};
+};
+
+}  // namespace ecs

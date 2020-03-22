@@ -4,7 +4,7 @@
 
 #include "ecs-engine/core/component_manager.h"
 #include "ecs-engine/core/component_setting.h"
-#include "ecs-engine/utility/type_mapping.h"
+#include "ecs-engine/utility/tmp/type_mapping.h"
 
 namespace ecs {
 
@@ -17,9 +17,10 @@ class ComponentManagerPolicy {
   class Builder;
 
   template <typename T>
-  const ComponentManager<T>& GetComponentManager(Type2Type<T>) const noexcept;
+  const ComponentManager<T>& GetComponentManager(tmp::Type2Type<T>) const
+      noexcept;
   template <typename T>
-  ComponentManager<T>& GetComponentManager(Type2Type<T>) noexcept;
+  ComponentManager<T>& GetComponentManager(tmp::Type2Type<T>) noexcept;
 
   template <typename T>
   const T& GetSingletonComponent() const noexcept;
@@ -28,15 +29,15 @@ class ComponentManagerPolicy {
 
  private:
   using ManagerList =
-      typename ListWrapperOf<ComponentManager,
+      typename tmp::ListWrapperOf<ComponentManager,
                              typename ComponentSetting::Components>::Type;
 
   using SingletonComponentList = typename ComponentSetting::SingletonComponents;
 
   using ManagerPtrTuple =
-      typename TupleWrapperOf<std::unique_ptr, ManagerList>::Type;
+      typename tmp::TupleWrapperOf<std::unique_ptr, ManagerList>::Type;
   using SingletonCompPtrTuple =
-      typename ecs::TupleWrapperOf<std::unique_ptr,
+      typename tmp::TupleWrapperOf<std::unique_ptr,
                                    SingletonComponentList>::Type;
 
   ManagerPtrTuple manager_ptr_tup_;
@@ -66,7 +67,7 @@ template <typename T>
 inline const typename ComponentManagerPolicy<
     ComponentSetting, ThreadingModel>::template ComponentManager<T>&
 ComponentManagerPolicy<ComponentSetting, ThreadingModel>::GetComponentManager(
-    Type2Type<T>) const noexcept {
+    tmp::Type2Type<T>) const noexcept {
   return *std::get<std::unique_ptr<ComponentManager<T>>>(manager_ptr_tup_);
 }
 
@@ -75,7 +76,7 @@ template <typename T>
 inline typename ComponentManagerPolicy<
     ComponentSetting, ThreadingModel>::template ComponentManager<T>&
 ComponentManagerPolicy<ComponentSetting, ThreadingModel>::GetComponentManager(
-    Type2Type<T>) noexcept {
+    tmp::Type2Type<T>) noexcept {
   return const_cast<ComponentManager<T>&>(
       static_cast<const ComponentManagerPolicy&>(*this)
           .GetComponentManager<T>());
@@ -116,7 +117,7 @@ inline T& ComponentManagerPolicy<ComponentSetting, ThreadingModel>::Builder::
   return ref;
 }
 
-namespace detail {
+namespace component_manager_policy_internal {
 
 template <typename PtrTuple>
 bool PtrTupleHasNull(const PtrTuple& tup) {
@@ -130,20 +131,39 @@ bool PtrTupleHasNull(const PtrTuple& tup) {
   return has_null;
 }
 
+template <typename T>
+typename std::enable_if<std::is_default_constructible<T>::value>::type
+Construct(std::unique_ptr<T>& ptr) {
+  ptr = std::make_unique<T>();
+}
+
+template <typename T>
+typename std::enable_if<!std::is_default_constructible<T>::value>::type
+Construct(std::unique_ptr<T>&) {
+  assert(false &&
+         "Failed to build singleton component. Please make non default "
+         "constructible singleton component.");
+}
+
 }  // namespace detail
 
 template <typename ComponentSetting, typename ThreadingModel>
 inline ComponentManagerPolicy<ComponentSetting, ThreadingModel>
 ComponentManagerPolicy<ComponentSetting, ThreadingModel>::Builder::Build() {
   assert(
-      !detail::PtrTupleHasNull(manager_ptr_tup_) &&
+      !component_manager_policy_internal::PtrTupleHasNull(manager_ptr_tup_) &&
       "Failed to build component manager policy. Component manager not set.");
-  assert(
-      !detail::PtrTupleHasNull(singleton_comp_tup_) &&
-      "Failed to build component manager policy. Singleton component not set.");
 
   auto policy = ComponentManagerPolicy{};
   policy.manager_ptr_tup_ = std::move(manager_ptr_tup_);
+
+  ecs::algo::StaticFor<std::tuple_size<SingletonCompPtrTuple>::value>(
+      [&](auto i) {
+        auto&& e = std::get<i>(singleton_comp_tup_);
+        if (!e) {
+          component_manager_policy_internal::Construct(e);
+        }
+      });
   policy.singleton_comp_tup_ = std::move(singleton_comp_tup_);
   return policy;
 }

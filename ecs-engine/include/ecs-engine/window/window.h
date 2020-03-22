@@ -8,7 +8,7 @@
 #include "ecs-engine/input/input.h"
 #include "ecs-engine/input/input_fn.h"
 #include "ecs-engine/math/glm.h"
-#include "ecs-engine/utility/type_mapping.h"
+#include "ecs-engine/utility/tmp/type_mapping.h"
 
 namespace ecs {
 
@@ -36,11 +36,12 @@ class Window {
   void SetTime(double time);
 
  private:
-  void SetInputCallback(Type2Type<input::KeyFn>, GLFWkeyfun callback);
-  void SetInputCallback(Type2Type<input::MouseButtonFn>,
+  void SetInputCallback(tmp::Type2Type<input::KeyFn>, GLFWkeyfun callback);
+  void SetInputCallback(tmp::Type2Type<input::MouseButtonFn>,
                         GLFWmousebuttonfun callback);
-  void SetInputCallback(Type2Type<input::ScrollFn>, GLFWscrollfun callback);
-  void SetInputCallback(Type2Type<input::CursorPosFn>,
+  void SetInputCallback(tmp::Type2Type<input::ScrollFn>,
+                        GLFWscrollfun callback);
+  void SetInputCallback(tmp::Type2Type<input::CursorPosFn>,
                         GLFWcursorposfun callback);
 
   GLFWwindow& window_;
@@ -63,7 +64,7 @@ template <typename Fn>
 inline void Window::SetInputCallback(const Fn& callback) {
   const Fn& fn = GetInputCallback<Fn>();
   const_cast<Fn&>(fn) = callback;
-  SetInputCallback(Type2Type<Fn>{}, &Fn::Invoke);
+  SetInputCallback(tmp::Type2Type<Fn>{}, &Fn::Invoke);
 }
 
 }  // namespace ecs

@@ -1,8 +1,10 @@
 #pragma once
 
+#include <cstddef>
 #include <tuple>
 
 namespace ecs {
+namespace tmp {
 
 template <typename... Ts>
 struct TypeList;
@@ -136,5 +138,5 @@ struct ListWrapperOf<Wrapper, TypeList<Ts...>> {
   using Type = TypeList<Wrapper<Ts>...>;
 };
 
-
+}  // namespace tmp
 }  // namespace ecs

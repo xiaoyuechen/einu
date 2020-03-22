@@ -9,7 +9,8 @@
 namespace ecs {
 
 struct InstancedSpriteComponent : public ComponentTag {
-  Sprite* sprite = nullptr;
-  std::array<uint8_t, 4> color{0xff, 0xff, 0xff, 0xff};
+  using Color = std::array<uint8_t, 4>;
+  const Sprite* sprite = nullptr;
+  Color color{0xff, 0xff, 0xff, 0xff};
 };
 }  // namespace ecs

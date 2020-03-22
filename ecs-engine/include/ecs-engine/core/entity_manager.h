@@ -8,8 +8,7 @@
 #include "ecs-engine/core/entity.h"
 #include "ecs-engine/core/entity_id_manager.h"
 #include "ecs-engine/utility/algorithm.h"
-#include "ecs-engine/utility/type_list.h"
-#include "ecs-engine/utility/type_mapping.h"
+#include "ecs-engine/utility/tmp/type_mapping.h"
 
 namespace ecs {
 
@@ -56,7 +55,7 @@ class EntityManager : public ComponentManagerPolicy, public ThreadingModel {
   T& GetSingletonComponent();
 
   template <typename... Ts>
-  void RegisterInterest(Type2Type<ComponentList<Ts...>>);
+  void RegisterInterest(tmp::Type2Type<ComponentList<Ts...>>);
 
   std::size_t GetEntityCount() const noexcept;
 
@@ -256,7 +255,7 @@ template <typename ComponentSetting, typename ComponentManagerPolicy,
 template <typename... Ts>
 inline void EntityManager<
     ComponentSetting, ComponentManagerPolicy,
-    ThreadingModel>::RegisterInterest(Type2Type<ComponentList<Ts...>>) {
+    ThreadingModel>::RegisterInterest(tmp::Type2Type<ComponentList<Ts...>>) {
   const auto comp_mask = ComponentSetting::template GetComponentMask<Ts...>();
   comp_cache_mgr_.RegisterComponentMask(comp_mask);
 }
@@ -321,7 +320,7 @@ inline const typename EntityManager<
     ThreadingModel>::template ComponentManager<T>&
 EntityManager<ComponentSetting, ComponentManagerPolicy,
               ThreadingModel>::GetComponentManager() const {
-  return ComponentManagerPolicy::GetComponentManager(Type2Type<T>{});
+  return ComponentManagerPolicy::GetComponentManager(tmp::Type2Type<T>{});
 }
 
 template <typename ComponentSetting, typename ComponentManagerPolicy,

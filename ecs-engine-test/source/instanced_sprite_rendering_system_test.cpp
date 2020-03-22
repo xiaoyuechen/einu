@@ -83,7 +83,8 @@ TEST_F(ISRTest, Render) {
 
   for (auto i = std::size_t(0); i != 50; ++i) {
     auto ett_handle = ett_mgr.CreateEntity();
-    auto& transform = ett_handle.AddComponent<TransformComponent>();
+    auto& transform_comp = ett_handle.AddComponent<TransformComponent>();
+    auto& transform = transform_comp.transform;
     transform.SetPosition(
         glm::vec3(distribution_x(generator), distribution_y(generator), 0));
     transform.SetRotation(glm::quat(

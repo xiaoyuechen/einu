@@ -58,7 +58,7 @@ class InstancedSpriteRenderingSystem
   VertexBuffer instance_vbo_;
 
   std::vector<InstanceState> instance_state_cache_;
-  std::map<Sprite*, TupArr> tuple_map_;
+  std::map<const Sprite*, TupArr> tuple_map_;
 };
 
 //////////////////////////////////////////////////////////////////////////
@@ -148,12 +148,13 @@ inline void
 InstancedSpriteRenderingSystem<EntityManager, UnitPolicy>::SetInstanceVBOData(
     const TupArr& tup_arr) {
   instance_state_cache_.clear();
-  for (const auto& [sprite, transform] : tup_arr) {
+  for (const auto& [sprite_comp, transform_comp] : tup_arr) {
+    auto& transform = transform_comp.transform;
     auto pos = transform.GetPosition() * UnitPolicy::PixelPerUnit();
     const auto& quat = transform.GetRotation();
     auto quat_vec = glm::vec4{quat.x, quat.y, quat.z, quat.w};
     auto scale = transform.GetScale();
-    auto state = InstanceState{sprite.color, pos, quat_vec, scale};
+    auto state = InstanceState{sprite_comp.color, pos, quat_vec, scale};
     instance_state_cache_.push_back(state);
   }
   instance_vbo_.Set(sizeof(InstanceState) * instance_state_cache_.size(),
@@ -197,10 +198,10 @@ inline void
 InstancedSpriteRenderingSystem<EntityManager, UnitPolicy>::UpdateTupleMap() {
   tuple_map_.clear();
   for (const auto& tuple : System::GetMatchingComponentTuples()) {
-    const auto& [instanced_sprite, transform] = tuple;
-    auto sprite = instanced_sprite.sprite;
+    const auto& [instanced_sprite_comp, transform_comp] = tuple;
+    auto sprite = instanced_sprite_comp.sprite;
     if (sprite) {
-      tuple_map_[instanced_sprite.sprite].push_back(tuple);
+      tuple_map_[instanced_sprite_comp.sprite].push_back(tuple);
     }
   }
 }

@@ -10,7 +10,7 @@ T GetRandomInRange(const T min, const T max);
 
 //////////////////////////////////////////////////////////////////////////
 
-namespace detail {
+namespace component_manager_policy_internal {
 std::random_device& GetRandomDevice() {
   static std::random_device device{};
   return device;
@@ -26,7 +26,7 @@ std::mt19937& GetGenerator() {
 template <typename T>
 T GetRandomInRange(const T min, const T max) {
   std::uniform_real_distribution<T> distribution(min, max);
-  return distribution(detail::GetGenerator());
+  return distribution(component_manager_policy_internal::GetGenerator());
 }
 
 }  // namespace ecs
