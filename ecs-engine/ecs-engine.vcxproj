@@ -148,6 +148,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\ecs-engine\ai\behavior_tree\composite.h" />
+    <ClInclude Include="include\ecs-engine\ai\behavior_tree\decorator.h" />
+    <ClInclude Include="include\ecs-engine\ai\behavior_tree\leaf.h" />
+    <ClInclude Include="include\ecs-engine\ai\behavior_tree\node.h" />
+    <ClInclude Include="include\ecs-engine\ai\behavior_tree\root.h" />
+    <ClInclude Include="include\ecs-engine\ai\behavior_tree\status.h" />
     <ClInclude Include="include\ecs-engine\core\component_list.h" />
     <ClInclude Include="include\ecs-engine\extension\component\singleton_entity_prototype_map_component.h" />
     <ClInclude Include="include\ecs-engine\extension\component\singleton_spawn_queue_component.h" />
@@ -211,6 +217,9 @@
     <ClInclude Include="include\ecs-engine\window\window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\ecs-engine\ai\behavior_tree\composite.cpp" />
+    <ClCompile Include="source\ecs-engine\ai\behavior_tree\decorator.cpp" />
+    <ClCompile Include="source\ecs-engine\ai\behavior_tree\root.cpp" />
     <ClCompile Include="source\ecs-engine\graphics\projection.cpp" />
     <ClCompile Include="source\ecs-engine\graphics\sprite.cpp" />
     <ClCompile Include="source\ecs-engine\graphics\view.cpp" />

@@ -198,6 +198,24 @@
     <ClInclude Include="include\ecs-engine\extension\component\singleton_spawn_queue_component.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\ecs-engine\ai\behavior_tree\node.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-engine\ai\behavior_tree\root.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-engine\ai\behavior_tree\status.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-engine\ai\behavior_tree\composite.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-engine\ai\behavior_tree\decorator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-engine\ai\behavior_tree\leaf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\ecs-engine\graphics\bitmap_font.cpp">
@@ -264,6 +282,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\ecs-engine\math\glm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ecs-engine\ai\behavior_tree\root.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ecs-engine\ai\behavior_tree\composite.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ecs-engine\ai\behavior_tree\decorator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
