@@ -24,8 +24,7 @@ class Result {
 
   Result();
   EIDs& operator[](const Status& status);
-  EIDs& at(const Status& status);
-  const EIDs& at(const Status& status) const;
+  const EIDs& operator[](const Status& status) const;
   iterator begin() noexcept;
   const_iterator begin() const noexcept;
   iterator end() noexcept;
@@ -45,14 +44,10 @@ inline Result::Result() {
 }
 
 inline Result::EIDs& Result::operator[](const Status& status) {
-  return map_[status];
-}
-
-inline Result::EIDs& Result::at(const Status& status) {
   return map_.at(status);
 }
 
-inline const Result::EIDs& Result::at(const Status& status) const {
+inline const Result::EIDs& Result::operator[](const Status& status) const {
   return map_.at(status);
 }
 
