@@ -19,11 +19,12 @@ class System {
   using ComponentTuple =
       typename tmp::TupleRefOf<typename RequiredComponentList::TypeList>::Type;
   using ComponentTupleBuffer = std::vector<ComponentTuple>;
+  using EIDs = std::vector<EntityID>;
 
   System(EntityManager& ett_mgr);
 
-  const std::vector<ComponentTuple>& GetMatchingComponentTuples() const;
-  std::vector<ComponentTuple>& GetMatchingComponentTuples();
+  const ComponentTupleBuffer& GetMatchingComponentTuples() const;
+  ComponentTupleBuffer& GetMatchingComponentTuples();
 
   const typename EntityManager::EntityHandle GetEntityHandle(
       const ComponentTuple& tuple) const;
@@ -31,6 +32,7 @@ class System {
       const ComponentTuple& tuple);
 
   const EntityID& GetEntityID(const ComponentTuple& tuple) const;
+  const EIDs& GetEntityIDs() const noexcept;
 
   const EntityManager& GetEntityManager() const;
   EntityManager& GetEntityManager();
@@ -38,7 +40,7 @@ class System {
  private:
   EntityManager& ett_mgr_;
   mutable ComponentTupleBuffer matching_comps_;
-  mutable std::vector<EntityID> eid_arr_;
+  mutable EIDs eid_arr_;
 };
 
 //////////////////////////////////////////////////////////////////////////
@@ -88,6 +90,12 @@ System<EntityManager, RequiredComponentList>::GetEntityID(
     const ComponentTuple& tuple) const {
   auto index = &tuple - matching_comps_.data();
   return eid_arr_[index];
+}
+
+template <typename EntityManager, typename RequiredComponentList>
+inline const typename System<EntityManager, RequiredComponentList>::EIDs&
+System<EntityManager, RequiredComponentList>::GetEntityIDs() const noexcept {
+  return eid_arr_;
 }
 
 template <typename EntityManager, typename RequiredComponentList>

@@ -18,12 +18,12 @@ class Decorator : public Node {
 
 class Inverter : public Decorator {
  public:
-  virtual Status Run(float dt) override;
+  virtual const Result& Run(float dt, const EIDs& eids) override;
 };
 
 class Succeeder : public Decorator {
  public:
-  virtual Status Run(float dt) override;
+  virtual const Result& Run(float dt, const EIDs& eids) override;
 };
 
 }  // namespace bt

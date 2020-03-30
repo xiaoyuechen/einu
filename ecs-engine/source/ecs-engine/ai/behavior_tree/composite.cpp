@@ -12,24 +12,24 @@ const std::vector<std::unique_ptr<Node>>& Composite::GetChildren() {
   return children_;
 }
 
-Status Sequence::Run(float dt) {
+const Result& Sequence::Run(float dt, const EIDs& eids) {
+  Node::Run(dt, eids);
+  auto& result_cache = GetResultCache();
+  result_cache[Status::SUCCESS] = eids;
   for (auto&& child : GetChildren()) {
-    auto status = child->Run(dt);
-    if (status != Status::SUCCESS) {
-      return status;
-    }
+    result_cache = child->Run(dt, result_cache[Status::SUCCESS]);
   }
-  return Status::SUCCESS;
+  return result_cache;
 }
 
-Status Selector::Run(float dt) {
+const Result& Selector::Run(float dt, const EIDs& eids) {
+  Node::Run(dt, eids);
+  auto& result_cache = GetResultCache();
+  result_cache[Status::FAILURE] = eids;
   for (auto&& child : GetChildren()) {
-    auto status = child->Run(dt);
-    if (status != Status::FAILURE) {
-      return status;
-    }
+    result_cache = child->Run(dt, result_cache[Status::FAILURE]);
   }
-  return Status::FAILURE;
+  return result_cache;
 }
 
 }  // namespace bt

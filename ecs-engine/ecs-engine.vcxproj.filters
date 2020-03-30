@@ -204,9 +204,6 @@
     <ClInclude Include="include\ecs-engine\ai\behavior_tree\root.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\ecs-engine\ai\behavior_tree\status.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\ecs-engine\ai\behavior_tree\composite.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -214,6 +211,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\ecs-engine\ai\behavior_tree\leaf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-engine\extension\component\behavior_tree_component.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-engine\ai\behavior_tree\result.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-engine\ai\behavior_tree\extension\move_to.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-engine\ai\behavior_tree\extension\destination_component.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -282,9 +291,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\ecs-engine\math\glm.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\ecs-engine\ai\behavior_tree\root.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\ecs-engine\ai\behavior_tree\composite.cpp">
