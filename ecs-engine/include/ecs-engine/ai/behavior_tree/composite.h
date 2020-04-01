@@ -1,22 +1,13 @@
 #pragma once
 
-#include <memory>
-#include <vector>
-
+#include "ecs-engine/ai/behavior_tree/internal/multi_node_owner.h"
 #include "ecs-engine/ai/behavior_tree/node.h"
 
 namespace ecs {
 namespace ai {
 namespace bt {
 
-class Composite : public Node {
- public:
-  void AddChild(std::unique_ptr<Node> child);
-  const std::vector<std::unique_ptr<Node>>& GetChildren();
-
- private:
-  std::vector<std::unique_ptr<Node>> children_;
-};
+class Composite : public Node, public MultiNodeOwner {};
 
 class Sequence : public Composite {
  public:
@@ -27,6 +18,8 @@ class Selector : public Composite {
  public:
   virtual const Result& Run(float dt, const EIDs& eids) override;
 };
+
+//////////////////////////////////////////////////////////////////////////
 
 }  // namespace bt
 }  // namespace ai

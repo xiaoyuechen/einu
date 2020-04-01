@@ -152,12 +152,13 @@
     <ClInclude Include="include\ecs-engine\ai\behavior_tree\decorator.h" />
     <ClInclude Include="include\ecs-engine\ai\behavior_tree\extension\destination_component.h" />
     <ClInclude Include="include\ecs-engine\ai\behavior_tree\extension\move_to.h" />
+    <ClInclude Include="include\ecs-engine\ai\behavior_tree\internal\multi_node_owner.h" />
+    <ClInclude Include="include\ecs-engine\ai\behavior_tree\internal\single_node_owner.h" />
     <ClInclude Include="include\ecs-engine\ai\behavior_tree\leaf.h" />
     <ClInclude Include="include\ecs-engine\ai\behavior_tree\node.h" />
     <ClInclude Include="include\ecs-engine\ai\behavior_tree\root.h" />
     <ClInclude Include="include\ecs-engine\ai\behavior_tree\result.h" />
     <ClInclude Include="include\ecs-engine\core\component_list.h" />
-    <ClInclude Include="include\ecs-engine\extension\component\behavior_tree_component.h" />
     <ClInclude Include="include\ecs-engine\extension\component\singleton_entity_prototype_map_component.h" />
     <ClInclude Include="include\ecs-engine\extension\component\singleton_spawn_queue_component.h" />
     <ClInclude Include="include\ecs-engine\extension\entity\entity_prototype.h" />

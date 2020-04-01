@@ -213,9 +213,6 @@
     <ClInclude Include="include\ecs-engine\ai\behavior_tree\leaf.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\ecs-engine\extension\component\behavior_tree_component.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\ecs-engine\ai\behavior_tree\result.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -223,6 +220,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\ecs-engine\ai\behavior_tree\extension\destination_component.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-engine\ai\behavior_tree\internal\single_node_owner.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-engine\ai\behavior_tree\internal\multi_node_owner.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

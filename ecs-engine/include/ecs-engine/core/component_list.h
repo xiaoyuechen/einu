@@ -8,8 +8,6 @@ namespace ecs {
 template <typename... Ts>
 struct ComponentList : public tmp::TypeList<Ts...> {
   // TODO(Xiaoyue Chen): Static assert ComponentTag is base of types
-
-  using TypeList = tmp::TypeList<Ts...>;
 };
 
 }  // namespace ecs

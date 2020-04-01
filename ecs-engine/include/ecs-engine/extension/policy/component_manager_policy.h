@@ -30,7 +30,7 @@ class ComponentManagerPolicy {
  private:
   using ManagerList =
       typename tmp::ListWrapperOf<ComponentManager,
-                             typename ComponentSetting::Components>::Type;
+                                  typename ComponentSetting::Components>::Type;
 
   using SingletonComponentList = typename ComponentSetting::SingletonComponents;
 
@@ -48,7 +48,7 @@ template <typename ComponentSetting, typename ThreadingModel>
 class ComponentManagerPolicy<ComponentSetting, ThreadingModel>::Builder {
  public:
   template <typename T, typename... Args>
-  T& MakeComponentManager(Args&&... args);
+  ComponentManager<T>& MakeComponentManager(Args&&... args);
 
   template <typename T, typename... Args>
   T& MakeSingletonComponent(Args&&... args);
@@ -99,11 +99,14 @@ inline T& ComponentManagerPolicy<
 
 template <typename ComponentSetting, typename ThreadingModel>
 template <typename T, typename... Args>
-inline T& ComponentManagerPolicy<ComponentSetting, ThreadingModel>::Builder::
+inline typename ComponentManagerPolicy<ComponentSetting,
+                                       ThreadingModel>::ComponentManager<T>&
+ComponentManagerPolicy<ComponentSetting, ThreadingModel>::Builder::
     MakeComponentManager(Args&&... args) {
-  auto mgr = std::make_unique<T>(std::forward<Args>(args)...);
+  auto mgr = std::make_unique<ComponentManager<T>>(std::forward<Args>(args)...);
   auto& ref = *mgr;
-  std::get<std::unique_ptr<T>>(manager_ptr_tup_) = std::move(mgr);
+  std::get<std::unique_ptr<ComponentManager<T>>>(manager_ptr_tup_) =
+      std::move(mgr);
   return ref;
 }
 
@@ -145,7 +148,7 @@ Construct(std::unique_ptr<T>&) {
          "constructible singleton component.");
 }
 
-}  // namespace detail
+}  // namespace component_manager_policy_internal
 
 template <typename ComponentSetting, typename ThreadingModel>
 inline ComponentManagerPolicy<ComponentSetting, ThreadingModel>

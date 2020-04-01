@@ -2,19 +2,14 @@
 
 #include <memory>
 
+#include "ecs-engine/ai/behavior_tree/internal/single_node_owner.h"
 #include "ecs-engine/ai/behavior_tree/node.h"
 
 namespace ecs {
 namespace ai {
 namespace bt {
 
-class Decorator : public Node {
- public:
-  void SetChild(std::unique_ptr<Node> child) noexcept;
-
- protected:
-  std::unique_ptr<Node> child_;
-};
+class Decorator : public Node, public SingleNodeOwner {};
 
 class Inverter : public Decorator {
  public:

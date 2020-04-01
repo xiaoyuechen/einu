@@ -12,7 +12,7 @@
 namespace ecs {
 
 using InstancedSpriteRenderingSystemComponentList =
-    RequiredComponentList<InstancedSpriteComponent, TransformComponent>;
+    ComponentList<InstancedSpriteComponent, TransformComponent>;
 
 // TODO(Xiaoyue Chen): System should not have any state
 template <typename EntityManager, typename UnitPolicy = DefaultUnitPolicy>
@@ -69,7 +69,6 @@ inline InstancedSpriteRenderingSystem<EntityManager, UnitPolicy>::
                                    ShaderProgram& program)
     : System(ett_mgr)
     , program_(program) {
-
   vao_.Bind();
 
   {

@@ -31,11 +31,8 @@ struct ISRTest : testing::Test {
       : window(Window::Mode::WINDOWED, 1920, 1080, "application")
       , ett_mgr([] {
         auto builder = MyComponentManagerPolicy::Builder{};
-        builder.MakeComponentManager<
-            MyComponentManagerPolicy::ComponentManager<TransformComponent>>(
-            10000);
-        builder.MakeComponentManager<MyComponentManagerPolicy::ComponentManager<
-            InstancedSpriteComponent>>(10000);
+        builder.MakeComponentManager<TransformComponent>(10000);
+        builder.MakeComponentManager<InstancedSpriteComponent>(10000);
         builder.MakeSingletonComponent<SingletonCameraComponent>();
         return builder.Build();
       }())

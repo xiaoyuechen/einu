@@ -4,14 +4,6 @@ namespace ecs {
 namespace ai {
 namespace bt {
 
-void Composite::AddChild(std::unique_ptr<Node> child) {
-  children_.emplace_back(std::move(child));
-}
-
-const std::vector<std::unique_ptr<Node>>& Composite::GetChildren() {
-  return children_;
-}
-
 const Result& Sequence::Run(float dt, const EIDs& eids) {
   Node::Run(dt, eids);
   auto& result_cache = GetResultCache();

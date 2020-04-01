@@ -18,7 +18,7 @@ struct TypeAt;
 template <typename TypeList, typename T>
 struct IndexOf;
 
-template <typename LhsTypeList, typename RhsTypeList>
+template <typename... TypeLists>
 struct Concatenate;
 
 template <typename TypeList, typename T>
@@ -61,9 +61,20 @@ struct TypeAt<TypeList<Ts...>, index> {
   using Type = typename std::tuple_element<index, std::tuple<Ts...>>::type;
 };
 
+template <typename TypeList>
+struct Concatenate<TypeList> {
+  using Result = TypeList;
+};
+
 template <typename... LhsTs, typename... RhsTs>
 struct Concatenate<TypeList<LhsTs...>, TypeList<RhsTs...>> {
   using Result = TypeList<LhsTs..., RhsTs...>;
+};
+
+template <typename Head, typename... Rest>
+struct Concatenate<Head, Rest...> {
+  using Result =
+      typename Concatenate<Head, typename Concatenate<Rest...>::Result>::Result;
 };
 
 template <typename T, typename... Rest>

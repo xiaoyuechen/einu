@@ -10,12 +10,10 @@
 
 namespace ecs {
 
-template <typename... Ts>
-using RequiredComponentList = ComponentList<Ts...>;
-
 template <typename EntityManager, typename RequiredComponentList>
 class System {
  public:
+  using ComponentList = RequiredComponentList;
   using ComponentTuple =
       typename tmp::TupleRefOf<typename RequiredComponentList::TypeList>::Type;
   using ComponentTupleBuffer = std::vector<ComponentTuple>;
