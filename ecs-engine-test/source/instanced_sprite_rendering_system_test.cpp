@@ -7,7 +7,7 @@
 #include "ecs-engine/extension/component/instanced_sprite_component.h"
 #include "ecs-engine/extension/component/singleton_camera_component.h"
 #include "ecs-engine/extension/component/transform_component.h"
-#include "ecs-engine/extension/policy/component_manager_policy.h"
+#include "ecs-engine/extension/policy/component_management_policy.h"
 #include "ecs-engine/extension/policy/threading_model.h"
 #include "ecs-engine/extension/system/instanced_sprite_rendering_system.h"
 #include "ecs-engine/graphics/graphics.h"
@@ -22,7 +22,7 @@ struct ISRTest : testing::Test {
   using MyComponentSetting =
       ComponentSetting<MyComponentList, MySingletonComponentList>;
   using MyComponentManagerPolicy =
-      ComponentManagerPolicy<MyComponentSetting, MultiThreaded>;
+      ComponentManagementPolicy<MyComponentSetting, MultiThreaded>;
   using MyEntityManager =
       EntityManager<MyComponentSetting, MyComponentManagerPolicy,
                     MultiThreaded>;

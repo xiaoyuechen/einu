@@ -3,7 +3,7 @@
 #include <array>
 
 #include "ecs-engine/core/component_setting.h"
-#include "ecs-engine/core/component_tag.h"
+#include "ecs-engine/core/component.h"
 
 namespace ecs {
 
@@ -19,11 +19,13 @@ class ComponentArray {
   const T& Get() const noexcept;
   template <typename T>
   T& Get() noexcept;
+  template <typename T>
+  bool Has() const noexcept;
 
  private:
   static constexpr auto kComponentTypeCount =
       ComponentSetting::GetComponentTypeCount();
-  std::array<ComponentTag*, kComponentTypeCount> arr_{nullptr};
+  std::array<IComponent*, kComponentTypeCount> arr_{nullptr};
 };
 
 //////////////////////////////////////////////////////////////////////////
@@ -53,6 +55,13 @@ template <typename ComponentSetting>
 template <typename T>
 inline T& ComponentArray<ComponentSetting>::Get() noexcept {
   return const_cast<T&>(static_cast<const ComponentArray&>(*this).Get<T>());
+}
+
+template <typename ComponentSetting>
+template <typename T>
+inline bool ComponentArray<ComponentSetting>::Has() const noexcept {
+  constexpr auto index = ComponentSetting::template GetComponentTypeIndex<T>();
+  return arr_[index] != nullptr;
 }
 
 }  // namespace ecs

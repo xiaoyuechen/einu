@@ -2,9 +2,23 @@
 
 #include <bitset>
 
+#include "ecs-engine/utility/rtti/class_index.h"
 #include "ecs-engine/core/component_list.h"
 
 namespace ecs {
+
+//class IComponentSetting {
+// public:
+//  template <typename T>
+//  void RegisterComponent() {
+//    RegisterComponent(GetClassIndex<T>());
+//  }
+//
+//  virtual std::size_t GetComponentTypeCount() = 0;
+//
+// protected:
+//  virtual void RegisterComponent(ClassIndex& idx) = 0;
+//};
 
 template <typename ComponentList, typename SingletonComponentList>
 struct ComponentSetting {

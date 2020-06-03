@@ -5,7 +5,7 @@
 namespace ecs {
 
 template <typename Key, typename Resource>
-class SingletonResourceComponent {
+class SingletonResourceComponent : public IComponent {
   using Map = std::map<Key, Resource>;
 
  public:

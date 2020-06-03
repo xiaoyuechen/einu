@@ -5,7 +5,7 @@
 #include "Test_class_collection.h"
 #include "ecs-engine/core/component_setting.h"
 #include "ecs-engine/core/entity_manager.h"
-#include "ecs-engine/extension/policy/component_manager_policy.h"
+#include "ecs-engine/extension/policy/component_management_policy.h"
 #include "ecs-engine/core/system.h"
 #include "ecs-engine/extension/policy/threading_model.h"
 #include "ecs-engine/utility/type_list.h"

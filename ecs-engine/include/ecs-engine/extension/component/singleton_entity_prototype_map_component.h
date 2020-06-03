@@ -2,12 +2,12 @@
 
 #include <map>
 
-#include "ecs-engine/core/component_tag.h"
+#include "ecs-engine/core/component.h"
 
 namespace ecs {
 
 template <typename Key, typename EntityPrototype>
-struct SingletonEntityPrototypeMapComponent : public ComponentTag {
+struct SingletonEntityPrototypeMapComponent : public IComponent {
   using PrototypeMap = std::map<Key, EntityPrototype>;
   PrototypeMap map{};
 };

@@ -1,18 +1,21 @@
 #pragma once
 
 #include <map>
-#include <mutex>
 
-#include "ecs-engine/core/component_tag.h"
+#include "ecs-engine/core/component.h"
 #include "ecs-engine/core/entity_id.h"
 #include "ecs-engine/utility/fixed_size_pool.h"
 
 namespace ecs {
 
+class IComponentManager {};
+
 template <typename T, typename ThreadingModel,
           typename PoolPolicy = FixedSizePool<T, ThreadingModel>>
-class ComponentManager : public ThreadingModel, public PoolPolicy {
-  static_assert(std::is_base_of<ComponentTag, T>() &&
+class ComponentManager : public ThreadingModel,
+                         public PoolPolicy,
+                         public IComponentManager {
+  static_assert(std::is_base_of<IComponent, T>() &&
                 "T must inherit from Component");
 
  public:
@@ -23,6 +26,7 @@ class ComponentManager : public ThreadingModel, public PoolPolicy {
   [[nodiscard]] const T& GetComponent(const EntityID& eid) const;
   [[nodiscard]] T& GetComponent(const EntityID& eid);
   void RemoveComponent(const EntityID& eid);
+  bool HasComponent(const EntityID& eid) const noexcept;
 
  private:
   using Map = std::map<EntityID, T&>;
@@ -69,6 +73,12 @@ void ComponentManager<T, ThreadingModel, PoolPolicy>::RemoveComponent(
   PoolPolicy::Recall(comp);
   typename ThreadingModel::Lock lock(*this);
   map_.erase(eid);
+}
+
+template <typename T, typename ThreadingModel, typename PoolPolicy>
+inline bool ComponentManager<T, ThreadingModel, PoolPolicy>::HasComponent(
+    const EntityID& eid) const noexcept {
+  return map_.find(eid) != map_.end();
 }
 
 }  // namespace ecs

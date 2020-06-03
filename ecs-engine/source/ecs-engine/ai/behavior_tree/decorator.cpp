@@ -16,14 +16,9 @@ const Result& Inverter::Run(float dt, const EIDs& eids) {
 
 const Result& Succeeder::Run(float dt, const EIDs& eids) {
   Node::Run(dt, eids);
-  auto& result_cache = GetResultCache();
-  const auto& result = GetChild().Run(dt, eids);
-  result_cache[Status::RUNNING] = result[Status::RUNNING];
-  result_cache[Status::SUCCESS] = result[Status::SUCCESS];
-  const auto& failure_eids = result[Status::FAILURE];
-  std::copy(failure_eids.begin(), failure_eids.end(),
-            std::back_inserter(result_cache[Status::SUCCESS]));
-  return result_cache;
+  GetChild().Run(dt, eids);
+  GetResultCache()[Status::SUCCESS] = eids;
+  return GetResultCache();
 }
 
 }  // namespace bt

@@ -4,7 +4,7 @@
 #include <tuple>
 
 #include "ecs-engine/core/component_list.h"
-#include "ecs-engine/core/component_tag.h"
+#include "ecs-engine/core/component.h"
 #include "ecs-engine/utility/algorithm.h"
 #include "ecs-engine/utility/tmp/type_list.h"
 #include "ecs-engine/utility/tmp/type_mapping.h"

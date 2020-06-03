@@ -1,11 +1,11 @@
 #pragma once
 
-#include "ecs-engine/core/component_tag.h"
+#include "ecs-engine/core/component.h"
 #include "ecs-engine/graphics/projection.h"
 #include "ecs-engine/graphics/view.h"
 
 namespace ecs {
-struct SingletonCameraComponent : public ComponentTag {
+struct SingletonCameraComponent : public IComponent {
   Projection projection;
   View view;
 };

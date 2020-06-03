@@ -12,7 +12,7 @@ class EntityID {
   constexpr std::size_t GetID() const noexcept;
 
  private:
-  std::size_t id_ = 0;
+  std::size_t id_ = ~std::size_t(0);
 };
 
 constexpr bool operator==(const EntityID& lhs, const EntityID& rhs) noexcept;
@@ -55,4 +55,3 @@ struct less<ecs::EntityID> {
   }
 };
 }  // namespace std
-

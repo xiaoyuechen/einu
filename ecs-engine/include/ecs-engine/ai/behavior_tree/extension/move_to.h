@@ -42,6 +42,7 @@ inline const Result& MoveTo<EntityManager>::Run(
       result[Status::SUCCESS].emplace_back(eid);
     } else {
       movement_comp.direction = glm::normalize(delta);
+      movement_comp.speed = movement_comp.max_speed;
       result[Status::RUNNING].emplace_back(eid);
     }
   }

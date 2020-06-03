@@ -11,20 +11,22 @@ T GetRandomInRange(const T min, const T max);
 //////////////////////////////////////////////////////////////////////////
 
 namespace component_manager_policy_internal {
-std::random_device& GetRandomDevice() {
+
+inline std::random_device& GetRandomDevice() {
   static std::random_device device{};
   return device;
 }
 
-std::mt19937& GetGenerator() {
+inline std::mt19937& GetGenerator() {
   static std::random_device device{};
   static std::mt19937 generator{GetRandomDevice()()};
   return generator;
 }
-}  // namespace detail
+
+}  // namespace component_manager_policy_internal
 
 template <typename T>
-T GetRandomInRange(const T min, const T max) {
+inline T GetRandomInRange(const T min, const T max) {
   std::uniform_real_distribution<T> distribution(min, max);
   return distribution(component_manager_policy_internal::GetGenerator());
 }

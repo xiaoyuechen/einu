@@ -33,9 +33,6 @@
     <ClInclude Include="include\ecs-engine\core\component_setting.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\ecs-engine\core\component_tag.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\ecs-engine\core\entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -121,9 +118,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\ecs-engine\graphics\sprite.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ecs-engine\extension\policy\component_manager_policy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\ecs-engine\extension\system\instanced_sprite_rendering_system.h">
@@ -226,6 +220,24 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\ecs-engine\ai\behavior_tree\internal\multi_node_owner.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-engine\core\component.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-engine\extension\policy\component_management_policy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-engine\core\i_entity_manager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-engine\utility\rtti\class_index.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-engine\utility\rtti\class_index_register.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs-engine\core\singleton_component_manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
