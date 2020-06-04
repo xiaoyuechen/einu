@@ -2,7 +2,7 @@
 
 #include <array>
 
-#include "ecs-engine/core/component.h"
+#include "ecs-engine/core/i_component.h"
 #include "ecs-engine/extension/component/transform_component.h"
 #include "ecs-engine/graphics/graphics.h"
 

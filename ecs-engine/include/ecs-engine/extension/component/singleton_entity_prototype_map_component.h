@@ -2,7 +2,7 @@
 
 #include <map>
 
-#include "ecs-engine/core/component.h"
+#include "ecs-engine/core/i_component.h"
 
 namespace ecs {
 

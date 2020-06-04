@@ -3,9 +3,12 @@
 #include <array>
 
 #include "ecs-engine/core/component_setting.h"
-#include "ecs-engine/core/component.h"
+#include "ecs-engine/core/i_component.h"
+#include "ecs-engine/utility/rtti/class_index.h"
 
 namespace ecs {
+
+using ComponentSet = std::map<rtti::ClassIndex, IComponent*>;
 
 template <typename ComponentSetting>
 class ComponentArray {

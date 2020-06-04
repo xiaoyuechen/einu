@@ -2,8 +2,8 @@
 
 #include <map>
 
-#include "ecs-engine/core/component.h"
 #include "ecs-engine/core/entity_id.h"
+#include "ecs-engine/core/i_component.h"
 #include "ecs-engine/utility/fixed_size_pool.h"
 
 namespace ecs {
@@ -30,7 +30,6 @@ class ComponentManager : public ThreadingModel,
 
  private:
   using Map = std::map<EntityID, T&>;
-
   Map map_;
 };
 

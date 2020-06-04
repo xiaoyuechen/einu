@@ -1,13 +1,105 @@
 #pragma once
 
 #include <map>
+#include <type_traits>
 #include <vector>
 
 #include "ecs-engine/core/component_array.h"
 #include "ecs-engine/core/component_setting.h"
+#include "ecs-engine/core/entity.h"
 #include "ecs-engine/core/entity_id.h"
 
 namespace ecs {
+
+template <typename Entity>
+class EntityCache {
+ public:
+  using Entities = std::vector<Entity&>;
+
+  void Register(const Entity& ett) {
+    id_ett_map.insert({ett.GetEntityID(), ett});
+    is_expired = true;
+  }
+
+  void Unregister(const Entity& ett) {
+    id_ett_map.erase(ett.GetEntityID());
+    is_expired = true;
+  }
+
+  const Entities& Get() const {
+    if (is_expired) {
+      Refresh();
+    }
+    return etts;
+  }
+
+ private:
+  void Refresh() const {
+    etts.clear();
+    for (auto&& [eid, ett] : id_ett_map) {
+      etts.emplace_back(ett);
+    }
+    is_expired = false;
+  }
+
+  std::map<EntityID, const Entity&> id_ett_map;  // for fast entity unregister
+  mutable Entities etts;                         // for fast iteration
+  mutable bool is_expired = false;               // to know when to refresh etts
+};
+
+template <typename Entity, typename ThreadingModel>
+class EntityCacheManager : public ThreadingModel {
+ public:
+  using ComponentMask = typename Entity::ComponentMask;
+  using EntityCache = EntityCache<Entity>;
+  using Entities = typename EntityCache::Entities;
+
+  void RegisterComponentMask(const ComponentMask& mask) {
+    cache_map_.insert(mask, Entities{});
+  }
+
+  void RegisterEntity(const Entity& ett) {
+    typename ThreadingModel::Lock lock(*this);
+    for (auto&& [mask, cache] : cache_map_) {
+      if ((mask & ett.GetComponentMask()) == mask) {
+        cache.Register(ett);
+      }
+    }
+  }
+
+  void UnregisterEntity(const Entity& ett) {
+    typename ThreadingModel::Lock lock(*this);
+    for (auto&& [mask, etts] : cache_map_) {
+      if ((mask & ett.GetComponentMask()) == mask) {
+        cache.Unregister(ett);
+      }
+    }
+  }
+
+  const Entities& GetEntities(const ComponentMask& mask) const {
+    return cache_map_.at(mask);
+  }
+
+  Entities& GetEntities(const ComponentMask& mask) {
+    return cache_map_.at(mask);
+  }
+
+ private:
+  struct ComponentMaskCompare {
+    bool operator()(const ComponentMask& lhs,
+                    const ComponentMask& rhs) const noexcept {
+      for (std::size_t i = 0; i != lhs.size(); ++i) {
+        auto bit = lhs.size() - i - 1;
+        if (lhs[bit] ^ rhs[bit]) return rhs[bit];
+      }
+      return false;
+    }
+  };
+
+  using CacheMap =
+      std::map<const ComponentMask&, EntityCache, ComponentMaskCompare>;
+  CacheMap cache_map_;
+};
 
 template <typename ComponentSetting, typename ThreadingModel>
 class ComponentCacheManager : public ThreadingModel {
@@ -31,14 +123,14 @@ class ComponentCacheManager : public ThreadingModel {
 
  private:
   struct ComponentCache {
-    std::map<EntityID, ComponentArray> ett_comp_map{};
+    std::map<EntityID, const ComponentArray&> ett_comp_map{};
     mutable bool is_expired = false;
     mutable CacheData cache_data{};
   };
 
   struct ComponentMaskCompare {
-    bool operator()(const ComponentMask& lhs, const ComponentMask& rhs) const
-        noexcept;
+    bool operator()(const ComponentMask& lhs,
+                    const ComponentMask& rhs) const noexcept;
   };
 
   std::map<ComponentMask, ComponentCache, ComponentMaskCompare> cache_map_{};

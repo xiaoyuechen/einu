@@ -9,13 +9,14 @@ class ClassIndex {
  public:
   using IndexType = std::size_t;
 
-  ClassIndex() = default;
-  ClassIndex(IndexType index) noexcept { index_ = index; }
+  explicit ClassIndex(IndexType index = ~IndexType(0)) noexcept {
+    index_ = index;
+  }
   operator IndexType&() noexcept { return index_; }
   operator IndexType() const noexcept { return index_; }
 
  private:
-  IndexType index_ = ~IndexType(0);
+  IndexType index_;
 };
 
 inline bool IsAssigned(ClassIndex idx) { return idx != ClassIndex(); }

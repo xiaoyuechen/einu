@@ -158,7 +158,9 @@
     <ClInclude Include="include\ecs-engine\ai\behavior_tree\node.h" />
     <ClInclude Include="include\ecs-engine\ai\behavior_tree\root.h" />
     <ClInclude Include="include\ecs-engine\ai\behavior_tree\result.h" />
-    <ClInclude Include="include\ecs-engine\core\singleton_component_manager.h" />
+    <ClInclude Include="include\ecs-engine\core\component_context.h" />
+    <ClInclude Include="include\ecs-engine\core\i_singleton_component.h" />
+    <ClInclude Include="include\ecs-engine\utility\misc\counter.h" />
     <ClInclude Include="include\ecs-engine\utility\rtti\class_index_register.h" />
     <ClInclude Include="include\ecs-engine\utility\rtti\class_index.h" />
     <ClInclude Include="include\ecs-engine\core\component_list.h" />
@@ -193,7 +195,7 @@
     <ClInclude Include="include\ecs-engine\extension\policy\component_management_policy.h" />
     <ClInclude Include="include\ecs-engine\core\component_setting.h" />
     <ClInclude Include="include\ecs-engine\core\entity.h" />
-    <ClInclude Include="include\ecs-engine\core\component.h" />
+    <ClInclude Include="include\ecs-engine\core\i_component.h" />
     <ClInclude Include="include\ecs-engine\core\component_manager.h" />
     <ClInclude Include="include\ecs-engine\core\entity_id_manager.h" />
     <ClInclude Include="include\ecs-engine\core\entity_manager.h" />

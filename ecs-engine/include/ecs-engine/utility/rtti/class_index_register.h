@@ -1,5 +1,8 @@
 #pragma once
 
+#include <cassert>
+
+#include "ecs-engine/utility/misc/counter.h"
 #include "ecs-engine/utility/rtti/class_index.h"
 
 namespace ecs {
@@ -7,27 +10,21 @@ namespace rtti {
 
 class ClassIndexRegister {
  public:
+  using size_type = std::size_t;
+
   template <typename T>
-  void Register() noexcept {
-    auto& idx = GetClassIndex<T>();
-    if (!IsAssigned(idx)) {
-      idx = ++latest_idx_;
-    }
+  void Register(ClassIndex idx) noexcept {
+    auto& idx0 = GetClassIndex<T>();
+    assert(!IsAssigned(idx0));
+    idx0 = idx;
+    counter_.CountUp();
   }
 
- private:
-  rtti::ClassIndex latest_idx_{};
-};
+  size_type GetRegisteredCount() const noexcept { return counter_.GetCount(); }
 
-//template <typename... Ts>
-//void RegisterMultiple(ClassIndexRegister& reg) {
-//  (reg.Register<Ts>(), ...);
-//}
-//
-//template <typename... Ts>
-//void RegisterTypeList(ClassIndexRegister& reg, tmp::TypeList<Ts...>) {
-//  RegisterMultiple<Ts...>(reg);
-//}
+ private:
+  misc::Counter<size_type> counter_;
+};
 
 }  // namespace rtti
 }  // namespace ecs

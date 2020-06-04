@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ecs-engine/core/component.h"
+#include "ecs-engine/core/i_component.h"
 #include "ecs-engine/math/glm.h"
 
 namespace ecs {

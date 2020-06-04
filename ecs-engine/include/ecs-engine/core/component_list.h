@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ecs-engine/core/component.h"
+#include "ecs-engine/core/i_component.h"
 #include "ecs-engine/utility/tmp/type_list.h"
 
 namespace ecs {

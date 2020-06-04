@@ -2,6 +2,7 @@
 
 #include <cstddef>
 #include <tuple>
+#include <type_traits>
 
 namespace ecs {
 namespace tmp {
@@ -29,6 +30,12 @@ struct Erase;
 
 template <typename TypeList, typename T>
 struct EraseAll;
+
+template <typename Base, typename... Subs>
+struct SubtypeList : public tmp::TypeList<Subs...> {
+  static_assert((std::is_base_of<IComponent, Subs>::value && ...),
+                "<Base> must be the base class of all the <Subs>");
+};
 
 template <typename TypeList>
 struct TupleOf;

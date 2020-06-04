@@ -10,12 +10,6 @@
 
 namespace ecs {
 
-
-
-
-
-
-
 template <typename ComponentSetting, typename ThreadingModel>
 class ComponentManagementPolicy {
  public:

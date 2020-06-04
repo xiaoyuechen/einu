@@ -2,8 +2,45 @@
 
 #include "ecs-engine/core/component_array.h"
 #include "ecs-engine/core/component_setting.h"
+#include "ecs-engine/core/entity_id.h"
+#include "ecs-engine/utility/rtti/class_index.h"
 
 namespace ecs {
+
+template <typename ComponentMaskType, typename ThreadingModel>
+class Entity_N : public ThreadingModel {
+ public:
+  using ComponentMask = ComponentMaskType;
+  using ComponentMap = std::map<rtti::ClassIndex, IComponent&>;
+
+  Entity_N(EntityID eid) { eid_ = eid; }
+
+  void AddComponent(rtti::ClassIndex idx, IComponent& comp) {
+    typename ThreadingModel::Lock lock(*this);
+    mask_[idx] = true;
+    map_[idx] = comp;
+  }
+
+  void RemoveComponent(rtti::ClassIndex idx) {
+    typename ThreadingModel::Lock lock(*this);
+    mask_[idx] = false;
+    map_.erase(idx);
+  }
+
+  const IComponent& GetComponent(rtti::ClassIndex idx) const {
+    return map_.at(idx);
+  }
+  IComponent& GetComponent(rtti::ClassIndex idx) { return map_.at(idx); }
+
+  EntityID GetEntityID() const { return eid_; }
+  const ComponentMask& GetComponentMask() const { return mask_; }
+  const ComponentMap& GetComponentMap() const { return map_; }
+
+ private:
+  EntityID eid_;
+  ComponentMask mask_;
+  ComponentMap map_;
+};
 
 template <typename ComponentSetting>
 class Entity {
