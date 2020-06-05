@@ -2,10 +2,12 @@
 
 #include <map>
 
+#include "ecs-engine/core/i_singleton_component.h"
+
 namespace ecs {
 
 template <typename Key, typename Resource>
-class SingletonResourceComponent : public IComponent {
+class SingletonResourceComponent : public ISingletonComponent {
   using Map = std::map<Key, Resource>;
 
  public:
@@ -24,8 +26,8 @@ class SingletonResourceComponent : public IComponent {
 
 template <typename Key, typename Resource>
 template <typename... Args>
-inline Resource& SingletonResourceComponent<Key, Resource>::Emplace(const Key& key,
-                                                   Args&&... args) {
+inline Resource& SingletonResourceComponent<Key, Resource>::Emplace(
+    const Key& key, Args&&... args) {
   auto result = map_.try_emplace(key, std::forward<Args>(args)...);
   return result.first->second;
 }
