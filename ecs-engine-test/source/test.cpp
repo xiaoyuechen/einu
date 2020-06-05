@@ -72,10 +72,10 @@ TEST_F(TypeListTest, EraseAll) {
 //////////////////////////////////////////////////////////////////////////
 
 using MyComponentList = ComponentList<C_0, C_1, C_2>;
-using MyComponentSetting = ComponentSetting<MyComponentList>;
+using MyComponentContext = ComponentSetting<MyComponentList>;
 
 class MyComponentManagerPolicy
-    : public ComponentManagerPolicy<MyComponentSetting, ComponentList<>, MultiThreaded> {
+    : public ComponentManagerPolicy<MyComponentContext, ComponentList<>, MultiThreaded> {
  public:
   MyComponentManagerPolicy()
       : c_0_manager_{99}
@@ -90,7 +90,7 @@ class MyComponentManagerPolicy
 };
 
 using MyEntityManager =
-    EntityManager<MyComponentSetting, MyComponentManagerPolicy, MultiThreaded>;
+    EntityManager<MyComponentContext, MyComponentManagerPolicy, MultiThreaded>;
 
 struct EntityManagerTest : testing::Test {
   MyEntityManager ett_mgr;

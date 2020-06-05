@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ecs-engine/ai/behavior_tree/internal/multi_node_owner.h"
+#include "ecs-engine/ai/behavior_tree/detail/multi_node_owner.h"
 #include "ecs-engine/ai/behavior_tree/node.h"
 
 namespace ecs {

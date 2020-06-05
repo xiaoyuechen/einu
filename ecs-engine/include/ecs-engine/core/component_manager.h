@@ -1,6 +1,7 @@
 #pragma once
 
 #include <map>
+#include <utility>
 
 #include "ecs-engine/core/entity_id.h"
 #include "ecs-engine/core/i_component.h"
@@ -8,76 +9,50 @@
 
 namespace ecs {
 
-class IComponentManager {};
+class IComponentManager {
+ public:
+  virtual ~IComponentManager() = default;
+  virtual void RemoveComponent(EntityID eid) = 0;
+};
 
-template <typename T, typename ThreadingModel,
-          typename PoolPolicy = FixedSizePool<T, ThreadingModel>>
-class ComponentManager : public ThreadingModel,
-                         public PoolPolicy,
-                         public IComponentManager {
+template <typename T, typename PoolPolicy = FixedSizePool<T>>
+class ComponentManager : public PoolPolicy, public IComponentManager {
   static_assert(std::is_base_of<IComponent, T>() &&
-                "T must inherit from Component");
+                "T must inherit from IComponent");
 
  public:
   template <typename... PoolArgs>
-  ComponentManager(PoolArgs&&... pool_args);
+  ComponentManager(PoolArgs&&... pool_args)
+      : PoolPolicy(std::forward<PoolArgs>(pool_args)...) {}
 
-  T& AddComponent(const EntityID& eid);
-  [[nodiscard]] const T& GetComponent(const EntityID& eid) const;
-  [[nodiscard]] T& GetComponent(const EntityID& eid);
-  void RemoveComponent(const EntityID& eid);
-  bool HasComponent(const EntityID& eid) const noexcept;
+  T& AddComponent(EntityID eid) {
+    auto& comp = PoolPolicy::Acquire();
+    map_.insert({eid, comp});
+    return comp;
+  }
+
+  [[nodiscard]] const T& GetComponent(EntityID eid) const {
+    return map_.at(eid);
+  }
+
+  [[nodiscard]] T& GetComponent(EntityID eid) {
+    return const_cast<T&>(
+        static_cast<const ComponentManager&>(*this).GetComponent(eid));
+  }
+
+  virtual void RemoveComponent(EntityID eid) override {
+    auto& comp = GetComponent(eid);
+    PoolPolicy::Recall(comp);
+    map_.erase(eid);
+  }
+
+  bool HasComponent(EntityID eid) const noexcept {
+    return map_.find(eid) != map_.end();
+  }
 
  private:
   using Map = std::map<EntityID, T&>;
   Map map_;
 };
-
-//////////////////////////////////////////////////////////////////////////
-
-template <typename T, typename ThreadingModel, typename PoolPolicy>
-template <typename... PoolArgs>
-inline ComponentManager<T, ThreadingModel, PoolPolicy>::ComponentManager(
-    PoolArgs&&... pool_args)
-    : PoolPolicy(std::forward<PoolArgs>(pool_args)...) {}
-
-template <typename T, typename ThreadingModel, typename PoolPolicy>
-T& ComponentManager<T, ThreadingModel, PoolPolicy>::AddComponent(
-    const EntityID& eid) {
-  assert(map_.find(eid) == map_.end() && "eid already have component");
-  auto& comp = PoolPolicy::Acquire();
-  typename ThreadingModel::Lock lock(*this);
-  map_.insert({eid, comp});
-  return comp;
-}
-
-template <typename T, typename ThreadingModel, typename PoolPolicy>
-const T& ComponentManager<T, ThreadingModel, PoolPolicy>::GetComponent(
-    const EntityID& entity) const {
-  return map_.at(entity);
-}
-
-template <typename T, typename ThreadingModel, typename PoolPolicy>
-T& ComponentManager<T, ThreadingModel, PoolPolicy>::GetComponent(
-    const EntityID& eid) {
-  return const_cast<T&>(
-      static_cast<const ComponentManager<T, ThreadingModel, PoolPolicy>&>(*this)
-          .GetComponent(eid));
-}
-
-template <typename T, typename ThreadingModel, typename PoolPolicy>
-void ComponentManager<T, ThreadingModel, PoolPolicy>::RemoveComponent(
-    const EntityID& eid) {
-  auto& comp = GetComponent(eid);
-  PoolPolicy::Recall(comp);
-  typename ThreadingModel::Lock lock(*this);
-  map_.erase(eid);
-}
-
-template <typename T, typename ThreadingModel, typename PoolPolicy>
-inline bool ComponentManager<T, ThreadingModel, PoolPolicy>::HasComponent(
-    const EntityID& eid) const noexcept {
-  return map_.find(eid) != map_.end();
-}
 
 }  // namespace ecs

@@ -33,7 +33,7 @@ struct EraseAll;
 
 template <typename Base, typename... Subs>
 struct SubtypeList : public tmp::TypeList<Subs...> {
-  static_assert((std::is_base_of<IComponent, Subs>::value && ...),
+  static_assert((std::is_base_of<Base, Subs>::value && ...),
                 "<Base> must be the base class of all the <Subs>");
 };
 

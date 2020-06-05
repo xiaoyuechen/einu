@@ -2,9 +2,7 @@
 // pre-compiled header
 
 #include <ecs-engine/core/i_component.h>
-#include <ecs-engine/extension/policy/component_management_policy.h>
 #include <ecs-engine/utility/rtti/class_index_register.h>
-#include <ecs-engine/core/component_setting.h>
 
 #include <typeinfo>
 
@@ -28,17 +26,12 @@ class C1 : public IComponent {
   int val = 0;
 };
 class C2 : public IComponent {};
-using CList = tmp::TypeList<C1, C2>;
 TEST(RegisterIndex, Reg) {
   auto reg = ClassIndexRegister();
   reg.Register<C1>(ClassIndex(0));
   reg.Register<C2>(ClassIndex(1));
   EXPECT_EQ(GetClassIndex<C1>(), ClassIndex(0));
   EXPECT_EQ(GetClassIndex<C2>(), ClassIndex(1));
-  reg.Register<C1>(ClassIndex(0));
-  EXPECT_EQ(GetClassIndex<C1>(), 0);
-  GetClassIndex<C1>() = ClassIndex();
-  GetClassIndex<C2>() = ClassIndex();
 }
 
 }  // namespace ecs

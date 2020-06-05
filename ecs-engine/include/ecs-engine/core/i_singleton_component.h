@@ -2,6 +2,8 @@
 
 namespace ecs {
 
-class ISingletonComponent {};
+struct ISingletonComponent {
+  virtual ~ISingletonComponent() = default;
+};
 
 }  // namespace ecs

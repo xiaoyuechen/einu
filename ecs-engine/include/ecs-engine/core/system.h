@@ -3,110 +3,68 @@
 #include <tuple>
 #include <vector>
 
-#include "ecs-engine/core/component_list.h"
-#include "ecs-engine/core/component_manager.h"
-#include "ecs-engine/core/entity_id_manager.h"
-#include "ecs-engine/utility/tmp/type_mapping.h"
+#include "ecs-engine/core/component_context.h"
+#include "ecs-engine/core/entity_manager.h"
 
 namespace ecs {
 
 template <typename EntityManager, typename RequiredComponentList>
-class System {
+class System;
+
+template <typename EntityManager, typename... Ts>
+class System<EntityManager, ComponentList<Ts...>> {
  public:
-  using ComponentList = RequiredComponentList;
-  using ComponentTuple =
-      typename tmp::TupleRefOf<typename RequiredComponentList::TypeList>::Type;
+  using ComponentTuple = std::tuple<Ts&...>;
   using ComponentTupleBuffer = std::vector<ComponentTuple>;
   using EIDs = std::vector<EntityID>;
 
-  System(EntityManager& ett_mgr);
+  System(EntityManager& ett_mgr)
+      : ett_mgr_(ett_mgr) {
+    ett_mgr_.RegisterInterest<Ts...>();
+  }
 
-  const ComponentTupleBuffer& GetMatchingComponentTuples() const;
-  ComponentTupleBuffer& GetMatchingComponentTuples();
+  const ComponentTupleBuffer& GetMatchingComponentTuples() const {
+    matching_comps_.clear();
+    eid_arr_.clear();
+    ett_mgr_.GetMatchingComponentsEids(&matching_comps_, &eid_arr_);
+    return matching_comps_;
+  }
+
+  ComponentTupleBuffer& GetMatchingComponentTuples() {
+    return const_cast<ComponentTupleBuffer&>(
+        static_cast<const System&>(*this).GetMatchingComponentTuples());
+  }
 
   const typename EntityManager::EntityHandle GetEntityHandle(
-      const ComponentTuple& tuple) const;
+      const ComponentTuple& tuple) const {
+    const auto& eid = GetEntityID(tuple);
+    return EntityManager::EntityHandle(eid, ett_mgr_);
+  }
+
   typename EntityManager::EntityHandle GetEntityHandle(
-      const ComponentTuple& tuple);
+      const ComponentTuple& tuple) {
+    const auto handle =
+        static_cast<const System&>(*this).GetEntityHandle(tuple);
+    return *const_cast<typename EntityManager::EntityHandle*>(&handle);
+  }
 
-  const EntityID& GetEntityID(const ComponentTuple& tuple) const;
-  const EIDs& GetEntityIDs() const noexcept;
+  EntityID GetEntityID(const ComponentTuple& tuple) const {
+    auto index = &tuple - matching_comps_.data();
+    return eid_arr_[index];
+  }
 
-  const EntityManager& GetEntityManager() const;
-  EntityManager& GetEntityManager();
+  const EIDs& GetEntityIDs() const noexcept { return eid_arr_; }
+
+  const EntityManager& GetEntityManager() const { return ett_mgr_; }
+  EntityManager& GetEntityManager() {
+    return const_cast<EntityManager&>(
+        static_cast<const System&>(*this).GetEntityManager());
+  }
 
  private:
   EntityManager& ett_mgr_;
   mutable ComponentTupleBuffer matching_comps_;
   mutable EIDs eid_arr_;
 };
-
-//////////////////////////////////////////////////////////////////////////
-
-template <typename EntityManager, typename RequiredComponentList>
-inline System<EntityManager, RequiredComponentList>::System(
-    EntityManager& ett_mgr)
-    : ett_mgr_(ett_mgr) {
-  ett_mgr_.RegisterInterest(tmp::Type2Type<RequiredComponentList>{});
-}
-
-template <typename EntityManager, typename RequiredComponentList>
-const typename System<EntityManager,
-                      RequiredComponentList>::ComponentTupleBuffer&
-System<EntityManager, RequiredComponentList>::GetMatchingComponentTuples()
-    const {
-  ett_mgr_.GetMatchingComponents(&matching_comps_, &eid_arr_);
-  return matching_comps_;
-}
-
-template <typename EntityManager, typename RequiredComponentList>
-typename System<EntityManager, RequiredComponentList>::ComponentTupleBuffer&
-System<EntityManager, RequiredComponentList>::GetMatchingComponentTuples() {
-  return const_cast<ComponentTupleBuffer&>(
-      static_cast<const System&>(*this).GetMatchingComponentTuples());
-}
-
-template <typename EntityManager, typename RequiredComponentList>
-const typename EntityManager::EntityHandle
-System<EntityManager, RequiredComponentList>::GetEntityHandle(
-    const ComponentTuple& tuple) const {
-  const auto& eid = GetEntityID(tuple);
-  return EntityManager::EntityHandle(eid, ett_mgr_);
-}
-
-template <typename EntityManager, typename RequiredComponentList>
-typename EntityManager::EntityHandle
-System<EntityManager, RequiredComponentList>::GetEntityHandle(
-    const ComponentTuple& tuple) {
-  const auto handle = static_cast<const System&>(*this).GetEntityHandle(tuple);
-  return *const_cast<typename EntityManager::EntityHandle*>(&handle);
-}
-
-template <typename EntityManager, typename RequiredComponentList>
-inline const EntityID&
-System<EntityManager, RequiredComponentList>::GetEntityID(
-    const ComponentTuple& tuple) const {
-  auto index = &tuple - matching_comps_.data();
-  return eid_arr_[index];
-}
-
-template <typename EntityManager, typename RequiredComponentList>
-inline const typename System<EntityManager, RequiredComponentList>::EIDs&
-System<EntityManager, RequiredComponentList>::GetEntityIDs() const noexcept {
-  return eid_arr_;
-}
-
-template <typename EntityManager, typename RequiredComponentList>
-inline const EntityManager&
-System<EntityManager, RequiredComponentList>::GetEntityManager() const {
-  return ett_mgr_;
-}
-
-template <typename EntityManager, typename RequiredComponentList>
-inline EntityManager&
-System<EntityManager, RequiredComponentList>::GetEntityManager() {
-  return const_cast<EntityManager&>(
-      static_cast<const System&>(*this).GetEntityManager());
-}
 
 }  // namespace ecs

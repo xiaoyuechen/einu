@@ -15,13 +15,11 @@ using SingletonComponentList = tmp::SubtypeList<ISingletonComponent, Ts...>;
 namespace component_context_internal {
 template <typename... Ts>
 void RegisterTypeList(rtti::ClassIndexRegister& reg, tmp::TypeList<Ts...>) {
-  (reg.Register<Ts>(rtti::ClassIndex(tmp::IndexOf<TypeList, Ts>::value)), ...);
+  (reg.Register<Ts>(
+       rtti::ClassIndex(tmp::IndexOf<tmp::TypeList<Ts...>, Ts>::value)),
+   ...);
 }
 
-template <typename ComponentList>
-struct ComponentMask {
-  using Type = std::bitset<tmp::Size<ComponentList>::value>;
-};
 }  // namespace component_context_internal
 
 template <typename ComponentList, typename SingletonComponentList>
@@ -32,15 +30,13 @@ class ComponentContext {
     kSingletonComponent,
   };
 
-  using ComponentMask =
-      component_context_internal::ComponentMask<ComponentList>::Type;
   using size_type = rtti::ClassIndexRegister::size_type;
 
   ComponentContext() {
-    component_context_internal::RegisterTypeList<ComponentList>(
-        regs_[Type.kComponent]);
-    component_context_internal::RegisterTypeList<SingletonComponentList>(
-        regs_[Type.kSingletonComponent]);
+    component_context_internal::RegisterTypeList(regs_[Type::kComponent],
+                                                 ComponentList{});
+    component_context_internal::RegisterTypeList(
+        regs_[Type::kSingletonComponent], SingletonComponentList{});
   }
 
   size_type GetComponentTypeCount(Type type) const noexcept {

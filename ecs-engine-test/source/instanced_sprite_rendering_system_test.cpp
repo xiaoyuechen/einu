@@ -3,11 +3,11 @@
 
 #include <random>
 
+#include "ecs-engine/core/component_context.h"
 #include "ecs-engine/core/entity_manager.h"
 #include "ecs-engine/extension/component/instanced_sprite_component.h"
 #include "ecs-engine/extension/component/singleton_camera_component.h"
 #include "ecs-engine/extension/component/transform_component.h"
-#include "ecs-engine/extension/policy/component_management_policy.h"
 #include "ecs-engine/extension/policy/threading_model.h"
 #include "ecs-engine/extension/system/instanced_sprite_rendering_system.h"
 #include "ecs-engine/graphics/graphics.h"
@@ -18,24 +18,16 @@ namespace ecs {
 struct ISRTest : testing::Test {
   using MyComponentList =
       ComponentList<TransformComponent, InstancedSpriteComponent>;
-  using MySingletonComponentList = ComponentList<SingletonCameraComponent>;
-  using MyComponentSetting =
-      ComponentSetting<MyComponentList, MySingletonComponentList>;
-  using MyComponentManagerPolicy =
-      ComponentManagementPolicy<MyComponentSetting, MultiThreaded>;
-  using MyEntityManager =
-      EntityManager<MyComponentSetting, MyComponentManagerPolicy,
-                    MultiThreaded>;
+  using MySingletonComponentList =
+      SingletonComponentList<SingletonCameraComponent>;
+  using MyComponentContext =
+      ComponentContext<MyComponentList, MySingletonComponentList>;
+  using MyEntityManager = EntityManager<>;
 
   ISRTest()
       : window(Window::Mode::WINDOWED, 1920, 1080, "application")
-      , ett_mgr([] {
-        auto builder = MyComponentManagerPolicy::Builder{};
-        builder.MakeComponentManager<TransformComponent>(10000);
-        builder.MakeComponentManager<InstancedSpriteComponent>(10000);
-        builder.MakeSingletonComponent<SingletonCameraComponent>();
-        return builder.Build();
-      }())
+      , ett_pool(1000)
+      , ett_mgr(component_managers, singleton_components, ett_pool)
       , instanced_sprite_shader(
             [] {
               auto vertex_shader = VertexShader{};
@@ -52,10 +44,17 @@ struct ISRTest : testing::Test {
               return fragment_shader;
             }())
       , sys(ett_mgr, instanced_sprite_shader) {
+    component_managers.Make<TransformComponent>(1000);
+    component_managers.Make<InstancedSpriteComponent>(1000);
+    singleton_components.Make<SingletonCameraComponent>();
     tex.LoadFromFile("ecs-engine-test/resource/white-triangle.png");
   }
 
   Window window;
+  MyComponentContext context;
+  ComponentManagerSet component_managers;
+  SingletonComponentSet singleton_components;
+  EntityPool ett_pool;
   MyEntityManager ett_mgr;
   ShaderProgram instanced_sprite_shader;
   InstancedSpriteRenderingSystem<MyEntityManager> sys;

@@ -2,6 +2,6 @@
 
 namespace ecs {
 
-class IComponent {};
+struct IComponent {};
 
 }  // namespace ecs

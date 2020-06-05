@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "ecs-engine/ai/behavior_tree/internal/single_node_owner.h"
+#include "ecs-engine/ai/behavior_tree/detail/single_node_owner.h"
 #include "ecs-engine/ai/behavior_tree/node.h"
 
 namespace ecs {
