@@ -4,20 +4,20 @@ namespace ecs {
 namespace ai {
 namespace bt {
 
-const Result& Inverter::Run(float dt, const EIDs& eids) {
-  Node::Run(dt, eids);
+const Result& Inverter::Run(float dt, const EntityDataVector& etts) {
+  Node::Run(dt, etts);
   auto& result_cache = GetResultCache();
-  const auto& result = GetChild().Run(dt, eids);
+  const auto& result = GetChild().Run(dt, etts);
   result_cache[Status::RUNNING] = result[Status::RUNNING];
   result_cache[Status::SUCCESS] = result[Status::FAILURE];
   result_cache[Status::FAILURE] = result[Status::SUCCESS];
   return result_cache;
 }
 
-const Result& Succeeder::Run(float dt, const EIDs& eids) {
-  Node::Run(dt, eids);
-  GetChild().Run(dt, eids);
-  GetResultCache()[Status::SUCCESS] = eids;
+const Result& Succeeder::Run(float dt, const EntityDataVector& etts) {
+  Node::Run(dt, etts);
+  GetChild().Run(dt, etts);
+  GetResultCache()[Status::SUCCESS] = etts;
   return GetResultCache();
 }
 

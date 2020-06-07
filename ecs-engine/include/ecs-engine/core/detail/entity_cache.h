@@ -1,8 +1,9 @@
 #pragma once
 
 #include <functional>
+#include <set>
 
-#include "ecs-engine/core/entity.h"
+#include "ecs-engine/core/entity_data.h"
 #include "ecs-engine/core/entity_id.h"
 #include "ecs-engine/utility/rtti/class_index.h"
 
@@ -12,58 +13,56 @@ namespace detail {
 template <typename ThreadingModel>
 class EntityCache : public ThreadingModel {
  public:
-  struct ComponentsEids {
+  struct CacheData {
     std::vector<IComponent*> comps;
-    std::vector<EntityID> eids;
+    std::vector<EntityData*> etts;
 
     void Clear() {
       comps.clear();
-      eids.clear();
+      etts.clear();
     }
   };
 
-  template <typename... Ts>
-  void SetTypes() {
-    (comp_idx_vec_.push_back(rtti::GetClassIndex<Ts>()), ...);
-  }
+  EntityCache(std::initializer_list<rtti::ClassIndex> l)
+      : comp_idx_seq_(l) {}
 
-  void Register(Entity& ett) {
-    id_ett_map_.insert({ett.GetEntityID(), ett});
+  void Register(EntityData& ett) {
+    etts_.insert(&ett);
     is_expired_ = true;
   }
 
-  void Unregister(const Entity& ett) {
-    id_ett_map_.erase(ett.GetEntityID());
+  void Unregister(EntityData& ett) {
+    etts_.erase(&ett);
     is_expired_ = true;
   }
 
-  const ComponentsEids& Get() const {
+  const CacheData& Get() const {
     if (is_expired_) {
       typename ThreadingModel::Lock lock(const_cast<EntityCache&>(*this));
       Refresh();
     }
-    return comps_eids_;
+    return cache_data_;
   }
 
  private:
   void Refresh() const {
     if (!is_expired_) return;
 
-    comps_eids_.Clear();
-    for (auto&& [eid, ett] : id_ett_map_) {
-      comps_eids_.eids.emplace_back(eid);
-      for (auto idx : comp_idx_vec_) {
-        auto& comp = ett.GetComponent(idx);
-        comps_eids_.comps.emplace_back(&comp);
+    cache_data_.Clear();
+    for (auto ett : etts_) {
+      cache_data_.etts.emplace_back(ett);
+      for (auto idx : comp_idx_seq_) {
+        auto& comp = ett->GetComponent(idx);
+        cache_data_.comps.emplace_back(&comp);
       }
     }
     is_expired_ = false;
   }
 
-  std::vector<rtti::ClassIndex> comp_idx_vec_;
-  std::map<EntityID, Entity&> id_ett_map_;  // for fast entity unregister
-  mutable ComponentsEids comps_eids_;       // for fast iteration
-  mutable bool is_expired_ = false;         // to know when to refresh comps
+  std::vector<rtti::ClassIndex> comp_idx_seq_;
+  std::set<EntityData*> etts_;       // for fast entity unregister
+  mutable CacheData cache_data_;     // for fast iteration
+  mutable bool is_expired_ = false;  // to know when to refresh comps
 };
 
 }  // namespace detail

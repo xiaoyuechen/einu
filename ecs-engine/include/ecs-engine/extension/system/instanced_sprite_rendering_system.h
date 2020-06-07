@@ -38,9 +38,10 @@ class InstancedSpriteRenderingSystem
     glm::vec2 uv;
   };
 
-  using TupArr = std::vector<typename System<
-      EntityManager,
-      InstancedSpriteRenderingSystemComponentList>::ComponentTuple>;
+  using TupArr =
+      std::vector<typename System<EntityManager,
+                                  InstancedSpriteRenderingSystemComponentList>::
+                      ComponentEntityBuffer::ComponentTuple>;
 
   using System =
       System<EntityManager, InstancedSpriteRenderingSystemComponentList>;
@@ -195,8 +196,9 @@ InstancedSpriteRenderingSystem<EntityManager, UnitPolicy>::GetVerts(
 template <typename EntityManager, typename UnitPolicy>
 inline void
 InstancedSpriteRenderingSystem<EntityManager, UnitPolicy>::UpdateTupleMap() {
+  System::RefreshMatchingBuffer();
   tuple_map_.clear();
-  for (const auto& tuple : System::GetMatchingComponentTuples()) {
+  for (const auto& tuple : System::GetMatchingBuffer().GetComponents()) {
     const auto& [instanced_sprite_comp, transform_comp] = tuple;
     auto sprite = instanced_sprite_comp.sprite;
     if (sprite) {

@@ -12,6 +12,7 @@ namespace ecs {
 class IComponentManager {
  public:
   virtual ~IComponentManager() = default;
+  virtual IComponent& AddComponent(EntityID eid) = 0;
   virtual void RemoveComponent(EntityID eid) = 0;
 };
 
@@ -25,7 +26,7 @@ class ComponentManager : public PoolPolicy, public IComponentManager {
   ComponentManager(PoolArgs&&... pool_args)
       : PoolPolicy(std::forward<PoolArgs>(pool_args)...) {}
 
-  T& AddComponent(EntityID eid) {
+  virtual T& AddComponent(EntityID eid) override {
     auto& comp = PoolPolicy::Acquire();
     map_.insert({eid, comp});
     return comp;

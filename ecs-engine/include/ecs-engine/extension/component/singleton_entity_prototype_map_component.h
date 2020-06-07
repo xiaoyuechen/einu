@@ -1,14 +1,17 @@
 #pragma once
 
 #include <map>
+#include <memory>
 
 #include "ecs-engine/core/i_singleton_component.h"
+#include "ecs-engine/extension/entity/entity_prototype.h"
 
 namespace ecs {
 
-template <typename Key, typename EntityPrototype>
+template <typename Key, typename IEntityPrototype>
 struct SingletonEntityPrototypeMapComponent : public ISingletonComponent {
-  using PrototypeMap = std::map<Key, EntityPrototype>;
+  using PrototypePtr = std::unique_ptr<IEntityPrototype>;
+  using PrototypeMap = std::map<Key, PrototypePtr>;
   PrototypeMap map{};
 };
 

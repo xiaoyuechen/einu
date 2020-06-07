@@ -4,10 +4,10 @@ namespace ecs {
 namespace ai {
 namespace bt {
 
-const Result& Sequence::Run(float dt, const EIDs& eids) {
-  Node::Run(dt, eids);
+const Result& Sequence::Run(float dt, const EntityDataVector& etts) {
+  Node::Run(dt, etts);
   auto& result_cache = GetResultCache();
-  result_cache[Status::SUCCESS] = eids;
+  result_cache[Status::SUCCESS] = etts;
   for (auto&& child : GetChildren()) {
     auto& result = child->Run(dt, result_cache[Status::SUCCESS]);
     result_cache[Status::SUCCESS] = result[Status::SUCCESS];
@@ -19,10 +19,10 @@ const Result& Sequence::Run(float dt, const EIDs& eids) {
   return result_cache;
 }
 
-const Result& Selector::Run(float dt, const EIDs& eids) {
-  Node::Run(dt, eids);
+const Result& Selector::Run(float dt, const EntityDataVector& etts) {
+  Node::Run(dt, etts);
   auto& result_cache = GetResultCache();
-  result_cache[Status::FAILURE] = eids;
+  result_cache[Status::FAILURE] = etts;
   for (auto&& child : GetChildren()) {
     auto& result = child->Run(dt, result_cache[Status::FAILURE]);
     result_cache[Status::FAILURE] = result[Status::FAILURE];

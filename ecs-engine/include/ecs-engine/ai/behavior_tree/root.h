@@ -15,16 +15,12 @@ class Root : public System<EntityManager, RequiredComponentList>,
   using System = System<EntityManager, RequiredComponentList>;
 
   using System::System;
-  void Run(float dt);
+
+  void Run(float dt) {
+    System::RefreshMatchingBuffer();
+    GetChild().Run(dt, System::GetMatchingBuffer().GetEntities());
+  }
 };
-
-//////////////////////////////////////////////////////////////////////////
-
-template <typename EntityManager, typename RequiredComponentList>
-void Root<EntityManager, RequiredComponentList>::Run(float dt) {
-  System::GetMatchingComponentTuples();
-  GetChild().Run(dt, System::GetEntityIDs());
-}
 
 }  // namespace bt
 }  // namespace ai

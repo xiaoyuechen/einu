@@ -4,6 +4,7 @@
 #include <utility>
 
 #include "ecs-engine/core/component_manager.h"
+#include "ecs-engine/utility/rtti/class_index.h"
 
 namespace ecs {
 

@@ -1,42 +1,59 @@
 #pragma once
 
-#include "ecs-engine/core/entity_id.h"
+#include "ecs-engine/core/entity_data.h"
+#include "ecs-engine/utility/rtti/class_index.h"
 
 namespace ecs {
+
+class ConstEntityHandle {
+ public:
+  ConstEntityHandle(const EntityData& ett)
+      : ett_(ett) {}
+
+  template <typename T>
+  const T& GetComponent() const {
+    return static_cast<const T&>(ett_.GetComponent(rtti::GetClassIndex<T>()));
+  }
+
+  const EntityID& GetEntityID() const noexcept { return ett_.GetEntityID(); }
+
+ private:
+  const EntityData& ett_;
+};
 
 template <typename EntityManager>
 class EntityHandle {
  public:
-  EntityHandle(EntityID eid, EntityManager& ett_mgr)
-      : eid_(eid)
+  EntityHandle(EntityData& ett, EntityManager& ett_mgr)
+      : ett_(ett)
       , ett_mgr_(ett_mgr) {}
 
   template <typename T>
   T& AddComponent() {
-    return ett_mgr_.AddComponent<T>(eid_);
+    return ett_mgr_.AddComponent<T>(ett_);
   }
 
   template <typename T>
   void RemoveComponent() {
-    ett_mgr_.RemoveComponent<T>(eid_);
+    ett_mgr_.RemoveComponent<T>(ett_);
   }
 
   template <typename T>
   const T& GetComponent() const {
-    return ett_mgr_.GetComponent<T>(eid_);
+    return static_cast<const T&>(ett_.GetComponent(rtti::GetClassIndex<T>()));
   }
 
   template <typename T>
   T& GetComponent() {
-    return ett_mgr_.GetComponent<T>(eid_);
+    return static_cast<T&>(ett_.GetComponent(rtti::GetClassIndex<T>()));
   }
 
-  const EntityID& GetEntityID() const noexcept { return eid_; }
+  const EntityID& GetEntityID() const noexcept { return ett_.GetEntityID(); }
 
-  void Destory() { ett_mgr_.DestroyEntity(eid_); }
+  void Destory() { ett_mgr_.DestroyEntity(ett_); }
 
  private:
-  EntityID eid_;
+  EntityData& ett_;
   EntityManager& ett_mgr_;
 };
 

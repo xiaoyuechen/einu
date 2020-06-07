@@ -10,29 +10,19 @@ namespace bt {
 
 class Node {
  public:
-  using EIDs = std::vector<EntityID>;
-
   virtual ~Node() = default;
 
-  virtual const Result& Run(float dt, const EIDs& eids);
+  virtual const Result& Run(float, const EntityDataVector&) {
+    ClearResultCache();
+    return GetResultCache();
+  }
 
-  Result& GetResultCache() noexcept;
-  void ClearResultCache() noexcept;
+  Result& GetResultCache() noexcept { return result_cache_; }
+  void ClearResultCache() noexcept { result_cache_.clear(); }
 
  private:
   mutable Result result_cache_;
 };
-
-//////////////////////////////////////////////////////////////////////////
-
-inline const Result& Node::Run(float, const EIDs&) {
-  ClearResultCache();
-  return GetResultCache();
-}
-
-inline Result& Node::GetResultCache() noexcept { return result_cache_; }
-
-inline void Node::ClearResultCache() noexcept { result_cache_.clear(); }
 
 }  // namespace bt
 }  // namespace ai

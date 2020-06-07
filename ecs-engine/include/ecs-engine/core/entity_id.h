@@ -7,41 +7,22 @@ namespace ecs {
 
 class EntityID {
  public:
-  constexpr EntityID() noexcept;
-  constexpr explicit EntityID(std::size_t id) noexcept;
-  constexpr std::size_t GetID() const noexcept;
+  constexpr EntityID() noexcept {}
+  constexpr explicit EntityID(std::size_t id) noexcept
+      : id_(id) {}
 
  private:
   std::size_t id_ = ~std::size_t(0);
+
+  friend constexpr bool operator==(EntityID lhs, EntityID rhs) noexcept;
+  friend struct std::less<ecs::EntityID>;
 };
 
-constexpr bool operator==(const EntityID& lhs, const EntityID& rhs) noexcept;
-constexpr bool operator!=(const EntityID& lhs, const EntityID& rhs) noexcept;
-
-}  // namespace ecs
-
-namespace std {
-template <>
-struct less<ecs::EntityID>;
+constexpr bool operator==(EntityID lhs, EntityID rhs) noexcept {
+  return lhs.id_ == rhs.id_;
 }
 
-//////////////////////////////////////////////////////////////////////////
-namespace ecs {
-
-inline constexpr EntityID::EntityID() noexcept {}
-
-inline constexpr EntityID::EntityID(std::size_t id) noexcept
-    : id_(id) {}
-
-inline constexpr std::size_t EntityID::GetID() const noexcept { return id_; }
-
-inline constexpr bool operator==(const EntityID& lhs,
-                                 const EntityID& rhs) noexcept {
-  return lhs.GetID() == rhs.GetID();
-}
-
-inline constexpr bool operator!=(const EntityID& lhs,
-                                 const EntityID& rhs) noexcept {
+constexpr bool operator!=(EntityID lhs, EntityID rhs) noexcept {
   return !(lhs == rhs);
 }
 
@@ -50,8 +31,8 @@ inline constexpr bool operator!=(const EntityID& lhs,
 namespace std {
 template <>
 struct less<ecs::EntityID> {
-  bool operator()(const ecs::EntityID& lhs, const ecs::EntityID& rhs) const {
-    return lhs.GetID() < rhs.GetID();
+  constexpr bool operator()(ecs::EntityID lhs, ecs::EntityID rhs) const noexcept {
+    return lhs.id_ < rhs.id_;
   }
 };
 }  // namespace std

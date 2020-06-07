@@ -5,6 +5,7 @@
     <ClCompile Include="source\inlined_vector_test.cpp" />
     <ClCompile Include="source\instanced_sprite_rendering_system_test.cpp" />
     <ClCompile Include="source\class_index_test.cpp" />
+    <ClCompile Include="source\iterator_test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Test_class_collection.h" />

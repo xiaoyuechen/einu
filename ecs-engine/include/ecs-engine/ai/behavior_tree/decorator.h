@@ -13,12 +13,12 @@ class Decorator : public Node, public SingleNodeOwner {};
 
 class Inverter : public Decorator {
  public:
-  virtual const Result& Run(float dt, const EIDs& eids) override;
+  virtual const Result& Run(float dt, const EntityDataVector& etts) override;
 };
 
 class Succeeder : public Decorator {
  public:
-  virtual const Result& Run(float dt, const EIDs& eids) override;
+  virtual const Result& Run(float dt, const EntityDataVector& etts) override;
 };
 
 }  // namespace bt
