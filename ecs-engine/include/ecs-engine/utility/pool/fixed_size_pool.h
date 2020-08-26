@@ -4,25 +4,26 @@
 #include <vector>
 
 #include "ecs-engine/utility/algorithm.h"
-#include "free_index_stack.h"
+#include "ecs-engine/utility/free_index_stack.h"
 
 namespace ecs {
 
 template <typename T, typename Allocator = std::allocator<T>>
 class FixedSizePool {
  public:
-  explicit FixedSizePool(std::size_t count,
-                         const Allocator& alloc = Allocator())
+  using size_type = std::size_t;
+
+  explicit FixedSizePool(size_type count, const Allocator& alloc = Allocator())
       : object_arr_(count, alloc)
       , free_index_stack_(count) {}
 
-  FixedSizePool(std::size_t count, const T& value,
+  FixedSizePool(size_type count, const T& value,
                 const Allocator& alloc = Allocator())
       : object_arr_(count, value, alloc)
       , free_index_stack_(count) {}
 
   template <typename... Args>
-  FixedSizePool(std::size_t count, std::tuple<Args&&...> args_tup,
+  FixedSizePool(size_type count, std::tuple<Args&&...> args_tup,
                 const Allocator& alloc = Allocator())
       : object_arr_(alloc)
       , free_index_stack_(count) {
@@ -37,8 +38,8 @@ class FixedSizePool {
   FixedSizePool(const FixedSizePool&) = delete;
   FixedSizePool& operator=(const FixedSizePool&) = delete;
 
-  std::size_t Size() const noexcept { return object_arr_.size(); }
-  std::size_t FreeSize() const noexcept { return free_index_stack_.Size(); }
+  size_type Size() const noexcept { return object_arr_.size(); }
+  size_type FreeSize() const noexcept { return free_index_stack_.Size(); }
 
   [[nodiscard]] T& Acquire() {
     return object_arr_[free_index_stack_.Acquire()];
@@ -50,7 +51,7 @@ class FixedSizePool {
   }
 
  private:
-  FreeIndexStack<std::size_t> free_index_stack_;
+  FreeIndexStack<size_type> free_index_stack_;
   std::vector<T, Allocator> object_arr_;
 };
 

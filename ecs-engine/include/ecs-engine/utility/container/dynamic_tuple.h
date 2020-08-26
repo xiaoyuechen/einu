@@ -3,7 +3,7 @@
 #include <memory>
 #include <vector>
 
-#include "ecs-engine/utility/rtti/class_index.h"
+#include "ecs-engine/utility/rtti/class_index_storage.h"
 
 namespace ecs {
 
@@ -25,7 +25,7 @@ class DynamicTuple {
 
   template <typename T>
   const T& Get() const noexcept {
-    auto idx = rtti::GetClassIndex<T>();
+    auto idx = rtti::ClassIndexStorage::value;
     return static_cast<T>(vec_[idx]);
   }
 

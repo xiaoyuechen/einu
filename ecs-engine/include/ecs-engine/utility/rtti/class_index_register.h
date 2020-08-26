@@ -3,7 +3,7 @@
 #include <cassert>
 
 #include "ecs-engine/utility/misc/counter.h"
-#include "ecs-engine/utility/rtti/class_index.h"
+#include "ecs-engine/utility/rtti/class_index_storage.h"
 
 namespace ecs {
 namespace rtti {

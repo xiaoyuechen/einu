@@ -3,6 +3,7 @@
 #include "ecs-engine/graphics/gl_error.h"
 
 namespace ecs {
+namespace window {
 
 namespace {
 void InitializeGLFW() {
@@ -20,10 +21,15 @@ void InitializeGLAD() {
 }
 }  // namespace
 
-GLContext::GLContext() {
-  InitializeGLFW();
-}
+GLContext::GLContext() { InitializeGLFW(); }
 
 GLContext::~GLContext() { glfwTerminate(); }
 
+void GLContext::MakeContextCurrent(void* window) {
+  auto gl_window = static_cast<GLFWwindow*>(window);
+  glfwMakeContextCurrent(gl_window);
+  InitializeGLAD();
+}
+
+}  // namespace window
 }  // namespace ecs

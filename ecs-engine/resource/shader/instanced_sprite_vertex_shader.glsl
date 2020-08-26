@@ -1,13 +1,12 @@
 //VERTEX SHADER
 #version 330 core
 
-/*
-This is an optimized shader for instanced sprites.
-Notice that we compute the per-instance transformation here. 
-Although the transformation is computed 4 times on the GPU 
-(recomputes on every vertex), it is still much faster than on CPU. 
-Further more, the direct use of quaternion also reduses computation. 
-*/
+// This is an optimized shader for instanced sprites.
+// Notice that we compute the per-instance transformation here. 
+// Although the transformation is computed 4 times on the GPU 
+// (recomputes on every vertex), it is still much faster than on CPU. 
+// Further more, the direct use of quaternion also reduses computation. 
+
 
 in vec2 a_pos;
 in vec2 a_texcoord;

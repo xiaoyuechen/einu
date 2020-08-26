@@ -4,32 +4,32 @@ namespace ecs {
 namespace ai {
 namespace bt {
 
-const Result& Sequence::Run(float dt, const EntityDataVector& etts) {
+const Result& Sequence::Run(float dt, const EntitySet& etts) {
   Node::Run(dt, etts);
   auto& result_cache = GetResultCache();
-  result_cache[Status::SUCCESS] = etts;
+  result_cache[Status::kSuccess] = etts;
   for (auto&& child : GetChildren()) {
-    auto& result = child->Run(dt, result_cache[Status::SUCCESS]);
-    result_cache[Status::SUCCESS] = result[Status::SUCCESS];
-    std::copy(result[Status::FAILURE].begin(), result[Status::FAILURE].end(),
-              std::back_inserter(result_cache[Status::FAILURE]));
-    std::copy(result[Status::RUNNING].begin(), result[Status::RUNNING].end(),
-              std::back_inserter(result_cache[Status::RUNNING]));
+    auto& result = child->Run(dt, result_cache[Status::kSuccess]);
+    result_cache[Status::kSuccess] = result[Status::kSuccess];
+    std::copy(result[Status::kFailure].begin(), result[Status::kFailure].end(),
+              std::back_inserter(result_cache[Status::kFailure]));
+    std::copy(result[Status::kRunning].begin(), result[Status::kRunning].end(),
+              std::back_inserter(result_cache[Status::kRunning]));
   }
   return result_cache;
 }
 
-const Result& Selector::Run(float dt, const EntityDataVector& etts) {
+const Result& Selector::Run(float dt, const EntitySet& etts) {
   Node::Run(dt, etts);
   auto& result_cache = GetResultCache();
-  result_cache[Status::FAILURE] = etts;
+  result_cache[Status::kFailure] = etts;
   for (auto&& child : GetChildren()) {
-    auto& result = child->Run(dt, result_cache[Status::FAILURE]);
-    result_cache[Status::FAILURE] = result[Status::FAILURE];
-    std::copy(result[Status::SUCCESS].begin(), result[Status::SUCCESS].end(),
-              std::back_inserter(result_cache[Status::SUCCESS]));
-    std::copy(result[Status::RUNNING].begin(), result[Status::RUNNING].end(),
-              std::back_inserter(result_cache[Status::RUNNING]));
+    auto& result = child->Run(dt, result_cache[Status::kFailure]);
+    result_cache[Status::kFailure] = result[Status::kFailure];
+    std::copy(result[Status::kSuccess].begin(), result[Status::kSuccess].end(),
+              std::back_inserter(result_cache[Status::kSuccess]));
+    std::copy(result[Status::kRunning].begin(), result[Status::kRunning].end(),
+              std::back_inserter(result_cache[Status::kRunning]));
   }
   return result_cache;
 }

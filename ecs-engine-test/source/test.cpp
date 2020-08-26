@@ -10,7 +10,7 @@
 #include "ecs-engine/extension/policy/threading_model.h"
 #include "ecs-engine/utility/type_list.h"
 #include "ecs-engine/window/gl_context.h"
-#include "ecs-engine/window/window.h"
+#include "ecs-engine/window/gl_window.h"
 
 namespace ecs {
 

@@ -3,34 +3,34 @@
 #include <map>
 #include <vector>
 
-#include "ecs-engine/core/entity_data.h"
-#include "ecs-engine/core/entity_data_vector.h"
+#include "ecs-engine/core/entity.h"
 
 namespace ecs {
 namespace ai {
 namespace bt {
 
 enum class Status {
-  SUCCESS,
-  FAILURE,
-  RUNNING,
+  kSuccess,
+  kFailure,
+  kRunning,
 };
 
 class Result {
  public:
-  using Map = std::map<Status, EntityDataVector>;
-  using iterator = Map::iterator;
-  using const_iterator = Map::const_iterator;
+  using EntitySet = std::vector<std::reference_wrapper<IEntity>>;
+  using Map = std::map<Status, EntitySet>;
+  using iterator = typename Map::iterator;
+  using const_iterator = typename Map::const_iterator;
 
   Result() {
-    map_[Status::SUCCESS];
-    map_[Status::FAILURE];
-    map_[Status::RUNNING];
+    map_[Status::kSuccess];
+    map_[Status::kFailure];
+    map_[Status::kRunning];
   }
 
-  EntityDataVector& operator[](const Status& status) { return map_.at(status); }
+  EntitySet& operator[](const Status& status) { return map_.at(status); }
 
-  const EntityDataVector& operator[](const Status& status) const {
+  const EntitySet& operator[](const Status& status) const {
     return map_.at(status);
   }
   iterator begin() noexcept { return map_.begin(); }

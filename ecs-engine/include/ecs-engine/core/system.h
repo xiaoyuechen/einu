@@ -18,21 +18,23 @@ class System<EntityManager, ComponentList<Ts...>> {
   using ComponentEntityBuffer = ComponentEntityBuffer<Ts...>;
 
   System(EntityManager& ett_mgr)
-      : ett_mgr_(ett_mgr) {
-    ett_mgr_.RegisterInterest<Ts...>();
-  }
+      : ett_mgr_(ett_mgr) {}
 
   virtual ~System() = default;
 
   void RefreshMatchingBuffer() const {
     comp_ett_buffer_.Clear();
-    ett_mgr_.GetMatchingComponentsEntities(comp_ett_buffer_);
+    ett_mgr_.GetMatchingComponentsEntities<Ts...>(comp_ett_buffer_);
   }
 
   const EntityManager& GetEntityManager() const { return ett_mgr_; }
   EntityManager& GetEntityManager() {
     return const_cast<EntityManager&>(
         static_cast<const System&>(*this).GetEntityManager());
+  }
+
+  ComponentEntityBuffer& GetMatchingBuffer() noexcept {
+    return comp_ett_buffer_;
   }
 
   const ComponentEntityBuffer& GetMatchingBuffer() const noexcept {

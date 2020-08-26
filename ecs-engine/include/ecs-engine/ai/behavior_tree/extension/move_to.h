@@ -30,11 +30,11 @@ class MoveTo : public Leaf<EntityManager, MoveToRequiredComponentList> {
           dest_comp.destination - transform_comp.transform.GetPosition();
       if (glm::length2(delta) < glm::pow(dest_comp.tolerance_radius, 2)) {
         movement_comp.direction = glm::vec3();
-        result[Status::SUCCESS].emplace_back(ett);
+        result[Status::kSuccess].emplace_back(ett);
       } else {
         movement_comp.direction = glm::normalize(delta);
         movement_comp.speed = movement_comp.max_speed;
-        result[Status::RUNNING].emplace_back(ett);
+        result[Status::kRunning].emplace_back(ett);
       }
     }
     return result;

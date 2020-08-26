@@ -1,13 +1,13 @@
 #include "ecs-engine/input/input_fn.h"
 
-#include "ecs-engine/window/window.h"
+#include "ecs-engine/window/gl_window.h"
 
 namespace ecs {
 namespace input {
 
 namespace {
-Window& GetWindow(GLFWwindow* window) {
-  return *static_cast<Window*>(glfwGetWindowUserPointer(window));
+GLWindow& GetWindow(GLFWwindow* window) {
+  return *static_cast<GLWindow*>(glfwGetWindowUserPointer(window));
 }
 }  // namespace
 

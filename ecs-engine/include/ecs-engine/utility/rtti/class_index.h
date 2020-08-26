@@ -22,18 +22,5 @@ class ClassIndex {
 
 inline bool IsAssigned(ClassIndex idx) { return idx != ClassIndex(); }
 
-namespace detail {
-template <typename T>
-ClassIndex& GetClassIndex() {
-  static auto index = ClassIndex();
-  return index;
-}
-}  // namespace detail
-
-template <typename T>
-ClassIndex& GetClassIndex() {
-  return detail::GetClassIndex<std::remove_const<T>::type>();
-}
-
 }  // namespace rtti
 }  // namespace ecs

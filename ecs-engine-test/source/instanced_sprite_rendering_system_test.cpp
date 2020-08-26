@@ -1,72 +1,104 @@
 #include "pch.h"
 // pre-compiled header
 
+//#include <Windows.h>
+
 #include <random>
 
 #include "ecs-engine/core/component_context.h"
 #include "ecs-engine/core/entity_manager.h"
+#include "ecs-engine/extension/component/entity_storage.h"
 #include "ecs-engine/extension/component/instanced_sprite_component.h"
 #include "ecs-engine/extension/component/singleton_camera_component.h"
 #include "ecs-engine/extension/component/transform_component.h"
 #include "ecs-engine/extension/policy/threading_model.h"
+#include "ecs-engine/extension/system/create_glfw_window.h"
+#include "ecs-engine/extension/system/glfw_input.h"
+#include "ecs-engine/extension/system/initialize_glad.h"
+#include "ecs-engine/extension/system/initialize_glfw.h"
 #include "ecs-engine/extension/system/instanced_sprite_rendering_system.h"
 #include "ecs-engine/graphics/graphics.h"
-#include "ecs-engine/window/window.h"
+#include "ecs-engine/window/gl_window.h"
 
 namespace ecs {
 
 struct ISRTest : testing::Test {
+  using MyEntityManager = EntityManager<>;
+  using MyEntity = Entity<MyEntityManager>;
+  using MyEntityPool = EntityPool<MyEntity>;
   using MyComponentList =
-      ComponentList<TransformComponent, InstancedSpriteComponent>;
+      ComponentList<comp::Window, TransformComponent, InstancedSpriteComponent,
+                    comp::Input, comp::EntityStorage<MyEntityManager>>;
   using MySingletonComponentList =
       SingletonComponentList<SingletonCameraComponent>;
   using MyComponentContext =
       ComponentContext<MyComponentList, MySingletonComponentList>;
-  using MyEntityManager = EntityManager<>;
 
   ISRTest()
-      : window(Window::Mode::WINDOWED, 1920, 1080, "application")
-      , ett_pool(1000)
-      , ett_mgr(component_managers, singleton_components, ett_pool)
-      , instanced_sprite_shader(
-            [] {
-              auto vertex_shader = VertexShader{};
-              vertex_shader.LoadFromFile(
-                  "ecs-engine/resource/shader/"
-                  "instanced_sprite_vertex_shader.glsl");
-              return vertex_shader;
-            }(),
-            [] {
-              auto fragment_shader = FragmentShader{};
-              fragment_shader.LoadFromFile(
-                  "ecs-engine/resource/shader/"
-                  "instanced_sprite_fragment_shader.glsl");
-              return fragment_shader;
-            }())
-      , sys(ett_mgr, instanced_sprite_shader) {
-    component_managers.Make<TransformComponent>(1000);
-    component_managers.Make<InstancedSpriteComponent>(1000);
-    singleton_components.Make<SingletonCameraComponent>();
-    tex.LoadFromFile("ecs-engine-test/resource/white-triangle.png");
+      : entity_pool(1000)
+      , ett_mgr(entity_pool, component_pool_manager,
+                singleton_component_manager)
+      , create_window(ett_mgr)
+      , glfw_input(ett_mgr) {
+    component_pool_manager.Make<TransformComponent>(1000);
+    component_pool_manager.Make<InstancedSpriteComponent>(1000);
+    component_pool_manager.Make<comp::Window>(10);
+    component_pool_manager.Make<comp::Input>(10);
+    component_pool_manager.Make<comp::EntityStorage<MyEntityManager>>(10);
+    {
+      auto& ett = ett_mgr.CreateEntity();
+      auto& win = ett.AddComponent<comp::Window>();
+      win.size = comp::Window::Size{640, 320};
+      win.title = "input";
+      input_comp = &ett.AddComponent<comp::Input>();
+      ett.AddComponent<comp::EntityStorage<MyEntityManager>>();
+    }
+    {
+      auto& ett = ett_mgr.CreateEntity();
+      auto& win = ett.AddComponent<comp::Window>();
+      win.size = comp::Window::Size{1080, 720};
+      ett.AddComponent<comp::EntityStorage<MyEntityManager>>();
+    }
+    singleton_component_manager.Make<SingletonCameraComponent>();
   }
 
-  Window window;
   MyComponentContext context;
-  ComponentManagerSet component_managers;
-  SingletonComponentSet singleton_components;
-  EntityPool ett_pool;
+  MyEntityPool entity_pool;
+  ComponentPoolManager component_pool_manager;
+  SingletonComponentManager singleton_component_manager;
   MyEntityManager ett_mgr;
-  ShaderProgram instanced_sprite_shader;
-  InstancedSpriteRenderingSystem<MyEntityManager> sys;
-  Texture tex;
+  system::CreateGlfwWindow<MyEntityManager> create_window;
+  system::IntializeGlfw initialize_glfw;
+  system::InitializeGlad initialize_glad;
+  system::GlfwInput<MyEntityManager> glfw_input;
+  ecs::comp::Input* input_comp = nullptr;
 };
 
 TEST_F(ISRTest, Render) {
+  initialize_glfw.Init();
+  create_window.Create();
+
+  initialize_glad.Init();
+  glfw_input.SetCallbacks();
+
+  auto tex = Texture{};
+  tex.LoadFromFile("ecs-engine-test/resource/white-triangle.png");
+  auto vertex_shader = VertexShader{};
+  vertex_shader.LoadFromFile(
+      "ecs-engine/resource/shader/instanced_sprite_vertex_shader.glsl");
+  auto fragment_shader = FragmentShader{};
+  fragment_shader.LoadFromFile(
+      "ecs-engine/resource/shader/instanced_sprite_fragment_shader.glsl");
+  auto instanced_sprite_shader = ShaderProgram(vertex_shader, fragment_shader);
+  InstancedSpriteRenderingSystem<MyEntityManager> sys(ett_mgr,
+                                                      instanced_sprite_shader);
+
   Sampler sampler{};
   sampler.Set(GL_NEAREST, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
   sampler.Bind();
   Sprite sprite{tex, {0, 0, tex.Width(), tex.Height()}};
-  auto& cam = ett_mgr.GetSingletonComponent<SingletonCameraComponent>();
+  auto& cam =
+      ett_mgr.GetSingletonComponentManager().Get<SingletonCameraComponent>();
   cam.projection =
       ecs::Projection{ecs::Projection::Type::ORTHOGRAPHIC,
                       ecs::Projection::OrthographicAttrib{0, 1920, 0, 1080}};
@@ -78,26 +110,30 @@ TEST_F(ISRTest, Render) {
   std::uniform_real_distribution<float> distribution_rotate(0, 360);
 
   for (auto i = std::size_t(0); i != 50; ++i) {
-    auto ett_handle = ett_mgr.CreateEntity();
-    auto& transform_comp = ett_handle.AddComponent<TransformComponent>();
+    auto& ett = ett_mgr.CreateEntity();
+    auto& transform_comp = ett.AddComponent<TransformComponent>();
     auto& transform = transform_comp.transform;
     transform.SetPosition(
         glm::vec3(distribution_x(generator), distribution_y(generator), 0));
     transform.SetRotation(glm::quat(
         glm::vec3(0, 0, glm::radians(distribution_rotate(generator)))));
     transform.SetScale(glm::vec3(0.05f, 0.1f, 1.f));
-    auto& inst_sprite = ett_handle.AddComponent<InstancedSpriteComponent>();
+    auto& inst_sprite = ett.AddComponent<InstancedSpriteComponent>();
     inst_sprite.sprite = &sprite;
   }
 
-  while (!window.ShouldClose()) {
-    glClearColor(0.1f, 0.2f, 0.3f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  ComponentEntityBuffer<ecs::comp::Window> buffer;
+  ett_mgr.GetMatchingComponentsEntities<ecs::comp::Window>(buffer);
+  auto&& [win] = buffer.GetComponents()[1];
 
+  while (true) {
     sys.Render();
+    glfwPollEvents();
+    glfwSwapBuffers(static_cast<GLFWwindow*>(win.window));
 
-    window.SwapBuffer();
-    window.PollEvents();
+    if (input_comp->GetKeyboardKey(KeyboardKey::kQ)) {
+      break;
+    }
   }
 }
 

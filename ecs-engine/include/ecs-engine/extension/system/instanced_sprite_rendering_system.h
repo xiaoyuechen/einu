@@ -7,6 +7,7 @@
 #include "ecs-engine/extension/component/singleton_camera_component.h"
 #include "ecs-engine/extension/component/transform_component.h"
 #include "ecs-engine/extension/policy/default_unit_policy.h"
+#include "ecs-engine/graphics/color.h"
 #include "ecs-engine/math/primitive.h"
 
 namespace ecs {
@@ -27,7 +28,7 @@ class InstancedSpriteRenderingSystem
 
  private:
   struct InstanceState {
-    std::array<uint8_t, 4> color;
+    Color<> color;
     glm::vec2 pos;
     glm::vec4 quat;
     glm::vec2 scale;
@@ -124,7 +125,7 @@ inline void
 InstancedSpriteRenderingSystem<EntityManager, UnitPolicy>::SetCameraUniform() {
   const auto& ett_mgr = System::GetEntityManager();
   const auto& camera =
-      ett_mgr.GetSingletonComponent<SingletonCameraComponent>();
+      ett_mgr.GetSingletonComponentManager().Get<SingletonCameraComponent>();
   auto view = camera.view;
   view.position *= UnitPolicy::PixelPerUnit();
   view.target *= UnitPolicy::PixelPerUnit();

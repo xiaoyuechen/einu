@@ -10,9 +10,11 @@ namespace bt {
 
 class Node {
  public:
+  using EntitySet = Result::EntitySet;
+
   virtual ~Node() = default;
 
-  virtual const Result& Run(float, const EntityDataVector&) {
+  virtual const Result& Run(float, const EntitySet&) {
     ClearResultCache();
     return GetResultCache();
   }
