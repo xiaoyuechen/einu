@@ -9,6 +9,3 @@ PointerAlignment: Left
 
 BreakConstructorInitializers: BeforeComma
 ConstructorInitializerAllOnOneLineOrOnePerLine: false
-
-# BinPackArguments: false
-# BinPackParameters: false
