@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ecs-engine/utility/rtti/class_index.h"
+#include "ecs-rtti/class_index.h"
 
 namespace ecs {
 namespace rtti {
@@ -13,7 +13,7 @@ struct ClassIndexStorage {
 }  // namespace detail
 
 template <typename T>
-ClassIndex& GetClassIndex() noexcept {
+ClassIndex GetClassIndex() noexcept {
   return detail::ClassIndexStorage<std::decay<T>::type>::value;
 }
 

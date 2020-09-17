@@ -2,8 +2,7 @@
 
 #include <cassert>
 
-#include "ecs-engine/utility/misc/counter.h"
-#include "ecs-engine/utility/rtti/class_index_storage.h"
+#include "ecs-rtti/class_index_storage.h"
 
 namespace ecs {
 namespace rtti {
@@ -14,16 +13,16 @@ class ClassIndexRegister {
 
   template <typename T>
   void Register(ClassIndex idx) noexcept {
-    auto& idx0 = GetClassIndex<T>();
+    auto& idx0 = detail::ClassIndexStorage<T>::value;
     assert(!IsAssigned(idx0));
     idx0 = idx;
-    counter_.CountUp();
+    ++count_;
   }
 
-  size_type GetRegisteredCount() const noexcept { return counter_.GetCount(); }
+  size_type GetRegisteredCount() const noexcept { return count_; }
 
  private:
-  misc::Counter<size_type> counter_;
+  size_type count_ = 0;
 };
 
 }  // namespace rtti
