@@ -3,14 +3,14 @@
 #include <vector>
 #include <string>
 
-#include "ecs-engine/graphics/camera.h"
-#include "ecs-engine/graphics/sampler.h"
-#include "ecs-engine/graphics/shader_program.h"
-#include "ecs-engine/graphics/texture.h"
-#include "ecs-engine/graphics/vertex_buffer.h"
-#include "ecs-engine/graphics/vertex_format.h"
+#include "einu-engine/graphics/camera.h"
+#include "einu-engine/graphics/sampler.h"
+#include "einu-engine/graphics/shader_program.h"
+#include "einu-engine/graphics/texture.h"
+#include "einu-engine/graphics/vertex_buffer.h"
+#include "einu-engine/graphics/vertex_format.h"
 
-namespace ecs {
+namespace einu {
 
 class BitmapFont {
  public:
@@ -35,4 +35,4 @@ class BitmapFont {
   std::vector<Vertex> vertices_;
 };
 
-}  // namespace ecs
+}  // namespace einu

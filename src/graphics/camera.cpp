@@ -1,6 +1,6 @@
-#include "ecs-engine/graphics/camera.h"
+#include "einu-engine/graphics/camera.h"
 
-namespace ecs {
+namespace einu {
 
 Camera::Camera(const glm::mat4& projection)
     : projection_(projection) {}
@@ -53,4 +53,4 @@ glm::mat4 Camera::get_view() const { return view_; }
 
 glm::mat4 Camera::get_projection() const { return projection_; }
 
-}  // namespace ecs
+}  // namespace einu

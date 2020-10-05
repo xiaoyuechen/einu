@@ -2,22 +2,22 @@
 
 #include <random>
 
-#include "ecs-engine/core/component_context.h"
-#include "ecs-engine/core/entity_manager.h"
-#include "ecs-engine/extension/component/entity_storage.h"
-#include "ecs-engine/extension/component/instanced_sprite_component.h"
-#include "ecs-engine/extension/component/singleton_camera_component.h"
-#include "ecs-engine/extension/component/transform_component.h"
-#include "ecs-engine/extension/policy/threading_model.h"
-#include "ecs-engine/extension/system/create_glfw_window.h"
-#include "ecs-engine/extension/system/glfw_input.h"
-#include "ecs-engine/extension/system/initialize_glad.h"
-#include "ecs-engine/extension/system/initialize_glfw.h"
-#include "ecs-engine/extension/system/instanced_sprite_rendering_system.h"
-#include "ecs-engine/graphics/graphics.h"
-#include "ecs-engine/window/gl_window.h"
+#include "einu-engine/core/component_context.h"
+#include "einu-engine/core/entity_manager.h"
+#include "einu-engine/extension/component/entity_storage.h"
+#include "einu-engine/extension/component/instanced_sprite_component.h"
+#include "einu-engine/extension/component/singleton_camera_component.h"
+#include "einu-engine/extension/component/transform_component.h"
+#include "einu-engine/extension/policy/threading_model.h"
+#include "einu-engine/extension/system/create_glfw_window.h"
+#include "einu-engine/extension/system/glfw_input.h"
+#include "einu-engine/extension/system/initialize_glad.h"
+#include "einu-engine/extension/system/initialize_glfw.h"
+#include "einu-engine/extension/system/instanced_sprite_rendering_system.h"
+#include "einu-engine/graphics/graphics.h"
+#include "einu-engine/window/gl_window.h"
 
-namespace ecs {
+namespace einu {
 
 struct ISRTest : testing::Test {
   using MyEntityManager = EntityManager<>;
@@ -68,7 +68,7 @@ struct ISRTest : testing::Test {
   system::IntializeGlfw initialize_glfw;
   system::InitializeGlad initialize_glad;
   system::GlfwInput<MyEntityManager> glfw_input;
-  ecs::comp::Input* input_comp = nullptr;
+  einu::comp::Input* input_comp = nullptr;
 };
 
 TEST_F(ISRTest, Render) {
@@ -79,13 +79,13 @@ TEST_F(ISRTest, Render) {
   glfw_input.SetCallbacks();
 
   auto tex = Texture{};
-  tex.LoadFromFile("ecs-engine-test/resource/white-triangle.png");
+  tex.LoadFromFile("einu-engine-test/resource/white-triangle.png");
   auto vertex_shader = VertexShader{};
   vertex_shader.LoadFromFile(
-      "ecs-engine/resource/shader/instanced_sprite_vertex_shader.glsl");
+      "einu-engine/resource/shader/instanced_sprite_vertex_shader.glsl");
   auto fragment_shader = FragmentShader{};
   fragment_shader.LoadFromFile(
-      "ecs-engine/resource/shader/instanced_sprite_fragment_shader.glsl");
+      "einu-engine/resource/shader/instanced_sprite_fragment_shader.glsl");
   auto instanced_sprite_shader = ShaderProgram(vertex_shader, fragment_shader);
   InstancedSpriteRenderingSystem<MyEntityManager> sys(ett_mgr,
                                                       instanced_sprite_shader);
@@ -97,8 +97,8 @@ TEST_F(ISRTest, Render) {
   auto& cam =
       ett_mgr.GetSingletonComponentManager().Get<SingletonCameraComponent>();
   cam.projection =
-      ecs::Projection{ecs::Projection::Type::ORTHOGRAPHIC,
-                      ecs::Projection::OrthographicAttrib{0, 1920, 0, 1080}};
+      einu::Projection{einu::Projection::Type::ORTHOGRAPHIC,
+                      einu::Projection::OrthographicAttrib{0, 1920, 0, 1080}};
 
   std::random_device device;
   std::mt19937 generator(device());
@@ -119,8 +119,8 @@ TEST_F(ISRTest, Render) {
     inst_sprite.sprite = &sprite;
   }
 
-  ComponentEntityBuffer<ecs::comp::Window> buffer;
-  ett_mgr.GetMatchingComponentsEntities<ecs::comp::Window>(buffer);
+  ComponentEntityBuffer<einu::comp::Window> buffer;
+  ett_mgr.GetMatchingComponentsEntities<einu::comp::Window>(buffer);
   auto&& [win] = buffer.GetComponents()[1];
 
   while (true) {
@@ -134,4 +134,4 @@ TEST_F(ISRTest, Render) {
   }
 }
 
-}  // namespace ecs
+}  // namespace einu

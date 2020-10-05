@@ -5,7 +5,7 @@
 #include <cstdint>
 #include <vector>
 
-namespace ecs {
+namespace einu {
 
 class VertexFormat {
  public:
@@ -31,5 +31,5 @@ class VertexFormat {
   std::vector<Attribute> attributes_{};
 };
 
-}  // namespace ecs
+}  // namespace einu
 

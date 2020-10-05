@@ -1,6 +1,6 @@
-#include "ecs-engine/graphics/sampler.h"
+#include "einu-engine/graphics/sampler.h"
 
-namespace ecs {
+namespace einu {
 
 Sampler::Sampler() { glGenSamplers(1, &sampler_); }
 
@@ -18,4 +18,4 @@ void Sampler::Set(const GLenum filter,
 
 void Sampler::Bind() const { glBindSampler(0, sampler_); }
 
-}  // namespace ecs
+}  // namespace einu

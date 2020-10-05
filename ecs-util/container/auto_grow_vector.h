@@ -2,7 +2,7 @@
 
 #include <vector>
 
-namespace ecs {
+namespace einu {
 template <typename T, typename Allocator = std::allocator<T>>
 class AutoGrowVector : public std::vector<T, Allocator> {
  public:

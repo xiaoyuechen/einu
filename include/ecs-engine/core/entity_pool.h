@@ -2,11 +2,11 @@
 
 #include <vector>
 
-#include "ecs-engine/core/component_map.h"
-#include "ecs-engine/core/component_mask.h"
-#include "ecs-engine/utility/free_index_stack.h"
+#include "einu-engine/core/component_map.h"
+#include "einu-engine/core/component_mask.h"
+#include "einu-engine/utility/free_index_stack.h"
 
-namespace ecs {
+namespace einu {
 
 class IEntityManager;
 
@@ -59,4 +59,4 @@ class EntityPool : public IEntityPool {
   ComponentMaps comp_maps_;
   FreeIndexStack free_index_stack_;
 };
-}  // namespace ecs
+}  // namespace einu

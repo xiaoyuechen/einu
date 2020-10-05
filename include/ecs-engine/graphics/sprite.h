@@ -1,10 +1,10 @@
 #pragma once
 
-#include "ecs-engine/math/primitive.h"
-#include "ecs-engine/graphics/texture.h"
-#include "ecs-engine/math/glm.h"
+#include "einu-engine/math/primitive.h"
+#include "einu-engine/graphics/texture.h"
+#include "einu-engine/math/glm.h"
 
-namespace ecs {
+namespace einu {
 
 struct Sprite {
   Sprite(const Texture& tex);
@@ -18,5 +18,5 @@ struct Sprite {
   glm::mat4 transform = glm::mat4{1.0f};
 };
 
-}  // namespace ecs
+}  // namespace einu
 

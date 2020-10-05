@@ -1,13 +1,13 @@
 #pragma once
 
-#include "ecs-engine/core/i_component.h"
-#include "ecs-engine/math/transform.h"
+#include "einu-engine/core/i_component.h"
+#include "einu-engine/math/transform.h"
 
-namespace ecs {
+namespace einu {
 
 struct TransformComponent : public IComponent {
   using Transform = Transform<transform_policy::NoCache>;
   Transform transform{};
 };
 
-}  // namespace ecs
+}  // namespace einu

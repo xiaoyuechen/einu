@@ -1,9 +1,9 @@
 #pragma once
 
-#include "ecs-engine/ai/behavior_tree/detail/multi_node_owner.h"
-#include "ecs-engine/ai/behavior_tree/node.h"
+#include "einu-engine/ai/behavior_tree/detail/multi_node_owner.h"
+#include "einu-engine/ai/behavior_tree/node.h"
 
-namespace ecs {
+namespace einu {
 namespace ai {
 namespace bt {
 
@@ -23,4 +23,4 @@ class Selector : public Composite {
 
 }  // namespace bt
 }  // namespace ai
-}  // namespace ecs
+}  // namespace einu

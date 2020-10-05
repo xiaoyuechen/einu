@@ -2,9 +2,9 @@
 
 #include <glad/glad.h>
 
-#include "ecs-engine/utility/Noncopyable.h"
+#include "einu-engine/utility/Noncopyable.h"
 
-namespace ecs {
+namespace einu {
 
 class Texture : Noncopyable {
  public:
@@ -23,5 +23,5 @@ class Texture : Noncopyable {
   int width_ = 0;
   int height_ = 0;
 };
-}  // namespace ecs
+}  // namespace einu
 

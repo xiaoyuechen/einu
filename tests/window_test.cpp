@@ -1,11 +1,11 @@
 #include "pch.h"
 // pre-compiled header
 
-#include "ecs-engine/graphics/graphics.h"
-#include "ecs-engine/window/window.h"
+#include "einu-engine/graphics/graphics.h"
+#include "einu-engine/window/window.h"
 
 
-namespace ecs {
+namespace einu {
 //////////////////////////////////////////////////////////////////////////
 // WindowTest:
 //////////////////////////////////////////////////////////////////////////
@@ -76,4 +76,4 @@ TEST_F(WindowTest, Render) {
     window.SwapBuffer();
   }
 }
-}  // namespace ecs
+}  // namespace einu

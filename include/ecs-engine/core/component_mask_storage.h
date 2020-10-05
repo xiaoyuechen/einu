@@ -1,10 +1,10 @@
 #pragma once
 
-#include "ecs-engine/core/component_mask.h"
-#include "ecs-engine/utility/algorithm.h"
-#include "ecs-engine/utility/tmp/type_list.h"
+#include "einu-engine/core/component_mask.h"
+#include "einu-engine/utility/algorithm.h"
+#include "einu-engine/utility/tmp/type_list.h"
 
-namespace ecs {
+namespace einu {
 namespace detail {
 
 template <typename T>
@@ -25,4 +25,4 @@ ComponentMask& GetComponentMask() {
 }
 
 }  // namespace detail
-}  // namespace ecs
+}  // namespace einu

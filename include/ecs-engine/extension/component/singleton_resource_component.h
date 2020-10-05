@@ -2,9 +2,9 @@
 
 #include <map>
 
-#include "ecs-engine/core/i_singleton_component.h"
+#include "einu-engine/core/i_singleton_component.h"
 
-namespace ecs {
+namespace einu {
 
 template <typename Key, typename Resource>
 class SingletonResourceComponent : public ISingletonComponent {
@@ -55,4 +55,4 @@ inline Resource& SingletonResourceComponent<Key, Resource>::Get(
       static_cast<const SingletonResourceComponent&>(*this).Get(key));
 }
 
-}  // namespace ecs
+}  // namespace einu

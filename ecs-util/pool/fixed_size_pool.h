@@ -3,10 +3,10 @@
 #include <functional>
 #include <vector>
 
-#include "ecs-engine/utility/algorithm.h"
-#include "ecs-engine/utility/free_index_stack.h"
+#include "einu-engine/utility/algorithm.h"
+#include "einu-engine/utility/free_index_stack.h"
 
-namespace ecs {
+namespace einu {
 
 template <typename T, typename Allocator = std::allocator<T>>
 class FixedSizePool {
@@ -55,4 +55,4 @@ class FixedSizePool {
   std::vector<T, Allocator> object_arr_;
 };
 
-}  // namespace ecs
+}  // namespace einu

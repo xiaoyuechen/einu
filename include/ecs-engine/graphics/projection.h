@@ -1,8 +1,8 @@
 #pragma once
 
-#include "ecs-engine/math/glm.h"
+#include "einu-engine/math/glm.h"
 
-namespace ecs {
+namespace einu {
 
 struct Projection {
   enum class Type {
@@ -35,5 +35,5 @@ struct Projection {
 Projection operator*(const Projection& projection, float ratio);
 Projection operator*(float ratio, const Projection& projection);
 
-}  // namespace ecs
+}  // namespace einu
 

@@ -1,9 +1,9 @@
 #ifndef TEST_CLASS_COLLECTION_H_
 #define TEST_CLASS_COLLECTION_H_
 
-#include "ecs-engine/core/component_tag.h"
+#include "einu-engine/core/component_tag.h"
 
-namespace ecs {
+namespace einu {
 struct C_0 : ComponentTag {};
 struct C_1 : ComponentTag {};
 struct C_2 : ComponentTag {};

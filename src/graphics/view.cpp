@@ -1,9 +1,9 @@
-#include "ecs-engine/graphics/view.h"
+#include "einu-engine/graphics/view.h"
 
-namespace ecs {
+namespace einu {
 
 glm::mat4 View::GetViewMatrix() const {
   return glm::lookAt(position, target, up);
 }
 
-}  // namespace ecs
+}  // namespace einu

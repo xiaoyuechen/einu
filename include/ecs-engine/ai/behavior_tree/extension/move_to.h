@@ -1,11 +1,11 @@
 #pragma once
 
-#include "ecs-engine/ai/behavior_tree/extension/destination_component.h"
-#include "ecs-engine/ai/behavior_tree/leaf.h"
-#include "ecs-engine/extension/component/movement_component.h"
-#include "ecs-engine/extension/component/transform_component.h"
+#include "einu-engine/ai/behavior_tree/extension/destination_component.h"
+#include "einu-engine/ai/behavior_tree/leaf.h"
+#include "einu-engine/extension/component/movement_component.h"
+#include "einu-engine/extension/component/transform_component.h"
 
-namespace ecs {
+namespace einu {
 namespace ai {
 namespace bt {
 
@@ -43,4 +43,4 @@ class MoveTo : public Leaf<EntityManager, MoveToRequiredComponentList> {
 
 }  // namespace bt
 }  // namespace ai
-}  // namespace ecs
+}  // namespace einu

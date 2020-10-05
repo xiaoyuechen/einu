@@ -2,9 +2,9 @@
 
 #include <functional>
 
-#include "ecs-engine/input/input.h"
+#include "einu-engine/input/input.h"
 
-namespace ecs {
+namespace einu {
 namespace input {
 
 template <typename... FnArgs>
@@ -25,4 +25,4 @@ using ScrollFn = InputFn<double, double>;
 using CursorPosFn = InputFn<double, double>;
 
 }  // namespace input
-}  // namespace ecs
+}  // namespace einu

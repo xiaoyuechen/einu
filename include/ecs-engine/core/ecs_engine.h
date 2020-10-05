@@ -1,8 +1,8 @@
 #pragma once
 
-#include "ecs-engine/core/i_component"
+#include "einu-engine/core/i_component"
 
-namespace ecs {
+namespace einu {
 
 class ISystem {};
 
@@ -24,4 +24,4 @@ class Engine {
   virtual IWorld MakeWorld() = 0;
 };
 
-}  // namespace ecs
+}  // namespace einu

@@ -1,10 +1,10 @@
-#include "ecs-engine/graphics/shader_util.h"
+#include "einu-engine/graphics/shader_util.h"
 
 #include <string>
 
-#include "ecs-engine/graphics/gl_error.h"
+#include "einu-engine/graphics/gl_error.h"
 
-namespace ecs {
+namespace einu {
 
 namespace shader_util {
 
@@ -50,4 +50,4 @@ void CheckStatus(Type type, GLuint id) {
   }
 }
 }  // namespace shader_util
-}  // namespace ecs
+}  // namespace einu

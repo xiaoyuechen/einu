@@ -2,12 +2,12 @@
 
 #include <map>
 
-#include "ecs-engine/core/i_component.h"
-#include "ecs-engine/core/i_singleton_component.h"
-#include "ecs-engine/utility/rtti/class_index_register.h"
-#include "ecs-engine/utility/tmp/type_list.h"
+#include "einu-engine/core/i_component.h"
+#include "einu-engine/core/i_singleton_component.h"
+#include "einu-engine/utility/rtti/class_index_register.h"
+#include "einu-engine/utility/tmp/type_list.h"
 
-namespace ecs {
+namespace einu {
 
 template <typename... Ts>
 using ComponentList = tmp::SubtypeList<IComponent, Ts...>;
@@ -48,4 +48,4 @@ class ComponentContext {
   std::map<Type, rtti::ClassIndexRegister> regs_;
 };
 
-}  // namespace ecs
+}  // namespace einu

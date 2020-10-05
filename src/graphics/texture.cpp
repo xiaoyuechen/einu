@@ -1,11 +1,11 @@
-#include "ecs-engine/graphics/texture.h"
+#include "einu-engine/graphics/texture.h"
 
 #include <stdexcept>
 
-#include "ecs-engine/graphics/stb_image.h"
-#include "ecs-engine/utility/file_reader.h"
+#include "einu-engine/graphics/stb_image.h"
+#include "einu-engine/utility/file_reader.h"
 
-namespace ecs {
+namespace einu {
 
 Texture::Texture() { glGenTextures(1, &texture_); }
 
@@ -63,4 +63,4 @@ const int Texture::Width() const { return width_; }
 
 const int Texture::Height() const { return height_; }
 
-}  // namespace ecs
+}  // namespace einu

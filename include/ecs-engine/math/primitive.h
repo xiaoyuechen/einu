@@ -1,8 +1,8 @@
 #pragma once
 
-#include "ecs-engine/math/glm.h"
+#include "einu-engine/math/glm.h"
 
-namespace ecs {
+namespace einu {
 
 struct LineSegment2D {
   glm::vec2 start, end;
@@ -31,5 +31,5 @@ Rect<T> operator*(const glm::mat<4, 4, T>& transform, const Rect<T>& rhs) {
   return Rect<T>{};
 }
 
-}  // namespace ecs
+}  // namespace einu
 

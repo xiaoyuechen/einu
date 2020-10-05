@@ -1,7 +1,7 @@
-#include <ecs-engine/graphics/color.h>
+#include <einu-engine/graphics/color.h>
 #include <gtest/gtest.h>
 
-namespace ecs {
+namespace einu {
 
 TEST(Color, GetScaled) {
   using Color = Color<>;
@@ -26,4 +26,4 @@ TEST(Color, RGBA) {
   EXPECT_EQ(c.R(), 255);
 }
 
-}  // namespace ecs
+}  // namespace einu

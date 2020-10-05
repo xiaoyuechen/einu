@@ -1,11 +1,11 @@
 
 
-#include <ecs-engine/utility/iterator/filter.h>
-#include <ecs-engine/utility/iterator/zip.h>
+#include <einu-engine/utility/iterator/filter.h>
+#include <einu-engine/utility/iterator/zip.h>
 
 #include <typeinfo>
 
-namespace ecs {
+namespace einu {
 
 TEST(Filter, ANY) {
   auto v1 = std::vector<int>({1, 2, 3, 4});
@@ -32,4 +32,4 @@ TEST(CopyFilter, ANY) {
   EXPECT_EQ(*f.begin(), std::make_tuple(3.8f, 3));
 }
 
-}  // namespace ecs
+}  // namespace einu

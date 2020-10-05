@@ -1,8 +1,8 @@
-#include "ecs-engine/graphics/vertex_format.h"
+#include "einu-engine/graphics/vertex_format.h"
 
 #include <cassert>
 
-namespace ecs {
+namespace einu {
 
 namespace {
 
@@ -54,4 +54,4 @@ void VertexFormat::Disable() {
   }
 }
 
-}  // namespace ecs
+}  // namespace einu

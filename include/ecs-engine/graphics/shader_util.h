@@ -2,7 +2,7 @@
 
 #include <glad/glad.h>
 
-namespace ecs {
+namespace einu {
 namespace shader_util {
 enum class Type {
   SHADER,
@@ -11,5 +11,5 @@ enum class Type {
 
 void CheckStatus(Type type, GLuint id);
 }  // namespace shader_util
-}  // namespace ecs
+}  // namespace einu
 

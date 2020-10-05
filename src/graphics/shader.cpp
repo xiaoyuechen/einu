@@ -1,11 +1,11 @@
-#include "ecs-engine/graphics/shader.h"
+#include "einu-engine/graphics/shader.h"
 
 #include <stdexcept>
 
-#include "ecs-engine/graphics/shader_util.h"
-#include "ecs-engine/utility/file_reader.h"
+#include "einu-engine/graphics/shader_util.h"
+#include "einu-engine/utility/file_reader.h"
 
-namespace ecs {
+namespace einu {
 
 namespace {
 
@@ -54,4 +54,4 @@ FragmentShader::FragmentShader(FragmentShader&& other)
 void swap(Shader& lhs, Shader& rhs) noexcept {
   std::swap(lhs.shader_, rhs.shader_);
 }
-}  // namespace ecs
+}  // namespace einu

@@ -2,10 +2,10 @@
 
 #include <algorithm>
 
-#include "ecs-engine/core/i_component.h"
-#include "ecs-engine/math/glm.h"
+#include "einu-engine/core/i_component.h"
+#include "einu-engine/math/glm.h"
 
-namespace ecs {
+namespace einu {
 
 struct MovementComponent : public IComponent {
   glm::vec3 direction{};
@@ -30,4 +30,4 @@ inline glm::vec3 GetVelocity(const MovementComponent& movement_comp) {
 
 }  // namespace movement_component_util
 
-}  // namespace ecs
+}  // namespace einu

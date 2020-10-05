@@ -1,6 +1,6 @@
 #pragma once
 
-namespace ecs {
+namespace einu {
 namespace misc {
 
 template <typename size_type>
@@ -17,4 +17,4 @@ class Counter {
 };
 
 }  // namespace misc
-}  // namespace ecs
+}  // namespace einu

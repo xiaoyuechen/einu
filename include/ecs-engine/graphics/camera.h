@@ -1,7 +1,7 @@
 #pragma once
-#include "ecs-engine/math/glm.h"
+#include "einu-engine/math/glm.h"
 
-namespace ecs {
+namespace einu {
 
 class Camera {
  public:

@@ -2,7 +2,7 @@
 
 #include <mutex>
 
-namespace ecs {
+namespace einu {
 
 class SingleThreaded {
  public:
@@ -45,4 +45,4 @@ inline MultiThreaded::Lock::Lock(MultiThreaded& host)
 
 inline MultiThreaded::Lock::~Lock() { host_.mutex_.unlock(); }
 
-}  // namespace ecs
+}  // namespace einu

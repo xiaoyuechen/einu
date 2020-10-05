@@ -1,7 +1,7 @@
-#include <ecs-rtti/class_index_storage.h>
+#include <einu-rtti/class_index_storage.h>
 #include <gtest/gtest.h>
 
-namespace ecs {
+namespace einu {
 namespace rtti {
 
 template <typename T>
@@ -19,4 +19,4 @@ TEST(ClassIndexStorageTest, GetClassIndex) {
 }
 
 }  // namespace rtti
-}  // namespace ecs
+}  // namespace einu

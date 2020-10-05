@@ -1,7 +1,7 @@
 
-#include <ecs-engine/utility/container/inlined_vector.h>
+#include <einu-engine/utility/container/inlined_vector.h>
 
-namespace ecs {
+namespace einu {
 
 struct InlinedVectorTest : testing::Test {
   static constexpr std::size_t cap = 666;
@@ -51,4 +51,4 @@ TEST_F(InlinedVectorTest, Erase) {
 }
 
 
-}  // namespace ecs
+}  // namespace einu

@@ -5,7 +5,7 @@
 #include <glad/glad.h>
 #include <stdexcept>
 
-namespace ecs {
+namespace einu {
 namespace system {
 class InitializeGlad {
  public:
@@ -16,4 +16,4 @@ class InitializeGlad {
   }
 };
 }  // namespace system
-}  // namespace ecs
+}  // namespace einu

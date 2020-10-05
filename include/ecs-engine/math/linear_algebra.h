@@ -1,8 +1,8 @@
 #pragma once
 
-#include "ecs-engine/math/glm.h"
+#include "einu-engine/math/glm.h"
 
-namespace ecs {
+namespace einu {
 namespace linalg {
 
 template <typename T>
@@ -78,5 +78,5 @@ void SetRotation(glm::mat<4, 4, T>& transform, const glm::tquat<T>& rotation) {
 }
 
 }  // namespace linalg
-}  // namespace ecs
+}  // namespace einu
 

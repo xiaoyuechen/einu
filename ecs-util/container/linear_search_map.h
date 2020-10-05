@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <vector>
 
-namespace ecs {
+namespace einu {
 template <typename Key, typename T,
           template <typename> typename UnderlyingContainer = std::vector>
 class LinearSearchMap {
@@ -88,4 +88,4 @@ class LinearSearchMap {
  private:
   Underlying underlying_;
 };
-}  // namespace ecs
+}  // namespace einu

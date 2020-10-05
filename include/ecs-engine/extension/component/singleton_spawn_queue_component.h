@@ -2,9 +2,9 @@
 
 #include <vector>
 
-#include "ecs-engine/core/i_singleton_component.h"
+#include "einu-engine/core/i_singleton_component.h"
 
-namespace ecs {
+namespace einu {
 
 template <typename SpawnSetting>
 struct SingletonSpawnQueueComponent : public ISingletonComponent {
@@ -12,4 +12,4 @@ struct SingletonSpawnQueueComponent : public ISingletonComponent {
   Queue queue;
 };
 
-}  // namespace ecs
+}  // namespace einu

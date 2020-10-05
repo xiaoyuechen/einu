@@ -1,11 +1,11 @@
-#include "ecs-engine/graphics/shader_program.h"
+#include "einu-engine/graphics/shader_program.h"
 
 #include <cassert>
 
-#include "ecs-engine/graphics/gl_error.h"
-#include "ecs-engine/graphics/shader_util.h"
+#include "einu-engine/graphics/gl_error.h"
+#include "einu-engine/graphics/shader_util.h"
 
-namespace ecs {
+namespace einu {
 ShaderProgram::ShaderProgram() { program_ = glCreateProgram(); }
 
 ShaderProgram::ShaderProgram(const VertexShader& vertex_shader,
@@ -58,4 +58,4 @@ void ShaderProgram::SetUniform(const char* name, const glm::vec4& vec) const {
   glUniform4fv(location, 1, glm::value_ptr(vec));
 }
 
-}  // namespace ecs
+}  // namespace einu

@@ -3,10 +3,10 @@
 #include <map>
 #include <memory>
 
-#include "ecs-engine/core/component_pool.h"
-#include "ecs-engine/utility/rtti/class_index_storage.h"
+#include "einu-engine/core/component_pool.h"
+#include "einu-engine/utility/rtti/class_index_storage.h"
 
-namespace ecs {
+namespace einu {
 
 class ComponentPoolManager {
  public:
@@ -44,4 +44,4 @@ class ComponentPoolManager {
   Map pools_;
 };
 
-}  // namespace ecs
+}  // namespace einu

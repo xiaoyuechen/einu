@@ -1,7 +1,7 @@
-#include <ecs-rtti/class_index_register.h>
+#include <einu-rtti/class_index_register.h>
 #include <gtest/gtest.h>
 
-namespace ecs {
+namespace einu {
 namespace rtti {
 
 using U = ClassIndex::IndexType;
@@ -26,4 +26,4 @@ TEST_F(ClassIndexRegisterTest, GetRegisteredCount) {
 }
 
 }  // namespace rtti
-}  // namespace ecs
+}  // namespace einu

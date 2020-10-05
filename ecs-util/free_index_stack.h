@@ -4,9 +4,9 @@
 #include <mutex>
 #include <vector>
 
-#include "ecs-engine/utility/algorithm.h"
+#include "einu-engine/utility/algorithm.h"
 
-namespace ecs {
+namespace einu {
 
 template <typename IndexType>
 class FreeIndexStack {
@@ -30,4 +30,4 @@ class FreeIndexStack {
   std::vector<IndexType> stack_;
 };
 
-}  // namespace ecs
+}  // namespace einu

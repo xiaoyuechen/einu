@@ -4,10 +4,10 @@
 #include <bitset>
 #include <tuple>
 
-#include "ecs-engine/core/i_component.h"
-#include "ecs-engine/input/input_def.h"
+#include "einu-engine/core/i_component.h"
+#include "einu-engine/input/input_def.h"
 
-namespace ecs {
+namespace einu {
 namespace comp {
 
 struct Input : public IComponent {
@@ -78,4 +78,4 @@ struct Input : public IComponent {
 };
 
 }  // namespace comp
-}  // namespace ecs
+}  // namespace einu

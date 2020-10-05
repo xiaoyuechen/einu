@@ -4,7 +4,7 @@
 #include <tuple>
 #include <type_traits>
 
-namespace ecs {
+namespace einu {
 namespace tmp {
 
 template <typename... Ts>
@@ -96,4 +96,4 @@ struct EraseAll<TypeList<Head, Rest...>, T> {
 };
 
 }  // namespace tmp
-}  // namespace ecs
+}  // namespace einu

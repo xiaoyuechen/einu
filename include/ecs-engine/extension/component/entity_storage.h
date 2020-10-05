@@ -1,10 +1,10 @@
 #pragma once
 
-#include "ecs-engine/core/entity.h"
-#include "ecs-engine/core/entity_manager.h"
-#include "ecs-engine/core/i_component.h"
+#include "einu-engine/core/entity.h"
+#include "einu-engine/core/entity_manager.h"
+#include "einu-engine/core/i_component.h"
 
-namespace ecs {
+namespace einu {
 namespace comp {
 
 template <typename EntityManager>
@@ -14,4 +14,4 @@ struct EntityStorage : public IComponent {
 };
 
 }  // namespace comp
-}  // namespace ecs
+}  // namespace einu

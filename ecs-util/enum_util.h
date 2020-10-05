@@ -2,7 +2,7 @@
 
 #include <cstddef>
 
-namespace ecs {
+namespace einu {
 
 template <typename Enum>
 struct EnableBitMaskOperators {
@@ -68,4 +68,4 @@ operator^=(Enum& lhs, Enum rhs) {
   return lhs;
 }
 
-}  // namespace ecs
+}  // namespace einu

@@ -3,9 +3,9 @@
 #include <map>
 #include <vector>
 
-#include "ecs-engine/core/entity.h"
+#include "einu-engine/core/entity.h"
 
-namespace ecs {
+namespace einu {
 namespace ai {
 namespace bt {
 
@@ -49,4 +49,4 @@ class Result {
 
 }  // namespace bt
 }  // namespace ai
-}  // namespace ecs
+}  // namespace einu

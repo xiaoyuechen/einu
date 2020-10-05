@@ -5,7 +5,7 @@
 #include <tuple>
 #include <utility>
 
-namespace ecs {
+namespace einu {
 
 namespace algo {
 
@@ -66,4 +66,4 @@ constexpr void StaticFor(Predicate&& pred) {
 
 }  // namespace algo
 
-}  // namespace ecs
+}  // namespace einu

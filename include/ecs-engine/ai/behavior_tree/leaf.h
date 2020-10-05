@@ -2,12 +2,12 @@
 
 #include <algorithm>
 
-#include "ecs-engine/ai/behavior_tree/node.h"
-#include "ecs-engine/core/system.h"
-#include "ecs-engine/utility/iterator/filter.h"
-#include "ecs-engine/utility/iterator/zip.h"
+#include "einu-engine/ai/behavior_tree/node.h"
+#include "einu-engine/core/system.h"
+#include "einu-engine/utility/iterator/filter.h"
+#include "einu-engine/utility/iterator/zip.h"
 
-namespace ecs {
+namespace einu {
 namespace ai {
 namespace bt {
 
@@ -35,4 +35,4 @@ class Leaf : public Node, public System<EntityManager, RequiredComponentList> {
 
 }  // namespace bt
 }  // namespace ai
-}  // namespace ecs
+}  // namespace einu

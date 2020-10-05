@@ -1,9 +1,9 @@
 #pragma once
 
-#include "ecs-engine/input/input.h"
-#include "ecs-engine/input/input_fn.h"
+#include "einu-engine/input/input.h"
+#include "einu-engine/input/input_fn.h"
 
-namespace ecs {
+namespace einu {
 namespace input {
 
 class InputRegister {
@@ -21,4 +21,4 @@ class InputRegister {
 };
 
 }  // namespace input
-}  // namespace ecs
+}  // namespace einu

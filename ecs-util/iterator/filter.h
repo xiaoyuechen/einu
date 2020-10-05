@@ -1,6 +1,6 @@
 #pragma once
 
-namespace ecs {
+namespace einu {
 
 namespace detail {
 
@@ -65,7 +65,7 @@ class FilterIterator {
   Filter filter_, filter_end_;
   Filter filtered_, filtered_end_;
   Subject subject_;
-};  // namespace ecs
+};  // namespace einu
 
 template <typename FilterContainer, typename SubjectContainer>
 class Filter {
@@ -120,4 +120,4 @@ class CopyFilter {
   Filter filter_impl_;
 };
 
-}  // namespace ecs
+}  // namespace einu

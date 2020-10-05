@@ -1,10 +1,10 @@
-#include <ecs-rtti/class_index.h>
+#include <einu-rtti/class_index.h>
 #include <gtest/gtest.h>
 
 #include <array>
 #include <cstdlib>
 
-namespace ecs {
+namespace einu {
 namespace rtti {
 
 using U = ClassIndex::IndexType;
@@ -37,4 +37,4 @@ TEST_F(ClassIndexTest, IsAssigned) {
 }
 
 }  // namespace rtti
-}  // namespace ecs
+}  // namespace einu

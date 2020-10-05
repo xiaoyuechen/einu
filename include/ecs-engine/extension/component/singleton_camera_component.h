@@ -1,12 +1,12 @@
 #pragma once
 
-#include "ecs-engine/core/i_singleton_component.h"
-#include "ecs-engine/graphics/projection.h"
-#include "ecs-engine/graphics/view.h"
+#include "einu-engine/core/i_singleton_component.h"
+#include "einu-engine/graphics/projection.h"
+#include "einu-engine/graphics/view.h"
 
-namespace ecs {
+namespace einu {
 struct SingletonCameraComponent : public ISingletonComponent {
   Projection projection;
   View view;
 };
-}  // namespace ecs
+}  // namespace einu

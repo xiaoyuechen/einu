@@ -1,9 +1,9 @@
-#include <ecs-engine/core/i_component.h>
-#include <ecs-engine/utility/rtti/class_index_register.h>
+#include <einu-engine/core/i_component.h>
+#include <einu-engine/utility/rtti/class_index_register.h>
 
 #include <typeinfo>
 
-namespace ecs {
+namespace einu {
 using namespace rtti;
 TEST(ClassIndexTest, Construct) { EXPECT_EQ(ClassIndex(), ~std::size_t(0)); }
 
@@ -31,4 +31,4 @@ TEST(RegisterIndex, Reg) {
   EXPECT_EQ(GetClassIndex<C2>(), ClassIndex(1));
 }
 
-}  // namespace ecs
+}  // namespace einu

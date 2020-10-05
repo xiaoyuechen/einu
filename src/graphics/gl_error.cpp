@@ -1,6 +1,6 @@
-#include "ecs-engine/graphics/gl_error.h"
+#include "einu-engine/graphics/gl_error.h"
 
-namespace ecs {
+namespace einu {
 
 GLError::GLError(const char* message)
 {

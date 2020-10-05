@@ -1,6 +1,6 @@
 #pragma once
 
-namespace ecs {
+namespace einu {
 
 class Noncopyable {
  public:
@@ -11,4 +11,4 @@ class Noncopyable {
  protected:
   ~Noncopyable() = default;
 };
-}  // namespace ecs
+}  // namespace einu

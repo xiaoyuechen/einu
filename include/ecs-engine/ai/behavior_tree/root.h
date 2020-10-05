@@ -1,10 +1,10 @@
 #pragma once
 
-#include "ecs-engine/ai/behavior_tree/detail/single_node_owner.h"
-#include "ecs-engine/ai/behavior_tree/node.h"
-#include "ecs-engine/core/system.h"
+#include "einu-engine/ai/behavior_tree/detail/single_node_owner.h"
+#include "einu-engine/ai/behavior_tree/node.h"
+#include "einu-engine/core/system.h"
 
-namespace ecs {
+namespace einu {
 namespace ai {
 namespace bt {
 
@@ -24,4 +24,4 @@ class Root : public System<EntityManager, RequiredComponentList>,
 
 }  // namespace bt
 }  // namespace ai
-}  // namespace ecs
+}  // namespace einu

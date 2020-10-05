@@ -5,12 +5,12 @@
 
 #include <stdexcept>
 
-#include "ecs-engine/core/system.h"
-#include "ecs-engine/extension/component/entity_storage.h"
-#include "ecs-engine/extension/component/window.h"
-#include "ecs-engine/utility/iterator/zip.h"
+#include "einu-engine/core/system.h"
+#include "einu-engine/extension/component/entity_storage.h"
+#include "einu-engine/extension/component/window.h"
+#include "einu-engine/utility/iterator/zip.h"
 
-namespace ecs {
+namespace einu {
 namespace system {
 
 template <typename EntityManager>
@@ -75,4 +75,4 @@ class CreateGlfwWindow
 };
 
 }  // namespace system
-}  // namespace ecs
+}  // namespace einu

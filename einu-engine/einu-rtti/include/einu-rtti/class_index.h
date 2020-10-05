@@ -3,7 +3,7 @@
 #include <cstddef>
 #include <type_traits>
 
-namespace ecs {
+namespace einu {
 namespace rtti {
 
 class ClassIndex {
@@ -23,4 +23,4 @@ class ClassIndex {
 inline bool IsAssigned(ClassIndex idx) { return idx != ClassIndex(); }
 
 }  // namespace rtti
-}  // namespace ecs
+}  // namespace einu

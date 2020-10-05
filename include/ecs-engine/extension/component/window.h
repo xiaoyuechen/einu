@@ -2,9 +2,9 @@
 
 #include <string>
 
-#include "ecs-engine/core/i_component.h"
+#include "einu-engine/core/i_component.h"
 
-namespace ecs {
+namespace einu {
 namespace comp {
 
 struct Window : public IComponent {
@@ -28,4 +28,4 @@ struct Window : public IComponent {
 };
 
 }  // namespace comp
-}  // namespace ecs
+}  // namespace einu

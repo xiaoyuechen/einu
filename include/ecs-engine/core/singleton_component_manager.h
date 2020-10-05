@@ -4,12 +4,12 @@
 #include <memory>
 #include <type_traits>
 
-#include "ecs-engine/core/component_context.h"
-#include "ecs-engine/core/i_singleton_component.h"
-#include "ecs-engine/utility/algorithm.h"
-#include "ecs-engine/utility/rtti/class_index.h"
+#include "einu-engine/core/component_context.h"
+#include "einu-engine/core/i_singleton_component.h"
+#include "einu-engine/utility/algorithm.h"
+#include "einu-engine/utility/rtti/class_index.h"
 
-namespace ecs {
+namespace einu {
 
 class SingletonComponentManager {
  public:
@@ -68,4 +68,4 @@ class SingletonComponentManager {
   Map comps_;
 };
 
-}  // namespace ecs
+}  // namespace einu

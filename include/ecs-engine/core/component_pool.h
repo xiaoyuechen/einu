@@ -2,10 +2,10 @@
 
 #include <type_traits>
 
-#include "ecs-engine/core/i_component.h"
-#include "ecs-engine/utility/pool/fixed_size_pool.h"
+#include "einu-engine/core/i_component.h"
+#include "einu-engine/utility/pool/fixed_size_pool.h"
 
-namespace ecs {
+namespace einu {
 
 class IComponentPool {
  public:
@@ -30,4 +30,4 @@ class ComponentPool : public FixedSizePool<T>, public IComponentPool {
   virtual IComponent& Acquire() override { return Pool::Acquire(); }
 };
 
-}  // namespace ecs
+}  // namespace einu

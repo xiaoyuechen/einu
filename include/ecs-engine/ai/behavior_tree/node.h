@@ -2,9 +2,9 @@
 
 #include <vector>
 
-#include "ecs-engine/ai/behavior_tree/result.h"
+#include "einu-engine/ai/behavior_tree/result.h"
 
-namespace ecs {
+namespace einu {
 namespace ai {
 namespace bt {
 
@@ -28,4 +28,4 @@ class Node {
 
 }  // namespace bt
 }  // namespace ai
-}  // namespace ecs
+}  // namespace einu

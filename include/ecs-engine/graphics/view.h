@@ -1,8 +1,8 @@
 #pragma once
 
-#include "ecs-engine/math/glm.h"
+#include "einu-engine/math/glm.h"
 
-namespace ecs {
+namespace einu {
 
 struct View {
   glm::mat4 GetViewMatrix() const;
@@ -11,5 +11,5 @@ struct View {
   glm::vec3 up{0, 1, 0};
 };
 
-}  // namespace ecs
+}  // namespace einu
 

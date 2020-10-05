@@ -2,13 +2,13 @@
 
 #include <map>
 
-#include "ecs-engine/core/component_map.h"
-#include "ecs-engine/core/component_mask.h"
-#include "ecs-engine/core/i_component.h"
-#include "ecs-engine/extension/policy/threading_model.h"
-#include "ecs-engine/utility/rtti/class_index_storage.h"
+#include "einu-engine/core/component_map.h"
+#include "einu-engine/core/component_mask.h"
+#include "einu-engine/core/i_component.h"
+#include "einu-engine/extension/policy/threading_model.h"
+#include "einu-engine/utility/rtti/class_index_storage.h"
 
-namespace ecs {
+namespace einu {
 
 class IEntity {
  public:
@@ -127,4 +127,4 @@ class Entity : public ThreadingModel, public IEntity {
   friend class EntityPool;
 };
 
-}  // namespace ecs
+}  // namespace einu

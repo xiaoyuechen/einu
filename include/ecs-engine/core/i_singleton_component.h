@@ -1,9 +1,9 @@
 #pragma once
 
-namespace ecs {
+namespace einu {
 
 struct ISingletonComponent {
   virtual ~ISingletonComponent() = default;
 };
 
-}  // namespace ecs
+}  // namespace einu

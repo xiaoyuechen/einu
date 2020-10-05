@@ -2,9 +2,9 @@
 
 #include <glad/glad.h>
 
-#include "ecs-engine/utility/noncopyable.h"
+#include "einu-engine/utility/noncopyable.h"
 
-namespace ecs {
+namespace einu {
 
 class Shader : Noncopyable {
  public:
@@ -37,4 +37,4 @@ class FragmentShader : public Shader {
   FragmentShader(FragmentShader&& other);
 };
 
-}  // namespace ecs
+}  // namespace einu

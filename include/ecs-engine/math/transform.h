@@ -1,8 +1,8 @@
 #pragma once
 
-#include "ecs-engine/math/glm.h"
+#include "einu-engine/math/glm.h"
 
-namespace ecs {
+namespace einu {
 
 namespace transform_policy {
 class UseCache {
@@ -103,5 +103,5 @@ inline void Transform<CachePolicy>::SetScale(const glm::vec3& scale) {
   CachePolicy::UpdateLinearTransform(rotation_, scale_);
 }
 
-}  // namespace ecs
+}  // namespace einu
 

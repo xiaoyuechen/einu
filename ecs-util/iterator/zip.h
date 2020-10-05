@@ -2,7 +2,7 @@
 
 #include <tuple>
 
-namespace ecs {
+namespace einu {
 
 template <typename... Itrs>
 class ZipIterator {
@@ -60,4 +60,4 @@ class Zip {
   ContainerTup containers_;
 };
 
-}  // namespace ecs
+}  // namespace einu

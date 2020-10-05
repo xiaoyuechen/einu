@@ -3,10 +3,10 @@
 #include <map>
 #include <memory>
 
-#include "ecs-engine/core/i_singleton_component.h"
-#include "ecs-engine/extension/entity/entity_prototype.h"
+#include "einu-engine/core/i_singleton_component.h"
+#include "einu-engine/extension/entity/entity_prototype.h"
 
-namespace ecs {
+namespace einu {
 
 template <typename Key, typename IEntityPrototype>
 struct SingletonEntityPrototypeMapComponent : public ISingletonComponent {
@@ -15,4 +15,4 @@ struct SingletonEntityPrototypeMapComponent : public ISingletonComponent {
   PrototypeMap map{};
 };
 
-}  // namespace ecs
+}  // namespace einu

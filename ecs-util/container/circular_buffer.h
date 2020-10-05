@@ -4,7 +4,7 @@
 #include <array>
 #include <bitset>
 
-namespace ecs {
+namespace einu {
 
 template <typename T, std::size_t N>
 class CircularBuffer {
@@ -51,4 +51,4 @@ class CircularBuffer<bool, N> {
   mutable Buffer cache_;
 };
 
-}  // namespace ecs
+}  // namespace einu

@@ -2,9 +2,9 @@
 
 #include <glad/glad.h>
 
-#include "ecs-engine/utility/Noncopyable.h"
+#include "einu-engine/utility/Noncopyable.h"
 
-namespace ecs {
+namespace einu {
 
 class Sampler : Noncopyable {
  public:
@@ -18,4 +18,4 @@ class Sampler : Noncopyable {
  private:
   GLuint sampler_ = 0;
 };
-}  // namespace ecs
+}  // namespace einu

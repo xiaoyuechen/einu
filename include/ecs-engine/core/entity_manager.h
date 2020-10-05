@@ -3,15 +3,15 @@
 #include <algorithm>
 #include <vector>
 
-#include "ecs-engine/core/component_entity_buffer.h"
-#include "ecs-engine/core/component_mask_storage.h"
-#include "ecs-engine/core/component_pool_manager.h"
-#include "ecs-engine/core/entity.h"
-#include "ecs-engine/core/entity_pool.h"
-#include "ecs-engine/core/singleton_component_manager.h"
-#include "ecs-engine/extension/policy/threading_model.h"
+#include "einu-engine/core/component_entity_buffer.h"
+#include "einu-engine/core/component_mask_storage.h"
+#include "einu-engine/core/component_pool_manager.h"
+#include "einu-engine/core/entity.h"
+#include "einu-engine/core/entity_pool.h"
+#include "einu-engine/core/singleton_component_manager.h"
+#include "einu-engine/extension/policy/threading_model.h"
 
-namespace ecs {
+namespace einu {
 
 class IEntityManager {};
 
@@ -88,4 +88,4 @@ class EntityManager : public ThreadingModel, public IEntityManager {
   EntitySet entities_;
 };
 
-}  // namespace ecs
+}  // namespace einu

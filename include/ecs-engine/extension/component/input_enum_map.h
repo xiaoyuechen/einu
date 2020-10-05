@@ -3,10 +3,10 @@
 #include <array>
 #include <tuple>
 
-#include "ecs-engine/core/i_singleton_component.h"
-#include "ecs-engine/input/input_def.h"
+#include "einu-engine/core/i_singleton_component.h"
+#include "einu-engine/input/input_def.h"
 
-namespace ecs {
+namespace einu {
 namespace comp {
 namespace single {
 class InputEnumMap : public ISingletonComponent {
@@ -33,4 +33,4 @@ class InputEnumMap : public ISingletonComponent {
 };
 }  // namespace single
 }  // namespace comp
-}  // namespace ecs
+}  // namespace einu

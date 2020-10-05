@@ -4,9 +4,9 @@
 #include <cstddef>
 #include <cstdint>
 
-#include "ecs-engine/utility/noncopyable.h"
+#include "einu-engine/utility/noncopyable.h"
 
-namespace ecs {
+namespace einu {
 
 class VertexBuffer : Noncopyable {
  public:
@@ -23,5 +23,5 @@ class VertexBuffer : Noncopyable {
  private:
   GLuint vertex_buffer_ = 0;
 };
-}  // namespace ecs
+}  // namespace einu
 

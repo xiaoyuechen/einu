@@ -2,9 +2,9 @@
 
 #include <cassert>
 
-#include "ecs-rtti/class_index_storage.h"
+#include "einu-rtti/class_index_storage.h"
 
-namespace ecs {
+namespace einu {
 namespace rtti {
 
 class ClassIndexRegister {
@@ -26,4 +26,4 @@ class ClassIndexRegister {
 };
 
 }  // namespace rtti
-}  // namespace ecs
+}  // namespace einu

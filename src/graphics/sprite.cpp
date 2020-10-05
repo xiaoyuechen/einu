@@ -1,6 +1,6 @@
-#include "ecs-engine/graphics/sprite.h"
+#include "einu-engine/graphics/sprite.h"
 
-namespace ecs {
+namespace einu {
 
 Sprite::Sprite(const Texture& tex)
     : Sprite(tex, IntRect{0, 0, tex.Width(), tex.Height()}) {}
@@ -18,4 +18,4 @@ void Sprite::CenterOrigin() noexcept {
       glm::vec3(-texture_rect.width / 2.f, -texture_rect.height / 2.f, 0.f));
 }
 
-}  // namespace ecs
+}  // namespace einu

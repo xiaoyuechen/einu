@@ -3,7 +3,7 @@
 #include <exception>
 #include <string>
 
-namespace ecs {
+namespace einu {
 
 class GLError : public std::exception {
 public:

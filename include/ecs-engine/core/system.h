@@ -3,11 +3,11 @@
 #include <tuple>
 #include <vector>
 
-#include "ecs-engine/core/component_context.h"
-#include "ecs-engine/core/component_entity_buffer.h"
-#include "ecs-engine/core/entity_manager.h"
+#include "einu-engine/core/component_context.h"
+#include "einu-engine/core/component_entity_buffer.h"
+#include "einu-engine/core/entity_manager.h"
 
-namespace ecs {
+namespace einu {
 
 template <typename EntityManager, typename RequiredComponentList>
 class System;
@@ -46,4 +46,4 @@ class System<EntityManager, ComponentList<Ts...>> {
   mutable ComponentEntityBuffer comp_ett_buffer_;
 };
 
-}  // namespace ecs
+}  // namespace einu

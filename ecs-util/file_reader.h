@@ -3,7 +3,7 @@
 #include <fstream>
 #include <vector>
 
-namespace ecs {
+namespace einu {
 
 class FileReader {
  public:
@@ -37,5 +37,5 @@ class FileWriter {
   std::ofstream ofstream_;
 };
 
-}  // namespace ecs
+}  // namespace einu
 

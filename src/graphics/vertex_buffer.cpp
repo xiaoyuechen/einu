@@ -1,6 +1,6 @@
-#include "ecs-engine/graphics/vertex_buffer.h"
+#include "einu-engine/graphics/vertex_buffer.h"
 
-namespace ecs {
+namespace einu {
 
 VertexBuffer::VertexBuffer() { glGenBuffers(1, &vertex_buffer_); }
 
@@ -26,4 +26,4 @@ void VertexBuffer::RenderInstance(GLenum primitive,
   glDrawArraysInstanced(primitive, start, count, instance_count);
 }
 
-}  // namespace ecs
+}  // namespace einu

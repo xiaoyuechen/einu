@@ -2,10 +2,10 @@
 
 #include <tuple>
 
-#include "ecs-engine/core/component_context.h"
-#include "ecs-engine/utility/algorithm.h"
+#include "einu-engine/core/component_context.h"
+#include "einu-engine/utility/algorithm.h"
 
-namespace ecs {
+namespace einu {
 
 template <typename EntityManager>
 class IEntityPrototype {
@@ -49,4 +49,4 @@ class EntityPrototype<EntityManager, ComponentList<Ts...>>
   ComponentTuple comp_tup_;
 };
 
-}  // namespace ecs
+}  // namespace einu

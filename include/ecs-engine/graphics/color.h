@@ -4,9 +4,9 @@
 #include <cstdint>
 #include <initializer_list>
 
-#include "ecs-engine/math/glm.h"
+#include "einu-engine/math/glm.h"
 
-namespace ecs {
+namespace einu {
 
 template <typename T = std::uint8_t, std::size_t channel_count = 4>
 class Color {
@@ -57,4 +57,4 @@ constexpr auto ScaleZeroOne(const Color& color, Max max) {
   return color.GetScaled(1.f / max);
 }
 
-}  // namespace ecs
+}  // namespace einu

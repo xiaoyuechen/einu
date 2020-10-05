@@ -1,8 +1,8 @@
-#include "ecs-engine/graphics/bitmap_font.h"
+#include "einu-engine/graphics/bitmap_font.h"
 
-#include "ecs-engine/math/glm.h"
+#include "einu-engine/math/glm.h"
 
-namespace ecs {
+namespace einu {
 
 BitmapFont::BitmapFont(const ShaderProgram& shader_program,
                        const Texture& texture)
@@ -62,4 +62,4 @@ void BitmapFont::Flush(const Camera& camera) {
   vertices_.clear();
 }
 
-}  // namespace ecs
+}  // namespace einu

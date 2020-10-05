@@ -2,15 +2,15 @@
 
 #include <array>
 
-#include "ecs-engine/core/system.h"
-#include "ecs-engine/extension/component/instanced_sprite_component.h"
-#include "ecs-engine/extension/component/singleton_camera_component.h"
-#include "ecs-engine/extension/component/transform_component.h"
-#include "ecs-engine/extension/policy/default_unit_policy.h"
-#include "ecs-engine/graphics/color.h"
-#include "ecs-engine/math/primitive.h"
+#include "einu-engine/core/system.h"
+#include "einu-engine/extension/component/instanced_sprite_component.h"
+#include "einu-engine/extension/component/singleton_camera_component.h"
+#include "einu-engine/extension/component/transform_component.h"
+#include "einu-engine/extension/policy/default_unit_policy.h"
+#include "einu-engine/graphics/color.h"
+#include "einu-engine/math/primitive.h"
 
-namespace ecs {
+namespace einu {
 
 using InstancedSpriteRenderingSystemComponentList =
     ComponentList<InstancedSpriteComponent, TransformComponent>;
@@ -49,9 +49,9 @@ class InstancedSpriteRenderingSystem
 
   void SetCameraUniform();
   void UpdateTupleMap();
-  void SetQuadVBOData(const ecs::IntRect& rect, const glm::ivec2& tex_extent);
+  void SetQuadVBOData(const einu::IntRect& rect, const glm::ivec2& tex_extent);
   void SetInstanceVBOData(const TupArr& tup_arr);
-  std::array<Vertex, 6> GetVerts(const ecs::IntRect& rect,
+  std::array<Vertex, 6> GetVerts(const einu::IntRect& rect,
                                  const glm::ivec2& tex_extent) const;
 
   ShaderProgram& program_;
@@ -139,7 +139,7 @@ InstancedSpriteRenderingSystem<EntityManager, UnitPolicy>::SetCameraUniform() {
 template <typename EntityManager, typename UnitPolicy>
 inline void
 InstancedSpriteRenderingSystem<EntityManager, UnitPolicy>::SetQuadVBOData(
-    const ecs::IntRect& rect, const glm::ivec2& tex_extent) {
+    const einu::IntRect& rect, const glm::ivec2& tex_extent) {
   auto verts = GetVerts(rect, tex_extent);
   quad_vbo_.Set(verts.size() * sizeof(Vertex), verts.data());
 }
@@ -167,7 +167,7 @@ inline std::array<
     typename InstancedSpriteRenderingSystem<EntityManager, UnitPolicy>::Vertex,
     6>
 InstancedSpriteRenderingSystem<EntityManager, UnitPolicy>::GetVerts(
-    const ecs::IntRect& rect, const glm::ivec2& tex_extent) const {
+    const einu::IntRect& rect, const glm::ivec2& tex_extent) const {
   /**
    * 3  ------ 2
    *   |      |
@@ -208,4 +208,4 @@ InstancedSpriteRenderingSystem<EntityManager, UnitPolicy>::UpdateTupleMap() {
   }
 }
 
-}  // namespace ecs
+}  // namespace einu

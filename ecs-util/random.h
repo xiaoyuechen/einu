@@ -3,7 +3,7 @@
 
 #include <random>
 
-namespace ecs {
+namespace einu {
 
 template <typename T>
 T GetRandomInRange(const T min, const T max);
@@ -31,6 +31,6 @@ inline T GetRandomInRange(const T min, const T max) {
   return distribution(component_manager_policy_internal::GetGenerator());
 }
 
-}  // namespace ecs
+}  // namespace einu
 
 #endif  // RANDOM_H_

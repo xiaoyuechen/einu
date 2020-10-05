@@ -2,12 +2,12 @@
 
 #include <array>
 
-#include "ecs-engine/core/i_component.h"
-#include "ecs-engine/extension/component/transform_component.h"
-#include "ecs-engine/graphics/color.h"
-#include "ecs-engine/graphics/graphics.h"
+#include "einu-engine/core/i_component.h"
+#include "einu-engine/extension/component/transform_component.h"
+#include "einu-engine/graphics/color.h"
+#include "einu-engine/graphics/graphics.h"
 
-namespace ecs {
+namespace einu {
 
 struct InstancedSpriteComponent : public IComponent {
   using Color = Color<>;
@@ -15,4 +15,4 @@ struct InstancedSpriteComponent : public IComponent {
   Color color{0xff, 0xff, 0xff, 0xff};
 };
 
-}  // namespace ecs
+}  // namespace einu

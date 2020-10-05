@@ -1,6 +1,6 @@
-#include "ecs-engine/ai/behavior_tree/decorator.h"
+#include "einu-engine/ai/behavior_tree/decorator.h"
 
-namespace ecs {
+namespace einu {
 namespace ai {
 namespace bt {
 
@@ -23,4 +23,4 @@ const Result& Succeeder::Run(float dt, const EntitySet& etts) {
 
 }  // namespace bt
 }  // namespace ai
-}  // namespace ecs
+}  // namespace einu

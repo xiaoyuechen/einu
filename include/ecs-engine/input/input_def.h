@@ -2,10 +2,10 @@
 
 #include <cstddef>
 
-#include "ecs-engine/math/glm.h"
-#include "ecs-engine/utility/enum_util.h"
+#include "einu-engine/math/glm.h"
+#include "einu-engine/utility/enum_util.h"
 
-namespace ecs {
+namespace einu {
 
 enum class Action : unsigned char;
 enum class MouseButton : unsigned char;
@@ -189,4 +189,4 @@ inline constexpr std::size_t GetEnumCount<KeyboardKey>() noexcept {
 
 #endif  // GLFW_INPUT_ENUM
 
-}  // namespace ecs
+}  // namespace einu

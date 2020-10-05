@@ -3,9 +3,9 @@
 #include <memory>
 #include <vector>
 
-#include "ecs-engine/ai/behavior_tree/node.h"
+#include "einu-engine/ai/behavior_tree/node.h"
 
-namespace ecs {
+namespace einu {
 namespace ai {
 namespace bt {
 
@@ -41,4 +41,4 @@ inline const std::vector<std::unique_ptr<Node>>& MultiNodeOwner::GetChildren()
 
 }  // namespace bt
 }  // namespace ai
-}  // namespace ecs
+}  // namespace einu

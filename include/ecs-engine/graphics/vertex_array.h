@@ -2,9 +2,9 @@
 
 #include <glad/glad.h>
 
-#include "ecs-engine/utility/noncopyable.h"
+#include "einu-engine/utility/noncopyable.h"
 
-namespace ecs {
+namespace einu {
 
 class VertexArray : Noncopyable {
  public:
@@ -16,5 +16,5 @@ class VertexArray : Noncopyable {
   GLuint vertex_array_ = 0;
 };
 
-}  // namespace ecs
+}  // namespace einu
 

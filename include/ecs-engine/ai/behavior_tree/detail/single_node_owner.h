@@ -2,9 +2,9 @@
 
 #include <memory>
 
-#include "ecs-engine/ai/behavior_tree/node.h"
+#include "einu-engine/ai/behavior_tree/node.h"
 
-namespace ecs {
+namespace einu {
 namespace ai {
 namespace bt {
 
@@ -28,7 +28,7 @@ T& SingleNodeOwner::SetChild(Args&&... args) noexcept {
   return static_cast<T&>(*child_);
 }
 
-inline Node& ecs::ai::bt::SingleNodeOwner::GetChild() noexcept {
+inline Node& einu::ai::bt::SingleNodeOwner::GetChild() noexcept {
   return *child_;
 }
 
@@ -38,4 +38,4 @@ inline const Node& SingleNodeOwner::GetChild() const noexcept {
 
 }  // namespace bt
 }  // namespace ai
-}  // namespace ecs
+}  // namespace einu

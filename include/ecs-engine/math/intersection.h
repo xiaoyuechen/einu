@@ -2,10 +2,10 @@
 
 #include <array>
 
-#include "ecs-engine/math/glm.h"
-#include "ecs-engine/math/primitive.h"
+#include "einu-engine/math/glm.h"
+#include "einu-engine/math/primitive.h"
 
-namespace ecs {
+namespace einu {
 
 class LineLineIntersectTest {
  public:
@@ -47,8 +47,8 @@ class LineLineIntersectTest {
 //  std::size_t intersect_count = 0;
 //  for (std::size_t i = 0; i != 4; ++i) {
 //    const auto &v_1 = verts[i], v_2 = verts[(i + 1) % 4];
-//    auto side = ecs::linalg::LineSegment2D{v_1, v_2};
-//    auto intersection_test = ecs::linalg::LineIntersectionTest{line, side};
+//    auto side = einu::linalg::LineSegment2D{v_1, v_2};
+//    auto intersection_test = einu::linalg::LineIntersectionTest{line, side};
 //    if (!intersection_test.IsParallel() &&
 //        intersection_test.IsIntersectionOnSecondSeg()) {
 //      auto intersection = intersection_test.GetIntersectionPoint();
@@ -105,5 +105,5 @@ inline constexpr float LineLineIntersectTest::GetU() const noexcept {
          denominator_;
 }
 
-}  // namespace ecs
+}  // namespace einu
 

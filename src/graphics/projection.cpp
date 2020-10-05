@@ -1,8 +1,8 @@
-#include "ecs-engine/graphics/projection.h"
+#include "einu-engine/graphics/projection.h"
 
-namespace ecs {
+namespace einu {
 
-glm::mat4 ecs::Projection::GetProjectionMatrix() const {
+glm::mat4 einu::Projection::GetProjectionMatrix() const {
   if (type == Projection::Type::ORTHOGRAPHIC) {
     const auto& ortho_attrib = attrib.orthographic_attrib;
     return glm::ortho(ortho_attrib.left, ortho_attrib.right,  //
@@ -42,4 +42,4 @@ Projection operator*(float ratio, const Projection& projection) {
   return projection * ratio;
 }
 
-}  // namespace ecs
+}  // namespace einu

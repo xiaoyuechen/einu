@@ -3,9 +3,9 @@
 #include <tuple>
 #include <vector>
 
-#include "ecs-engine/core/entity.h"
+#include "einu-engine/core/entity.h"
 
-namespace ecs {
+namespace einu {
 
 template <typename... Ts>
 class ComponentEntityBuffer {
@@ -29,4 +29,4 @@ class ComponentEntityBuffer {
   EntityBuffer etts_;
 };
 
-}  // namespace ecs
+}  // namespace einu

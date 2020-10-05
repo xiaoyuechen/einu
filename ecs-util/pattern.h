@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 
-namespace ecs {
+namespace einu {
 namespace patt {
 class I_observer;
 class I_subject {
@@ -24,4 +24,4 @@ class I_observer {
   std::vector<I_subject*> subject_arr_;
 };
 }  // namespace patt
-}  // namespace ecs
+}  // namespace einu

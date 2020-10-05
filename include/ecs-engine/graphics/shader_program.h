@@ -1,10 +1,10 @@
 #pragma once
 
-#include "ecs-engine/math/glm.h"
-#include "ecs-engine/utility/Noncopyable.h"
+#include "einu-engine/math/glm.h"
+#include "einu-engine/utility/Noncopyable.h"
 #include "shader.h"
 
-namespace ecs {
+namespace einu {
 
 class ShaderProgram : Noncopyable {
  public:
@@ -27,4 +27,4 @@ class ShaderProgram : Noncopyable {
   GLuint program_ = 0;
 };
 
-}  // namespace ecs
+}  // namespace einu

@@ -1,8 +1,10 @@
 #pragma once
 
-#include "ecs-rtti/class_index.h"
+#include <cassert>
 
-namespace ecs {
+#include "einu-rtti/class_index.h"
+
+namespace einu {
 namespace rtti {
 
 namespace detail {
@@ -13,9 +15,16 @@ struct ClassIndexStorage {
 }  // namespace detail
 
 template <typename T>
+void SetClassIndex(ClassIndex idx) noexcept {
+  auto& v = detail::ClassIndexStorage<std::decay<T>::type>::value;
+  assert(v == ClassIndex() && "class index of <T> is already set");
+  v = idx;
+}
+
+template <typename T>
 ClassIndex GetClassIndex() noexcept {
   return detail::ClassIndexStorage<std::decay<T>::type>::value;
 }
 
 }  // namespace rtti
-}  // namespace ecs
+}  // namespace einu

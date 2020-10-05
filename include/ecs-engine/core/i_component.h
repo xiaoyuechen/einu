@@ -1,7 +1,7 @@
 #pragma once
 
-namespace ecs {
+namespace einu {
 
 struct IComponent {};
 
-}  // namespace ecs
+}  // namespace einu

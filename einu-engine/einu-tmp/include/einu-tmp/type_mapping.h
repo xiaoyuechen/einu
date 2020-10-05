@@ -1,6 +1,6 @@
 #pragma once
 
-namespace ecs {
+namespace einu {
 namespace tmp {
 
 template <int v>
@@ -22,4 +22,4 @@ struct Type2Type {
 };
 
 }  // namespace tmp
-}  // namespace ecs
+}  // namespace einu

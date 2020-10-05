@@ -2,9 +2,9 @@
 
 #include <vector>
 
-#include "ecs-engine/math/glm.h"
+#include "einu-engine/math/glm.h"
 
-namespace ecs {
+namespace einu {
 
 template <typename T>
 class Grid {
@@ -85,5 +85,5 @@ inline std::size_t Grid<T>::GetTotalCellCount() const noexcept {
   return static_cast<std::size_t>(size_.x) * size_.y;
 }
 
-}  // namespace ecs
+}  // namespace einu
 

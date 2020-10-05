@@ -1,6 +1,6 @@
-#include "ecs-engine/ai/behavior_tree/composite.h"
+#include "einu-engine/ai/behavior_tree/composite.h"
 
-namespace ecs {
+namespace einu {
 namespace ai {
 namespace bt {
 
@@ -36,4 +36,4 @@ const Result& Selector::Run(float dt, const EntitySet& etts) {
 
 }  // namespace bt
 }  // namespace ai
-}  // namespace ecs
+}  // namespace einu

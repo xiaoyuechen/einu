@@ -2,10 +2,10 @@
 
 #include <memory>
 
-#include "ecs-engine/ai/behavior_tree/detail/single_node_owner.h"
-#include "ecs-engine/ai/behavior_tree/node.h"
+#include "einu-engine/ai/behavior_tree/detail/single_node_owner.h"
+#include "einu-engine/ai/behavior_tree/node.h"
 
-namespace ecs {
+namespace einu {
 namespace ai {
 namespace bt {
 
@@ -23,4 +23,4 @@ class Succeeder : public Decorator {
 
 }  // namespace bt
 }  // namespace ai
-}  // namespace ecs
+}  // namespace einu

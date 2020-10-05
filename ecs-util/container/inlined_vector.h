@@ -5,7 +5,7 @@
 #include <array>
 #include <initializer_list>
 
-namespace ecs {
+namespace einu {
 
 template <typename T, std::size_t N>
 class InlinedVector {
@@ -332,6 +332,6 @@ inline void InlinedVector<T, N>::resize(size_type count,
   }
 }
 
-}  // namespace ecs
+}  // namespace einu
 
 #endif  // FIXED_SIZE_VECTOR_H_

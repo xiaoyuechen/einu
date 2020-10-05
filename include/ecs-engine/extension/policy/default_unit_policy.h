@@ -1,6 +1,6 @@
 #pragma once
 
-namespace ecs {
+namespace einu {
 
 class DefaultUnitPolicy {
  public:
@@ -12,6 +12,6 @@ class DefaultUnitPolicy {
 
 //////////////////////////////////////////////////////////////////////////
 
-constexpr float ecs::DefaultUnitPolicy::PixelPerUnit() { return kPixPerUnit; }
+constexpr float einu::DefaultUnitPolicy::PixelPerUnit() { return kPixPerUnit; }
 
-}  // namespace ecs
+}  // namespace einu

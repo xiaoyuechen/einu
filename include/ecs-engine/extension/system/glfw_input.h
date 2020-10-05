@@ -2,13 +2,13 @@
 
 #include <GLFW/glfw3.h>
 
-#include "ecs-engine/core/system.h"
-#include "ecs-engine/extension/component/entity_storage.h"
+#include "einu-engine/core/system.h"
+#include "einu-engine/extension/component/entity_storage.h"
 #define GLFW_INPUT_ENUM
-#include "ecs-engine/extension/component/input.h"
-#include "ecs-engine/extension/component/window.h"
+#include "einu-engine/extension/component/input.h"
+#include "einu-engine/extension/component/window.h"
 
-namespace ecs {
+namespace einu {
 namespace system {
 
 using GlfwInputRequiredComponentList = ComponentList<comp::Window, comp::Input>;
@@ -83,4 +83,4 @@ class GlfwInput : System<EntityManager, GlfwInputRequiredComponentList> {
   }
 };
 }  // namespace system
-}  // namespace ecs
+}  // namespace einu

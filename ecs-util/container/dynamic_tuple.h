@@ -3,9 +3,9 @@
 #include <memory>
 #include <vector>
 
-#include "ecs-engine/utility/rtti/class_index_storage.h"
+#include "einu-engine/utility/rtti/class_index_storage.h"
 
-namespace ecs {
+namespace einu {
 
 // all classes must be registered using ClassIndexRegister to use this container
 template <typename Base>
@@ -39,4 +39,4 @@ class DynamicTuple {
   std::vector<Ptr> vec_;
 };
 
-}  // namespace ecs
+}  // namespace einu
