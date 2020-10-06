@@ -1,7 +1,8 @@
 add_executable(einu-core-tests 
   "component_list_test.cpp" 
   "entity_view_test.cpp"
-)
+  "einu_engine_test.cpp"
+ )
 
 target_link_libraries(einu-core-tests 
   PRIVATE einu-core 

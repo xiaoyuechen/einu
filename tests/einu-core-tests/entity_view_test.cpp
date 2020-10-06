@@ -1,4 +1,4 @@
-#include <einu-core/einu_core.h>
+#include <einu-core/entity_view.h>
 #include <gtest/gtest.h>
 
 namespace einu {
@@ -11,32 +11,31 @@ struct MockComponent2 : IComponent {
   int v = -1;
 };
 
+using namespace internal;
+
 class MockEntity : public IEntity {
- public:
-  virtual bool IsActive() const override { return false; }
-
-  virtual void Destroy() override {}
-
  private:
-  virtual bool HasComponent(rtti::ClassIndex idx) const override {
+  virtual bool HasComponents(
+      const ComponentIndexList&) const noexcept override {
     return false;
   }
 
-  virtual const IComponent& GetComponent(rtti::ClassIndex idx) const override {
+  virtual const IComponent& GetComponent(
+      rtti::ClassIndex idx) const noexcept override {
     if (idx == 1) return comp1_;
     return comp2_;
   }
 
-  virtual IComponent& GetComponent(rtti::ClassIndex idx) override {
+  virtual IComponent& GetComponent(rtti::ClassIndex idx) noexcept override {
     if (idx == rtti::ClassIndex(1)) return comp1_;
     return comp2_;
   }
 
-  virtual IComponent& AddComponent(rtti::ClassIndex idx) override {
+  virtual void AddComponent(ComponentIndex, IComponent&) override {}
+
+  virtual IComponent& RemoveComponent(rtti::ClassIndex idx) noexcept override {
     return comp1_;
   }
-
-  virtual void RemoveComponent(rtti::ClassIndex idx) override {}
 
   MockComponent1 comp1_;
   MockComponent2 comp2_;

@@ -2,19 +2,12 @@
 
 #include <cstddef>
 #include <tuple>
-#include <type_traits>
 
 namespace einu {
 namespace tmp {
 
 template <typename... Ts>
 struct TypeList {};
-
-template <typename Base, typename... Subs>
-struct SubtypeList : public tmp::TypeList<Subs...> {
-  static_assert((std::is_base_of<Base, Subs>::value && ...),
-                "<Base> must be the base class of all the <Subs>");
-};
 
 template <typename TypeList>
 struct Size;
@@ -93,6 +86,22 @@ struct EraseAll<TypeList<Head, Rest...>, T> {
   using Type =
       typename Concatenate<TypeList<Head>,
                            typename EraseAll<TypeList<Rest...>, T>::Type>::Type;
+};
+
+template <typename TypeList, typename T>
+struct CountType;
+template <typename T>
+struct CountType<TypeList<>, T> {
+  static constexpr std::size_t value = 0;
+};
+template <typename T, typename... Tail>
+struct CountType<TypeList<T, Tail...>, T> {
+  static constexpr std::size_t value =
+      1 + CountType<TypeList<Tail...>, T>::value;
+};
+template <typename T, typename Head, typename... Tail>
+struct CountType<TypeList<Head, Tail...>, T> {
+  static constexpr std::size_t value = CountType<TypeList<Tail...>, T>::value;
 };
 
 }  // namespace tmp
