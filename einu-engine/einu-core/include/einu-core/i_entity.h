@@ -10,6 +10,8 @@ using EID = std::size_t;
 
 class IEntity {
  public:
+  virtual EID GetID() const noexcept = 0;
+
   template <typename... Ts>
   bool HasComponents() const noexcept {
     return HasComponents(
