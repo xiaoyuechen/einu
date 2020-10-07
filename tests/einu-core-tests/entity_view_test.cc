@@ -18,7 +18,7 @@ class MockEntity : public IEntity {
   virtual EID GetID() const noexcept override { return 0; }
 
   virtual bool HasComponents(
-      const ComponentIndexList&) const noexcept override {
+      const ComponentMask&) const noexcept override {
     return false;
   }
 

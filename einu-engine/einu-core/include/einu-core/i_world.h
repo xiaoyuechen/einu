@@ -4,7 +4,7 @@
 
 #include "einu-core/entity_buffer.h"
 #include "einu-core/i_entity.h"
-#include "einu-core/internal/component_index_list.h"
+#include "einu-core/internal/component_signature.h"
 
 namespace einu {
 
@@ -25,8 +25,8 @@ class IWorldFactory {
 
 namespace internal {
 
-void Snapshot(const ComponentIndexList& list, const IWorld& src, IWorld& dest);
-void Merge(const ComponentIndexList& list, const IWorld& src, IWorld& dest);
+void Snapshot(const ComponentMask& list, const IWorld& src, IWorld& dest);
+void Merge(const ComponentMask& list, const IWorld& src, IWorld& dest);
 
 }  // namespace internal
 

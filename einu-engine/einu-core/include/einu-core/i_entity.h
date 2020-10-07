@@ -2,7 +2,7 @@
 
 #include "einu-core/component_list.h"
 #include "einu-core/i_component.h"
-#include "einu-core/internal/component_index_list.h"
+#include "einu-core/internal/component_signature.h"
 
 namespace einu {
 
@@ -14,8 +14,7 @@ class IEntity {
 
   template <typename... Ts>
   bool HasComponents() const noexcept {
-    return HasComponents(
-        internal::GetComponentIndexList(ComponentList<Ts...>{}));
+    return HasComponents(internal::GetComponentMask(ComponentList<Ts...>{}));
   }
 
   template <typename T>
@@ -41,7 +40,7 @@ class IEntity {
 
  protected:
   virtual bool HasComponents(
-      const internal::ComponentIndexList& idx_list) const noexcept = 0;
+      const internal::ComponentMask& sig) const noexcept = 0;
   virtual const IComponent& GetComponent(
       internal::ComponentIndex idx) const noexcept = 0;
   virtual IComponent& GetComponent(internal::ComponentIndex idx) noexcept = 0;

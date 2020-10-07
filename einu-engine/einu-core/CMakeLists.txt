@@ -4,7 +4,7 @@ add_library(
   "src/dummy.cc"
   "include/einu-core/internal/entity.h"
   "include/einu-core/internal/component_index.h"
-  "include/einu-core/internal/component_index_list.h"
+  "include/einu-core/internal/component_mask.h"
   "include/einu-core/component_list.h"
   "include/einu-core/i_component.h"
   "include/einu-core/i_entity.h"

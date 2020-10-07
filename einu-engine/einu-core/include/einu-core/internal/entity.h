@@ -1,32 +1,25 @@
 #pragma once
 
+#include <array>
 #include <bitset>
 #include <cstddef>
-#include <unordered_map>
 
 #include "einu-core/i_entity.h"
 
 namespace einu {
 namespace internal {
 
-template <std::size_t max_comp_count>
+template <std::size_t max_comp>
 class Entity : public IEntity {
  public:
   EID GetID() const noexcept override { return eid_; }
 
  private:
-  using Signature = std::bitset<max_comp_count>;
-  using SignatureTable =
-      std::unordered_map<const internal::ComponentIndexList*, Signature>;
+  using StaticComponentSignature = StaticComponentSignature<max_comp>;
 
-  static SignatureTable& GetSignatureTable() {
-    static Signature& table = *new SignatureTable{};
-    return table;
-  }
-
-  bool HasComponents(const internal::ComponentIndexList& idx_list)
-      const noexcept override final {
-    throw std::logic_error("The method or operation is not implemented.");
+  bool HasComponents(
+      const internal::ComponentMask& sig) const noexcept override final {
+    return sig & signature_ == signature_;
   }
 
   const IComponent& GetComponent(
@@ -47,7 +40,7 @@ class Entity : public IEntity {
   }
 
   EID eid_ = ~EID{0};
-  Signature signature_{};
+  StaticComponentSignature signature_{};
 };
 
 }  // namespace internal
