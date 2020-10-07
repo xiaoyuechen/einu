@@ -18,8 +18,8 @@ class Entity : public IEntity {
   using StaticComponentSignature = StaticComponentSignature<max_comp>;
 
   bool HasComponents(
-      const internal::ComponentMask& sig) const noexcept override final {
-    return sig & signature_ == signature_;
+      const internal::ComponentMask& mask) const noexcept override final {
+    return mask & mask_ == mask_;
   }
 
   const IComponent& GetComponent(
@@ -40,7 +40,7 @@ class Entity : public IEntity {
   }
 
   EID eid_ = ~EID{0};
-  StaticComponentSignature signature_{};
+  StaticComponentSignature mask_{};
 };
 
 }  // namespace internal

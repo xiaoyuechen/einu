@@ -1,4 +1,4 @@
-#include <einu-core/internal/component_signature.h>
+#include <einu-core/internal/component_mask.h>
 #include <gtest/gtest.h>
 
 namespace einu {
@@ -34,7 +34,7 @@ TEST(ComponentMask, OperatorBitWiseAnd) {
   SetComponentIndex<MockComponent1>(ComponentIndex(1));
   SetComponentIndex<MockComponent2>(ComponentIndex(2));
   using CL = ComponentList<MockComponent1, MockComponent2>;
-  auto sig = ComponentMask(CL()); 
+  auto sig = ComponentMask(CL());
   EXPECT_EQ(*(std::uint8_t*)sig.Data(), std::stoi("110", 0, 2));
   auto ssig = StaticComponentMask<16>{"1111111100000110"};
   auto r = sig & ssig;

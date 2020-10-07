@@ -4,7 +4,7 @@
 
 #include "einu-core/entity_buffer.h"
 #include "einu-core/i_entity.h"
-#include "einu-core/internal/component_signature.h"
+#include "einu-core/internal/component_mask.h"
 
 namespace einu {
 

@@ -46,54 +46,54 @@ template <std::size_t max_comp>
 using StaticComponentMask = std::bitset<max_comp>;
 
 template <std::size_t max_comp>
-StaticComponentMask<max_comp> ToStatic(const ComponentMask& sig) noexcept {
+StaticComponentMask<max_comp> ToStatic(const ComponentMask& mask) noexcept {
   auto r = StaticComponentMask<max_comp>{};
-  std::copy(sig.Data(), sig.Data() + sig.SizeInBytes(), &r);
+  std::copy(mask.Data(), mask.Data() + mask.SizeInBytes(), &r);
   return r;
 }
 
 template <std::size_t max_comp>
-bool operator==(const ComponentMask& sig,
-                const StaticComponentMask<max_comp>& ssig) noexcept {
-  return ToStatic<max_comp>(sig) == ssig;
+bool operator==(const ComponentMask& mask,
+                const StaticComponentMask<max_comp>& smask) noexcept {
+  return ToStatic<max_comp>(mask) == smask;
 }
 
 template <std::size_t max_comp>
-bool operator==(const StaticComponentMask<max_comp>& ssig,
-                const ComponentMask& sig) noexcept {
-  return sig == ssig;
+bool operator==(const StaticComponentMask<max_comp>& smask,
+                const ComponentMask& mask) noexcept {
+  return mask == smask;
 }
 
 template <std::size_t max_comp>
 StaticComponentMask<max_comp> operator&(
-    const ComponentMask& sig,
-    const StaticComponentMask<max_comp>& ssig) noexcept {
-  auto r = ToStatic<max_comp>(sig);
-  r &= ssig;
+    const ComponentMask& mask,
+    const StaticComponentMask<max_comp>& smask) noexcept {
+  auto r = ToStatic<max_comp>(mask);
+  r &= smask;
   return r;
 }
 
 template <std::size_t max_comp>
 StaticComponentMask<max_comp> operator&(
-    const StaticComponentMask<max_comp>& ssig,
-    const ComponentMask& sig) noexcept {
-  return sig & ssig;
+    const StaticComponentMask<max_comp>& smask,
+    const ComponentMask& mask) noexcept {
+  return mask & smask;
 }
 
 template <std::size_t max_comp>
 StaticComponentMask<max_comp> operator|(
-    const ComponentMask& sig,
-    const StaticComponentMask<max_comp>& ssig) noexcept {
-  auto r = ToStatic<max_comp>(sig);
-  r |= ssig;
+    const ComponentMask& mask,
+    const StaticComponentMask<max_comp>& smask) noexcept {
+  auto r = ToStatic<max_comp>(mask);
+  r |= smask;
   return r;
 }
 
 template <std::size_t max_comp>
 StaticComponentMask<max_comp> operator|(
-    const StaticComponentMask<max_comp>& ssig,
-    const ComponentMask& sig) noexcept {
-  return sig | ssig;
+    const StaticComponentMask<max_comp>& smask,
+    const ComponentMask& mask) noexcept {
+  return mask | smask;
 }
 
 }  // namespace internal

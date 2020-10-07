@@ -2,7 +2,7 @@
 
 #include "einu-core/component_list.h"
 #include "einu-core/i_component.h"
-#include "einu-core/internal/component_signature.h"
+#include "einu-core/internal/component_mask.h"
 
 namespace einu {
 
@@ -40,7 +40,7 @@ class IEntity {
 
  protected:
   virtual bool HasComponents(
-      const internal::ComponentMask& sig) const noexcept = 0;
+      const internal::ComponentMask& mask) const noexcept = 0;
   virtual const IComponent& GetComponent(
       internal::ComponentIndex idx) const noexcept = 0;
   virtual IComponent& GetComponent(internal::ComponentIndex idx) noexcept = 0;
