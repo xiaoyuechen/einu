@@ -1,7 +1,7 @@
 add_library(
   einu-core
   "include/einu-core/einu_core.h"
-  "src/dummy.cpp"
+  "src/dummy.cc"
   "include/einu-core/internal/entity.h"
   "include/einu-core/internal/component_index.h"
   "include/einu-core/internal/component_index_list.h"

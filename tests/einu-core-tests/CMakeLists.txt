@@ -1,7 +1,7 @@
 add_executable(einu-core-tests 
-  "component_list_test.cpp" 
-  "entity_view_test.cpp"
-  "einu_engine_test.cpp"
+  "component_list_test.cc" 
+  "entity_view_test.cc"
+  "einu_engine_test.cc"
  )
 
 target_link_libraries(einu-core-tests 

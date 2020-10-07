@@ -1,6 +1,6 @@
 add_executable(einu-rtti-tests 
-  "class_index_test.cpp" 
-  "class_index_storage_test.cpp" 
+  "class_index_test.cc" 
+  "class_index_storage_test.cc" 
    
 )
 
