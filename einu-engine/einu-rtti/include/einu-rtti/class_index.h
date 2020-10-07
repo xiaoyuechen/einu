@@ -10,9 +10,8 @@ class ClassIndex {
  public:
   using IndexType = std::size_t;
 
-  explicit ClassIndex(IndexType index = ~IndexType(0)) noexcept {
-    index_ = index;
-  }
+  constexpr explicit ClassIndex(IndexType index = ~IndexType(0)) noexcept
+      : index_(index) {}
   operator IndexType&() noexcept { return index_; }
   operator IndexType() const noexcept { return index_; }
 

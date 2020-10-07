@@ -8,10 +8,12 @@ namespace einu {
 namespace rtti {
 
 namespace internal {
+
 template <typename T>
 struct ClassIndexStorage {
   inline static ClassIndex value = ClassIndex();
 };
+
 }  // namespace internal
 
 template <typename T>

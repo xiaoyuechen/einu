@@ -11,12 +11,11 @@ namespace internal {
 class ComponentIndexList {
  public:
   template <typename... Ts>
-  explicit ComponentIndexList(ComponentList<Ts...>) {
-    (list_.push_back(GetComponentIndex<Ts>()), ...);
-  }
+  constexpr explicit ComponentIndexList(ComponentList<Ts...>)
+      : list_{GetComponentIndex<Ts>()...} {}
 
-  auto begin() const { return list_.begin(); }
-  auto end() const { return list_.end(); }
+  auto begin() const noexcept { return list_.begin(); }
+  auto end() const noexcept { return list_.end(); }
 
  private:
   using List = std::vector<ComponentIndex>;
@@ -26,7 +25,7 @@ class ComponentIndexList {
 template <typename... Ts>
 const ComponentIndexList& GetComponentIndexList(
     ComponentList<Ts...> comp_list) {
-  static ComponentIndexList idx_list(comp_list);
+  static auto& idx_list = *new ComponentIndexList(comp_list);
   return idx_list;
 }
 
