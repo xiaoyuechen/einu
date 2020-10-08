@@ -17,25 +17,24 @@ class MockEntity : public IEntity {
  private:
   virtual EID GetID() const noexcept override { return 0; }
 
-  virtual bool HasComponents(
-      const ComponentMask&) const noexcept override {
+  virtual bool HasComponents(const ComponentMask&) const noexcept override {
     return false;
   }
 
   virtual const IComponent& GetComponent(
-      rtti::ClassIndex idx) const noexcept override {
+      ComponentIndex idx) const noexcept override {
     if (idx == 1) return comp1_;
     return comp2_;
   }
 
-  virtual IComponent& GetComponent(rtti::ClassIndex idx) noexcept override {
+  virtual IComponent& GetComponent(ComponentIndex idx) noexcept override {
     if (idx == rtti::ClassIndex(1)) return comp1_;
     return comp2_;
   }
 
   virtual void AddComponent(ComponentIndex, IComponent&) override {}
 
-  virtual IComponent& RemoveComponent(rtti::ClassIndex idx) noexcept override {
+  virtual IComponent& RemoveComponent(ComponentIndex idx) noexcept override {
     return comp1_;
   }
 

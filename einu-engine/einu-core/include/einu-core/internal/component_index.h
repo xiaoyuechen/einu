@@ -4,10 +4,15 @@
 
 #include <type_traits>
 
+#include "einu-core/i_component.h"
+
 namespace einu {
 namespace internal {
 
-using ComponentIndex = rtti::ClassIndex;
+class ComponentIndex : public rtti::ClassIndex {
+ public:
+  using rtti::ClassIndex::ClassIndex;
+};
 
 template <typename T>
 void SetComponentIndex(ComponentIndex idx) {
@@ -20,7 +25,7 @@ template <typename T>
 ComponentIndex GetComponentIndex() {
   static_assert(std::is_base_of<IComponent, T>::value &&
                 "<IComponent> must be base of <T>");
-  return rtti::GetClassIndex<T>();
+  return ComponentIndex(rtti::GetClassIndex<T>());
 }
 
 }  // namespace internal

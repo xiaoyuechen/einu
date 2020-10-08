@@ -5,17 +5,27 @@
 #include "einu-core/entity_buffer.h"
 #include "einu-core/i_entity.h"
 #include "einu-core/internal/component_mask.h"
+#include "einu-core/internal/singlenent_index.h"
+#include "einu-core/need_list.h"
 
 namespace einu {
 
 class IWorld {
  public:
   virtual void AddEntity(IEntity& ett) = 0;
-  virtual void RemoveEntity(const IEntity& ett) = 0;
+  virtual void RemoveEntity(const IEntity& ett) noexcept = 0;
   virtual IEntity& GetEntity(EID eid) noexcept = 0;
   virtual const IEntity& GetEntity(EID eid) const noexcept = 0;
   virtual std::size_t GetEntityCount() const noexcept = 0;
   virtual void GetEntities(EntityBuffer& buffer) const = 0;
+  template <typename Singlenent>
+  const Singlenent& GetSinglenent() const noexcept {
+    return GetSinglenent(internal::GetSinglenentIndex<Singlenent>());
+  }
+
+ protected:
+  virtual const ISinglenent& GetSinglenent(
+      internal::SinglenentIndex idx) const noexcept = 0;
 };
 
 class IWorldFactory {

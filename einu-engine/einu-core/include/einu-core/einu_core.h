@@ -8,21 +8,31 @@
 #include "einu-core/i_entity.h"
 #include "einu-core/i_entity_pool.h"
 #include "einu-core/i_world.h"
+#include "einu-core/singlenent_list.h"
 
 namespace einu {
 
-struct ExampleEnginePolicy {
-  using ComponentList = ComponentList<IComponent>;
+template <typename ComponentList, typename SinglenentList>
+struct EnginePolicy;
+
+template <typename... Components, typename... Singlenents>
+struct EnginePolicy<ComponentList<Components...>,
+                    SinglenentList<Singlenents...>> {
+  using ComponentList = ComponentList<Components...>;
+  using SinglenentList = SinglenentList<Singlenents...>;
 };
 
 template <typename EnginePolicy>
 class EinuEngine {
  public:
   using ComponentList = typename EnginePolicy::ComponentList;
+  using SinglenentList = typename EnginePolicy::SinglenentList;
 
   EinuEngine(EnginePolicy policy) {
-    RequireComponentsUnique(ComponentList{});
+    RequireUnique(ComponentList{});
+    RequireUnique(SinglenentList{});
     RegisterComponents(ComponentList{});
+    RegisterSinglenents(SinglenentList{});
   }
 
   std::unique_ptr<IComponentPool> CreateComponentPool() {
@@ -42,16 +52,22 @@ class EinuEngine {
   // using ComponentMask = std::bitset<kCompCount>;
 
   template <typename... Ts>
-  static constexpr void RequireComponentsUnique(
-      einu::ComponentList<Ts...>) noexcept {
-    static_assert(((tmp::CountType<ComponentList, Ts>::value == 1) && ...),
-                  "Component must be unique");
+  static constexpr void RequireUnique(tmp::TypeList<Ts...>) noexcept {
+    static_assert(
+        ((tmp::CountType<tmp::TypeList<Ts...>, Ts>::value == 1) && ...),
+        "Type must be unique");
   }
 
   template <typename... Ts>
   static void RegisterComponents(einu::ComponentList<Ts...>) noexcept {
     auto idx = std::size_t{0};
     (internal::SetComponentIndex<Ts>(internal::ComponentIndex{idx++}), ...);
+  }
+
+  template <typename... Ts>
+  static void RegisterSinglenents(einu::SinglenentList<Ts...>) noexcept {
+    auto idx = std::size_t{0};
+    (internal::SetSinglenentIndex<Ts>(internal::SinglenentIndex{idx++}), ...);
   }
 };
 

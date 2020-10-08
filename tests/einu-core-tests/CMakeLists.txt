@@ -2,6 +2,7 @@ add_executable(einu-core-tests
   "component_mask_test.cc" 
   "entity_view_test.cc"
   "einu_engine_test.cc"
+  "need_list_test.cc"
  )
 
 target_link_libraries(einu-core-tests 
