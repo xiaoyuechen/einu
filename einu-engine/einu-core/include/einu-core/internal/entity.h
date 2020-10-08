@@ -1,7 +1,7 @@
 #pragma once
 
 #include <array>
-#include <bitset>
+#include <cassert>
 #include <cstddef>
 
 #include "einu-core/i_entity.h"
@@ -9,40 +9,52 @@
 namespace einu {
 namespace internal {
 
-template <std::size_t max_comp>
+template <int max_comp>
+using StaticComponentTable = std::array<Xnent*, max_comp>;
+
+template <int max_comp>
 class Entity : public IEntity {
  public:
-  Entity(EID eid, StaticXnentMask& mask) {}
+  using StaticXnentMask = StaticXnentMask<max_comp>;
+  using ComponentTable = StaticComponentTable<max_comp>;
 
-  EID GetID() const noexcept override { return eid_; }
+  Entity(EID eid, StaticXnentMask& mask, ComponentTable& table) noexcept
+      : eid_{eid}
+      , mask_{mask}
+      , table_{table} {}
+
+  EID GetID() const noexcept override final { return eid_; }
 
  private:
-  using StaticComponentSignature = StaticComponentSignature<max_comp>;
-
-  bool HasComponents(
-      const internal::XnentMask& mask) const noexcept override final {
-    return mask & mask_ == mask_;
+  bool HasComponentsImpl(const XnentMask& mask) const noexcept override final {
+    return (mask & mask_) == mask;
   }
 
-  const Xnent& GetComponent(
-      internal::XnentIndex idx) const noexcept override {
-    throw std::logic_error("The method or operation is not implemented.");
+  const Xnent& GetComponentImpl(XnentIndex idx) const noexcept override final {
+    return *table_[idx];
   }
 
-  Xnent& GetComponent(internal::XnentIndex idx) noexcept override {
-    throw std::logic_error("The method or operation is not implemented.");
+  Xnent& GetComponentImpl(XnentIndex idx) noexcept override final {
+    return *table_[idx];
   }
 
-  void AddComponent(internal::XnentIndex idx, Xnent& comp) override {
-    throw std::logic_error("The method or operation is not implemented.");
+  void AddComponentImpl(XnentIndex idx, Xnent& comp) override final {
+    assert(!mask_[idx] && "already have component");
+    table_[idx] = &comp;
+    mask_[idx] = true;
   }
 
-  Xnent& RemoveComponent(internal::XnentIndex idx) noexcept override {
-    throw std::logic_error("The method or operation is not implemented.");
+  Xnent& RemoveComponentImpl(XnentIndex idx) noexcept override final {
+    assert(mask_[idx] && "do not have component");
+    mask_[idx] = false;
+    auto& tmp = *table_[idx];
+    table_[idx] = nullptr;
+    return tmp;
   }
 
   EID eid_ = ~EID{0};
-  StaticComponentSignature& mask_{};
+  StaticXnentMask& mask_;
+  ComponentTable& table_;
 };
 
 }  // namespace internal

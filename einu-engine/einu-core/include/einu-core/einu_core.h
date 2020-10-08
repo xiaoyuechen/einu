@@ -27,11 +27,16 @@ class EinuEngine {
   using ComponentList = typename NeedList::ComponentList;
   using SinglenentList = typename NeedList::SinglenentList;
 
-  EinuEngine(EnginePolicy policy) {
+  EinuEngine() noexcept {
     RequireUnique(ComponentList{});
     RequireUnique(SinglenentList{});
     RegisterXnents(ComponentList{});
     RegisterXnents(SinglenentList{});
+  }
+
+  ~EinuEngine() {
+    ResetXnents(ComponentList{});
+    ResetXnents(SinglenentList{});
   }
 
   std::unique_ptr<IComponentPool> CreateComponentPool() {
@@ -48,7 +53,6 @@ class EinuEngine {
 
  private:
   static constexpr auto kCompCount = tmp::Size<ComponentList>::value;
-  // using XnentMask = std::bitset<kCompCount>;
 
   template <typename... Ts>
   static constexpr void RequireUnique(XnentList<Ts...>) noexcept {
@@ -61,6 +65,11 @@ class EinuEngine {
   static void RegisterXnents(XnentList<Ts...>) noexcept {
     auto idx = std::size_t{0};
     (internal::SetXnentIndex<Ts>(internal::XnentIndex{idx++}), ...);
+  }
+
+  template <typename... Ts>
+  static void ResetXnents(XnentList<Ts...>) noexcept {
+    (internal::ResetXnentIndex<Ts>(), ...);
   }
 };
 

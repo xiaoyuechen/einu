@@ -13,7 +13,7 @@ add_library(
   "include/einu-core/i_component_pool.h"
   "include/einu-core/entity_buffer.h"
   "include/einu-core/i_world.h"
-       "include/einu-core/need_list.h")
+  "include/einu-core/need_list.h")
 
 target_include_directories(einu-core PUBLIC "include")
 target_link_libraries(einu-core INTERFACE einu-rtti einu-tmp)

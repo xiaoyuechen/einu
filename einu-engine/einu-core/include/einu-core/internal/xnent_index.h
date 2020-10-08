@@ -1,6 +1,6 @@
 #pragma once
 
-#include <einu-rtti/class_index_storage.h>
+#include <einu-rtti/class_index.h>
 
 #include <type_traits>
 
@@ -26,6 +26,13 @@ XnentIndex GetXnentIndex() noexcept {
   static_assert(std::is_base_of<Xnent, T>::value &&
                 "<Xnent> must be base of <T>");
   return XnentIndex(rtti::GetClassIndex<T>());
+}
+
+template <typename T>
+void ResetXnentIndex() noexcept {
+  static_assert(std::is_base_of<Xnent, T>::value &&
+                "<Xnent> must be base of <T>");
+  rtti::SetClassIndex<T>(XnentIndex{0});
 }
 
 }  // namespace internal

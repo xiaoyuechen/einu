@@ -17,24 +17,24 @@ class MockEntity : public IEntity {
  private:
   virtual EID GetID() const noexcept override { return 0; }
 
-  virtual bool HasComponents(const XnentMask&) const noexcept override {
+  virtual bool HasComponentsImpl(const XnentMask&) const noexcept override {
     return false;
   }
 
-  virtual const Xnent& GetComponent(
+  virtual const Xnent& GetComponentImpl(
       XnentIndex idx) const noexcept override {
     if (idx == 1) return comp1_;
     return comp2_;
   }
 
-  virtual Xnent& GetComponent(XnentIndex idx) noexcept override {
+  virtual Xnent& GetComponentImpl(XnentIndex idx) noexcept override {
     if (idx == rtti::ClassIndex(1)) return comp1_;
     return comp2_;
   }
 
-  virtual void AddComponent(XnentIndex, Xnent&) override {}
+  virtual void AddComponentImpl(XnentIndex, Xnent&) override {}
 
-  virtual Xnent& RemoveComponent(XnentIndex idx) noexcept override {
+  virtual Xnent& RemoveComponentImpl(XnentIndex idx) noexcept override {
     return comp1_;
   }
 
@@ -58,8 +58,7 @@ TEST(EntityView, c) {
   EXPECT_EQ(c2.v, 999);
 
   auto const_view =
-      EntityView<XnentList<const MockComponent1, const MockComponent2>>(
-          ett);
+      EntityView<XnentList<const MockComponent1, const MockComponent2>>(ett);
   auto&& [cc1, cc2] = const_view();
   EXPECT_EQ(cc1.v, 666);
   EXPECT_EQ(cc2.v, 999);

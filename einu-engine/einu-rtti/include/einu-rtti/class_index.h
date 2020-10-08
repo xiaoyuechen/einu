@@ -19,7 +19,26 @@ class ClassIndex {
   IndexType index_;
 };
 
-inline bool IsAssigned(ClassIndex idx) { return idx != ClassIndex(); }
+inline bool IsAssigned(ClassIndex idx) noexcept { return idx != ClassIndex(); }
+
+namespace internal {
+
+template <typename T>
+struct ClassIndexStorage {
+  inline static ClassIndex value = ClassIndex();
+};
+
+}  // namespace internal
+
+template <typename T>
+void SetClassIndex(ClassIndex idx) noexcept {
+  internal::ClassIndexStorage<std::decay<T>::type>::value = idx;
+}
+
+template <typename T>
+ClassIndex GetClassIndex() noexcept {
+  return internal::ClassIndexStorage<std::decay<T>::type>::value;
+}
 
 }  // namespace rtti
 }  // namespace einu
