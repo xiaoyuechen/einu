@@ -18,6 +18,11 @@ class IWorld {
   virtual std::size_t GetEntityCount() const noexcept = 0;
   virtual void GetEntities(EntityBuffer& buffer) const = 0;
 
+  template <typename SinglenentList>
+  bool HasSinglenents(SinglenentList l) const noexcept {
+    return HasSinglenents(internal::GetXnentMask(l));
+  }
+
   template <typename Singlenent>
   void AddSinglenent(Singlenent& singlenent) {
     AddSinglenent(internal::GetXnentIndex<Singlenent>(), singlenent);
@@ -35,17 +40,17 @@ class IWorld {
 
   template <typename Singlenent>
   Singlenent& GetSinglenent() noexcept {
-    return const_cast<Singlenent&>(
-        static_cast<const IWorld&>(*this).GetSinglenent<Singlenent>());
+    return GetSinglenent(internal::GetXnentIndex<Singlenent>());
   }
 
  protected:
-  virtual void AddSinglenent(internal::XnentIndex idx,
-                             Xnent& singlenent) = 0;
-  virtual Xnent& RemoveSinglenent(
-      internal::XnentIndex idx) noexcept = 0;
+  virtual bool HasSinglenents(
+      const internal::XnentMask& mask) const noexcept = 0;
+  virtual void AddSinglenent(internal::XnentIndex idx, Xnent& singlenent) = 0;
+  virtual Xnent& RemoveSinglenent(internal::XnentIndex idx) noexcept = 0;
   virtual const Xnent& GetSinglenent(
       internal::XnentIndex idx) const noexcept = 0;
+  virtual Xnent& GetSinglenent(internal::XnentIndex idx) noexcept = 0;
 };
 
 class IWorldFactory {
@@ -55,19 +60,25 @@ class IWorldFactory {
 
 namespace internal {
 
-void Snapshot(const XnentMask& list, const IWorld& src, IWorld& dest);
-void Merge(const XnentMask& list, const IWorld& src, IWorld& dest);
+void Snapshot(const XnentMask& comp_mask, const XnentMask& single_mask,
+              const IWorld& src, IWorld& dest);
+void Merge(const XnentMask& comp_mask, const XnentMask& single_mask,
+           const IWorld& src, IWorld& dest);
 
 }  // namespace internal
 
-template <typename ComponentList>
-void Snapshot(ComponentList comp_list, const IWorld& src, IWorld& dest) {
-  internal::Snapshot(internal::GetComponentIndexList(comp_list), src, dest);
+template <typename NeedList>
+void Snapshot(NeedList need_list, const IWorld& src, IWorld& dest) {
+  using ComponentList = typename NeedList::ComponentList;
+  using SinglenentList = typename NeedList::SinglenentList;
+  internal::Snapshot(internal::GetXnentMask(ComponentList{}),
+                     internal::GetXnentMask(SinglenentList{}), src, dest);
 }
 
 template <typename ComponentList>
 void Merge(ComponentList comp_list, const IWorld& src, IWorld& dest) {
-  internal::Merge(internal::GetComponentIndexList(comp_list), src, dest);
+  internal::Merge(internal::GetXnentMask(ComponentList{}),
+                  internal::GetXnentMask(SinglenentList{}), src, dest);
 }
 
 }  // namespace einu
