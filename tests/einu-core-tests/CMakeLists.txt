@@ -1,5 +1,5 @@
 add_executable(einu-core-tests 
-  "component_list_test.cc" 
+  "component_mask_test.cc" 
   "entity_view_test.cc"
   "einu_engine_test.cc"
  )

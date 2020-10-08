@@ -12,6 +12,8 @@ namespace internal {
 template <std::size_t max_comp>
 class Entity : public IEntity {
  public:
+  Entity(EID eid, StaticComponentMask& mask) {}
+
   EID GetID() const noexcept override { return eid_; }
 
  private:
@@ -40,7 +42,7 @@ class Entity : public IEntity {
   }
 
   EID eid_ = ~EID{0};
-  StaticComponentSignature mask_{};
+  StaticComponentSignature& mask_{};
 };
 
 }  // namespace internal

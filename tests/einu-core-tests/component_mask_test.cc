@@ -41,5 +41,15 @@ TEST(ComponentMask, OperatorBitWiseAnd) {
   EXPECT_EQ(r.to_string(), "0000000000000110");
 }
 
+TEST(ComponentMask, EqualsEqualsOperator) {
+  SetComponentIndex<MockComponent1>(ComponentIndex(1));
+  SetComponentIndex<MockComponent2>(ComponentIndex(2));
+  using CL = ComponentList<MockComponent1, MockComponent2>;
+  auto mask = ComponentMask(CL());
+  auto smask = StaticComponentMask<16>{"1111111100000000"};
+  EXPECT_EQ(mask & smask, StaticComponentMask<16>{});
+  EXPECT_EQ(mask | smask, StaticComponentMask<16>{"1111111100000110"});
+}
+
 }  // namespace internal
 }  // namespace einu
