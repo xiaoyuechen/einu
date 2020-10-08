@@ -5,5 +5,5 @@
 #include "einu-engine/utility/rtti/class_index.h"
 
 namespace einu {
-using ComponentMap = LinearSearchMap<rtti::ClassIndex, IComponent*>;
+using ComponentMap = LinearSearchMap<rtti::ClassIndex, Xnent*>;
 }  // namespace einu

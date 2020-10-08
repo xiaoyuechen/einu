@@ -12,7 +12,7 @@ namespace internal {
 template <std::size_t max_comp>
 class Entity : public IEntity {
  public:
-  Entity(EID eid, StaticComponentMask& mask) {}
+  Entity(EID eid, StaticXnentMask& mask) {}
 
   EID GetID() const noexcept override { return eid_; }
 
@@ -20,24 +20,24 @@ class Entity : public IEntity {
   using StaticComponentSignature = StaticComponentSignature<max_comp>;
 
   bool HasComponents(
-      const internal::ComponentMask& mask) const noexcept override final {
+      const internal::XnentMask& mask) const noexcept override final {
     return mask & mask_ == mask_;
   }
 
-  const IComponent& GetComponent(
-      internal::ComponentIndex idx) const noexcept override {
+  const Xnent& GetComponent(
+      internal::XnentIndex idx) const noexcept override {
     throw std::logic_error("The method or operation is not implemented.");
   }
 
-  IComponent& GetComponent(internal::ComponentIndex idx) noexcept override {
+  Xnent& GetComponent(internal::XnentIndex idx) noexcept override {
     throw std::logic_error("The method or operation is not implemented.");
   }
 
-  void AddComponent(internal::ComponentIndex idx, IComponent& comp) override {
+  void AddComponent(internal::XnentIndex idx, Xnent& comp) override {
     throw std::logic_error("The method or operation is not implemented.");
   }
 
-  IComponent& RemoveComponent(internal::ComponentIndex idx) noexcept override {
+  Xnent& RemoveComponent(internal::XnentIndex idx) noexcept override {
     throw std::logic_error("The method or operation is not implemented.");
   }
 

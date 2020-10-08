@@ -1,7 +1,7 @@
 #pragma once
 
-#include "einu-core/i_component.h"
-#include "einu-core/internal/component_index.h"
+#include "einu-core/xnent.h"
+#include "einu-core/internal/xnent_index.h"
 
 namespace einu {
 
@@ -9,18 +9,18 @@ class IComponentPool {
  public:
   template <typename T>
   T& Acquire() {
-    return static_cast<T&>(Acquire(internal::GetComponentIndex<T>()));
+    return static_cast<T&>(Acquire(internal::GetXnentIndex<T>()));
   }
 
   template <typename T>
   void Release(const T& comp) noexcept {
-    Release(internal::GetComponentIndex<T>(), comp);
+    Release(internal::GetXnentIndex<T>(), comp);
   }
 
  protected:
-  virtual IComponent& Acquire(internal::ComponentIndex idx) = 0;
-  virtual void Release(internal::ComponentIndex idx,
-                       const IComponent& comp) = 0;
+  virtual Xnent& Acquire(internal::XnentIndex idx) = 0;
+  virtual void Release(internal::XnentIndex idx,
+                       const Xnent& comp) = 0;
 };
 
 }  // namespace einu

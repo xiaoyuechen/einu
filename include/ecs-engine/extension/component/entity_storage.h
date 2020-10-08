@@ -8,7 +8,7 @@ namespace einu {
 namespace comp {
 
 template <typename EntityManager>
-struct EntityStorage : public IComponent {
+struct EntityStorage : public Xnent {
   IEntity* ett;
   EntityManager* ett_mgr;
 };

@@ -50,7 +50,7 @@ class EntityPool : public IEntityPool {
 
  private:
   using Entities = std::vector<Entity>;
-  using ComponentMasks = std::vector<ComponentMask>;
+  using ComponentMasks = std::vector<XnentMask>;
   using ComponentMaps = std::vector<ComponentMap>;
   using FreeIndexStack = FreeIndexStack<size_type>;
 

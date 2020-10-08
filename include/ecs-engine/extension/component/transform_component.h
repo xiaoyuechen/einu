@@ -5,7 +5,7 @@
 
 namespace einu {
 
-struct TransformComponent : public IComponent {
+struct TransformComponent : public Xnent {
   using Transform = Transform<transform_policy::NoCache>;
   Transform transform{};
 };

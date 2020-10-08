@@ -18,11 +18,11 @@ TEST(ClassIndexTest, Compare) {
   EXPECT_EQ(idx, ClassIndex(666));
 }
 
-class C1 : public IComponent {
+class C1 : public Xnent {
  public:
   int val = 0;
 };
-class C2 : public IComponent {};
+class C2 : public Xnent {};
 TEST(RegisterIndex, Reg) {
   auto reg = ClassIndexRegister();
   reg.Register<C1>(ClassIndex(0));

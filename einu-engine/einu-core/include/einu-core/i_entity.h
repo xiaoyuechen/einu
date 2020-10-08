@@ -1,8 +1,8 @@
 #pragma once
 
-#include "einu-core/component_list.h"
-#include "einu-core/i_component.h"
-#include "einu-core/internal/component_mask.h"
+#include "einu-core/xnent_list.h"
+#include "einu-core/xnent.h"
+#include "einu-core/internal/xnent_mask.h"
 
 namespace einu {
 
@@ -20,33 +20,33 @@ class IEntity {
   template <typename T>
   const T& GetComponent() const noexcept {
     return static_cast<const T&>(
-        internal::GetComponent(GetComponentIndex<T>()));
+        internal::GetComponent(GetXnentIndex<T>()));
   }
 
   template <typename T>
   T& GetComponent() noexcept {
-    return static_cast<T&>(GetComponent(GetComponentIndex<T>()));
+    return static_cast<T&>(GetComponent(GetXnentIndex<T>()));
   }
 
   template <typename T>
   void AddComponent(T& comp) {
-    AddComponent(internal::GetComponentIndex<T>(), comp);
+    AddComponent(internal::GetXnentIndex<T>(), comp);
   }
 
   template <typename T>
   T& RemoveComponent() noexcept {
-    return static_cast<T&>(RemoveComponent(internal::GetComponentIndex<T>()));
+    return static_cast<T&>(RemoveComponent(internal::GetXnentIndex<T>()));
   }
 
  protected:
   virtual bool HasComponents(
-      const internal::ComponentMask& mask) const noexcept = 0;
-  virtual const IComponent& GetComponent(
-      internal::ComponentIndex idx) const noexcept = 0;
-  virtual IComponent& GetComponent(internal::ComponentIndex idx) noexcept = 0;
-  virtual void AddComponent(internal::ComponentIndex idx, IComponent& comp) = 0;
-  virtual IComponent& RemoveComponent(
-      internal::ComponentIndex idx) noexcept = 0;
+      const internal::XnentMask& mask) const noexcept = 0;
+  virtual const Xnent& GetComponent(
+      internal::XnentIndex idx) const noexcept = 0;
+  virtual Xnent& GetComponent(internal::XnentIndex idx) noexcept = 0;
+  virtual void AddComponent(internal::XnentIndex idx, Xnent& comp) = 0;
+  virtual Xnent& RemoveComponent(
+      internal::XnentIndex idx) noexcept = 0;
 };
 
 }  // namespace einu

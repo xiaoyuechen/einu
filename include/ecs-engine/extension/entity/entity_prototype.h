@@ -19,7 +19,7 @@ template <typename EntityManager, typename RequiredComponentList>
 class EntityPrototype;
 
 template <typename EntityManager, typename... Ts>
-class EntityPrototype<EntityManager, ComponentList<Ts...>>
+class EntityPrototype<EntityManager, XnentList<Ts...>>
     : public IEntityPrototype<EntityManager> {
  public:
   virtual typename EntityManager::EntityHandle CloneEntity(

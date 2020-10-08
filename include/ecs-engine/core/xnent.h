@@ -2,6 +2,6 @@
 
 namespace einu {
 
-struct ISinglenent {};
+struct Xnent {};
 
 }  // namespace einu

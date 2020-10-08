@@ -10,6 +10,6 @@
 namespace einu {
 
 static constexpr std::size_t kMaxComponentCount = 256;
-using ComponentMask = std::bitset<kMaxComponentCount>;
+using XnentMask = std::bitset<kMaxComponentCount>;
 
 }  // namespace einu

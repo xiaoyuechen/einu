@@ -9,7 +9,7 @@
 
 namespace einu {
 
-struct InstancedSpriteComponent : public IComponent {
+struct InstancedSpriteComponent : public Xnent {
   using Color = Color<>;
   const Sprite* sprite = nullptr;
   Color color{0xff, 0xff, 0xff, 0xff};

@@ -13,7 +13,7 @@
 namespace einu {
 
 using InstancedSpriteRenderingSystemComponentList =
-    ComponentList<InstancedSpriteComponent, TransformComponent>;
+    XnentList<InstancedSpriteComponent, TransformComponent>;
 
 // TODO(Xiaoyue Chen): System should not have any state
 template <typename EntityManager, typename UnitPolicy = DefaultUnitPolicy>

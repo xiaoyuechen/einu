@@ -12,12 +12,12 @@ class IWorld {
 };
 
 template <typename... Ts>
-using ComponentList = tmp::SubtypeList<IComponent, Ts...>;
+using XnentList = tmp::SubtypeList<Xnent, Ts...>;
 
 class Engine {
  public:
   template <typename... Ts>
-  void RegisterComponents(ComponentList<Ts...>) {
+  void RegisterComponents(XnentList<Ts...>) {
 
   }
 

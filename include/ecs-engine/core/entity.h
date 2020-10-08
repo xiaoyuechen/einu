@@ -39,15 +39,15 @@ class IEntity {
 
   virtual bool IsActive() const = 0;
   virtual void Destroy() = 0;
-  virtual const ComponentMask& GetComponentMask() const = 0;
+  virtual const XnentMask& GetComponentMask() const = 0;
   virtual const ComponentMap& GetComponentMap() const = 0;
 
  protected:
   virtual bool HasComponent(rtti::ClassIndex idx) const = 0;
-  virtual const IComponent& GetComponent(rtti::ClassIndex idx) const = 0;
-  virtual IComponent& GetComponent(rtti::ClassIndex idx) = 0;
+  virtual const Xnent& GetComponent(rtti::ClassIndex idx) const = 0;
+  virtual Xnent& GetComponent(rtti::ClassIndex idx) = 0;
 
-  virtual IComponent& AddComponent(rtti::ClassIndex idx) = 0;
+  virtual Xnent& AddComponent(rtti::ClassIndex idx) = 0;
   virtual void RemoveComponent(rtti::ClassIndex idx) = 0;
 };
 
@@ -72,7 +72,7 @@ class Entity : public ThreadingModel, public IEntity {
     entity_manager_->RemoveEntity(*this);
   }
 
-  virtual const ComponentMask& GetComponentMask() const override {
+  virtual const XnentMask& GetComponentMask() const override {
     return *component_mask_;
   }
 
@@ -85,15 +85,15 @@ class Entity : public ThreadingModel, public IEntity {
     return component_mask_->test(idx);
   }
 
-  virtual const IComponent& GetComponent(rtti::ClassIndex idx) const override {
+  virtual const Xnent& GetComponent(rtti::ClassIndex idx) const override {
     return *component_map_->at(idx);
   }
 
-  virtual IComponent& GetComponent(rtti::ClassIndex idx) {
+  virtual Xnent& GetComponent(rtti::ClassIndex idx) {
     return *component_map_->at(idx);
   }
 
-  virtual IComponent& AddComponent(rtti::ClassIndex idx) override {
+  virtual Xnent& AddComponent(rtti::ClassIndex idx) override {
     typename ThreadingModel::Lock lock(*this);
     assert(!component_mask_->test(idx) && "entity already has <T> component");
     component_mask_->set(idx);
@@ -120,7 +120,7 @@ class Entity : public ThreadingModel, public IEntity {
 
  private:
   EntityManager* entity_manager_ = nullptr;
-  ComponentMask* component_mask_ = nullptr;
+  XnentMask* component_mask_ = nullptr;
   ComponentMap* component_map_ = nullptr;
 
   template <typename>

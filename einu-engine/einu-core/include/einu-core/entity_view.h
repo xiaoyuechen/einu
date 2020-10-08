@@ -1,7 +1,7 @@
 #pragma once
 
-#include "einu-core/component_list.h"
 #include "einu-core/i_entity.h"
+#include "einu-core/xnent_list.h"
 
 namespace einu {
 
@@ -9,7 +9,7 @@ template <typename ComponentList>
 class EntityView;
 
 template <typename... Ts>
-class EntityView<ComponentList<Ts...>> {
+class EntityView<XnentList<Ts...>> {
  public:
   EntityView(IEntity& ett) noexcept
       : ett_(ett) {}

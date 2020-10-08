@@ -10,7 +10,7 @@ namespace ai {
 namespace bt {
 
 using MoveToRequiredComponentList =
-    ComponentList<const TransformComponent, MovementComponent,
+    XnentList<const TransformComponent, MovementComponent,
                   const DestinationComponent>;
 
 template <typename EntityManager>

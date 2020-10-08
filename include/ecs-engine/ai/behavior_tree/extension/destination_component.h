@@ -7,7 +7,7 @@ namespace einu {
 namespace ai {
 namespace bt {
 
-struct DestinationComponent : public IComponent {
+struct DestinationComponent : public Xnent {
   glm::vec3 destination{};
   float tolerance_radius = 1.f;
 };

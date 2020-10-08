@@ -7,7 +7,7 @@
 
 namespace einu {
 
-struct MovementComponent : public IComponent {
+struct MovementComponent : public Xnent {
   glm::vec3 direction{};
   float speed = 0;
   float max_speed = 0;

@@ -11,7 +11,7 @@
 namespace einu {
 namespace system {
 
-using GlfwInputRequiredComponentList = ComponentList<comp::Window, comp::Input>;
+using GlfwInputRequiredComponentList = XnentList<comp::Window, comp::Input>;
 
 template <typename EntityManager>
 class GlfwInput : System<EntityManager, GlfwInputRequiredComponentList> {

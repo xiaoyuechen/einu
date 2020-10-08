@@ -2,6 +2,6 @@
 
 namespace einu {
 
-struct IComponent {};
+class Xnent {};
 
 }  // namespace einu

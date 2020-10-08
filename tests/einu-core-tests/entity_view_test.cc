@@ -3,11 +3,11 @@
 
 namespace einu {
 
-struct MockComponent1 : IComponent {
+struct MockComponent1 : Xnent {
   int v = -1;
 };
 
-struct MockComponent2 : IComponent {
+struct MockComponent2 : Xnent {
   int v = -1;
 };
 
@@ -17,24 +17,24 @@ class MockEntity : public IEntity {
  private:
   virtual EID GetID() const noexcept override { return 0; }
 
-  virtual bool HasComponents(const ComponentMask&) const noexcept override {
+  virtual bool HasComponents(const XnentMask&) const noexcept override {
     return false;
   }
 
-  virtual const IComponent& GetComponent(
-      ComponentIndex idx) const noexcept override {
+  virtual const Xnent& GetComponent(
+      XnentIndex idx) const noexcept override {
     if (idx == 1) return comp1_;
     return comp2_;
   }
 
-  virtual IComponent& GetComponent(ComponentIndex idx) noexcept override {
+  virtual Xnent& GetComponent(XnentIndex idx) noexcept override {
     if (idx == rtti::ClassIndex(1)) return comp1_;
     return comp2_;
   }
 
-  virtual void AddComponent(ComponentIndex, IComponent&) override {}
+  virtual void AddComponent(XnentIndex, Xnent&) override {}
 
-  virtual IComponent& RemoveComponent(ComponentIndex idx) noexcept override {
+  virtual Xnent& RemoveComponent(XnentIndex idx) noexcept override {
     return comp1_;
   }
 
@@ -47,7 +47,7 @@ TEST(EntityView, c) {
   rtti::SetClassIndex<MockComponent2>(rtti::ClassIndex(2));
 
   MockEntity ett;
-  auto view = EntityView<ComponentList<MockComponent1, MockComponent2>>(ett);
+  auto view = EntityView<XnentList<MockComponent1, MockComponent2>>(ett);
 
   auto&& [comp1, comp2] = view();
   comp1.v = 666;
@@ -58,7 +58,7 @@ TEST(EntityView, c) {
   EXPECT_EQ(c2.v, 999);
 
   auto const_view =
-      EntityView<ComponentList<const MockComponent1, const MockComponent2>>(
+      EntityView<XnentList<const MockComponent1, const MockComponent2>>(
           ett);
   auto&& [cc1, cc2] = const_view();
   EXPECT_EQ(cc1.v, 666);

@@ -13,7 +13,7 @@ template <typename EntityManager, typename RequiredComponentList>
 class System;
 
 template <typename EntityManager, typename... Ts>
-class System<EntityManager, ComponentList<Ts...>> {
+class System<EntityManager, XnentList<Ts...>> {
  public:
   using ComponentEntityBuffer = ComponentEntityBuffer<Ts...>;
 

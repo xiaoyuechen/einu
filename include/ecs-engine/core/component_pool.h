@@ -10,24 +10,24 @@ namespace einu {
 class IComponentPool {
  public:
   virtual ~IComponentPool() = default;
-  virtual void Recall(const IComponent& comp) = 0;
-  virtual IComponent& Acquire() = 0;
+  virtual void Recall(const Xnent& comp) = 0;
+  virtual Xnent& Acquire() = 0;
 };
 
 template <typename T>
 class ComponentPool : public FixedSizePool<T>, public IComponentPool {
-  static_assert(std::is_base_of<IComponent, T>::value &&
-                "<T> must inherit from <IComponent>");
+  static_assert(std::is_base_of<Xnent, T>::value &&
+                "<T> must inherit from <Xnent>");
 
  public:
   using Pool = FixedSizePool<T>;
   using Pool::Pool;
 
-  virtual void Recall(const IComponent& comp) override {
+  virtual void Recall(const Xnent& comp) override {
     Pool::Recall(static_cast<const T&>(comp));
   }
 
-  virtual IComponent& Acquire() override { return Pool::Acquire(); }
+  virtual Xnent& Acquire() override { return Pool::Acquire(); }
 };
 
 }  // namespace einu

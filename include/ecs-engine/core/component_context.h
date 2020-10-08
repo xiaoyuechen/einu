@@ -10,7 +10,7 @@
 namespace einu {
 
 template <typename... Ts>
-using ComponentList = tmp::SubtypeList<IComponent, Ts...>;
+using XnentList = tmp::SubtypeList<Xnent, Ts...>;
 template <typename... Ts>
 using SingletonComponentList = tmp::SubtypeList<ISingletonComponent, Ts...>;
 
@@ -24,7 +24,7 @@ void RegisterTypeList(rtti::ClassIndexRegister& reg, tmp::TypeList<Ts...>) {
 
 }  // namespace detail
 
-template <typename ComponentList, typename SingletonComponentList>
+template <typename XnentList, typename SingletonComponentList>
 class ComponentContext {
  public:
   enum class Type {
@@ -35,7 +35,7 @@ class ComponentContext {
   using size_type = rtti::ClassIndexRegister::size_type;
 
   ComponentContext() {
-    detail::RegisterTypeList(regs_[Type::kComponent], ComponentList{});
+    detail::RegisterTypeList(regs_[Type::kComponent], XnentList{});
     detail::RegisterTypeList(regs_[Type::kSingletonComponent],
                              SingletonComponentList{});
   }

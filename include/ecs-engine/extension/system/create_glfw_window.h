@@ -15,7 +15,7 @@ namespace system {
 
 template <typename EntityManager>
 using CreateGlfwWindowComponentList =
-    ComponentList<comp::Window, comp::EntityStorage<EntityManager>>;
+    XnentList<comp::Window, comp::EntityStorage<EntityManager>>;
 
 template <typename EntityManager>
 class CreateGlfwWindow

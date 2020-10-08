@@ -7,7 +7,7 @@
 namespace einu {
 namespace comp {
 
-struct Window : public IComponent {
+struct Window : public Xnent {
   enum class Mode {
     kWindowed,
     kFullScreen,

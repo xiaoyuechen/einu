@@ -10,7 +10,7 @@
 namespace einu {
 namespace comp {
 
-struct Input : public IComponent {
+struct Input : public Xnent {
   static constexpr std::size_t kInputBufferSize = 8;
   using BoolBuffer = std::bitset<kInputBufferSize>;
   using MouseButtonBuffer = BoolBuffer;

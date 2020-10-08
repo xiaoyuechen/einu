@@ -4,8 +4,8 @@
 namespace einu {
 
 TEST(NeedList, _) {
-  using ComponentList = ComponentList<IComponent>;
-  using SinglenentList = SinglenentList<ISinglenent>;
+  using ComponentList = XnentList<Xnent>;
+  using SinglenentList = XnentList<Xnent>;
   using NeedList = NeedList<ComponentList, SinglenentList>;
   auto nl = NeedList{};
   auto cl = NeedList::ComponentList{};
