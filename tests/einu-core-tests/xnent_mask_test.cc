@@ -18,7 +18,7 @@ TEST(XnentMask, _) {
   using CL = XnentList<MockComponent1, MockComponent2>;
   auto sig = XnentMask(CL());
   EXPECT_EQ(sig.SizeInBytes(), 1);
-  EXPECT_EQ(*(std::uint8_t*)sig.Data(), std::stoi("110", 0, 2));
+  EXPECT_EQ(*(std::uint8_t*)sig.Data(), 0b110);
   ResetXnentIndex<MockComponent1>();
   ResetXnentIndex<MockComponent2>();
 }
@@ -29,7 +29,7 @@ TEST(GetXnentMask, _) {
   using CL = XnentList<MockComponent1, MockComponent2>;
   auto sig = XnentMask(CL());
   EXPECT_EQ(sig.SizeInBytes(), 2);
-  EXPECT_EQ(*(std::uint16_t*)sig.Data(), std::stoi("0100010000000000", 0, 2));
+  EXPECT_EQ(*(std::uint16_t*)sig.Data(), 0b0100010000000000);
   ResetXnentIndex<MockComponent1>();
   ResetXnentIndex<MockComponent2>();
 }
@@ -39,10 +39,10 @@ TEST(XnentMask, OperatorBitWiseAnd) {
   SetXnentIndex<MockComponent2>(XnentIndex(2));
   using CL = XnentList<MockComponent1, MockComponent2>;
   auto sig = XnentMask(CL());
-  EXPECT_EQ(*(std::uint8_t*)sig.Data(), std::stoi("110", 0, 2));
+  EXPECT_EQ(*(std::uint8_t*)sig.Data(), 0b110);
   auto ssig = StaticXnentMask<16>{"1111111100000110"};
   auto r = sig & ssig;
-  EXPECT_EQ(r.to_string(), "0000000000000110");
+  EXPECT_EQ(r.to_ulong(), 0b0000000000000110);
   ResetXnentIndex<MockComponent1>();
   ResetXnentIndex<MockComponent2>();
 }
