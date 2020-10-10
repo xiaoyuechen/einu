@@ -52,7 +52,8 @@ class EinuEngine {
   }
 
  private:
-  static constexpr auto kCompCount = tmp::Size<ComponentList>::value;
+  static constexpr auto kCompCount =
+      tmp::Size<ToTypeList<ComponentList>::Type>::value;
 
   template <typename... Ts>
   static constexpr void RequireUnique(XnentList<Ts...>) noexcept {

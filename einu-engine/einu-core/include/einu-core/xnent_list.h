@@ -2,11 +2,26 @@
 
 #include <einu-tmp/type_list.h>
 
+#include <type_traits>
+
 #include "einu-core/xnent.h"
 
 namespace einu {
 
-template <typename... Components>
-using XnentList = tmp::TypeList<Components...>;
+template <typename... Xnents>
+struct XnentList {
+  static_assert((std::is_base_of<Xnent, Xnents>::value && ...) &&
+                "must be subtype of Xnent");
+};
+
+template <typename XnentList>
+struct ToTypeList;
+
+template <typename... Xnents>
+struct ToTypeList<XnentList<Xnents...>> {
+  using Type = tmp::TypeList<Xnents...>;
+};
+
+// tmp::TypeList<Components...>;
 
 }  // namespace einu

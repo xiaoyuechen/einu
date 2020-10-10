@@ -13,7 +13,7 @@ using CL = XnentList<C0, C1, C2, C3>;
 using NL = NeedList<CL, XnentList<>>;
 using TestEnginePolicy = EnginePolicy<NL>;
 using TestEngine = EinuEngine<TestEnginePolicy>;
-using Entity = internal::Entity<tmp::Size<CL>::value>;
+using Entity = internal::Entity<tmp::Size<ToTypeList<CL>::Type>::value>;
 
 struct EntityTest : public testing::Test {
   EntityTest()
@@ -29,7 +29,7 @@ struct EntityTest : public testing::Test {
   Entity entity;
 };
 
-//TEST_F(EntityTest, can_add_component) {
+// TEST_F(EntityTest, can_add_component) {
 //  EXPECT_FALSE(entity.HasComponents(XnentList<C0>{}));
 //  entity.AddComponent(c0);
 //  EXPECT_TRUE(entity.HasComponents(XnentList<C0>{}));
