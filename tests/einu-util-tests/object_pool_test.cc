@@ -47,7 +47,7 @@ struct DynamicPoolTest : public testing::Test {
 
 TEST_F(DynamicPoolTest, pool_size_can_grow) {
   EXPECT_EQ(pool.Size(), kSize);
-  auto new_size = pool.GetGrowSize(pool.Size()) + pool.Size();
+  auto new_size = pool.Size() * 2;
   for (std::size_t i = 0; i != kSize + 1; ++i) {
     [[maybe_unused]] auto& r = pool.Acquire();
   }
@@ -60,7 +60,7 @@ TEST_F(DynamicPoolTest, pool_only_grows_when_full) {
     [[maybe_unused]] auto& r = pool.Acquire();
   }
   EXPECT_EQ(pool.Size(), kSize);
-  auto new_size = pool.GetGrowSize(pool.Size()) + pool.Size();
+  auto new_size = pool.Size() * 2;
   [[maybe_unused]] auto& r = pool.Acquire();
   EXPECT_EQ(pool.Size(), new_size);
 }
@@ -68,7 +68,7 @@ TEST_F(DynamicPoolTest, pool_only_grows_when_full) {
 TEST_F(DynamicPoolTest, release_would_make_more_space_available) {
   EXPECT_EQ(pool.Size(), kSize);
   auto acquired = std::vector<decltype(pool)::value_type*>{kSize + 1};
-  auto new_size = pool.GetGrowSize(pool.Size()) + pool.Size();
+  auto new_size = pool.Size() * 2;
   std::for_each(acquired.begin(), acquired.end(),
                 [&](auto&& v) { v = &pool.Acquire(); });
   EXPECT_EQ(pool.Size(), new_size);
@@ -84,7 +84,7 @@ TEST_F(DynamicPoolTest, release_would_make_more_space_available) {
 TEST_F(DynamicPoolTest, release_would_not_change_size) {
   EXPECT_EQ(pool.Size(), kSize);
   auto acquired = std::vector<decltype(pool)::value_type*>{kSize + 1};
-  auto new_size = pool.GetGrowSize(pool.Size()) + pool.Size();
+  auto new_size = pool.Size() * 2;
   std::for_each(acquired.begin(), acquired.end(),
                 [&](auto&& v) { v = &pool.Acquire(); });
   EXPECT_EQ(pool.Size(), new_size);

@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <functional>
+#include <memory>
 #include <numeric>
 #include <optional>
 #include <vector>
@@ -69,36 +70,56 @@ bool AllAcquired(const FixedPool<T>& pool) noexcept {
   return pool.FreePos() == pool.Size();
 }
 
+template <typename T>
+class IGrowPolicy {
+ public:
+  using size_type = std::size_t;
+
+  virtual ~IGrowPolicy() = default;
+  virtual size_type GetGrowSize(size_type old_size) const noexcept = 0;
+  virtual const T& GetValue() const noexcept = 0;
+};
+
 /**
  * This policy will double the pool size when growing is required
  * Also constructs objects with default constructor
  */
 template <typename T>
-class DefaultGrowPolicy {
+class DefaultGrowPolicy : public IGrowPolicy<T> {
  public:
-  std::size_t GetGrowSize(std::size_t old_size) const noexcept {
+  virtual size_type GetGrowSize(
+      size_type old_size) const noexcept override final {
     return old_size;
   }
-  const T& GetValue() const noexcept { return value_; }
+
+  virtual const T& GetValue() const noexcept override final { return value_; }
 
  private:
   T value_{};
 };
 
-template <typename T, typename GrowPolicy = DefaultGrowPolicy<T>>
-class DynamicPool : public GrowPolicy {
+template <typename T>
+class DynamicPool {
  public:
   using size_type = std::size_t;
   using value_type = T;
+  using GrowPolicyPtr = std::unique_ptr<IGrowPolicy<T>>;
 
-  explicit DynamicPool(size_type count) {
-    pools_.emplace_back(count, GrowPolicy::GetValue());
+  explicit DynamicPool(
+      size_type count,
+      GrowPolicyPtr grow_policy = std::make_unique<DefaultGrowPolicy<T>>()) {
+    grow_policy_ = std::move(grow_policy);
+    pools_.emplace_back(count, grow_policy_->GetValue());
+  }
+
+  void SetGrowPolicy(GrowPolicyPtr grow_policy) noexcept {
+    grow_policy_ = std::move(grow_policy);
   }
 
   [[nodiscard]] T& Acquire() {
     if (PoolsAllAcquired()) {
-      pools_.emplace_back(GrowPolicy::GetGrowSize(Size()),
-                          GrowPolicy::GetValue());
+      pools_.emplace_back(grow_policy_->GetGrowSize(Size()),
+                          grow_policy_->GetValue());
     }
 
     for (auto& pool : pools_) {
@@ -138,6 +159,7 @@ class DynamicPool : public GrowPolicy {
     return true;
   }
 
+  GrowPolicyPtr grow_policy_;
   PoolList pools_;
 };
 
