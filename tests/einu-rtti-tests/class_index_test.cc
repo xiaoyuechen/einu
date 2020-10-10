@@ -1,4 +1,4 @@
-#include <einu-rtti/class_index.h>
+#include <einu-rtti/type_id.h>
 #include <gtest/gtest.h>
 
 #include <array>
@@ -7,7 +7,7 @@
 namespace einu {
 namespace rtti {
 
-using U = ClassIndex::IndexType;
+using U = TypeID::IndexType;
 struct ClassIndexTest : testing::Test {
   ClassIndexTest() {
     srand(time(nullptr));
@@ -21,24 +21,24 @@ struct ClassIndexTest : testing::Test {
   U max = ~U(0);
 };
 
-TEST_F(ClassIndexTest, DefaultConstructor) { EXPECT_EQ(ClassIndex(), max); }
+TEST_F(ClassIndexTest, DefaultConstructor) { EXPECT_EQ(TypeID(), max); }
 
 TEST_F(ClassIndexTest, Constructor) {
   for (auto u : arr) {
-    EXPECT_EQ(ClassIndex(u), u);
+    EXPECT_EQ(TypeID(u), u);
   }
 }
 
 TEST_F(ClassIndexTest, IsAssigned) {
-  EXPECT_FALSE(IsAssigned(ClassIndex()));
+  EXPECT_FALSE(IsAssigned(TypeID()));
   for (auto u : arr) {
-    EXPECT_TRUE(IsAssigned(ClassIndex(u)));
+    EXPECT_TRUE(IsAssigned(TypeID(u)));
   }
 }
 
 template <typename T>
 void TestGetClassIndex() {
-  EXPECT_EQ(GetClassIndex<T>(), ClassIndex());
+  EXPECT_EQ(GetTypeID<T>(), TypeID());
 }
 
 template <typename... Ts>
@@ -46,7 +46,7 @@ void TestGetClassIndice() {
   (TestGetClassIndex<Ts>(), ...);
 }
 
-TEST(ClassIndexStorageTest, GetClassIndex) {
+TEST(ClassIndexStorageTest, GetTypeID) {
   TestGetClassIndice<char, int, float, double, long long>();
 }
 

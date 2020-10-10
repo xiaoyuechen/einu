@@ -13,7 +13,7 @@ class DynamicTuple {
  public:
   template <typename T, typename... Args>
   T& Make(Args&&... args) {
-    auto idx = rtti::GetClassIndex<T>();
+    auto idx = rtti::GetTypeID<T>();
     if (idx >= vec_.size()) {
       vec_.resize(idx + 1);
     }
@@ -25,7 +25,7 @@ class DynamicTuple {
 
   template <typename T>
   const T& Get() const noexcept {
-    auto idx = rtti::ClassIndexStorage::value;
+    auto idx = rtti::TypeIDStorage::value;
     return static_cast<T>(vec_[idx]);
   }
 

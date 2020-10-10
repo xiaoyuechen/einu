@@ -4,59 +4,31 @@
 namespace einu {
 namespace internal {
 
-struct MockComponent1 : Xnent {
-  int v = -1;
-};
-
-struct MockComponent2 : Xnent {
-  int v = -1;
-};
-
-TEST(XnentMask, _) {
-  SetXnentIndex<MockComponent1>(XnentIndex(1));
-  SetXnentIndex<MockComponent2>(XnentIndex(2));
-  using CL = XnentList<MockComponent1, MockComponent2>;
-  auto sig = XnentMask(CL());
+TEST(XnentMaskTest, a_new_mask_has_the_correct_size_and_bits_set_1) {
+  auto sig = DynamicXnentMask{XnentTypeID(1), XnentTypeID(2)};
   EXPECT_EQ(sig.SizeInBytes(), 1);
   EXPECT_EQ(*(std::uint8_t*)sig.Data(), 0b110);
-  ResetXnentIndex<MockComponent1>();
-  ResetXnentIndex<MockComponent2>();
 }
 
-TEST(GetXnentMask, _) {
-  SetXnentIndex<MockComponent1>(XnentIndex(10));
-  SetXnentIndex<MockComponent2>(XnentIndex(14));
-  using CL = XnentList<MockComponent1, MockComponent2>;
-  auto sig = XnentMask(CL());
+TEST(XnentMaskTest, a_new_mask_has_the_correct_size_and_bits_set_2) {
+  auto sig = DynamicXnentMask{XnentTypeID(12), XnentTypeID(6)};
   EXPECT_EQ(sig.SizeInBytes(), 2);
-  EXPECT_EQ(*(std::uint16_t*)sig.Data(), 0b0100010000000000);
-  ResetXnentIndex<MockComponent1>();
-  ResetXnentIndex<MockComponent2>();
+  EXPECT_EQ(*(std::uint16_t*)sig.Data(), 0b0001000001000000);
 }
 
-TEST(XnentMask, OperatorBitWiseAnd) {
-  SetXnentIndex<MockComponent1>(XnentIndex(1));
-  SetXnentIndex<MockComponent2>(XnentIndex(2));
-  using CL = XnentList<MockComponent1, MockComponent2>;
-  auto sig = XnentMask(CL());
+TEST(XnentMaskTest, OperatorBitWiseAnd) {
+  auto sig = DynamicXnentMask{XnentTypeID(1), XnentTypeID(2)};
   EXPECT_EQ(*(std::uint8_t*)sig.Data(), 0b110);
   auto ssig = StaticXnentMask<16>{"1111111100000110"};
   auto r = sig & ssig;
   EXPECT_EQ(r.to_ulong(), 0b0000000000000110);
-  ResetXnentIndex<MockComponent1>();
-  ResetXnentIndex<MockComponent2>();
 }
 
-TEST(XnentMask, EqualsEqualsOperator) {
-  SetXnentIndex<MockComponent1>(XnentIndex(1));
-  SetXnentIndex<MockComponent2>(XnentIndex(2));
-  using CL = XnentList<MockComponent1, MockComponent2>;
-  auto mask = XnentMask(CL());
+TEST(XnentMaskTest, EqualsEqualsOperator) {
+  auto mask = DynamicXnentMask{XnentTypeID(1), XnentTypeID(2)};
   auto smask = StaticXnentMask<16>{"1111111100000000"};
   EXPECT_EQ(mask & smask, StaticXnentMask<16>{});
   EXPECT_EQ(mask | smask, StaticXnentMask<16>{"1111111100000110"});
-  ResetXnentIndex<MockComponent1>();
-  ResetXnentIndex<MockComponent2>();
 }
 
 }  // namespace internal

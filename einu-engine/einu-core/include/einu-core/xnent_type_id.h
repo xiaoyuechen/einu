@@ -1,39 +1,40 @@
 #pragma once
 
-#include <einu-rtti/class_index.h>
+#include <einu-rtti/type_id.h>
 
+#include <cassert>
 #include <type_traits>
 
 #include "einu-core/xnent.h"
 
 namespace einu {
-namespace internal {
 
-class XnentIndex : public rtti::ClassIndex {
+class XnentTypeID : public rtti::TypeID {
  public:
-  using rtti::ClassIndex::ClassIndex;
+  using rtti::TypeID::TypeID;
 };
 
 template <typename T>
-void SetXnentIndex(XnentIndex idx) noexcept {
+void SetXnentTypeID(XnentTypeID id) noexcept {
   static_assert(std::is_base_of<Xnent, T>::value &&
                 "<Xnent> must be base of <T>");
-  rtti::SetClassIndex<T>(idx);
+  assert(!rtti::IsAssigned(GetXnentTypeID<T>()),
+         "xnent id is already assigned");
+  rtti::SetTypeID<T>(id);
 }
 
 template <typename T>
-XnentIndex GetXnentIndex() noexcept {
+XnentTypeID GetXnentTypeID() noexcept {
   static_assert(std::is_base_of<Xnent, T>::value &&
                 "<Xnent> must be base of <T>");
-  return XnentIndex(rtti::GetClassIndex<T>());
+  return XnentTypeID(rtti::GetTypeID<T>());
 }
 
 template <typename T>
-void ResetXnentIndex() noexcept {
+void ResetXnentTypeID() noexcept {
   static_assert(std::is_base_of<Xnent, T>::value &&
                 "<Xnent> must be base of <T>");
-  rtti::SetClassIndex<T>(XnentIndex{0});
+  rtti::SetTypeID<T>(XnentTypeID{0});
 }
 
-}  // namespace internal
 }  // namespace einu

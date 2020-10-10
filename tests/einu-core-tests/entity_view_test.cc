@@ -17,24 +17,25 @@ class MockEntity : public IEntity {
  private:
   virtual EID GetID() const noexcept override { return 0; }
 
-  virtual bool HasComponentsImpl(const XnentMask&) const noexcept override {
+  virtual bool HasComponentsImpl(
+      const DynamicXnentMask&) const noexcept override {
     return false;
   }
 
   virtual const Xnent& GetComponentImpl(
-      XnentIndex idx) const noexcept override {
+      XnentTypeID idx) const noexcept override {
     if (idx == 1) return comp1_;
     return comp2_;
   }
 
-  virtual Xnent& GetComponentImpl(XnentIndex idx) noexcept override {
-    if (idx == rtti::ClassIndex(1)) return comp1_;
+  virtual Xnent& GetComponentImpl(XnentTypeID idx) noexcept override {
+    if (idx == rtti::TypeID(1)) return comp1_;
     return comp2_;
   }
 
-  virtual void AddComponentImpl(XnentIndex, Xnent&) override {}
+  virtual void AddComponentImpl(XnentTypeID, Xnent&) override {}
 
-  virtual Xnent& RemoveComponentImpl(XnentIndex idx) noexcept override {
+  virtual Xnent& RemoveComponentImpl(XnentTypeID idx) noexcept override {
     return comp1_;
   }
 
@@ -43,8 +44,8 @@ class MockEntity : public IEntity {
 };
 
 TEST(EntityView, c) {
-  rtti::SetClassIndex<MockComponent1>(rtti::ClassIndex(1));
-  rtti::SetClassIndex<MockComponent2>(rtti::ClassIndex(2));
+  rtti::SetTypeID<MockComponent1>(rtti::TypeID(1));
+  rtti::SetTypeID<MockComponent2>(rtti::TypeID(2));
 
   MockEntity ett;
   auto view = EntityView<XnentList<MockComponent1, MockComponent2>>(ett);

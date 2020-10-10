@@ -29,15 +29,15 @@ struct EntityTest : public testing::Test {
   Entity entity;
 };
 
-TEST_F(EntityTest, can_add_component) {
-  EXPECT_FALSE(entity.HasComponents(XnentList<C0>{}));
-  entity.AddComponent(c0);
-  EXPECT_TRUE(entity.HasComponents(XnentList<C0>{}));
-  entity.AddComponent(c1);
-  EXPECT_TRUE(entity.HasComponents(XnentList<C0, C1>{}));
-  entity.AddComponent(c3);
-  EXPECT_TRUE(entity.HasComponents(XnentList<C0, C1, C3>{}));
-}
+//TEST_F(EntityTest, can_add_component) {
+//  EXPECT_FALSE(entity.HasComponents(XnentList<C0>{}));
+//  entity.AddComponent(c0);
+//  EXPECT_TRUE(entity.HasComponents(XnentList<C0>{}));
+//  entity.AddComponent(c1);
+//  EXPECT_TRUE(entity.HasComponents(XnentList<C0, C1>{}));
+//  entity.AddComponent(c3);
+//  EXPECT_TRUE(entity.HasComponents(XnentList<C0, C1, C3>{}));
+//}
 
 TEST_F(EntityTest, can_remove_component) {
   entity.AddComponent(c0);

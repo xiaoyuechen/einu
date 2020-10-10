@@ -25,32 +25,32 @@ class IWorld {
 
   template <typename Singlenent>
   void AddSinglenent(Singlenent& singlenent) {
-    AddSinglenent(internal::GetXnentIndex<Singlenent>(), singlenent);
+    AddSinglenent(GetXnentTypeID<Singlenent>(), singlenent);
   }
 
   template <typename Singlenent>
   Singlenent& RemoveSinglenent() noexcept {
-    return RemoveSinglenent(internal::GetXnentIndex<Singlenent>());
+    return RemoveSinglenent(GetXnentTypeID<Singlenent>());
   }
 
   template <typename Singlenent>
   const Singlenent& GetSinglenent() const noexcept {
-    return GetSinglenent(internal::GetXnentIndex<Singlenent>());
+    return GetSinglenent(GetXnentTypeID<Singlenent>());
   }
 
   template <typename Singlenent>
   Singlenent& GetSinglenent() noexcept {
-    return GetSinglenent(internal::GetXnentIndex<Singlenent>());
+    return GetSinglenent(GetXnentTypeID<Singlenent>());
   }
 
  protected:
   virtual bool HasSinglenents(
-      const internal::XnentMask& mask) const noexcept = 0;
-  virtual void AddSinglenent(internal::XnentIndex idx, Xnent& singlenent) = 0;
-  virtual Xnent& RemoveSinglenent(internal::XnentIndex idx) noexcept = 0;
+      const internal::DynamicXnentMask& mask) const noexcept = 0;
+  virtual void AddSinglenent(XnentTypeID idx, Xnent& singlenent) = 0;
+  virtual Xnent& RemoveSinglenent(XnentTypeID idx) noexcept = 0;
   virtual const Xnent& GetSinglenent(
-      internal::XnentIndex idx) const noexcept = 0;
-  virtual Xnent& GetSinglenent(internal::XnentIndex idx) noexcept = 0;
+      XnentTypeID idx) const noexcept = 0;
+  virtual Xnent& GetSinglenent(XnentTypeID idx) noexcept = 0;
 };
 
 class IWorldFactory {
@@ -60,9 +60,9 @@ class IWorldFactory {
 
 namespace internal {
 
-void Snapshot(const XnentMask& comp_mask, const XnentMask& single_mask,
+void Snapshot(const DynamicXnentMask& comp_mask, const DynamicXnentMask& single_mask,
               const IWorld& src, IWorld& dest);
-void Merge(const XnentMask& comp_mask, const XnentMask& single_mask,
+void Merge(const DynamicXnentMask& comp_mask, const DynamicXnentMask& single_mask,
            const IWorld& src, IWorld& dest);
 
 }  // namespace internal

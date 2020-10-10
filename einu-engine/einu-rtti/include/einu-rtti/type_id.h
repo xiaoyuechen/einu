@@ -6,11 +6,11 @@
 namespace einu {
 namespace rtti {
 
-class ClassIndex {
+class TypeID {
  public:
   using IndexType = std::size_t;
 
-  constexpr explicit ClassIndex(IndexType index = ~IndexType(0)) noexcept
+  constexpr explicit TypeID(IndexType index = ~IndexType(0)) noexcept
       : index_(index) {}
   operator IndexType&() noexcept { return index_; }
   operator IndexType() const noexcept { return index_; }
@@ -19,25 +19,25 @@ class ClassIndex {
   IndexType index_;
 };
 
-inline bool IsAssigned(ClassIndex idx) noexcept { return idx != ClassIndex(); }
+inline bool IsAssigned(TypeID id) noexcept { return id != TypeID(); }
 
 namespace internal {
 
 template <typename T>
-struct ClassIndexStorage {
-  inline static ClassIndex value = ClassIndex();
+struct TypeIDStorage {
+  inline static TypeID value = TypeID();
 };
 
 }  // namespace internal
 
 template <typename T>
-void SetClassIndex(ClassIndex idx) noexcept {
-  internal::ClassIndexStorage<std::decay<T>::type>::value = idx;
+void SetTypeID(TypeID id) noexcept {
+  internal::TypeIDStorage<std::decay<T>::type>::value = id;
 }
 
 template <typename T>
-ClassIndex GetClassIndex() noexcept {
-  return internal::ClassIndexStorage<std::decay<T>::type>::value;
+TypeID GetTypeID() noexcept {
+  return internal::TypeIDStorage<std::decay<T>::type>::value;
 }
 
 }  // namespace rtti

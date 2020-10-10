@@ -15,7 +15,7 @@ class SingletonComponentManager {
  public:
   template <typename T, typename... Args>
   T& Make(Args&&... args) {
-    auto idx = rtti::GetClassIndex<T>();
+    auto idx = rtti::GetTypeID<T>();
     assert(comps_.find(idx) == comps_.end() &&
            "singleton component already made");
     auto ptr = std::make_unique<T>(std::forward<Args>(args)...);
@@ -26,7 +26,7 @@ class SingletonComponentManager {
 
   template <typename T>
   const T& Get() const {
-    auto idx = rtti::GetClassIndex<T>();
+    auto idx = rtti::GetTypeID<T>();
     return static_cast<const T&>(*comps_.at(idx));
   }
 
@@ -39,7 +39,7 @@ class SingletonComponentManager {
   template <typename... Ts>
   void MakeRestDefault(SingletonComponentList<Ts...>) {
     auto f = [&](auto i) {
-      if (comps_.find(rtti::ClassIndex(i)) == comps_.end()) {
+      if (comps_.find(rtti::TypeID(i)) == comps_.end()) {
         comps[i] =
             MakeDefault<std::tuple_element<i, std::tuple<Ts...>>::type>();
       }
@@ -64,7 +64,7 @@ class SingletonComponentManager {
   }
 
   using Ptr = std::unique_ptr<ISingletonComponent>;
-  using Map = std::map<rtti::ClassIndex, Ptr>;
+  using Map = std::map<rtti::TypeID, Ptr>;
   Map comps_;
 };
 

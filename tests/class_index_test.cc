@@ -5,17 +5,17 @@
 
 namespace einu {
 using namespace rtti;
-TEST(ClassIndexTest, Construct) { EXPECT_EQ(ClassIndex(), ~std::size_t(0)); }
+TEST(ClassIndexTest, Construct) { EXPECT_EQ(TypeID(), ~std::size_t(0)); }
 
 TEST(ClassIndexTest, Algorithmic) {
-  auto idx = ClassIndex(666);
+  auto idx = TypeID(666);
   idx++;
   EXPECT_EQ(idx, 667);
 }
 
 TEST(ClassIndexTest, Compare) {
-  auto idx = ClassIndex(666);
-  EXPECT_EQ(idx, ClassIndex(666));
+  auto idx = TypeID(666);
+  EXPECT_EQ(idx, TypeID(666));
 }
 
 class C1 : public Xnent {
@@ -25,10 +25,10 @@ class C1 : public Xnent {
 class C2 : public Xnent {};
 TEST(RegisterIndex, Reg) {
   auto reg = ClassIndexRegister();
-  reg.Register<C1>(ClassIndex(0));
-  reg.Register<C2>(ClassIndex(1));
-  EXPECT_EQ(GetClassIndex<C1>(), ClassIndex(0));
-  EXPECT_EQ(GetClassIndex<C2>(), ClassIndex(1));
+  reg.Register<C1>(TypeID(0));
+  reg.Register<C2>(TypeID(1));
+  EXPECT_EQ(GetClassIndex<C1>(), TypeID(0));
+  EXPECT_EQ(GetClassIndex<C2>(), TypeID(1));
 }
 
 }  // namespace einu

@@ -23,33 +23,31 @@ class IEntity {
 
   template <typename T>
   const T& GetComponent() const noexcept {
-    return static_cast<const T&>(
-        GetComponentImpl(internal::GetXnentIndex<T>()));
+    return static_cast<const T&>(GetComponentImpl(GetXnentTypeID<T>()));
   }
 
   template <typename T>
   T& GetComponent() noexcept {
-    return static_cast<T&>(GetComponentImpl(internal::GetXnentIndex<T>()));
+    return static_cast<T&>(GetComponentImpl(GetXnentTypeID<T>()));
   }
 
   template <typename T>
   void AddComponent(T& comp) {
-    AddComponentImpl(internal::GetXnentIndex<T>(), comp);
+    AddComponentImpl(GetXnentTypeID<T>(), comp);
   }
 
   template <typename T>
   [[nodiscard]] T& RemoveComponent() noexcept {
-    return static_cast<T&>(RemoveComponentImpl(internal::GetXnentIndex<T>()));
+    return static_cast<T&>(RemoveComponentImpl(GetXnentTypeID<T>()));
   }
 
  protected:
   virtual bool HasComponentsImpl(
-      const internal::XnentMask& mask) const noexcept = 0;
-  virtual const Xnent& GetComponentImpl(
-      internal::XnentIndex idx) const noexcept = 0;
-  virtual Xnent& GetComponentImpl(internal::XnentIndex idx) noexcept = 0;
-  virtual void AddComponentImpl(internal::XnentIndex idx, Xnent& comp) = 0;
-  virtual Xnent& RemoveComponentImpl(internal::XnentIndex idx) noexcept = 0;
+      const internal::DynamicXnentMask& mask) const noexcept = 0;
+  virtual const Xnent& GetComponentImpl(XnentTypeID idx) const noexcept = 0;
+  virtual Xnent& GetComponentImpl(XnentTypeID idx) noexcept = 0;
+  virtual void AddComponentImpl(XnentTypeID idx, Xnent& comp) = 0;
+  virtual Xnent& RemoveComponentImpl(XnentTypeID idx) noexcept = 0;
 };
 
 }  // namespace einu

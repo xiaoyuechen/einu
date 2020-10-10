@@ -8,16 +8,16 @@ namespace einu {
 namespace detail {
 
 template <typename T>
-void SetBit(XnentMask& mask) noexcept {
-  auto idx = rtti::GetClassIndex<T>();
-  assert(idx != rtti::ClassIndex() && "<T> is not registered");
+void SetBit(DynamicXnentMask& mask) noexcept {
+  auto idx = rtti::GetTypeID<T>();
+  assert(idx != rtti::TypeID() && "<T> is not registered");
   mask.set(idx);
 }
 
 template <typename... Ts>
-XnentMask& GetComponentMask() {
-  static XnentMask value = [] {
-    XnentMask mask;
+DynamicXnentMask& GetComponentMask() {
+  static DynamicXnentMask value = [] {
+    DynamicXnentMask mask;
     (SetBit<Ts>(mask), ...);
     return mask;
   }();

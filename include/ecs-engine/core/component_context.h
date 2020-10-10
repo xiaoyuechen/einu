@@ -18,7 +18,7 @@ namespace detail {
 template <typename... Ts>
 void RegisterTypeList(rtti::ClassIndexRegister& reg, tmp::TypeList<Ts...>) {
   (reg.Register<Ts>(
-       rtti::ClassIndex(tmp::IndexOf<tmp::TypeList<Ts...>, Ts>::value)),
+       rtti::TypeID(tmp::IndexOf<tmp::TypeList<Ts...>, Ts>::value)),
    ...);
 }
 

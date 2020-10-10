@@ -3,7 +3,7 @@ add_library(
   "include/einu-core/einu_core.h"
   "src/dummy.cc"
   "include/einu-core/internal/entity.h"
-  "include/einu-core/internal/xnent_index.h"
+  "include/einu-core/xnent_type_id.h"
   "include/einu-core/internal/xnent_mask.h"
   "include/einu-core/xnent_list.h"
   "include/einu-core/xnent.h"
