@@ -46,11 +46,11 @@ class IWorld {
  protected:
   virtual bool HasSinglenents(
       const internal::DynamicXnentMask& mask) const noexcept = 0;
-  virtual void AddSinglenent(XnentTypeID idx, Xnent& singlenent) = 0;
-  virtual Xnent& RemoveSinglenent(XnentTypeID idx) noexcept = 0;
+  virtual void AddSinglenent(internal::XnentTypeID idx, Xnent& singlenent) = 0;
+  virtual Xnent& RemoveSinglenent(internal::XnentTypeID idx) noexcept = 0;
   virtual const Xnent& GetSinglenent(
-      XnentTypeID idx) const noexcept = 0;
-  virtual Xnent& GetSinglenent(XnentTypeID idx) noexcept = 0;
+      internal::XnentTypeID idx) const noexcept = 0;
+  virtual Xnent& GetSinglenent(internal::XnentTypeID idx) noexcept = 0;
 };
 
 class IWorldFactory {
@@ -60,10 +60,12 @@ class IWorldFactory {
 
 namespace internal {
 
-void Snapshot(const DynamicXnentMask& comp_mask, const DynamicXnentMask& single_mask,
-              const IWorld& src, IWorld& dest);
-void Merge(const DynamicXnentMask& comp_mask, const DynamicXnentMask& single_mask,
-           const IWorld& src, IWorld& dest);
+void Snapshot(const DynamicXnentMask& comp_mask,
+              const DynamicXnentMask& single_mask, const IWorld& src,
+              IWorld& dest);
+void Merge(const DynamicXnentMask& comp_mask,
+           const DynamicXnentMask& single_mask, const IWorld& src,
+           IWorld& dest);
 
 }  // namespace internal
 

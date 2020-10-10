@@ -1,7 +1,7 @@
 #pragma once
 
+#include "einu-core/internal/xnent_type_id.h"
 #include "einu-core/xnent.h"
-#include "einu-core/xnent_type_id.h"
 
 namespace einu {
 
@@ -18,8 +18,9 @@ class IComponentPool {
   }
 
  protected:
-  virtual Xnent& AcquireImpl(XnentTypeID idx) = 0;
-  virtual void ReleaseImpl(XnentTypeID idx, const Xnent& comp) noexcept = 0;
+  virtual Xnent& AcquireImpl(internal::XnentTypeID idx) = 0;
+  virtual void ReleaseImpl(internal::XnentTypeID idx,
+                           const Xnent& comp) noexcept = 0;
 };
 
 }  // namespace einu

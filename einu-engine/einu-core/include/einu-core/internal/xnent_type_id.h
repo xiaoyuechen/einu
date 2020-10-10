@@ -8,6 +8,7 @@
 #include "einu-core/xnent.h"
 
 namespace einu {
+namespace internal {
 
 class XnentTypeID : public rtti::TypeID {
  public:
@@ -18,7 +19,7 @@ template <typename T>
 void SetXnentTypeID(XnentTypeID id) noexcept {
   static_assert(std::is_base_of<Xnent, T>::value &&
                 "<Xnent> must be base of <T>");
-  assert(!rtti::IsAssigned(GetXnentTypeID<T>()),
+  assert(!rtti::IsAssigned(GetXnentTypeID<T>()) &&
          "xnent id is already assigned");
   rtti::SetTypeID<T>(id);
 }
@@ -37,4 +38,5 @@ void ResetXnentTypeID() noexcept {
   rtti::SetTypeID<T>(XnentTypeID{0});
 }
 
+}  // namespace internal
 }  // namespace einu

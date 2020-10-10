@@ -64,12 +64,12 @@ class EinuEngine {
   template <typename... Ts>
   static void RegisterXnents(XnentList<Ts...>) noexcept {
     auto idx = std::size_t{0};
-    (SetXnentTypeID<Ts>(XnentTypeID{idx++}), ...);
+    (internal::SetXnentTypeID<Ts>(internal::XnentTypeID{idx++}), ...);
   }
 
   template <typename... Ts>
   static void ResetXnents(XnentList<Ts...>) noexcept {
-    (ResetXnentTypeID<Ts>(), ...);
+    (internal::ResetXnentTypeID<Ts>(), ...);
   }
 };
 
