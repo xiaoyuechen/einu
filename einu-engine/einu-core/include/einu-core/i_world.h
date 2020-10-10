@@ -19,28 +19,35 @@ class IWorld {
   virtual void GetEntities(EntityBuffer& buffer) const = 0;
 
   template <typename SinglenentList>
-  bool HasSinglenents(SinglenentList l) const noexcept {
-    return HasSinglenents(internal::GetXnentMask(l));
+  bool HasSinglenents(
+      SinglenentList l,
+      const internal::DynamicXnentMask& mask =
+          internal::GetXnentMask(SinglenentList{})) const noexcept {
+    return HasSinglenents(mask);
   }
 
   template <typename Singlenent>
-  void AddSinglenent(Singlenent& singlenent) {
-    AddSinglenent(GetXnentTypeID<Singlenent>(), singlenent);
+  void AddSinglenent(Singlenent& singlenent,
+                     internal::XnentTypeID id = GetXnentTypeID<Singlenent>()) {
+    AddSinglenent(id, singlenent);
   }
 
   template <typename Singlenent>
-  Singlenent& RemoveSinglenent() noexcept {
-    return RemoveSinglenent(GetXnentTypeID<Singlenent>());
+  Singlenent& RemoveSinglenent(
+      internal::XnentTypeID id = GetXnentTypeID<Singlenent>()) noexcept {
+    return RemoveSinglenent(id);
   }
 
   template <typename Singlenent>
-  const Singlenent& GetSinglenent() const noexcept {
-    return GetSinglenent(GetXnentTypeID<Singlenent>());
+  const Singlenent& GetSinglenent(
+      internal::XnentTypeID id = GetXnentTypeID<Singlenent>()) const noexcept {
+    return GetSinglenent(id);
   }
 
   template <typename Singlenent>
-  Singlenent& GetSinglenent() noexcept {
-    return GetSinglenent(GetXnentTypeID<Singlenent>());
+  Singlenent& GetSinglenent(
+      internal::XnentTypeID id = GetXnentTypeID<Singlenent>()) noexcept {
+    return GetSinglenent(id);
   }
 
  protected:
