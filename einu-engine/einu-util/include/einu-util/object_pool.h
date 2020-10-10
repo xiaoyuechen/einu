@@ -109,7 +109,7 @@ class DynamicPool {
       size_type count,
       GrowPolicyPtr grow_policy = std::make_unique<DefaultGrowPolicy<T>>()) {
     grow_policy_ = std::move(grow_policy);
-    pools_.emplace_back(count, grow_policy_->GetValue());
+    Grow(count, grow_policy_->GetValue());
   }
 
   void SetGrowPolicy(GrowPolicyPtr grow_policy) noexcept {
@@ -118,8 +118,7 @@ class DynamicPool {
 
   [[nodiscard]] T& Acquire() {
     if (PoolsAllAcquired()) {
-      pools_.emplace_back(grow_policy_->GetGrowSize(Size()),
-                          grow_policy_->GetValue());
+      Grow(grow_policy_->GetGrowSize(Size()), grow_policy_->GetValue());
     }
 
     for (auto& pool : pools_) {
@@ -157,6 +156,11 @@ class DynamicPool {
       if (!AllAcquired(pool)) return false;
     }
     return true;
+  }
+
+  void Grow(size_type size, const T& value) {
+    if (size == 0) return;
+    pools_.emplace_back(size, value);
   }
 
   GrowPolicyPtr grow_policy_;
