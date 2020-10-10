@@ -13,20 +13,19 @@ using EID = std::size_t;
 
 class IEntity {
  public:
-  template <typename... Comps>
+  template <typename XnentList>
   using GetXnentMaskFunc =
-      std::function<const internal::DynamicXnentMask&(XnentList<Comps...>)>;
-
+      std::function<const internal::DynamicXnentMask&(XnentList)>;
   using GetXnentTypeIDFunc = std::function<internal::XnentTypeID()>;
 
   virtual ~IEntity() = default;
 
   virtual EID GetID() const noexcept = 0;
 
-  template <typename... Comps>
-  bool HasComponents(XnentList<Comps...> l,
-                     GetXnentMaskFunc<Comps...> get_xnent_mask =
-                         internal::GetXnentMask<Comps...>) const noexcept {
+  template <typename ComponentList>
+  bool HasComponents(ComponentList l,
+                     GetXnentMaskFunc<ComponentList> get_xnent_mask =
+                         internal::GetXnentMask<ComponentList>) const noexcept {
     return HasComponentsImpl(get_xnent_mask(l));
   }
 

@@ -34,10 +34,17 @@ class DynamicXnentMask {
   std::size_t size_;
 };
 
+namespace detail {
 template <typename... Ts>
-const DynamicXnentMask& GetXnentMask(XnentList<Ts...>) {
+const DynamicXnentMask& GetXnentMaskImpl(XnentList<Ts...>) {
   static auto& r = *new DynamicXnentMask{GetXnentTypeID<Ts>()...};
   return r;
+}
+}  // namespace detail
+
+template <typename XnentList>
+const DynamicXnentMask& GetXnentMask(XnentList l) {
+  return detail::GetXnentMaskImpl(l);
 }
 
 template <std::size_t max_comp>
