@@ -13,47 +13,38 @@ using EID = std::size_t;
 
 class IEntity {
  public:
-  template <typename XnentList>
-  using GetXnentMaskFunc =
-      std::function<const internal::DynamicXnentMask&(XnentList)>;
-  using GetXnentTypeIDFunc = std::function<internal::XnentTypeID()>;
-
   virtual ~IEntity() = default;
 
   virtual EID GetID() const noexcept = 0;
 
   template <typename ComponentList>
-  bool HasComponents(ComponentList l,
-                     GetXnentMaskFunc<ComponentList> get_xnent_mask =
-                         internal::GetXnentMask<ComponentList>) const noexcept {
-    return HasComponentsImpl(get_xnent_mask(l));
+  bool HasComponents(ComponentList l, const internal::DynamicXnentMask& mask =
+                                          internal::GetXnentMask(
+                                              ComponentList{})) const noexcept {
+    return HasComponentsImpl(mask);
   }
 
   template <typename T>
-  const T& GetComponent(GetXnentTypeIDFunc get_xnent_type_id =
-                            internal::GetXnentTypeID<T>) const noexcept {
-    auto id = get_xnent_type_id();
+  const T& GetComponent(
+      internal::XnentTypeID id = internal::GetXnentTypeID<T>()) const noexcept {
     return static_cast<const T&>(GetComponentImpl(id));
   }
 
   template <typename T>
-  T& GetComponent(GetXnentTypeIDFunc get_xnent_type_id =
-                      internal::GetXnentTypeID<T>) noexcept {
-    auto id = get_xnent_type_id();
+  T& GetComponent(
+      internal::XnentTypeID id = internal::GetXnentTypeID<T>()) noexcept {
     return static_cast<T&>(GetComponentImpl(id));
   }
 
   template <typename T>
-  void AddComponent(T& comp, GetXnentTypeIDFunc get_xnent_type_id =
-                                 internal::GetXnentTypeID<T>) {
-    auto id = get_xnent_type_id();
+  void AddComponent(T& comp,
+                    internal::XnentTypeID id = internal::GetXnentTypeID<T>()) {
     AddComponentImpl(id, comp);
   }
 
   template <typename T>
-  [[nodiscard]] T& RemoveComponent(GetXnentTypeIDFunc get_xnent_type_id =
-                                       internal::GetXnentTypeID<T>) noexcept {
-    auto id = get_xnent_type_id();
+  [[nodiscard]] T& RemoveComponent(
+      internal::XnentTypeID id = internal::GetXnentTypeID<T>()) noexcept {
     return static_cast<T&>(RemoveComponentImpl(id));
   }
 
