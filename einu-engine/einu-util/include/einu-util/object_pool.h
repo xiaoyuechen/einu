@@ -82,6 +82,7 @@ class IGrowPolicy {
 
 /**
  * This policy will double the pool size when growing is required
+ * If the pool size is 0, grow 1
  * Also constructs objects with default constructor
  */
 template <typename T>
@@ -89,7 +90,7 @@ class DefaultGrowPolicy : public IGrowPolicy<T> {
  public:
   virtual size_type GetGrowSize(
       size_type old_size) const noexcept override final {
-    return old_size;
+    return old_size == 0 ? 1 : old_size;
   }
 
   virtual const T& GetValue() const noexcept override final { return value_; }
@@ -109,16 +110,21 @@ class DynamicPool {
       size_type count,
       GrowPolicyPtr grow_policy = std::make_unique<DefaultGrowPolicy<T>>()) {
     grow_policy_ = std::move(grow_policy);
-    Grow(count, grow_policy_->GetValue());
+    Grow(count);
   }
 
   void SetGrowPolicy(GrowPolicyPtr grow_policy) noexcept {
     grow_policy_ = std::move(grow_policy);
   }
 
+  void Grow(size_type delta_size) {
+    if (delta_size == 0) return;
+    pools_.emplace_back(delta_size, grow_policy_->GetValue());
+  }
+
   [[nodiscard]] T& Acquire() {
     if (PoolsAllAcquired()) {
-      Grow(grow_policy_->GetGrowSize(Size()), grow_policy_->GetValue());
+      Grow(grow_policy_->GetGrowSize(Size()));
     }
 
     for (auto& pool : pools_) {
@@ -156,11 +162,6 @@ class DynamicPool {
       if (!AllAcquired(pool)) return false;
     }
     return true;
-  }
-
-  void Grow(size_type size, const T& value) {
-    if (size == 0) return;
-    pools_.emplace_back(size, value);
   }
 
   GrowPolicyPtr grow_policy_;
