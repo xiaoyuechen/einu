@@ -80,51 +80,36 @@ class IGrowPolicy {
   virtual const T& GetValue() const noexcept = 0;
 };
 
-/**
- * This policy will double the pool size when growing is required
- * If the pool size is 0, grow 1
- * Also constructs objects with default constructor
- */
-template <typename T>
-class DefaultGrowPolicy : public IGrowPolicy<T> {
- public:
-  virtual size_type GetGrowSize(
-      size_type old_size) const noexcept override final {
-    return old_size == 0 ? 1 : old_size;
-  }
-
-  virtual const T& GetValue() const noexcept override final { return value_; }
-
- private:
-  T value_{};
-};
+constexpr std::size_t DefaultGrowth(std::size_t pool_size) noexcept {
+  return pool_size == 0 ? 1 : pool_size;
+}
 
 template <typename T>
 class DynamicPool {
  public:
   using size_type = std::size_t;
   using value_type = T;
-  using GrowPolicyPtr = std::unique_ptr<IGrowPolicy<T>>;
+  using GrowthFunc = std::function<size_type(size_type)>;
 
-  explicit DynamicPool(
-      size_type count,
-      GrowPolicyPtr grow_policy = std::make_unique<DefaultGrowPolicy<T>>()) {
-    grow_policy_ = std::move(grow_policy);
-    Grow(count);
+  DynamicPool(size_type count = 0, const value_type& value = value_type{},
+              GrowthFunc growth = DefaultGrowth) {
+    SetValue(value);
+    SetGrowth(growth);
+    GrowExtra(count);
   }
 
-  void SetGrowPolicy(GrowPolicyPtr grow_policy) noexcept {
-    grow_policy_ = std::move(grow_policy);
-  }
+  void SetValue(const value_type& value) noexcept { value_ = value; }
 
-  void Grow(size_type delta_size) {
+  void SetGrowth(GrowthFunc growth) noexcept { growth_ = growth; }
+
+  void GrowExtra(size_type delta_size) {
     if (delta_size == 0) return;
-    pools_.emplace_back(delta_size, grow_policy_->GetValue());
+    pools_.emplace_back(delta_size, value_);
   }
 
   [[nodiscard]] T& Acquire() {
     if (PoolsAllAcquired()) {
-      Grow(grow_policy_->GetGrowSize(Size()));
+      GrowExtra(growth_(Size()));
     }
 
     for (auto& pool : pools_) {
@@ -164,7 +149,8 @@ class DynamicPool {
     return true;
   }
 
-  GrowPolicyPtr grow_policy_;
+  T value_;
+  GrowthFunc growth_;
   PoolList pools_;
 };
 

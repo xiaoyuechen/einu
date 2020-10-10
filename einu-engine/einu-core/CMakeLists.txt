@@ -18,4 +18,4 @@ add_library(
   )
 
 target_include_directories(einu-core PUBLIC "include")
-target_link_libraries(einu-core INTERFACE einu-rtti einu-tmp)
+target_link_libraries(einu-core INTERFACE einu-rtti einu-tmp einu-util)
