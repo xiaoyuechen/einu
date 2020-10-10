@@ -16,6 +16,7 @@ struct ComponentPoolTest : public testing::Test {
 
 TEST_F(ComponentPoolTest, can_add_policy) {
   pool.AddPolicy(plc0, XnentTypeID{0});
+  EXPECT_EQ(pool.OnePoolSize<C0>(XnentTypeID{0}), 666);
 }
 
 }  // namespace internal

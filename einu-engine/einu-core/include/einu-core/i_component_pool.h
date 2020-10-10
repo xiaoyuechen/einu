@@ -8,41 +8,40 @@
 
 namespace einu {
 
-struct IComponentPoolPolicy {
-  virtual ~IComponentPoolPolicy() = default;
-};
+using GrowthFunc = std::function<std::size_t(std::size_t)>;
 
-inline constexpr std::size_t DefaultComponentPoolGrowFunc(
+constexpr std::size_t DefaultComponentPoolGrowFunc(
     std::size_t pool_size) noexcept {
   return pool_size == 0 ? 1 : 2 * pool_size;
 }
 
 template <typename Component>
-struct ComponentPoolPolicy : public IComponentPoolPolicy {
+struct ComponentPoolPolicy {
   using size_type = std::size_t;
   using value_type = Component;
-  using GrowFunc = std::function<size_type(size_type)>;
 
-  ComponentPoolPolicy(size_type init_size,
-                      const value_type& value = value_type{},
-                      GrowFunc grow_func = DefaultComponentPoolGrowFunc)
+  constexpr ComponentPoolPolicy(
+      size_type init_size, const value_type& value = value_type{},
+      GrowthFunc growth_func = DefaultComponentPoolGrowFunc) noexcept
       : init_size(init_size)
       , value(value)
-      , grow_func(grow_func) {}
+      , growth_func(growth_func) {}
 
   size_type init_size;
   value_type value;
-  GrowFunc grow_func;
+  GrowthFunc growth_func;
 };
 
 class IComponentPool {
  public:
+  using size_type = std::size_t;
+
   virtual ~IComponentPool() = default;
 
   template <typename T>
   void AddPolicy(const ComponentPoolPolicy<T>& policy,
                  internal::XnentTypeID id = internal::GetXnentTypeID<T>()) {
-    AddPolicyImpl(policy, id);
+    AddPolicyImpl(policy.init_size, policy.value, policy.growth_func, id);
   }
 
   template <typename T>
@@ -56,12 +55,21 @@ class IComponentPool {
     ReleaseImpl(id, comp);
   }
 
+  template <typename T>
+  size_type OnePoolSize(
+      internal::XnentTypeID id = internal::GetXnentTypeID<T>()) const noexcept {
+    return OnePoolSizeImpl(id);
+  }
+
  protected:
-  virtual void AddPolicyImpl(const IComponentPoolPolicy& policy,
+  virtual void AddPolicyImpl(size_type init_size, const Xnent& value,
+                             GrowthFunc growth_func,
                              internal::XnentTypeID id) = 0;
   virtual Xnent& AcquireImpl(internal::XnentTypeID id) = 0;
   virtual void ReleaseImpl(internal::XnentTypeID id,
                            const Xnent& comp) noexcept = 0;
+  virtual size_type OnePoolSizeImpl(
+      internal::XnentTypeID id) const noexcept = 0;
 };
 
 }  // namespace einu
