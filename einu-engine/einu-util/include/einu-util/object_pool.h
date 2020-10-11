@@ -71,16 +71,6 @@ bool AllAcquired(const FixedPool<T>& pool) noexcept {
   return pool.FreePos() == pool.Size();
 }
 
-template <typename T>
-class IGrowPolicy {
- public:
-  using size_type = std::size_t;
-
-  virtual ~IGrowPolicy() = default;
-  virtual size_type GetGrowSize(size_type old_size) const noexcept = 0;
-  virtual const T& GetValue() const noexcept = 0;
-};
-
 constexpr std::size_t DefaultGrowth(std::size_t pool_size) noexcept {
   return pool_size == 0 ? 1 : pool_size;
 }
