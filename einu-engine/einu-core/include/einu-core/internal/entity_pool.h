@@ -14,7 +14,7 @@ namespace internal {
 class SimpleEIDManager {
  public:
   EID Acquire() noexcept { return available_++; }
-  void Release() noexcept {}
+  void Release(EID id) noexcept {}
 
  private:
   std::atomic_uint64_t available_ = 0;
@@ -42,7 +42,9 @@ class EntityPool final : public IEntityPool {
   }
 
   void ReleaseImpl(const IEntity& ett) noexcept override {
-    throw std::logic_error("The method or operation is not implemented.");
+    auto& entity = static_cast<const Entity&>(ett);
+    eid_manager_.Release(entity.GetID());
+    pool_.Release(std::forward_as_tuple(entity, entity.Mask(), entity.Table()));
   }
 
   size_type SizeImpl() const noexcept override { return pool_.Size(); }

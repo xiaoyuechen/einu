@@ -24,32 +24,37 @@ class Entity final : public IEntity {
       , mask_{&mask}
       , table_{&table} {}
 
+  const StaticXnentMask& Mask() const noexcept { return *mask_; }
+  StaticXnentMask& Mask() noexcept { return *mask_; }
+  const ComponentTable& Table() const noexcept { return *table_; }
+  ComponentTable& Table() noexcept { return *table_; }
+
  private:
   EID GetIDImpl() const noexcept override { return eid_; }
 
   bool HasComponentsImpl(const DynamicXnentMask& mask) const noexcept override {
-    return (mask & *mask_) == mask;
+    return (mask & Mask()) == mask;
   }
 
   const Xnent& GetComponentImpl(XnentTypeID idx) const noexcept override {
-    return *(*table_)[idx];
+    return *Table()[idx];
   }
 
   Xnent& GetComponentImpl(XnentTypeID idx) noexcept override {
-    return *(*table_)[idx];
+    return *Table()[idx];
   }
 
   void AddComponentImpl(XnentTypeID idx, Xnent& comp) override {
-    assert(!(*mask_)[idx] && "already have component");
-    (*table_)[idx] = &comp;
-    (*mask_)[idx] = true;
+    assert(!Mask()[idx] && "already have component");
+    Table()[idx] = &comp;
+    Mask()[idx] = true;
   }
 
   Xnent& RemoveComponentImpl(XnentTypeID idx) noexcept override {
-    assert((*mask_)[idx] && "do not have component");
-    (*mask_)[idx] = false;
-    auto& tmp = *(*table_)[idx];
-    (*table_)[idx] = nullptr;
+    assert(Mask()[idx] && "do not have component");
+    Mask()[idx] = false;
+    auto& tmp = *Table()[idx];
+    Table()[idx] = nullptr;
     return tmp;
   }
 
