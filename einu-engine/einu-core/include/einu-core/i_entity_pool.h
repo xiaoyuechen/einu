@@ -9,7 +9,7 @@ class IEntityPool {
   virtual ~IEntityPool() = default;
 
   IEntity& Acquire() { return AcquireImpl(); }
-  void Release(const IEntity& ett) { ReleaseImpl(); }
+  void Release(const IEntity& ett) { ReleaseImpl(ett); }
 
  private:
   virtual IEntity& AcquireImpl() = 0;
