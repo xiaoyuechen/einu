@@ -118,11 +118,15 @@ constexpr std::size_t DefaultGrowth(std::size_t pool_size) noexcept {
   return pool_size == 0 ? 1 : pool_size;
 }
 
-template <typename T>
+template <typename... Ts>
 class DynamicPool {
+  using FixedPool = FixedPool<Ts...>;
+
  public:
-  using size_type = std::size_t;
-  using value_type = T;
+  using size_type = typename FixedPool::size_type;
+  using value_type = typename FixedPool::value_type;
+  using reference = typename FixedPool::reference;
+  using const_reference = typename FixedPool::const_reference;
   using GrowthFunc = std::function<size_type(size_type)>;
 
   DynamicPool(size_type count = 0, const value_type& value = value_type{},
@@ -132,7 +136,7 @@ class DynamicPool {
     GrowExtra(count);
   }
 
-  void SetValue(const value_type& value) noexcept { value_ = value; }
+  void SetValue(const_reference value) noexcept { value_ = value; }
 
   void SetGrowth(GrowthFunc growth) noexcept { growth_ = growth; }
 
@@ -141,7 +145,7 @@ class DynamicPool {
     pools_.emplace_back(delta_size, value_);
   }
 
-  [[nodiscard]] T& Acquire() {
+  [[nodiscard]] reference Acquire() {
     if (PoolsAllAcquired()) {
       GrowExtra(growth_(Size()));
     }
@@ -156,7 +160,7 @@ class DynamicPool {
     return pools_[0].Acquire();
   }
 
-  void Release(const T& obj) noexcept {
+  void Release(const_reference obj) noexcept {
     for (auto& pool : pools_) {
       if (pool.Has(obj)) {
         pool.Release(obj);
@@ -173,7 +177,6 @@ class DynamicPool {
   }
 
  private:
-  using FixedPool = FixedPool<T>;
   using PoolList = std::vector<FixedPool>;
 
   bool PoolsAllAcquired() const noexcept {
@@ -183,7 +186,7 @@ class DynamicPool {
     return true;
   }
 
-  T value_;
+  value_type value_;
   GrowthFunc growth_;
   PoolList pools_;
 };
