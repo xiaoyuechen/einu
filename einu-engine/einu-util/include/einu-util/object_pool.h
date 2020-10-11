@@ -57,12 +57,13 @@ class FixedPool {
   void Release(const T& obj) noexcept {
     auto idx = &obj - object_arr_.data();
     assert(!bit_arr_[idx] && "object is already released");
-    bit_arr_[idx] = true;
+    bit_arr_[idx] = 1;
   }
 
  private:
   std::vector<T> object_arr_;
-  std::vector<bool> bit_arr_;
+  // TODO(Xiaoyue Chen): replace bit_array_ with a real bit array
+  std::vector<std::uint8_t> bit_arr_;
 };
 
 template <typename T>
