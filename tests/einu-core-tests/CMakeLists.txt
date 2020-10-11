@@ -8,11 +8,12 @@ add_executable(
   "xnents.h"
   "component_pool_test.cc"
   "entity_pool_test.cc"
-  )
+  "world_test.cc"
+   "mock_entity.h")
 
 target_link_libraries(einu-core-tests 
   PRIVATE einu-core 
-  PRIVATE gtest gtest_main
+  PRIVATE gtest gtest_main gmock gmock_main
 )
 
 include(GoogleTest)

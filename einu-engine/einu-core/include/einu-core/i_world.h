@@ -14,7 +14,7 @@ class IWorld {
   virtual ~IWorld() = default;
 
   void AddEntity(IEntity& ett) { AddEntityImpl(ett); }
-  void RemoveEntity(EID eid) noexcept { RemoveEntityImpl(eid); }
+  void RemoveEntity(EID eid) { RemoveEntityImpl(eid); }
   IEntity& GetEntity(EID eid) noexcept { return GetEntityImpl(eid); }
   const IEntity& GetEntity(EID eid) const noexcept {
     return GetEntityImpl(eid);
@@ -29,7 +29,7 @@ class IWorld {
 
  private:
   virtual void AddEntityImpl(IEntity& ett) = 0;
-  virtual void RemoveEntityImpl(EID eid) noexcept = 0;
+  virtual void RemoveEntityImpl(EID eid) = 0;
   virtual IEntity& GetEntityImpl(EID eid) noexcept = 0;
   virtual const IEntity& GetEntityImpl(EID eid) const noexcept = 0;
   virtual std::size_t GetEntityCountImpl() const noexcept = 0;

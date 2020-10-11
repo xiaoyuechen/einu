@@ -6,7 +6,6 @@ FetchContent_Declare(
   GIT_TAG        release-1.10.0
 )
 
-set(BUILD_GMOCK OFF CACHE BOOL "" FORCE)
 set(INSTALL_GTEST OFF CACHE BOOL "" FORCE)
 
 if (MSVC)

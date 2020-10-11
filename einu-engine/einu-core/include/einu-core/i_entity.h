@@ -54,10 +54,10 @@ class IEntity {
   virtual bool HasComponentsImpl(
       const internal::DynamicXnentMask& mask) const noexcept = 0;
   virtual const Xnent& GetComponentImpl(
-      internal::XnentTypeID idx) const noexcept = 0;
-  virtual Xnent& GetComponentImpl(internal::XnentTypeID idx) noexcept = 0;
-  virtual void AddComponentImpl(internal::XnentTypeID idx, Xnent& comp) = 0;
-  virtual Xnent& RemoveComponentImpl(internal::XnentTypeID idx) noexcept = 0;
+      internal::XnentTypeID id) const noexcept = 0;
+  virtual Xnent& GetComponentImpl(internal::XnentTypeID id) noexcept = 0;
+  virtual void AddComponentImpl(internal::XnentTypeID id, Xnent& comp) = 0;
+  virtual Xnent& RemoveComponentImpl(internal::XnentTypeID id) noexcept = 0;
 };
 
 }  // namespace einu
