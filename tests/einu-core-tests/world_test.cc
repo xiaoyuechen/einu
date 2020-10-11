@@ -8,7 +8,7 @@ namespace internal {
 
 struct WorldTest : public testing::Test {
   MockEntity singlentity = MockEntity();
-  World world{singlentity};
+  World world;
   MockEntity ett;
   EntityBuffer buffer;
 };
@@ -26,6 +26,7 @@ TEST_F(WorldTest, can_get_entity_after_add) {
 }
 
 TEST_F(WorldTest, can_get_singlentity) {
+  world.Singlentity() = singlentity;
   auto& r = world.GetSinglenity();
   EXPECT_EQ(&r, &singlentity);
 }

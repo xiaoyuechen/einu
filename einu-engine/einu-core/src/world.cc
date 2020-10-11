@@ -3,9 +3,6 @@
 namespace einu {
 namespace internal {
 
-World::World(IEntity& singlentity)
-    : singlentity_{std::move(singlentity)} {}
-
 void World::AddEntityImpl(IEntity& ett) {
   entity_table_.emplace(ett.GetID(), &ett);
 }
@@ -31,10 +28,10 @@ void World::GetAllEntitiesImpl(EntityBuffer& buffer) const {
   }
 }
 
-einu::IEntity& World::GetSinglenityImpl() noexcept { return singlentity_; }
+einu::IEntity& World::GetSinglenityImpl() noexcept { return Singlentity(); }
 
 const einu::IEntity& World::GetSinglenityImpl() const noexcept {
-  return singlentity_;
+  return Singlentity();
 }
 
 }  // namespace internal

@@ -2,6 +2,7 @@
 #include <gtest/gtest.h>
 
 namespace einu {
+namespace internal {
 
 // TODO(Xiaoyue Chen): Rewrite entity test
 
@@ -10,12 +11,9 @@ struct C1 : Xnent {};
 struct C2 : Xnent {};
 struct C3 : Xnent {};
 
-using CL = XnentList<C0, C1, C2, C3>;
-using Entity = internal::Entity<tmp::Size<ToTypeList<CL>::Type>::value>;
-
 struct EntityTest : public testing::Test {
-  EntityTest()
-      : entity(0, mask, table) {}
+  using CL = XnentList<C0, C1, C2, C3>;
+  using Entity = Entity<tmp::Size<ToTypeList<CL>::Type>::value>;
 
   C0 c0;
   C1 c1;
@@ -23,7 +21,7 @@ struct EntityTest : public testing::Test {
   C3 c3;
   Entity::StaticXnentMask mask;
   Entity::ComponentTable table{};
-  Entity entity;
+  Entity entity{0, mask, table};
 };
 
 // TEST_F(EntityTest, can_add_component) {
@@ -46,8 +44,9 @@ struct EntityTest : public testing::Test {
 
 TEST_F(EntityTest, can_get_id) {
   EXPECT_EQ(entity.GetID(), 0);
-  auto e = Entity(666, mask, table);
+  Entity e = {666, mask, table};
   EXPECT_EQ(e.GetID(), 666);
 }
 
+}  // namespace internal
 }  // namespace einu

@@ -44,7 +44,7 @@ class EntityPool final : public IEntityPool {
   void ReleaseImpl(const IEntity& ett) noexcept override {
     auto& entity = static_cast<const Entity&>(ett);
     eid_manager_.Release(entity.GetID());
-    pool_.Release(std::forward_as_tuple(entity, entity.Mask(), entity.Table()));
+    pool_.Release(std::forward_as_tuple(entity, *entity.mask, *entity.table));
   }
 
   size_type SizeImpl() const noexcept override { return pool_.Size(); }
