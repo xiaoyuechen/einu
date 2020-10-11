@@ -5,6 +5,7 @@
 #include <memory>
 #include <numeric>
 #include <optional>
+#include <tuple>
 #include <vector>
 
 #include "einu-util/bit.h"
@@ -12,62 +13,104 @@
 namespace einu {
 namespace util {
 
-template <typename T>
-class FixedPool {
+namespace internal {
+
+template <typename... Ts>
+class FixedPoolImpl {
  public:
   using size_type = std::size_t;
-  using value_type = T;
+  using value_type = std::tuple<Ts...>;
+  using reference = std::tuple<Ts&...>;
+  using const_reference = std::tuple<const Ts&...>;
 
-  explicit FixedPool(size_type count)
-      : object_arr_(count)
-      , bit_arr_(count, true) {}
+  FixedPoolImpl(size_type count,
+                const value_type& value = std::make_tuple<Ts...>())
+      : object_arr_tuple_{ObjectArray<Ts>(count, std::get<Ts>(value))...}
+      , bit_arr_(count, 1) {}
 
-  FixedPool(size_type count, const T& value)
-      : object_arr_(count, value)
-      , bit_arr_(count, true) {}
+  FixedPoolImpl(const FixedPoolImpl&) = delete;
+  FixedPoolImpl& operator=(const FixedPoolImpl&) = delete;
+  FixedPoolImpl(FixedPoolImpl&&) = default;
+  FixedPoolImpl& operator=(FixedPoolImpl&&) = default;
 
-  FixedPool(const FixedPool&) = delete;
-  FixedPool& operator=(const FixedPool&) = delete;
-  FixedPool(FixedPool&&) = default;
-  FixedPool& operator=(FixedPool&&) = default;
-
-  size_type Size() const noexcept { return object_arr_.size(); }
+  size_type Size() const noexcept { return bit_arr_.size(); }
   size_type FreePos() const noexcept {
     return FindFirstSet(bit_arr_.begin(), bit_arr_.end());
   }
 
-  bool Has(const T& obj) const noexcept {
-    auto idx = &obj - object_arr_.data();
+  bool Has(const_reference obj) const noexcept {
+    auto idx = &std::get<0>(obj) - std::get<0>(object_arr_tuple_).data();
     return 0 <= idx && (unsigned)idx < Size();
   }
 
-  [[nodiscard]] T& Acquire() noexcept {
+  [[nodiscard]] reference Acquire() noexcept {
     auto free_pos = FreePos();
     assert(free_pos != bit_arr_.size() && "no object available");
-    bit_arr_[free_pos] = false;
-    return object_arr_[free_pos];
+    return Acquire(free_pos);
   }
 
-  [[nodiscard]] T& Acquire(size_type pos_hint) noexcept {
+  [[nodiscard]] reference Acquire(size_type pos_hint) noexcept {
     assert(bit_arr_[pos_hint] && "object at pos is not available");
     bit_arr_[pos_hint] = false;
-    return object_arr_[pos_hint];
+    return std::forward_as_tuple(
+        std::get<ObjectArray<Ts>>(object_arr_tuple_)[pos_hint]...);
   }
 
-  void Release(const T& obj) noexcept {
-    auto idx = &obj - object_arr_.data();
+  void Release(const_reference obj) noexcept {
+    auto idx = &std::get<0>(obj) - std::get<0>(object_arr_tuple_).data();
     assert(!bit_arr_[idx] && "object is already released");
     bit_arr_[idx] = 1;
   }
 
  private:
-  std::vector<T> object_arr_;
+  template <typename T>
+  using ObjectArray = std::vector<T>;
+
+  std::tuple<ObjectArray<Ts>...> object_arr_tuple_;
   // TODO(Xiaoyue Chen): replace bit_array_ with a real bit array
   std::vector<std::uint8_t> bit_arr_;
 };
 
+}  // namespace internal
+
+template <typename... Ts>
+class FixedPool : public internal::FixedPoolImpl<Ts...> {
+  using Pool = internal::FixedPoolImpl<Ts...>;
+
+ public:
+  using Pool::Pool;
+};
+
 template <typename T>
-bool AllAcquired(const FixedPool<T>& pool) noexcept {
+class FixedPool<T> {
+ public:
+  using size_type = std::size_t;
+  using value_type = T;
+  using reference = value_type&;
+  using const_reference = const value_type&;
+
+  FixedPool(size_type count, const value_type& value = value_type{})
+      : pool_{count, std::forward_as_tuple(value)} {}
+
+  size_type Size() const noexcept { return pool_.Size(); }
+  size_type FreePos() const noexcept { return pool_.FreePos(); }
+  bool Has(const_reference obj) const noexcept { return pool_.Has(obj); }
+  [[nodiscard]] reference Acquire() noexcept {
+    return std::get<0>(pool_.Acquire());
+  }
+  [[nodiscard]] reference Acquire(size_type pos_hint) noexcept {
+    return std::get<0>(pool_.Acquire(pos_hint));
+  }
+  void Release(const_reference obj) noexcept {
+    pool_.Release(std::forward_as_tuple(obj));
+  }
+
+ private:
+  internal::FixedPoolImpl<T> pool_;
+};
+
+template <typename FixedPool>
+bool AllAcquired(const FixedPool& pool) noexcept {
   return pool.FreePos() == pool.Size();
 }
 
