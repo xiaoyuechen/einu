@@ -16,7 +16,7 @@ namespace util {
 
 // TODO(Xiaoyue Chen): This is a temporary solution. It uses more memory. We
 // need to support an actual bit array.
-std::size_t FindFirstSet(
+inline std::size_t FindFirstSet(
     std::vector<std::uint8_t>::const_iterator begin,
     std::vector<std::uint8_t>::const_iterator end) noexcept {
   auto it = std::find(begin, end, true);
