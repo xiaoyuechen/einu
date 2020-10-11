@@ -7,9 +7,8 @@ namespace einu {
 namespace internal {
 
 struct WorldTest : public testing::Test {
-  std::unique_ptr<MockEntity> singlentity = std::make_unique<MockEntity>();
-  MockEntity& singlentity_ref = *singlentity;
-  World world{std::move(singlentity)};
+  MockEntity singlentity = MockEntity();
+  World world{singlentity};
   MockEntity ett;
   EntityBuffer buffer;
 };
@@ -28,7 +27,7 @@ TEST_F(WorldTest, can_get_entity_after_add) {
 
 TEST_F(WorldTest, can_get_singlentity) {
   auto& r = world.GetSinglenity();
-  EXPECT_EQ(&r, &singlentity_ref);
+  EXPECT_EQ(&r, &singlentity);
 }
 
 }  // namespace internal

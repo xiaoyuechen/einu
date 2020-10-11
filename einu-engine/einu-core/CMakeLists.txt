@@ -16,7 +16,7 @@ add_library(
   "include/einu-core/need_list.h"
   "include/einu-core/internal/component_pool.h"
   "include/einu-core/internal/entity_pool.h"
-  "include/einu-core/pool_policy.h" "include/einu-core/internal/world.h")
+  "include/einu-core/pool_policy.h" "include/einu-core/internal/world.h" "include/einu-core/i_world_pool.h" "include/einu-core/internal/i_pool.h")
 
 target_include_directories(einu-core PUBLIC "include")
 target_link_libraries(einu-core PUBLIC einu-rtti einu-tmp einu-util)

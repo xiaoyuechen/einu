@@ -3,7 +3,7 @@
 namespace einu {
 namespace internal {
 
-World::World(SinglentityPtr singlentity)
+World::World(IEntity& singlentity)
     : singlentity_{std::move(singlentity)} {}
 
 void World::AddEntityImpl(IEntity& ett) {
@@ -31,10 +31,14 @@ void World::GetAllEntitiesImpl(EntityBuffer& buffer) const {
   }
 }
 
-einu::IEntity& World::GetSinglenityImpl() noexcept { return *singlentity_; }
+einu::IEntity& World::GetSinglenityImpl() noexcept { return singlentity_; }
 
 const einu::IEntity& World::GetSinglenityImpl() const noexcept {
-  return *singlentity_;
+  return singlentity_;
+}
+
+std::unique_ptr<IWorld> WorldFactory::CreateWorldImpl() const {
+  return std::make_unique<World>(ett_pool_.Acquire());
 }
 
 }  // namespace internal
