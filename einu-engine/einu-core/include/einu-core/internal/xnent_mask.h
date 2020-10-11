@@ -53,7 +53,8 @@ using StaticXnentMask = std::bitset<max_comp>;
 template <std::size_t max_comp>
 StaticXnentMask<max_comp> ToStatic(const DynamicXnentMask& mask) noexcept {
   auto r = StaticXnentMask<max_comp>{};
-  std::copy(mask.Data(), mask.Data() + mask.SizeInBytes(), &r);
+  std::copy(mask.Data(), mask.Data() + mask.SizeInBytes(),
+            reinterpret_cast<std::uint8_t*>(&r));
   return r;
 }
 
