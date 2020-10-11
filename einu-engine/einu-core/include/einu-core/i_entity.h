@@ -11,11 +11,12 @@ namespace einu {
 
 using EID = std::size_t;
 
+// TODO(Xiaoyue Chen): hide global state for user in release code
 class IEntity {
  public:
   virtual ~IEntity() = default;
 
-  virtual EID GetID() const noexcept = 0;
+  EID GetID() const noexcept { return GetIDImpl(); }
 
   template <typename ComponentList>
   bool HasComponents(ComponentList l, const internal::DynamicXnentMask& mask =
@@ -48,7 +49,8 @@ class IEntity {
     return static_cast<T&>(RemoveComponentImpl(id));
   }
 
- protected:
+ private:
+  virtual EID GetIDImpl() const noexcept = 0;
   virtual bool HasComponentsImpl(
       const internal::DynamicXnentMask& mask) const noexcept = 0;
   virtual const Xnent& GetComponentImpl(

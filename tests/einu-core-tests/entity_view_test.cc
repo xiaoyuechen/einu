@@ -15,7 +15,7 @@ using namespace internal;
 
 class MockEntity : public IEntity {
  private:
-  virtual EID GetID() const noexcept override { return 0; }
+  virtual EID GetIDImpl() const noexcept override { return 0; }
 
   virtual bool HasComponentsImpl(
       const DynamicXnentMask&) const noexcept override {

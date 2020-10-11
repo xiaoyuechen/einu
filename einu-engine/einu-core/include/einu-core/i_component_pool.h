@@ -32,6 +32,7 @@ struct ComponentPoolPolicy {
   GrowthFunc growth_func;
 };
 
+// TODO(Xiaoyue Chen): hide global state for user in release code
 class IComponentPool {
  public:
   using size_type = std::size_t;

@@ -23,9 +23,9 @@ class Entity final : public IEntity {
       , mask_{mask}
       , table_{table} {}
 
-  EID GetID() const noexcept override { return eid_; }
-
  private:
+  EID GetIDImpl() const noexcept override { return eid_; }
+
   bool HasComponentsImpl(const DynamicXnentMask& mask) const noexcept override {
     return (mask & mask_) == mask;
   }
