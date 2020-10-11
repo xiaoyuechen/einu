@@ -7,6 +7,7 @@ add_executable(
   "entity_test.cc"
   "xnents.h"
   "component_pool_test.cc"
+  "entity_pool_test.cc"
   )
 
 target_link_libraries(einu-core-tests 
