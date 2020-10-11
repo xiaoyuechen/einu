@@ -17,7 +17,7 @@ class IEntityPool {
   void SetPolicy(const Policy& policy) { SetPolicyImpl(policy); }
   IEntity& Acquire() { return AcquireImpl(); }
   void Release(const IEntity& ett) noexcept { ReleaseImpl(ett); }
-  size_type Size() const noexcept { SizeImpl(); }
+  size_type Size() const noexcept { return SizeImpl(); }
 
  private:
   virtual void SetPolicyImpl(const Policy& policy) = 0;
