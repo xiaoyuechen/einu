@@ -14,6 +14,7 @@ class EntityBuffer {
   auto begin() const { return buffer_.begin(); }
   auto end() { return buffer_.end(); }
   auto end() const { return buffer_.end(); }
+  auto size() const noexcept { return buffer_.size(); }
 
  private:
   using Buffer = std::vector<std::reference_wrapper<IEntity>>;
