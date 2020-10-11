@@ -7,8 +7,13 @@ namespace einu {
 class IEntityPool {
  public:
   virtual ~IEntityPool() = default;
-  virtual IEntity& Acquire() = 0;
-  virtual void Release(const IEntity& ett) = 0;
+
+  IEntity& Acquire() { return AcquireImpl(); }
+  void Release(const IEntity& ett) { ReleaseImpl(); }
+
+ private:
+  virtual IEntity& AcquireImpl() = 0;
+  virtual void ReleaseImpl(const IEntity& ett) = 0;
 };
 
 }  // namespace einu
