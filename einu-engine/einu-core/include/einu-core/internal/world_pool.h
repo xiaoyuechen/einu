@@ -19,7 +19,7 @@ class WorldPool : public IWorldPool {
 
   void SetPolicyImpl(const Policy& policy) override;
   IWorld& AcquireImpl() override;
-  void ReleaseImpl(const IEntity& ett) noexcept override;
+  void ReleaseImpl(const IWorld& world) override;
   size_type SizeImpl() const noexcept override;
 
   Pool pool_;

@@ -26,7 +26,7 @@ TEST_F(WorldTest, can_get_entity_after_add) {
 }
 
 TEST_F(WorldTest, can_get_singlentity) {
-  world.Singlentity() = singlentity;
+  world.singlentity = &singlentity;
   auto& r = world.GetSinglenity();
   EXPECT_EQ(&r, &singlentity);
 }

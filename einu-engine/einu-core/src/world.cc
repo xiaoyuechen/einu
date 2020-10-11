@@ -4,34 +4,34 @@ namespace einu {
 namespace internal {
 
 void World::AddEntityImpl(IEntity& ett) {
-  entity_table_.emplace(ett.GetID(), &ett);
+  entity_table.emplace(ett.GetID(), &ett);
 }
 
-void World::RemoveEntityImpl(EID eid) { entity_table_.erase(eid); }
+void World::RemoveEntityImpl(EID eid) { entity_table.erase(eid); }
 
 einu::IEntity& World::GetEntityImpl(EID eid) noexcept {
-  return *entity_table_.at(eid);
+  return *entity_table.at(eid);
 }
 
 const einu::IEntity& World::GetEntityImpl(EID eid) const noexcept {
-  return *entity_table_.at(eid);
+  return *entity_table.at(eid);
 }
 
 std::size_t World::GetEntityCountImpl() const noexcept {
-  return entity_table_.size();
+  return entity_table.size();
 }
 
 void World::GetAllEntitiesImpl(EntityBuffer& buffer) const {
   buffer.clear();
-  for (auto [id, ett] : entity_table_) {
+  for (auto [id, ett] : entity_table) {
     buffer.push_back(*ett);
   }
 }
 
-einu::IEntity& World::GetSinglenityImpl() noexcept { return Singlentity(); }
+einu::IEntity& World::GetSinglenityImpl() noexcept { return *singlentity; }
 
 const einu::IEntity& World::GetSinglenityImpl() const noexcept {
-  return Singlentity();
+  return *singlentity;
 }
 
 }  // namespace internal

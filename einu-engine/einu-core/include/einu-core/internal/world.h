@@ -13,10 +13,12 @@ class World final : public IWorld {
  public:
   using EntityTable = std::unordered_map<EID, IEntity*>;
 
-  EntityTable& Table() noexcept { return entity_table_; }
-  const EntityTable& Table() const noexcept { return entity_table_; }
-  IEntity& Singlentity() noexcept { return *singlentity_; }
-  const IEntity& Singlentity() const noexcept { return *singlentity_; }
+  World() = default;
+  World(IEntity& singlentity)
+      : singlentity(&singlentity) {}
+
+  EntityTable entity_table;
+  IEntity* singlentity = nullptr;
 
  private:
   void AddEntityImpl(IEntity& ett) override;
@@ -27,9 +29,6 @@ class World final : public IWorld {
   void GetAllEntitiesImpl(EntityBuffer& buffer) const override;
   IEntity& GetSinglenityImpl() noexcept override;
   const IEntity& GetSinglenityImpl() const noexcept override;
-
-  EntityTable entity_table_;
-  IEntity* singlentity_ = nullptr;
 };
 
 }  // namespace internal
