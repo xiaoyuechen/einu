@@ -14,6 +14,8 @@ namespace internal {
 struct ComponentPoolTest : public testing::Test {
   using ComponentList = XnentList<C0, C1, C2, C3>;
   using ComponentPool = ComponentPool<ComponentList>;
+  template <typename Comp>
+  using ComponentPoolPolicy = ComponentPool::Policy<Comp>;
   template <typename Complist>
   struct PolicyTuple;
   template <typename... Comps>
