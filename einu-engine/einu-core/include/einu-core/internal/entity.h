@@ -13,7 +13,7 @@ template <int max_comp>
 using StaticComponentTable = std::array<Xnent*, max_comp>;
 
 template <int max_comp>
-class Entity : public IEntity {
+class Entity final : public IEntity {
  public:
   using StaticXnentMask = StaticXnentMask<max_comp>;
   using ComponentTable = StaticComponentTable<max_comp>;
@@ -23,28 +23,28 @@ class Entity : public IEntity {
       , mask_{mask}
       , table_{table} {}
 
-  EID GetID() const noexcept override final { return eid_; }
+  EID GetID() const noexcept override { return eid_; }
 
  private:
-  bool HasComponentsImpl(const DynamicXnentMask& mask) const noexcept override final {
+  bool HasComponentsImpl(const DynamicXnentMask& mask) const noexcept override {
     return (mask & mask_) == mask;
   }
 
-  const Xnent& GetComponentImpl(XnentTypeID idx) const noexcept override final {
+  const Xnent& GetComponentImpl(XnentTypeID idx) const noexcept override {
     return *table_[idx];
   }
 
-  Xnent& GetComponentImpl(XnentTypeID idx) noexcept override final {
+  Xnent& GetComponentImpl(XnentTypeID idx) noexcept override {
     return *table_[idx];
   }
 
-  void AddComponentImpl(XnentTypeID idx, Xnent& comp) override final {
+  void AddComponentImpl(XnentTypeID idx, Xnent& comp) override {
     assert(!mask_[idx] && "already have component");
     table_[idx] = &comp;
     mask_[idx] = true;
   }
 
-  Xnent& RemoveComponentImpl(XnentTypeID idx) noexcept override final {
+  Xnent& RemoveComponentImpl(XnentTypeID idx) noexcept override {
     assert(mask_[idx] && "do not have component");
     mask_[idx] = false;
     auto& tmp = *table_[idx];

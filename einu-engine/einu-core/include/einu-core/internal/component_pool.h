@@ -26,22 +26,20 @@ class IOneComponentPool {
 };
 
 template <typename Comp>
-class OneComponentPool : public IOneComponentPool {
+class OneComponentPool final : public IOneComponentPool {
  public:
-  void SetValue(const Xnent& value) noexcept override final {
+  void SetValue(const Xnent& value) noexcept override {
     auto& v = reinterpret_cast<const Comp&>(value);
     pool_.SetValue(v);
   }
 
-  void SetGrowth(GrowthFunc growth) noexcept override final {
+  void SetGrowth(GrowthFunc growth) noexcept override {
     pool_.SetGrowth(growth);
   }
 
-  void GrowExtra(size_type delta_size) override final {
-    pool_.GrowExtra(delta_size);
-  }
+  void GrowExtra(size_type delta_size) override { pool_.GrowExtra(delta_size); }
 
-  Xnent& Acquire() override final { return pool_.Acquire(); }
+  Xnent& Acquire() override { return pool_.Acquire(); }
 
   void Release(const Xnent& obj) noexcept override {
     auto& comp = reinterpret_cast<const Comp&>(obj);
@@ -59,7 +57,7 @@ template <typename ComponentList>
 class ComponentPool;
 
 template <typename... Comps>
-class ComponentPool<XnentList<Comps...>> : public IComponentPool {
+class ComponentPool<XnentList<Comps...>> final : public IComponentPool {
  public:
   ComponentPool() {
     (
@@ -76,26 +74,25 @@ class ComponentPool<XnentList<Comps...>> : public IComponentPool {
   using PoolTuple = std::tuple<OneComponentPool<Comps>...>;
   using PoolTable = std::array<IOneComponentPool*, tmp::Size<TypeList>::value>;
 
-  virtual void AddPolicyImpl(size_type init_size, const Xnent& value,
-                             GrowthFunc growth_func,
-                             internal::XnentTypeID id) override final {
+  void AddPolicyImpl(size_type init_size, const Xnent& value,
+                     GrowthFunc growth_func,
+                     internal::XnentTypeID id) override {
     auto pool = pool_table_[id];
     pool->SetValue(value);
     pool->SetGrowth(growth_func);
     pool->GrowExtra(init_size);
   }
 
-  virtual Xnent& AcquireImpl(internal::XnentTypeID id) override final {
+  Xnent& AcquireImpl(internal::XnentTypeID id) override {
     return pool_table_[id]->Acquire();
   }
 
-  virtual void ReleaseImpl(internal::XnentTypeID id,
-                           const Xnent& comp) noexcept override final {
+  void ReleaseImpl(internal::XnentTypeID id,
+                   const Xnent& comp) noexcept override {
     pool_table_[id]->Release(comp);
   }
 
-  virtual size_type OnePoolSizeImpl(
-      internal::XnentTypeID id) const noexcept override final {
+  size_type OnePoolSizeImpl(internal::XnentTypeID id) const noexcept override {
     return pool_table_[id]->Size();
   }
 
