@@ -23,7 +23,7 @@ class IEntityPool {
   virtual void SetPolicyImpl(const Policy& policy) = 0;
   virtual IEntity& AcquireImpl() = 0;
   virtual void ReleaseImpl(const IEntity& ett) noexcept = 0;
-  size_type SizeImpl() const noexcept = 0;
+  virtual size_type SizeImpl() const noexcept = 0;
 };
 
 }  // namespace einu
