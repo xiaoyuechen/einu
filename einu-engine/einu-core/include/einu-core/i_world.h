@@ -22,53 +22,18 @@ class IWorld {
     return GetAllEntitiesImpl(buffer);
   }
 
-  template <typename SinglenentList>
-  bool HasSinglenents(
-      SinglenentList l,
-      const internal::DynamicXnentMask& mask =
-          internal::GetXnentMask(SinglenentList{})) const noexcept {
-    return HasSinglenentsImpl(mask);
-  }
+  IEntity& GetSinglenity() noexcept { return GetSinglenityImpl(); }
+  const IEntity& GetSinglenity() const noexcept { return GetSinglenityImpl(); }
 
-  template <typename Singlenent>
-  void AddSinglenent(Singlenent& singlenent,
-                     internal::XnentTypeID id = GetXnentTypeID<Singlenent>()) {
-    AddSinglenentImpl(id, singlenent);
-  }
-
-  template <typename Singlenent>
-  Singlenent& RemoveSinglenent(
-      internal::XnentTypeID id = GetXnentTypeID<Singlenent>()) noexcept {
-    return RemoveSinglenentImpl(id);
-  }
-
-  template <typename Singlenent>
-  const Singlenent& GetSinglenent(
-      internal::XnentTypeID id = GetXnentTypeID<Singlenent>()) const noexcept {
-    return GetSinglenentImpl(id);
-  }
-
-  template <typename Singlenent>
-  Singlenent& GetSinglenent(
-      internal::XnentTypeID id = GetXnentTypeID<Singlenent>()) noexcept {
-    return GetSinglenentImpl(id);
-  }
-
- protected:
+ private:
   virtual void AddEntityImpl(IEntity& ett) = 0;
   virtual void RemoveEntityImpl(EID eid) noexcept = 0;
   virtual IEntity& GetEntityImpl(EID eid) noexcept = 0;
   virtual const IEntity& GetEntityImpl(EID eid) const noexcept = 0;
   virtual std::size_t GetEntityCountImpl() const noexcept = 0;
   virtual void GetAllEntitiesImpl(EntityBuffer& buffer) const = 0;
-  virtual bool HasSinglenentsImpl(
-      const internal::DynamicXnentMask& mask) const noexcept = 0;
-  virtual void AddSinglenentImpl(internal::XnentTypeID idx,
-                                 Xnent& singlenent) = 0;
-  virtual Xnent& RemoveSinglenentImpl(internal::XnentTypeID idx) noexcept = 0;
-  virtual const Xnent& GetSinglenentImpl(
-      internal::XnentTypeID idx) const noexcept = 0;
-  virtual Xnent& GetSinglenentImpl(internal::XnentTypeID idx) noexcept = 0;
+  virtual IEntity& GetSinglenityImpl() noexcept = 0;
+  virtual const IEntity& GetSinglenityImpl() const noexcept = 0;
 };
 
 class IWorldFactory {
