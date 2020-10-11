@@ -37,9 +37,5 @@ const einu::IEntity& World::GetSinglenityImpl() const noexcept {
   return singlentity_;
 }
 
-std::unique_ptr<IWorld> WorldFactory::CreateWorldImpl() const {
-  return std::make_unique<World>(ett_pool_.Acquire());
-}
-
 }  // namespace internal
 }  // namespace einu

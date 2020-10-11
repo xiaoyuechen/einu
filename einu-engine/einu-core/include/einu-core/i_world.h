@@ -38,14 +38,6 @@ class IWorld {
   virtual const IEntity& GetSinglenityImpl() const noexcept = 0;
 };
 
-class IWorldFactory {
- public:
-  std::unique_ptr<IWorld> CreateWorld() const { return CreateWorldImpl(); }
-
- private:
-  virtual std::unique_ptr<IWorld> CreateWorldImpl() const = 0;
-};
-
 namespace internal {
 
 void SnapshotImpl(const DynamicXnentMask& comp_mask,

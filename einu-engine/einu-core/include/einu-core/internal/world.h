@@ -29,16 +29,5 @@ class World final : public IWorld {
   IEntity& singlentity_;
 };
 
-class WorldFactory final : public IWorldFactory {
- public:
-  WorldFactory(IEntityPool& ett_pool)
-      : ett_pool_{ett_pool} {}
-
- private:
-  std::unique_ptr<IWorld> CreateWorldImpl() const override;
-
-  IEntityPool& ett_pool_;
-};
-
 }  // namespace internal
 }  // namespace einu

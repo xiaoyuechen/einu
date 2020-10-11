@@ -6,6 +6,7 @@
 #include "einu-core/i_entity.h"
 #include "einu-core/i_entity_pool.h"
 #include "einu-core/i_world.h"
+#include "einu-core/i_world_pool.h"
 #include "need_list.h"
 
 namespace einu {
@@ -47,7 +48,7 @@ class EinuEngine {
     // TODO(Xiaoyue Chen): create and return entity pool
   }
 
-  std::unique_ptr<IWorldFactory> CreateWorldFactory() {
+  std::unique_ptr<IWorldPool> CreateWorldFactory() {
     // TODO(Xiaoyue Chen): create and return world factory
   }
 
