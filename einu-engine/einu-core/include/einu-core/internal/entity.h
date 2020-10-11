@@ -9,10 +9,10 @@
 namespace einu {
 namespace internal {
 
-template <int max_comp>
+template <std::size_t max_comp>
 using StaticComponentTable = std::array<Xnent*, max_comp>;
 
-template <int max_comp>
+template <std::size_t max_comp>
 class Entity final : public IEntity {
  public:
   using StaticXnentMask = StaticXnentMask<max_comp>;
