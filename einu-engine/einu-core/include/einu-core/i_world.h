@@ -11,6 +11,8 @@ namespace einu {
 
 class IWorld {
  public:
+  virtual ~IWorld() = default;
+
   void AddEntity(IEntity& ett) { AddEntityImpl(ett); }
   void RemoveEntity(EID eid) noexcept { RemoveEntityImpl(eid); }
   IEntity& GetEntity(EID eid) noexcept { return GetEntityImpl(eid); }
