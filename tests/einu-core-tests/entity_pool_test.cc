@@ -9,18 +9,18 @@ struct EntityPoolTest : public testing::Test {
   using EntityPool = EntityPool<kMaxComp, SimpleEIDManager>;
   using Policy = EntityPool::Policy;
 
-  SimpleEIDManager mgr;
-  EntityPool pool{mgr};
+  EntityPool pool{};
   Policy plc{666};
 };
 
 TEST_F(EntityPoolTest, a_new_pool_is_empty) { EXPECT_EQ(pool.Size(), 0); }
 
 bool InGoodState(const IEntity& ett) noexcept {
-  if (ett.GetID() == ~EID{0}) return false;
-  for (std::size_t i = 0; i != EntityPoolTest::kMaxComp; ++i) {
-    if (ett.HasComponents(0, internal::DynamicXnentMask{XnentTypeID{i}}))
-      return false;
+  if (ett.GetID() == EID{0}) {
+    for (std::size_t i = 0; i != EntityPoolTest::kMaxComp; ++i) {
+      if (ett.HasComponents(0, internal::DynamicXnentMask{XnentTypeID{i}}))
+        return false;
+    }
   }
   return true;
 }

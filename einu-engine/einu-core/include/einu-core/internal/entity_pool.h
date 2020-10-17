@@ -22,10 +22,6 @@ class SimpleEIDManager {
 
 template <std::size_t max_comp, typename EIDManager>
 class EntityPool final : public IEntityPool {
- public:
-  explicit EntityPool(EIDManager& eid_manager)
-      : eid_manager_(eid_manager) {}
-
  private:
   void SetPolicyImpl(const Policy& policy) override {
     pool_.SetGrowth(policy.growth_func);
@@ -33,17 +29,15 @@ class EntityPool final : public IEntityPool {
   }
 
   IEntity& AcquireImpl() override {
-    auto eid = eid_manager_.Acquire();
     auto&& [ett, mask, table] = pool_.Acquire();
     mask.reset();
     table.fill(nullptr);
-    ett = Entity(eid, mask, table);
+    ett = Entity(~EID{0}, mask, table);
     return ett;
   }
 
   void ReleaseImpl(const IEntity& ett) noexcept override {
     auto& entity = static_cast<const Entity&>(ett);
-    eid_manager_.Release(entity.GetID());
     pool_.Release(std::forward_as_tuple(entity, *entity.mask, *entity.table));
   }
 
@@ -54,7 +48,6 @@ class EntityPool final : public IEntityPool {
   using ComponentTable = StaticComponentTable<max_comp>;
   using Pool = util::DynamicPool<Entity, ComponentMask, ComponentTable>;
 
-  EIDManager& eid_manager_;
   Pool pool_;
 };
 
