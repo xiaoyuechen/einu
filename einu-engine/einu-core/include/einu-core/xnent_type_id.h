@@ -8,7 +8,6 @@
 #include "einu-core/xnent.h"
 
 namespace einu {
-namespace internal {
 
 class XnentTypeID : public rtti::TypeID {
  public:
@@ -38,5 +37,4 @@ void ResetXnentTypeID() noexcept {
   rtti::SetTypeID<T>(XnentTypeID{0});
 }
 
-}  // namespace internal
 }  // namespace einu

@@ -11,13 +11,13 @@ class MockEntity : public IEntity {
   MOCK_METHOD(void, ResetImpl, (), (noexcept, override));
   MOCK_METHOD(bool, HasComponentsImpl, (const internal::DynamicXnentMask& mask),
               (const, noexcept, override));
-  MOCK_METHOD(const Xnent&, GetComponentImpl, (internal::XnentTypeID id),
+  MOCK_METHOD(const Xnent&, GetComponentImpl, (XnentTypeID id),
               (const, noexcept, override));
-  MOCK_METHOD(Xnent&, GetComponentImpl, (internal::XnentTypeID id),
+  MOCK_METHOD(Xnent&, GetComponentImpl, (XnentTypeID id),
               (noexcept, override));
-  MOCK_METHOD(void, AddComponentImpl, (internal::XnentTypeID id, Xnent& comp),
+  MOCK_METHOD(void, AddComponentImpl, (XnentTypeID id, Xnent& comp),
               (override));
-  MOCK_METHOD(Xnent&, RemoveComponentImpl, (internal::XnentTypeID id),
+  MOCK_METHOD(Xnent&, RemoveComponentImpl, (XnentTypeID id),
               (noexcept, override));
 };
 

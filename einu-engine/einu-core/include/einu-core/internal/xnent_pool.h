@@ -58,7 +58,7 @@ class XnentPool<XnentList<Xnents...>> final : public IXnentPool {
 
   void AddPolicyImpl(size_type init_size, const Xnent& value,
                      GrowthFunc growth_func,
-                     internal::XnentTypeID id) override {
+                     XnentTypeID id) override {
     std::visit(
         [=](auto&& arg) {
           arg.SetValue(value);
@@ -68,17 +68,17 @@ class XnentPool<XnentList<Xnents...>> final : public IXnentPool {
         pool_table_[id]);
   }
 
-  Xnent& AcquireImpl(internal::XnentTypeID id) override {
+  Xnent& AcquireImpl(XnentTypeID id) override {
     return std::visit(
         [](auto&& arg) -> auto& { return arg.Acquire(); }, pool_table_[id]);
   }
 
-  void ReleaseImpl(internal::XnentTypeID id,
+  void ReleaseImpl(XnentTypeID id,
                    const Xnent& comp) noexcept override {
     std::visit([&comp](auto&& arg) { arg.Release(comp); }, pool_table_[id]);
   }
 
-  size_type OnePoolSizeImpl(internal::XnentTypeID id) const noexcept override {
+  size_type OnePoolSizeImpl(XnentTypeID id) const noexcept override {
     return std::visit([](auto&& arg) { return arg.Size(); }, pool_table_[id]);
   }
 

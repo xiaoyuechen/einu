@@ -2,7 +2,7 @@ add_library(
   einu-core
   "include/einu-core/einu_core.h"
   "include/einu-core/internal/entity.h"
-  "include/einu-core/internal/xnent_type_id.h"
+  "include/einu-core/xnent_type_id.h"
   "include/einu-core/internal/xnent_mask.h"
   "include/einu-core/xnent_list.h"
   "include/einu-core/xnent.h"

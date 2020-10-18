@@ -2,11 +2,11 @@
 
 #include "einu-core/entity_buffer.h"
 #include "einu-core/entity_view.h"
-#include "einu-core/i_xnent_pool.h"
 #include "einu-core/i_entity.h"
 #include "einu-core/i_entity_pool.h"
 #include "einu-core/i_world.h"
 #include "einu-core/i_world_pool.h"
+#include "einu-core/i_xnent_pool.h"
 #include "need_list.h"
 
 namespace einu {
@@ -66,12 +66,12 @@ class EinuEngine {
   template <typename... Ts>
   static void RegisterXnents(XnentList<Ts...>) noexcept {
     auto idx = std::size_t{0};
-    (internal::SetXnentTypeID<Ts>(internal::XnentTypeID{idx++}), ...);
+    (SetXnentTypeID<Ts>(XnentTypeID{idx++}), ...);
   }
 
   template <typename... Ts>
   static void ResetXnents(XnentList<Ts...>) noexcept {
-    (internal::ResetXnentTypeID<Ts>(), ...);
+    (ResetXnentTypeID<Ts>(), ...);
   }
 };
 
