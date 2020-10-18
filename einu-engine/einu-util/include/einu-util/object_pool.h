@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <cassert>
 #include <functional>
 #include <memory>
@@ -26,7 +27,7 @@ class FixedPoolImpl {
   FixedPoolImpl(size_type count,
                 const value_type& value = std::make_tuple<Ts...>())
       : object_arr_tuple_{ObjectArray<Ts>(count, std::get<Ts>(value))...}
-      , bit_arr_(count, 1) {}
+      , bit_arr_(count, true) {}
 
   FixedPoolImpl(const FixedPoolImpl&) = delete;
   FixedPoolImpl& operator=(const FixedPoolImpl&) = delete;
@@ -59,7 +60,7 @@ class FixedPoolImpl {
   void Release(const_reference obj) noexcept {
     auto idx = &std::get<0>(obj) - std::get<0>(object_arr_tuple_).data();
     assert(!bit_arr_[idx] && "object is already released");
-    bit_arr_[idx] = 1;
+    bit_arr_[idx] = true;
   }
 
  private:
@@ -150,24 +151,23 @@ class DynamicPool {
       GrowExtra(growth_(Size()));
     }
 
-    for (auto& pool : pools_) {
-      auto free_pos = pool.FreePos();
-      if (free_pos != pool.Size()) {
-        return pool.Acquire(free_pos);
-      }
-    }
-    assert(false);
-    return pools_[0].Acquire();
+    std::size_t free_pos;
+    auto free_pool_it = std::find_if(pools_.begin(), pools_.end(),
+                                     [&free_pos](const auto& pool) {
+                                       free_pos = pool.FreePos();
+                                       return free_pos != pool.Size();
+                                     });
+    assert(free_pool_it != pools_.end() &&
+           "no pool is free (maybe growth function is wrong)");
+    return free_pool_it->Acquire(free_pos);
   }
 
   void Release(const_reference obj) noexcept {
-    for (auto& pool : pools_) {
-      if (pool.Has(obj)) {
-        pool.Release(obj);
-        return;
-      }
-    }
-    assert(false && "object does not belong to this pool");
+    auto pool_it =
+        std::find_if(pools_.begin(), pools_.end(),
+                     [&obj](const auto& pool) { return pool.Has(obj); });
+    assert(pool_it != pools_.end() && "object does not belong to this pool");
+    pool_it->Release(obj);
   }
 
   size_type Size() const noexcept {
