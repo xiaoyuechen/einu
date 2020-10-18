@@ -30,9 +30,6 @@ class EntityPool final : public IEntityPool {
 
   IEntity& AcquireImpl() override {
     auto&& [ett, mask, table] = pool_.Acquire();
-    mask.reset();
-    table.fill(nullptr);
-    ett = Entity(~EID{0}, mask, table);
     return ett;
   }
 
