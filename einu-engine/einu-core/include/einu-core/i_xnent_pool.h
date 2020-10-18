@@ -10,13 +10,13 @@
 namespace einu {
 
 // TODO(Xiaoyue Chen): hide global state for user in release code
-class IComponentPool {
+class IXnentPool {
  public:
   using size_type = std::size_t;
-  template <typename Comp>
-  using Policy = PoolPolicy<Comp>;
+  template <typename Xnent>
+  using Policy = PoolPolicy<Xnent>;
 
-  virtual ~IComponentPool() = default;
+  virtual ~IXnentPool() = default;
 
   template <typename T>
   void AddPolicy(const Policy<T>& policy,

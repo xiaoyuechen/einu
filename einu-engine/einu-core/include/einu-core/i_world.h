@@ -3,7 +3,7 @@
 #include <memory>
 
 #include "einu-core/entity_buffer.h"
-#include "einu-core/i_component_pool.h"
+#include "einu-core/i_xnent_pool.h"
 #include "einu-core/i_entity.h"
 #include "einu-core/i_entity_pool.h"
 #include "einu-core/internal/xnent_mask.h"
@@ -60,7 +60,7 @@ void MergeImpl(const DynamicXnentMask& comp_mask,
 
 template <typename NeedList>
 void Snapshot(NeedList need_list, const IWorld& src, IWorld& dest,
-              IEntityPool& ett_pool, IComponentPool& comp_pool) {
+              IEntityPool& ett_pool, IXnentPool& comp_pool) {
   using ComponentList = typename NeedList::ComponentList;
   using SinglenentList = typename NeedList::SinglenentList;
   internal::SnapshotImpl(internal::GetXnentMask(ComponentList{}),
@@ -69,7 +69,7 @@ void Snapshot(NeedList need_list, const IWorld& src, IWorld& dest,
 
 template <typename ComponentList>
 void Merge(ComponentList comp_list, const IWorld& src, IWorld& dest,
-           IEntityPool& ett_pool, IComponentPool& comp_pool) {
+           IEntityPool& ett_pool, IXnentPool& comp_pool) {
   internal::MergeImpl(internal::GetXnentMask(ComponentList{}),
                       internal::GetXnentMask(SinglenentList{}), src, dest);
 }

@@ -7,14 +7,14 @@
 #include <tuple>
 #include <variant>
 
-#include "einu-core/i_component_pool.h"
+#include "einu-core/i_xnent_pool.h"
 #include "einu-core/xnent_list.h"
 
 namespace einu {
 namespace internal {
 
 template <typename Comp>
-class OneComponentPool {
+class OneXnentPool {
  public:
   using size_type = std::size_t;
   using GrowthFunc = std::function<size_type(size_type)>;
@@ -43,17 +43,17 @@ class OneComponentPool {
 };
 
 template <typename ComponentList>
-class ComponentPool;
+class XnentPool;
 
-template <typename... Comps>
-class ComponentPool<XnentList<Comps...>> final : public IComponentPool {
+template <typename... Xnents>
+class XnentPool<XnentList<Xnents...>> final : public IXnentPool {
  public:
-  ComponentPool()
-      : pool_table_{OneComponentPool<Comps>{}...} {}
+  XnentPool()
+      : pool_table_{OneXnentPool<Xnents>{}...} {}
 
  private:
-  using TypeList = tmp::TypeList<Comps...>;
-  using PoolVariant = std::variant<OneComponentPool<Comps>...>;
+  using TypeList = tmp::TypeList<Xnents...>;
+  using PoolVariant = std::variant<OneXnentPool<Xnents>...>;
   using PoolTable = std::array<PoolVariant, tmp::Size<TypeList>::value>;
 
   void AddPolicyImpl(size_type init_size, const Xnent& value,

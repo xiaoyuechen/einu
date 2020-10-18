@@ -11,35 +11,35 @@ namespace einu {
 class ComponentPoolManager {
  public:
   template <typename T, typename... Args>
-  ComponentPool<T>& Make(Args&&... args) {
+  XnentPool<T>& Make(Args&&... args) {
     auto idx = rtti::GetTypeID<T>();
     assert(pools_.find(idx) == pools_.end() && "component pool already made");
-    auto ptr = std::make_unique<ComponentPool<T>>(std::forward<Args>(args)...);
+    auto ptr = std::make_unique<XnentPool<T>>(std::forward<Args>(args)...);
     auto& ref = *ptr;
     pools_[idx] = std::move(ptr);
     return ref;
   }
 
   template <typename T>
-  const ComponentPool<T>& Get() const {
+  const XnentPool<T>& Get() const {
     auto idx = rtti::GetTypeID<T>();
-    return static_cast<const ComponentPool<T>&>(*pools_.at(idx));
+    return static_cast<const XnentPool<T>&>(*pools_.at(idx));
   }
 
   template <typename T>
-  ComponentPool<T>& Get() {
-    return const_cast<ComponentPool<T>&>(
+  XnentPool<T>& Get() {
+    return const_cast<XnentPool<T>&>(
         static_cast<const ComponentPoolManager&>(*this).Get<T>());
   }
 
-  const IComponentPool& Get(rtti::TypeID idx) const {
+  const IXnentPool& Get(rtti::TypeID idx) const {
     return *pools_.at(idx);
   }
 
-  IComponentPool& Get(rtti::TypeID idx) { return *pools_.at(idx); }
+  IXnentPool& Get(rtti::TypeID idx) { return *pools_.at(idx); }
 
  private:
-  using Ptr = std::unique_ptr<IComponentPool>;
+  using Ptr = std::unique_ptr<IXnentPool>;
   using Map = std::map<rtti::TypeID, Ptr>;
   Map pools_;
 };

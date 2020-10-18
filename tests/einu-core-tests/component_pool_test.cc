@@ -1,4 +1,4 @@
-#include <einu-core/internal/component_pool.h>
+#include <einu-core/internal/xnent_pool.h>
 #include <einu-tmp/static_algo.h>
 #include <einu-tmp/type_list.h>
 #include <gtest/gtest.h>
@@ -13,14 +13,14 @@ namespace internal {
 
 struct ComponentPoolTest : public testing::Test {
   using ComponentList = XnentList<C0, C1, C2, C3>;
-  using ComponentPool = ComponentPool<ComponentList>;
+  using ComponentPool = XnentPool<ComponentList>;
   template <typename Comp>
   using ComponentPoolPolicy = ComponentPool::Policy<Comp>;
   template <typename Complist>
   struct PolicyTuple;
-  template <typename... Comps>
-  struct PolicyTuple<XnentList<Comps...>> {
-    using Type = std::tuple<ComponentPoolPolicy<Comps>...>;
+  template <typename... Xnents>
+  struct PolicyTuple<XnentList<Xnents...>> {
+    using Type = std::tuple<ComponentPoolPolicy<Xnents>...>;
   };
 
   static constexpr std::size_t kCount =

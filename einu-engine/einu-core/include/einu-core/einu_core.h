@@ -2,7 +2,7 @@
 
 #include "einu-core/entity_buffer.h"
 #include "einu-core/entity_view.h"
-#include "einu-core/i_component_pool.h"
+#include "einu-core/i_xnent_pool.h"
 #include "einu-core/i_entity.h"
 #include "einu-core/i_entity_pool.h"
 #include "einu-core/i_world.h"
@@ -40,7 +40,7 @@ class EinuEngine {
     ResetXnents(SinglenentList{});
   }
 
-  std::unique_ptr<IComponentPool> CreateComponentPool() {
+  std::unique_ptr<IXnentPool> CreateComponentPool() {
     // TODO(Xiaoyue Chen): create and return component pool
   }
 

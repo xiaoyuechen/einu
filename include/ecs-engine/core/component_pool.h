@@ -7,15 +7,15 @@
 
 namespace einu {
 
-class IComponentPool {
+class IXnentPool {
  public:
-  virtual ~IComponentPool() = default;
+  virtual ~IXnentPool() = default;
   virtual void Recall(const Xnent& comp) = 0;
   virtual Xnent& Acquire() = 0;
 };
 
 template <typename T>
-class ComponentPool : public FixedSizePool<T>, public IComponentPool {
+class XnentPool : public FixedSizePool<T>, public IXnentPool {
   static_assert(std::is_base_of<Xnent, T>::value &&
                 "<T> must inherit from <Xnent>");
 
