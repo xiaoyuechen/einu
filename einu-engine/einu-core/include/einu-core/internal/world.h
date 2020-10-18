@@ -15,10 +15,7 @@ class World final : public IWorld {
 
   World() = default;
   World(IEntity& singlentity)
-      : singlentity(&singlentity) {}
-
-  EntityTable entity_table;
-  IEntity* singlentity = nullptr;
+      : singlentity_(&singlentity) {}
 
  private:
   void AddEntityImpl(IEntity& ett) override;
@@ -27,8 +24,12 @@ class World final : public IWorld {
   const IEntity& GetEntityImpl(EID eid) const noexcept override;
   std::size_t GetEntityCountImpl() const noexcept override;
   void GetAllEntitiesImpl(EntityBuffer& buffer) const override;
-  IEntity& GetSinglenityImpl() noexcept override;
-  const IEntity& GetSinglenityImpl() const noexcept override;
+  void SetSinglentityImpl(IEntity& singlentity) noexcept override;
+  IEntity& GetSinglentityImpl() noexcept override;
+  const IEntity& GetSinglentityImpl() const noexcept override;
+
+  EntityTable entity_table_;
+  IEntity* singlentity_ = nullptr;
 };
 
 }  // namespace internal

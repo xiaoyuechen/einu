@@ -11,8 +11,7 @@ namespace internal {
 
 class WorldPool : public IWorldPool {
  public:
-  WorldPool(IEntityPool& ett_pool)
-      : ett_pool_{ett_pool} {}
+  WorldPool(IEntityPool& ett_pool) {}
 
  private:
   using Pool = util::DynamicPool<World>;
@@ -23,7 +22,6 @@ class WorldPool : public IWorldPool {
   size_type SizeImpl() const noexcept override;
 
   Pool pool_;
-  IEntityPool& ett_pool_;
 };
 
 }  // namespace internal

@@ -3,7 +3,9 @@
 #include <memory>
 
 #include "einu-core/entity_buffer.h"
+#include "einu-core/i_component_pool.h"
 #include "einu-core/i_entity.h"
+#include "einu-core/i_entity_pool.h"
 #include "einu-core/internal/xnent_mask.h"
 #include "einu-core/need_list.h"
 
@@ -24,8 +26,14 @@ class IWorld {
     return GetAllEntitiesImpl(buffer);
   }
 
-  IEntity& GetSinglenity() noexcept { return GetSinglenityImpl(); }
-  const IEntity& GetSinglenity() const noexcept { return GetSinglenityImpl(); }
+  void SetSinglentity(IEntity& singlentity) noexcept {
+    SetSinglentityImpl(singlentity);
+  }
+
+  IEntity& GetSinglentity() noexcept { return GetSinglentityImpl(); }
+  const IEntity& GetSinglentity() const noexcept {
+    return GetSinglentityImpl();
+  }
 
  private:
   virtual void AddEntityImpl(IEntity& ett) = 0;
@@ -34,8 +42,9 @@ class IWorld {
   virtual const IEntity& GetEntityImpl(EID eid) const noexcept = 0;
   virtual std::size_t GetEntityCountImpl() const noexcept = 0;
   virtual void GetAllEntitiesImpl(EntityBuffer& buffer) const = 0;
-  virtual IEntity& GetSinglenityImpl() noexcept = 0;
-  virtual const IEntity& GetSinglenityImpl() const noexcept = 0;
+  virtual void SetSinglentityImpl(IEntity& singlentity) noexcept = 0;
+  virtual IEntity& GetSinglentityImpl() noexcept = 0;
+  virtual const IEntity& GetSinglentityImpl() const noexcept = 0;
 };
 
 namespace internal {
@@ -50,7 +59,8 @@ void MergeImpl(const DynamicXnentMask& comp_mask,
 }  // namespace internal
 
 template <typename NeedList>
-void Snapshot(NeedList need_list, const IWorld& src, IWorld& dest) {
+void Snapshot(NeedList need_list, const IWorld& src, IWorld& dest,
+              IEntityPool& ett_pool, IComponentPool& comp_pool) {
   using ComponentList = typename NeedList::ComponentList;
   using SinglenentList = typename NeedList::SinglenentList;
   internal::SnapshotImpl(internal::GetXnentMask(ComponentList{}),
@@ -58,7 +68,8 @@ void Snapshot(NeedList need_list, const IWorld& src, IWorld& dest) {
 }
 
 template <typename ComponentList>
-void Merge(ComponentList comp_list, const IWorld& src, IWorld& dest) {
+void Merge(ComponentList comp_list, const IWorld& src, IWorld& dest,
+           IEntityPool& ett_pool, IComponentPool& comp_pool) {
   internal::MergeImpl(internal::GetXnentMask(ComponentList{}),
                       internal::GetXnentMask(SinglenentList{}), src, dest);
 }
