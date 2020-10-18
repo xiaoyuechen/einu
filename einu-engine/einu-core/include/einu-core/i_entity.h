@@ -17,6 +17,7 @@ class IEntity {
   virtual ~IEntity() = default;
 
   EID GetID() const noexcept { return GetIDImpl(); }
+  void Reset() noexcept { ResetImpl(); }
 
   template <typename ComponentList>
   bool HasComponents(ComponentList l, const internal::DynamicXnentMask& mask =
@@ -51,6 +52,7 @@ class IEntity {
 
  private:
   virtual EID GetIDImpl() const noexcept = 0;
+  virtual void ResetImpl() noexcept = 0;
   virtual bool HasComponentsImpl(
       const internal::DynamicXnentMask& mask) const noexcept = 0;
   virtual const Xnent& GetComponentImpl(

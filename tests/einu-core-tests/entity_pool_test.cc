@@ -6,7 +6,7 @@ namespace internal {
 
 struct EntityPoolTest : public testing::Test {
   static constexpr std::size_t kMaxComp = 22;
-  using EntityPool = EntityPool<kMaxComp, SimpleEIDManager>;
+  using EntityPool = EntityPool<kMaxComp>;
   using Policy = EntityPool::Policy;
 
   EntityPool pool{};

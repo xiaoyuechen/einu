@@ -6,8 +6,9 @@
 namespace einu {
 
 class MockEntity : public IEntity {
- private:
+ public:
   MOCK_METHOD(EID, GetIDImpl, (), (const, noexcept, override));
+  MOCK_METHOD(void, ResetImpl, (), (noexcept, override));
   MOCK_METHOD(bool, HasComponentsImpl, (const internal::DynamicXnentMask& mask),
               (const, noexcept, override));
   MOCK_METHOD(const Xnent&, GetComponentImpl, (internal::XnentTypeID id),

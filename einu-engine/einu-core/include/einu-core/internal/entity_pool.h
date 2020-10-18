@@ -20,7 +20,7 @@ class SimpleEIDManager {
   std::atomic_uint64_t available_ = 0;
 };
 
-template <std::size_t max_comp, typename EIDManager>
+template <std::size_t max_comp>
 class EntityPool final : public IEntityPool {
  private:
   void SetPolicyImpl(const Policy& policy) override {
@@ -30,12 +30,13 @@ class EntityPool final : public IEntityPool {
 
   IEntity& AcquireImpl() override {
     auto&& [ett, mask, table] = pool_.Acquire();
+    ett = Entity{~EID{0}, mask, table};
     return ett;
   }
 
   void ReleaseImpl(const IEntity& ett) noexcept override {
     auto& entity = static_cast<const Entity&>(ett);
-    pool_.Release(std::forward_as_tuple(entity, *entity.mask, *entity.table));
+    pool_.Release(std::forward_as_tuple(entity, entity.Mask(), entity.Table()));
   }
 
   size_type SizeImpl() const noexcept override { return pool_.Size(); }

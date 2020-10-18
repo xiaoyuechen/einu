@@ -20,16 +20,23 @@ class Entity final : public IEntity {
 
   Entity() noexcept = default;
   Entity(EID id, StaticXnentMask& mask, ComponentTable& table) noexcept
-      : id(id)
-      , mask(&mask)
-      , table(&table) {}
+      : id_(id)
+      , mask_(&mask)
+      , table_(&table) {}
 
-  EID id = ~EID{0};
-  StaticXnentMask* mask = nullptr;
-  ComponentTable* table = nullptr;
+  const StaticXnentMask& Mask() const noexcept { return *mask_; }
+  StaticXnentMask& Mask() noexcept { return *mask_; }
+  const ComponentTable& Table() const noexcept { return *table_; }
+  ComponentTable& Table() noexcept { return *table_; }
 
  private:
-  EID GetIDImpl() const noexcept override { return id; }
+  EID GetIDImpl() const noexcept override { return id_; }
+
+  void ResetImpl() noexcept override {
+    id_ = ~EID{0};
+    Mask().reset();
+    Table().fill(nullptr);
+  }
 
   bool HasComponentsImpl(const DynamicXnentMask& mask) const noexcept override {
     return (mask & Mask()) == mask;
@@ -57,10 +64,9 @@ class Entity final : public IEntity {
     return tmp;
   }
 
-  const StaticXnentMask& Mask() const noexcept { return *mask; }
-  StaticXnentMask& Mask() noexcept { return *mask; }
-  const ComponentTable& Table() const noexcept { return *table; }
-  ComponentTable& Table() noexcept { return *table; }
+  EID id_ = ~EID{0};
+  StaticXnentMask* mask_ = nullptr;
+  ComponentTable* table_ = nullptr;
 };
 
 }  // namespace internal
