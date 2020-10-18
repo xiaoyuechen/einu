@@ -9,7 +9,9 @@ add_executable(
   "component_pool_test.cc"
   "entity_pool_test.cc"
   "world_test.cc"
-   "mock_entity.h")
+   "mock_entity.h"
+   "xnent_type_id_register_test.cc"
+   )
 
 target_link_libraries(einu-core-tests 
   PRIVATE einu-core 

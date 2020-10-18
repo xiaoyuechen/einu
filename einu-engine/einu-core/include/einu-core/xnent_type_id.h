@@ -34,7 +34,7 @@ template <typename T>
 void ResetXnentTypeID() noexcept {
   static_assert(std::is_base_of<Xnent, T>::value &&
                 "<Xnent> must be base of <T>");
-  rtti::SetTypeID<T>(XnentTypeID{0});
+  rtti::SetTypeID<T>(XnentTypeID{});
 }
 
 }  // namespace einu
