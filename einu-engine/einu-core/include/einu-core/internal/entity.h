@@ -35,7 +35,6 @@ class Entity final : public IEntity {
   void ResetImpl() noexcept override {
     id_ = ~EID{0};
     Mask().reset();
-    Table().fill(nullptr);
   }
 
   bool HasComponentsImpl(const DynamicXnentMask& mask) const noexcept override {
