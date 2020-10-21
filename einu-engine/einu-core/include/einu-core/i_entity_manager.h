@@ -34,9 +34,17 @@ class IEntityManager {
     return static_cast<T&>(AddComponentImpl(eid, GetXnentTypeID<T>()));
   }
 
+  Xnent& AddComponent(EID eid, XnentTypeID tid) {
+    return AddComponentImpl(eid, tid);
+  }
+
   template <typename T>
   void RemoveComponent(EID eid) noexcept {
-    RemoveComponentImpl(eid, GetXnentTypeID<T>())
+    RemoveComponentImpl(eid, GetXnentTypeID<T>());
+  }
+
+  void RemoveComponent(EID eid, XnentTypeID tid) noexcept {
+    RemoveComponentImpl(eid, tid);
   }
 
   template <typename T>
@@ -44,14 +52,23 @@ class IEntityManager {
     return static_cast<T&>(GetComponentImpl(eid, GetXnentTypeID<T>()));
   }
 
+  Xnent& GetComponent(EID eid, XnentTypeID tid) noexcept {
+    return GetComponentImpl(eid, tid);
+  }
+
   template <typename T>
   const T& GetComponent(EID eid) const noexcept {
-    return static_cast<T&>(GetComponentImpl(eid, GetXnentTypeID<T>()));
+    return static_cast<const T&>(GetComponentImpl(eid, GetXnentTypeID<T>()));
+  }
+
+  const Xnent& GetComponent(EID eid, XnentTypeID tid) const noexcept {
+    return GetComponentImpl(eid, tid);
   }
 
   template <typename ComponentList>
   void GetEntitiesWithComponents(EntityBuffer& buffer) {
-    GetEntitiesWithComponents(buffer, internal::GetXnentMask(ComponentList{}));
+    GetEntitiesWithComponentsImpl(buffer,
+                                  internal::GetXnentMask(ComponentList{}));
   }
 
   void Reset() noexcept { ResetImpl(); }
@@ -66,7 +83,7 @@ class IEntityManager {
                                         XnentTypeID tid) const noexcept = 0;
   virtual void GetEntitiesWithComponentsImpl(
       EntityBuffer& buffer, const internal::DynamicXnentMask& mask) = 0;
-  virtual void Reset() = 0;
+  virtual void Reset() noexcept = 0;
 };
 
 }  // namespace einu
