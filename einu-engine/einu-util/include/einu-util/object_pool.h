@@ -176,6 +176,12 @@ class DynamicPool {
         [](auto acc, const auto& pool) { return acc + pool.Size(); });
   }
 
+  void Clear() noexcept {
+    value_ = value_type{};
+    growth_ = DefaultGrowth;
+    pools_.clear();
+  }
+
  private:
   using PoolList = std::vector<FixedPool>;
 
