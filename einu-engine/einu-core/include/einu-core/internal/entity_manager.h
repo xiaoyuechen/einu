@@ -1,6 +1,11 @@
 #pragma once
 
+#include <absl/container/flat_hash_map.h>
+
+#include <cassert>
+
 #include "einu-core/i_entity_manager.h"
+#include "einu-util/object_pool.h"
 
 namespace einu {
 namespace internal {
@@ -69,7 +74,24 @@ class EntityManager : public IEntityManager {
  private:
   using ComponentMask = StaticXnentMask<max_comp>;
   using ComponentTable = StaticComponentTable<max_comp>;
-  using Pool = util::DynamicPool<ComponentMask, ComponentTable>;
+
+  struct EntityData {
+    ComponentMask* mask;
+    ComponentTable* comp_table;
+  };
+
+  using EntityTable = absl::flat_hash_map<EID, EntityData>;
+  using EntityDataPool = util::DynamicPool<ComponentMask, ComponentTable>;
+
+  void SetComponentPoolImpl(IXnentPool& comp_pool) noexcept override {
+    assert(!comp_pool_ && "component pool is already set");
+    comp_pool_ = &comp_pool;
+  }
+
+  void SetPolicyImpl(Policy policy) noexcept override {
+    ett_data_pool_.SetGrowth(policy.growth_func);
+    ett_data_pool_.GrowExtra(policy.init_size);
+  }
 
   EID CreateEntityImpl() override {
     throw std::logic_error("The method or operation is not implemented.");
@@ -96,14 +118,32 @@ class EntityManager : public IEntityManager {
     throw std::logic_error("The method or operation is not implemented.");
   }
 
+  void SetSinglenentImpl(const Xnent& singlenent, XnentTypeID tid) override {
+    throw std::logic_error("The method or operation is not implemented.");
+  }
+
+  Xnent& GetSinglenentImpl(XnentTypeID tid) noexcept override {
+    throw std::logic_error("The method or operation is not implemented.");
+  }
+
+  const Xnent& GetSinglenentImpl(XnentTypeID tid) const noexcept override {
+    throw std::logic_error("The method or operation is not implemented.");
+  }
+
   void GetEntitiesWithComponentsImpl(
       EntityBuffer& buffer, const internal::DynamicXnentMask& mask) override {
     throw std::logic_error("The method or operation is not implemented.");
   }
 
-  void Reset() override noexcept {
-    throw std::logic_error("The method or operation is not implemented.");
+  void ResetImpl() noexcept override {
+    comp_pool_ = nullptr;
+    ett_data_pool_.Clear();
+    ett_table_.clear();
   }
+
+  IXnentPool* comp_pool_ = nullptr;
+  EntityDataPool ett_data_pool_;
+  EntityTable ett_table_;
 };
 
 }  // namespace internal
