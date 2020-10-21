@@ -6,7 +6,8 @@ namespace internal {
 
 struct EntityManagerTest : public testing::Test {
   static constexpr std::size_t kMaxComponent = 256;
-  using EttMgr = EntityManager<kMaxComponent>;
+  static constexpr std::size_t kMaxSinglenent = 256;
+  using EttMgr = EntityManager<kMaxComponent, kMaxSinglenent>;
   EttMgr ett_mgr;
 };
 

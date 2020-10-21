@@ -1,7 +1,8 @@
 #pragma once
 
-#include "einu-core/i_entity.h"
+#include "einu-core/i_eid_pool.h"
 #include "einu-core/i_xnent_pool.h"
+#include "einu-core/internal/xnent_mask.h"
 #include "einu-core/pool_policy.h"
 #include "einu-core/xnent_list.h"
 
@@ -31,15 +32,21 @@ class IEntityManager {
  public:
   using Policy = PoolPolicy<>;
 
+  void SetEIDPool(IEIDPool& eid_pool) noexcept { SetEIDPoolImpl(eid_pool); }
+
   void SetComponentPool(IXnentPool& comp_pool) noexcept {
     SetComponentPoolImpl(comp_pool);
+  }
+
+  void SetSinglenentPool(IXnentPool& single_pool) noexcept {
+    SetSinglenentPoolImpl(single_pool);
   }
 
   void SetPolicy(Policy policy) noexcept { SetPolicyImpl(policy); }
 
   [[nodiscard]] EID CreateEntity() { return CreateEntityImpl(); }
 
-  void DestroyEntity(EID eid) noexcept { DestroyEntityImpl(eid); }
+  void DestroyEntity(EID eid) { DestroyEntityImpl(eid); }
 
   template <typename T>
   T& AddComponent(EID eid) {
@@ -51,40 +58,38 @@ class IEntityManager {
   }
 
   template <typename T>
-  void RemoveComponent(EID eid) noexcept {
+  void RemoveComponent(EID eid) {
     RemoveComponentImpl(eid, GetXnentTypeID<T>());
   }
 
-  void RemoveComponent(EID eid, XnentTypeID tid) noexcept {
+  void RemoveComponent(EID eid, XnentTypeID tid) {
     RemoveComponentImpl(eid, tid);
   }
 
   template <typename T>
-  T& GetComponent(EID eid) noexcept {
+  T& GetComponent(EID eid) {
     return static_cast<T&>(GetComponentImpl(eid, GetXnentTypeID<T>()));
   }
 
-  Xnent& GetComponent(EID eid, XnentTypeID tid) noexcept {
+  Xnent& GetComponent(EID eid, XnentTypeID tid) {
     return GetComponentImpl(eid, tid);
   }
 
   template <typename T>
-  const T& GetComponent(EID eid) const noexcept {
+  const T& GetComponent(EID eid) const {
     return static_cast<const T&>(GetComponentImpl(eid, GetXnentTypeID<T>()));
   }
 
-  const Xnent& GetComponent(EID eid, XnentTypeID tid) const noexcept {
+  const Xnent& GetComponent(EID eid, XnentTypeID tid) const {
     return GetComponentImpl(eid, tid);
   }
 
   template <typename T>
-  void SetSinglenent(const T& singlenent) {
-    SetSinglenentImpl(singlenent, GetXnentTypeID<T>());
+  T& AddSinglenent() {
+    return static_cast<T&>(AddSinglenentImpl(GetXnentTypeID<T>()));
   }
 
-  void SetSinglenent(const Xnent& singlenent, XnentTypeID tid) {
-    SetSinglenentImpl(singlenent, tid);
-  }
+  Xnent& AddSinglenent(XnentTypeID tid) { return AddSinglenentImpl(tid); }
 
   template <typename T>
   T& GetSinglenent() noexcept {
@@ -118,19 +123,20 @@ class IEntityManager {
   void Reset() noexcept { ResetImpl(); }
 
  private:
+  virtual void SetEIDPoolImpl(IEIDPool& eid_pool) noexcept = 0;
   virtual void SetComponentPoolImpl(IXnentPool& comp_pool) noexcept = 0;
+  virtual void SetSinglenentPoolImpl(IXnentPool& single_pool) noexcept = 0;
   virtual void SetPolicyImpl(Policy policy) noexcept = 0;
 
   virtual EID CreateEntityImpl() = 0;
-  virtual void DestroyEntityImpl(EID eid) noexcept = 0;
+  virtual void DestroyEntityImpl(EID eid) = 0;
 
   virtual Xnent& AddComponentImpl(EID eid, XnentTypeID tid) = 0;
-  virtual void RemoveComponentImpl(EID eid, XnentTypeID tid) noexcept = 0;
-  virtual Xnent& GetComponentImpl(EID eid, XnentTypeID tid) noexcept = 0;
-  virtual const Xnent& GetComponentImpl(EID eid,
-                                        XnentTypeID tid) const noexcept = 0;
+  virtual void RemoveComponentImpl(EID eid, XnentTypeID tid) = 0;
+  virtual Xnent& GetComponentImpl(EID eid, XnentTypeID tid) = 0;
+  virtual const Xnent& GetComponentImpl(EID eid, XnentTypeID tid) const = 0;
 
-  virtual void SetSinglenentImpl(const Xnent& singlenent, XnentTypeID tid) = 0;
+  virtual Xnent& AddSinglenentImpl(XnentTypeID tid) = 0;
   virtual Xnent& GetSinglenentImpl(XnentTypeID tid) noexcept = 0;
   virtual const Xnent& GetSinglenentImpl(XnentTypeID tid) const noexcept = 0;
 
