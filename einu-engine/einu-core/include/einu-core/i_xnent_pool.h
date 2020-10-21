@@ -3,9 +3,9 @@
 #include <functional>
 #include <memory>
 
-#include "einu-core/xnent_type_id.h"
 #include "einu-core/pool_policy.h"
 #include "einu-core/xnent.h"
+#include "einu-core/xnent_type_id.h"
 
 namespace einu {
 
@@ -25,31 +25,36 @@ class IXnentPool {
   }
 
   template <typename T>
-  T& Acquire(XnentTypeID id = GetXnentTypeID<T>()) {
-    return static_cast<T&>(AcquireImpl(id));
+  T& Acquire() {
+    return static_cast<T&>(AcquireImpl(GetXnentTypeID<T>()));
+  }
+
+  Xnent& Acquire(XnentTypeID tid) { return AcquireImpl(tid); }
+
+  template <typename T>
+  void Release(const T& comp) noexcept {
+    ReleaseImpl(GetXnentTypeID<T>(), comp);
+  }
+
+  void Release(XnentTypeID tid, const Xnent& comp) noexcept {
+    ReleaseImpl(tid, comp);
   }
 
   template <typename T>
-  void Release(const T& comp, XnentTypeID id =
-                                  GetXnentTypeID<T>()) noexcept {
-    ReleaseImpl(id, comp);
+  size_type OnePoolSize() const noexcept {
+    return OnePoolSizeImpl(GetXnentTypeID<T>());
   }
 
-  template <typename T>
-  size_type OnePoolSize(
-      XnentTypeID id = GetXnentTypeID<T>()) const noexcept {
-    return OnePoolSizeImpl(id);
+  size_type OnePoolSize(XnentTypeID tid) const noexcept {
+    return OnePoolSizeImpl(tid);
   }
 
  protected:
   virtual void AddPolicyImpl(size_type init_size, const Xnent& value,
-                             GrowthFunc growth_func,
-                             XnentTypeID id) = 0;
+                             GrowthFunc growth_func, XnentTypeID id) = 0;
   virtual Xnent& AcquireImpl(XnentTypeID id) = 0;
-  virtual void ReleaseImpl(XnentTypeID id,
-                           const Xnent& comp) noexcept = 0;
-  virtual size_type OnePoolSizeImpl(
-      XnentTypeID id) const noexcept = 0;
+  virtual void ReleaseImpl(XnentTypeID id, const Xnent& comp) noexcept = 0;
+  virtual size_type OnePoolSizeImpl(XnentTypeID id) const noexcept = 0;
 };
 
 }  // namespace einu

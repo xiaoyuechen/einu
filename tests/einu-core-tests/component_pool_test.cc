@@ -37,7 +37,7 @@ struct ComponentPoolTest : public testing::Test {
 TEST_F(ComponentPoolTest, a_new_pool_is_empty) {
   tmp::StaticFor<kCount>([&](auto i) {
     using Comp = tmp::TypeAt<ToTypeList<ComponentList>::Type, i>::Type;
-    EXPECT_EQ(pool.OnePoolSize<Comp>(XnentTypeID{i}), 0);
+    EXPECT_EQ(pool.OnePoolSize(XnentTypeID{i}), 0);
   });
 }
 
@@ -45,7 +45,7 @@ TEST_F(ComponentPoolTest, add_policy_will_grow_pool_size) {
   tmp::StaticFor<kCount>([&](auto i) {
     pool.AddPolicy(std::get<i>(policy_tuple), XnentTypeID{i});
     using Comp = tmp::TypeAt<ToTypeList<ComponentList>::Type, i>::Type;
-    EXPECT_EQ(pool.OnePoolSize<Comp>(XnentTypeID{i}),
+    EXPECT_EQ(pool.OnePoolSize(XnentTypeID{i}),
               std::get<i>(policy_tuple).init_size);
   });
 }
@@ -59,11 +59,11 @@ TEST_F(ComponentPoolTest,
 
     auto init_size = policy.init_size;
     for (auto time = std::size_t{0}; time != init_size; ++time) {
-      pool.Acquire<Comp>(XnentTypeID{i});
+      pool.Acquire(XnentTypeID{i});
     }
-    EXPECT_EQ(pool.OnePoolSize<Comp>(XnentTypeID{i}), init_size);
-    pool.Acquire<Comp>(XnentTypeID{i});
-    EXPECT_EQ(pool.OnePoolSize<Comp>(XnentTypeID{i}),
+    EXPECT_EQ(pool.OnePoolSize(XnentTypeID{i}), init_size);
+    pool.Acquire(XnentTypeID{i});
+    EXPECT_EQ(pool.OnePoolSize(XnentTypeID{i}),
               init_size + policy.growth_func(init_size));
   });
 }
@@ -74,16 +74,16 @@ TEST_F(ComponentPoolTest, acquire_release_aquire_would_not_make_pool_grow) {
     const auto& policy = std::get<ComponentPoolPolicy<Comp>>(policy_tuple);
     pool.AddPolicy(policy, XnentTypeID{i});
 
-    auto acquired = std::vector<Comp*>{};
+    auto acquired = std::vector<Xnent*>{};
     auto init_size = policy.init_size;
     for (auto time = std::size_t{0}; time != init_size; ++time) {
-      acquired.push_back(&pool.Acquire<Comp>(XnentTypeID{i}));
+      acquired.push_back(&pool.Acquire(XnentTypeID{i}));
     }
-    EXPECT_EQ(pool.OnePoolSize<Comp>(XnentTypeID{i}), init_size);
+    EXPECT_EQ(pool.OnePoolSize(XnentTypeID{i}), init_size);
     for (auto it = acquired.begin(); it != acquired.end(); ++it) {
-      pool.Release<Comp>(*(*it), XnentTypeID{i});
+      pool.Release(XnentTypeID{i}, *(*it));
     }
-    EXPECT_EQ(pool.OnePoolSize<Comp>(XnentTypeID{i}), init_size);
+    EXPECT_EQ(pool.OnePoolSize(XnentTypeID{i}), init_size);
   });
 }
 
