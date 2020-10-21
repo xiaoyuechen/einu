@@ -1,11 +1,6 @@
 #pragma once
 
-#include "einu-core/entity_buffer.h"
 #include "einu-core/entity_view.h"
-#include "einu-core/i_entity.h"
-#include "einu-core/i_entity_pool.h"
-#include "einu-core/i_world.h"
-#include "einu-core/i_world_pool.h"
 #include "einu-core/i_xnent_pool.h"
 #include "need_list.h"
 
@@ -42,14 +37,6 @@ class EinuEngine {
 
   std::unique_ptr<IXnentPool> CreateComponentPool() {
     // TODO(Xiaoyue Chen): create and return component pool
-  }
-
-  std::unique_ptr<IEntityPool> CreateEntityPool() {
-    // TODO(Xiaoyue Chen): create and return entity pool
-  }
-
-  std::unique_ptr<IWorldPool> CreateWorldFactory() {
-    // TODO(Xiaoyue Chen): create and return world factory
   }
 
  private:

@@ -18,16 +18,6 @@ inline void Clear(EntityBuffer& buffer) noexcept {
   buffer.eids.clear();
 }
 
-template <typename ComponentList>
-struct EntityView;
-
-template <typename... Ts>
-class EntityView<XnentList<Ts...>> {
- public:
- private:
-  EntityBuffer ett_buffer_;
-};
-
 class IEntityManager {
  public:
   using Policy = PoolPolicy<>;
