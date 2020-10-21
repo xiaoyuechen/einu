@@ -25,4 +25,7 @@ add_library(
    "include/einu-core/internal/xnent_type_id_register.h")
 
 target_include_directories(einu-core PUBLIC "include")
-target_link_libraries(einu-core PUBLIC einu-rtti einu-tmp einu-util)
+target_link_libraries(einu-core 
+  PUBLIC einu-rtti einu-tmp einu-util
+  PUBLIC absl::container
+)

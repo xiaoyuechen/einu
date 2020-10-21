@@ -19,3 +19,11 @@ FetchContent_Declare(
 )
 
 FetchContent_MakeAvailable(glm)
+
+FetchContent_Declare(
+  abseil-cpp
+  GIT_REPOSITORY https://github.com/abseil/abseil-cpp.git
+  GIT_TAG        20200923.2
+)
+
+FetchContent_MakeAvailable(abseil-cpp)
