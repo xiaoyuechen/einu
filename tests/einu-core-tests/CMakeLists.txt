@@ -7,6 +7,7 @@ add_executable(
   "component_pool_test.cc"
   "xnent_type_id_register_test.cc"
   "entity_manager_test.cc"
+  "entity_view_test.cc"
 )
 
 target_link_libraries(einu-core-tests 
