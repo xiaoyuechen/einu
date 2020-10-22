@@ -24,8 +24,11 @@ class FixedPoolImpl {
   using reference = std::tuple<Ts&...>;
   using const_reference = std::tuple<const Ts&...>;
 
-  FixedPoolImpl(size_type count,
-                const value_type& value = std::make_tuple<Ts...>())
+  FixedPoolImpl(size_type count)
+      : object_arr_tuple_{ObjectArray<Ts>(count)...}
+      , bit_arr_(count, true) {}
+
+  FixedPoolImpl(size_type count, const value_type& value)
       : object_arr_tuple_{ObjectArray<Ts>(count, std::get<Ts>(value))...}
       , bit_arr_(count, true) {}
 
@@ -90,7 +93,10 @@ class FixedPool<T> {
   using reference = value_type&;
   using const_reference = const value_type&;
 
-  FixedPool(size_type count, const value_type& value = value_type{})
+  FixedPool(size_type count)
+      : pool_{count} {}
+
+  FixedPool(size_type count, const value_type& value)
       : pool_{count, std::forward_as_tuple(value)} {}
 
   size_type Size() const noexcept { return pool_.Size(); }
@@ -130,22 +136,28 @@ class DynamicPool {
   using const_reference = typename FixedPool::const_reference;
   using GrowthFunc = std::function<size_type(size_type)>;
 
-  DynamicPool(size_type count = 0, const value_type& value = value_type{},
+  DynamicPool(size_type count = 0, std::unique_ptr<value_type> value = nullptr,
               GrowthFunc growth = DefaultGrowth) {
-    SetValue(value);
+    SetValue(std::move(value));
     SetGrowth(growth);
     GrowExtra(count);
   }
 
-  void SetValue(const_reference value) noexcept { value_ = value; }
+  void SetValue(std::unique_ptr<value_type> value) noexcept {
+    value_ = std::move(value);
+  }
 
   void SetGrowth(GrowthFunc growth) noexcept { growth_ = growth; }
 
-  const_reference GetValue() const noexcept { return value_; }
+  const_reference GetValue() const noexcept { return *value_; }
 
   void GrowExtra(size_type delta_size) {
     if (delta_size == 0) return;
-    pools_.emplace_back(delta_size, value_);
+    if (value_) {
+      pools_.emplace_back(delta_size, *value_);
+    } else {
+      pools_.emplace_back(delta_size);
+    }
   }
 
   [[nodiscard]] reference Acquire() {
@@ -179,7 +191,7 @@ class DynamicPool {
   }
 
   void Clear() noexcept {
-    value_ = value_type{};
+    value_.reset();
     growth_ = DefaultGrowth;
     pools_.clear();
   }
@@ -194,7 +206,7 @@ class DynamicPool {
     return true;
   }
 
-  value_type value_;
+  std::unique_ptr<value_type> value_ = nullptr;
   GrowthFunc growth_;
   PoolList pools_;
 };

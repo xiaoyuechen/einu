@@ -18,9 +18,10 @@ class OneXnentPool {
   using size_type = std::size_t;
   using GrowthFunc = std::function<size_type(size_type)>;
 
-  void SetValue(const Xnent& value) noexcept {
-    auto& v = reinterpret_cast<const Comp&>(value);
-    pool_.SetValue(v);
+  void SetValue(std::unique_ptr<Xnent> value) noexcept {
+    auto ptr = value.release();
+    auto v = std::unique_ptr<Comp>(reinterpret_cast<Comp*>(ptr));
+    pool_.SetValue(std::move(v));
   }
 
   void SetGrowth(GrowthFunc growth) noexcept { pool_.SetGrowth(growth); }
@@ -56,11 +57,11 @@ class XnentPool<XnentList<Xnents...>> final : public IXnentPool {
   using PoolVariant = std::variant<OneXnentPool<Xnents>...>;
   using PoolTable = std::array<PoolVariant, tmp::Size<TypeList>::value>;
 
-  void AddPolicyImpl(size_type init_size, const Xnent& value,
+  void AddPolicyImpl(size_type init_size, std::unique_ptr<Xnent> value,
                      GrowthFunc growth_func, XnentTypeID id) override {
     std::visit(
-        [=](auto&& arg) {
-          arg.SetValue(value);
+        [&](auto&& arg) {
+          arg.SetValue(std::move(value));
           arg.SetGrowth(growth_func);
           arg.GrowExtra(init_size);
         },

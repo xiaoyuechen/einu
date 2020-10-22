@@ -15,9 +15,9 @@ class IXnentPool {
   virtual ~IXnentPool() = default;
 
   template <typename T>
-  void AddPolicy(const Policy<T>& policy,
-                 XnentTypeID id = GetXnentTypeID<T>()) {
-    AddPolicyImpl(policy.init_size, policy.value, policy.growth_func, id);
+  void AddPolicy(Policy<T>&& policy, XnentTypeID id = GetXnentTypeID<T>()) {
+    AddPolicyImpl(policy.init_size, std::move(policy.value), policy.growth_func,
+                  id);
   }
 
   template <typename T>
@@ -46,7 +46,7 @@ class IXnentPool {
   }
 
  protected:
-  virtual void AddPolicyImpl(size_type init_size, const Xnent& value,
+  virtual void AddPolicyImpl(size_type init_size, std::unique_ptr<Xnent> value,
                              internal::GrowthFunc growth_func,
                              XnentTypeID id) = 0;
   virtual Xnent& AcquireImpl(XnentTypeID id) = 0;

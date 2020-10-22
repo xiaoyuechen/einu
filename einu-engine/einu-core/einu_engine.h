@@ -34,8 +34,14 @@ class EinuEngine {
 
   EinuEngine() noexcept {}
 
-  std::unique_ptr<IXnentPool> CreateXnentPool() {
-    return std::make_unique<internal::XnentPool>();
+  std::unique_ptr<IXnentPool> CreateComponentPool() {
+    using ComponentPool = internal::XnentPool<ComponentList>;
+    return std::make_unique<ComponentPool>();
+  }
+
+  std::unique_ptr<IXnentPool> CreateSinglenentPool() {
+    using SinglenentPool = internal::XnentPool<SinglenentList>;
+    return std::make_unique<SinglenentPool>();
   }
 
   std::unique_ptr<IEntityManager> CreateEntityManager() {
@@ -45,7 +51,7 @@ class EinuEngine {
   }
 
   std::unique_ptr<IEIDPool> CreateEIDPool() {
-    return std::make_unique<EIDPool>();
+    return std::make_unique<internal::EIDPool>();
   }
 
  private:

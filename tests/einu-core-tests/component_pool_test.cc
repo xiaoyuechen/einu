@@ -28,7 +28,8 @@ struct ComponentPoolTest : public testing::Test {
   ComponentPool pool;
   PolicyTuple<ComponentList>::Type policy_tuple{
       ComponentPoolPolicy<C0>{0},
-      ComponentPoolPolicy<C1>{300, C1{}, [](auto size) { return size * 3; }},
+      ComponentPoolPolicy<C1>{300, std::make_unique<C1>(),
+                              [](auto size) { return size * 3; }},
       ComponentPoolPolicy<C2>{123},
       ComponentPoolPolicy<C3>{666},
   };
@@ -43,7 +44,7 @@ TEST_F(ComponentPoolTest, a_new_pool_is_empty) {
 
 TEST_F(ComponentPoolTest, add_policy_will_grow_pool_size) {
   tmp::StaticFor<kCount>([&](auto i) {
-    pool.AddPolicy(std::get<i>(policy_tuple), XnentTypeID{i});
+    pool.AddPolicy(std::move(std::get<i>(policy_tuple)), XnentTypeID{i});
     using Comp = tmp::TypeAt<ToTypeList<ComponentList>::Type, i>::Type;
     EXPECT_EQ(pool.OnePoolSize(XnentTypeID{i}),
               std::get<i>(policy_tuple).init_size);
@@ -54,8 +55,8 @@ TEST_F(ComponentPoolTest,
        pool_size_would_grow_correctly_only_after_aquired_more_than_init_size) {
   tmp::StaticFor<kCount>([&](auto i) {
     using Comp = tmp::TypeAt<ToTypeList<ComponentList>::Type, i>::Type;
-    const auto& policy = std::get<ComponentPoolPolicy<Comp>>(policy_tuple);
-    pool.AddPolicy(policy, XnentTypeID{i});
+    auto&& policy = std::get<ComponentPoolPolicy<Comp>>(policy_tuple);
+    pool.AddPolicy(std::move(policy), XnentTypeID{i});
 
     auto init_size = policy.init_size;
     for (auto time = std::size_t{0}; time != init_size; ++time) {
@@ -71,8 +72,8 @@ TEST_F(ComponentPoolTest,
 TEST_F(ComponentPoolTest, acquire_release_aquire_would_not_make_pool_grow) {
   tmp::StaticFor<kCount>([&](auto i) {
     using Comp = tmp::TypeAt<ToTypeList<ComponentList>::Type, i>::Type;
-    const auto& policy = std::get<ComponentPoolPolicy<Comp>>(policy_tuple);
-    pool.AddPolicy(policy, XnentTypeID{i});
+    auto&& policy = std::get<ComponentPoolPolicy<Comp>>(policy_tuple);
+    pool.AddPolicy(std::move(policy), XnentTypeID{i});
 
     auto acquired = std::vector<Xnent*>{};
     auto init_size = policy.init_size;

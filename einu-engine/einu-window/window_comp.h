@@ -29,7 +29,7 @@ struct Window : public Xnent {
   int sample = 4;
   bool shouldClose = false;
   struct GLFWwindow* window = nullptr;
-  input::InputBuffer input_buffer;
+  //input::InputBuffer input_buffer;
 };
 
 }  // namespace comp
