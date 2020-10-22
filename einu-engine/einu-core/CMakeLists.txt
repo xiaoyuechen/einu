@@ -15,7 +15,7 @@ add_library(
   "include/einu-core/internal/xnent_mask.h"
   "include/einu-core/internal/xnent_pool.h"
   "include/einu-core/internal/xnent_type_id_register.h" 
-  "include/einu-core/internal/i_pool.h" 
+   
   "src/dummy.cpp"
   
   
