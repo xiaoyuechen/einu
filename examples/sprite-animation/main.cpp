@@ -2,6 +2,8 @@
 #include <einu-core/entity_view.h>
 #include <einu-window/window_sys.h>
 
+#include <iostream>
+
 int main() {
   using namespace einu;
   using ComponentList = XnentList<window::comp::Window>;
@@ -19,7 +21,7 @@ int main() {
   ett_mgr->SetComponentPool(*comp_pool);
 
   auto eid = ett_mgr->CreateEntity();
-  ett_mgr->AddComponent<window::comp::Window>(eid);
+  auto& win_comp = ett_mgr->AddComponent<window::comp::Window>(eid);
 
   using WindowEntityView = EntityView<XnentList<window::comp::Window>>;
   WindowEntityView window_entity_view;
@@ -29,6 +31,10 @@ int main() {
 
   for (auto&& [win] : window_entity_view.Components()) {
     window::sys::Create(win);
+  }
+
+  while (!win_comp.shouldClose) {
+    window::sys::PoolEvents(win_comp);
   }
 
   return 0;

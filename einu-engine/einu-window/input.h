@@ -3,6 +3,7 @@
 #include <einu-util/enum.h>
 
 #include <array>
+#include <bitset>
 #include <glm/glm.hpp>
 
 #include "einu-window/internal/glfw_input_def.h"

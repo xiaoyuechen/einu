@@ -28,8 +28,10 @@ struct Window : public Xnent {
   Size size = {1280, 720};
   std::string title = "default title";
   std::size_t monitor_index = 0;
+  int swap_interval = 1;
   int sample = 4;
   bool shouldClose = false;
+  Size frame_size = {};
   GLFWwindow* window = nullptr;
   input::InputBuffer input_buffer;
 };

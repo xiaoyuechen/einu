@@ -9,6 +9,10 @@ namespace einu {
 namespace window {
 namespace sys {
 
+void Init() { glfwInit(); }
+
+void Terminate() { glfwTerminate(); }
+
 namespace {
 
 void SetWindowHint(const comp::Window& window) {
@@ -45,8 +49,6 @@ GLFWmonitor* GetMonitorArgument(const comp::Window& window) {
     }
     case comp::Window::Mode::Windowed:
       return nullptr;
-    default:
-      break;
   }
   return nullptr;
 }
@@ -93,8 +95,6 @@ void CursorPosCallback(GLFWwindow* window, double xpos, double ypos) {
 
 }  // namespace
 
-void Init() { glfwInit(); }
-
 void Create(comp::Window& win_comp) {
   SetWindowHint(win_comp);
   auto glfw_win = glfwCreateWindow(win_comp.size.width, win_comp.size.height,
@@ -109,14 +109,19 @@ void Create(comp::Window& win_comp) {
   glfwSetMouseButtonCallback(glfw_win, MouseButtonCallback);
   glfwSetKeyCallback(glfw_win, KeyCallback);
   glfwSetCursorPosCallback(glfw_win, CursorPosCallback);
-
-  glfwMakeContextCurrent(glfw_win);
 }
 
-void UpdateInput(comp::Window& win) {
+void Destroy(comp::Window& win) { glfwDestroyWindow(win.window); }
+
+void MakeContextCurrent(comp::Window& win) {
+  glfwMakeContextCurrent(win.window);
+}
+
+namespace {
+
+void ResetCurrentInput(input::InputBuffer& input_buffer) noexcept {
   using namespace input;
 
-  auto& input_buffer = win.input_buffer;
   auto next = input_buffer.cursor + 1;
   input_buffer.cursor = next == input_buffer.kInputBufferSize ? 0 : next;
 
@@ -130,8 +135,26 @@ void UpdateInput(comp::Window& win) {
 
   input_buffer.modifier_key_buffer[input_buffer.cursor] =
       static_cast<ModifierKeyFlag>(0);
+}
 
+}  // namespace
+
+void PoolEvents(comp::Window& win) {
+  ResetCurrentInput(win.input_buffer);
   glfwPollEvents();
+  win.shouldClose = glfwWindowShouldClose(win.window);
+  glfwGetWindowSize(win.window, &win.size.width, &win.size.height);
+  glfwGetFramebufferSize(win.window, &win.frame_size.width,
+                         &win.frame_size.height);
+}
+
+void SwapBuffer(comp::Window& win) {
+  glfwSwapInterval(win.swap_interval);
+  glfwSwapBuffers(win.window);
+}
+
+GLLoaderProc GetProcAddress(const char* procname) {
+  return glfwGetProcAddress(procname);
 }
 
 }  // namespace sys
