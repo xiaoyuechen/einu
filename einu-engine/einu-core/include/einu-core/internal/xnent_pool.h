@@ -4,7 +4,6 @@
 
 #include <array>
 #include <cassert>
-#include <tuple>
 #include <variant>
 
 #include "einu-core/i_xnent_pool.h"

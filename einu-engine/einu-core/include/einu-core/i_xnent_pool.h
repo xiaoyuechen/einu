@@ -1,8 +1,5 @@
 #pragma once
 
-#include <functional>
-#include <memory>
-
 #include "einu-core/internal/pool_policy.h"
 #include "einu-core/xnent.h"
 #include "einu-core/xnent_type_id.h"

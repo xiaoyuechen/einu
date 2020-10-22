@@ -84,6 +84,13 @@ class IEntityManager {
   Xnent& AddSinglenent(XnentTypeID tid) { return AddSinglenentImpl(tid); }
 
   template <typename T>
+  void RemoveSinglenent() {
+    RemoveSinglenentImpl(GetXnentTypeID<T>());
+  }
+
+  void RemoveSinglenent(XnentTypeID tid) { RemoveSinglenentImpl(tid); }
+
+  template <typename T>
   T& GetSinglenent() noexcept {
     return static_cast<const T&>(GetSinglenentImpl(GetXnentTypeID<T>()));
   }
@@ -129,6 +136,7 @@ class IEntityManager {
   virtual const Xnent& GetComponentImpl(EID eid, XnentTypeID tid) const = 0;
 
   virtual Xnent& AddSinglenentImpl(XnentTypeID tid) = 0;
+  virtual void RemoveSinglenentImpl(XnentTypeID tid) = 0;
   virtual Xnent& GetSinglenentImpl(XnentTypeID tid) noexcept = 0;
   virtual const Xnent& GetSinglenentImpl(XnentTypeID tid) const noexcept = 0;
 

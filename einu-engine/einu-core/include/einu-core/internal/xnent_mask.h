@@ -5,10 +5,9 @@
 #include <cstdint>
 #include <initializer_list>
 #include <memory>
-#include <vector>
 
-#include "einu-core/xnent_type_id.h"
 #include "einu-core/xnent_list.h"
+#include "einu-core/xnent_type_id.h"
 
 namespace einu {
 namespace internal {

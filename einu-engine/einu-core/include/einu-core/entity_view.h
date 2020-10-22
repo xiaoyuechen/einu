@@ -4,7 +4,6 @@
 
 #include "einu-core/i_entity_manager.h"
 #include "einu-core/xnent_list.h"
-#include "einu-core/xnent_type_id.h"
 
 namespace einu {
 

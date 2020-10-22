@@ -1,6 +1,5 @@
 #pragma once
 
-#include "einu-core/i_eid_pool.h"
 #include "einu-core/internal/eid_pool.h"
 #include "einu-core/internal/entity_manager.h"
 #include "einu-core/internal/xnent_pool.h"
