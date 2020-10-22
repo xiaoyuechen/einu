@@ -22,6 +22,8 @@ class IEntityManager {
  public:
   using Policy = PoolPolicy<>;
 
+  virtual ~IEntityManager() = 0;
+
   void SetEIDPool(IEIDPool& eid_pool) noexcept { SetEIDPoolImpl(eid_pool); }
 
   void SetComponentPool(IXnentPool& comp_pool) noexcept {

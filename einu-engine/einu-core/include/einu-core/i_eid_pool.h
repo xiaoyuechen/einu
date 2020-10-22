@@ -6,6 +6,8 @@ namespace einu {
 
 class IEIDPool {
  public:
+  virtual ~IEIDPool() = default;
+
   EID Acquire() noexcept { return AcquireImpl(); }
 
   void Release(EID eid) noexcept { ReleaseImpl(eid); }
