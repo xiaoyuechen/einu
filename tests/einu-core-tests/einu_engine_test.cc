@@ -1,4 +1,4 @@
-#include <einu-core/einu_core.h>
+#include <einu-core/einu_engine.h>
 #include <gtest/gtest.h>
 
 namespace einu {

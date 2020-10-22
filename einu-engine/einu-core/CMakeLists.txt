@@ -1,6 +1,6 @@
 add_library(
   einu-core
-  "include/einu-core/einu_core.h"
+  "include/einu-core/einu_engine.h"
   "include/einu-core/xnent_list.h"
   "include/einu-core/xnent.h"
   "include/einu-core/entity_view.h"
@@ -19,7 +19,7 @@ add_library(
   "src/dummy.cpp"
   
   
- )
+  "include/einu-core/internal/eid_pool.h")
 
 target_include_directories(einu-core PUBLIC "include")
 target_link_libraries(einu-core 
