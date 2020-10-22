@@ -10,7 +10,8 @@ namespace sys {
 
 void Init();
 
-void Create(const ComponentBuffer<comp::Window>& buffer);
+void Create(comp::Window& window);
+
 
 
 
