@@ -52,37 +52,40 @@ class ComponentIterator<XnentList<Comps...>> {
 };
 
 template <typename ComponentList>
+class ComponentBuffer {
+ public:
+  constexpr ComponentBuffer(const std::vector<Xnent*>& comps) noexcept
+      : comps_(comps) {}
+
+  auto begin() const noexcept {
+    return ComponentIterator<ComponentList>{comps_.begin()};
+  }
+
+  auto end() const noexcept {
+    return ComponentIterator<ComponentList>{comps_.end()};
+  }
+
+ private:
+  const std::vector<Xnent*>& comps_;
+};
+
+class EIDBuffer {
+ public:
+  constexpr EIDBuffer(const std::vector<EID>& eids) noexcept
+      : eids_(eids) {}
+
+  auto begin() const noexcept { return eids_.begin(); }
+
+  auto end() const noexcept { return eids_.end(); }
+
+ private:
+  const std::vector<EID>& eids_;
+};
+
+template <typename ComponentList>
 class EntityView {
  public:
-  class ComponentBuffer {
-   public:
-    constexpr ComponentBuffer(const std::vector<Xnent*>& comps) noexcept
-        : comps_(comps) {}
-
-    auto begin() const noexcept {
-      return ComponentIterator<ComponentList>{comps_.begin()};
-    }
-
-    auto end() const noexcept {
-      return ComponentIterator<ComponentList>{comps_.end()};
-    }
-
-   private:
-    const std::vector<Xnent*>& comps_;
-  };
-
-  class EIDBuffer {
-   public:
-    constexpr EIDBuffer(const std::vector<EID>& eids) noexcept
-        : eids_(eids) {}
-
-    auto begin() const noexcept { return eids_.begin(); }
-
-    auto end() const noexcept { return eids_.end(); }
-
-   private:
-    const std::vector<EID>& eids_;
-  };
+  using ComponentBuffer = ComponentBuffer<ComponentList>;
 
   void View(IEntityManager& ett_mgr) {
     Clear(ett_buffer_);
