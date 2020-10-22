@@ -4,12 +4,13 @@ add_library(
   "window_comp.h"
   "window_sys.h"
   "window_sys.cpp"
- 
- "internal/glfw_input_def.h")
+  "internal/glfw_input_def.h"
+)
 
 target_link_libraries(
   einu-window
-  PUBLIC einu-core einu-util glm glfw
+  PUBLIC einu-core einu-util glm 
+  PRIVATE glfw
 )
 
 target_include_directories(
