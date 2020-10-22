@@ -10,10 +10,9 @@ namespace sys {
 
 void Init();
 
-void Create(comp::Window& window);
+void Create(comp::Window& win);
 
-
-
+void UpdateInput(comp::Window& win);
 
 }  // namespace sys
 }  // namespace window

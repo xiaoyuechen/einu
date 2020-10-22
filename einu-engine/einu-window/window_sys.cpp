@@ -16,7 +16,7 @@ void SetWindowHint(const comp::Window& window) {
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
   glfwWindowHint(GLFW_SAMPLES, window.sample);
-  if (window.mode == comp::Window::Mode::kWindowedFullScreen) {
+  if (window.mode == comp::Window::Mode::WindowedFullScreen) {
     int count;
     auto monitors = glfwGetMonitors(&count);
     if (window.monitor_index + 1 < count) {
@@ -33,8 +33,8 @@ void SetWindowHint(const comp::Window& window) {
 
 GLFWmonitor* GetMonitorArgument(const comp::Window& window) {
   switch (window.mode) {
-    case comp::Window::Mode::kWindowedFullScreen:
-    case comp::Window::Mode::kFullScreen: {
+    case comp::Window::Mode::WindowedFullScreen:
+    case comp::Window::Mode::FullScreen: {
       int count;
       auto monitors = glfwGetMonitors(&count);
       if (window.monitor_index + 1 < count) {
@@ -43,7 +43,7 @@ GLFWmonitor* GetMonitorArgument(const comp::Window& window) {
       auto monitor = monitors[window.monitor_index];
       return monitor;
     }
-    case comp::Window::Mode::kWindowed:
+    case comp::Window::Mode::Windowed:
       return nullptr;
     default:
       break;
@@ -51,21 +51,87 @@ GLFWmonitor* GetMonitorArgument(const comp::Window& window) {
   return nullptr;
 }
 
+auto& GetInputBuffer(GLFWwindow& window) {
+  auto& win_comp =
+      *static_cast<comp::Window*>(glfwGetWindowUserPointer(&window));
+  return win_comp.input_buffer;
+}
+
+void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
+  using namespace input;
+  using namespace util;
+
+  auto& input_buffer = GetInputBuffer(*window);
+  auto&& button_state =
+      input_buffer.GetMouseButton(static_cast<MouseButton>(button));
+  button_state = action;
+  auto&& mods_state = input_buffer.GetModifierKeyFlag();
+  mods_state |= static_cast<ModifierKeyFlag>(mods);
+}
+
+void KeyCallback(GLFWwindow* window, int key, [[maybe_unused]] int scancode,
+                 int action, int mods) {
+  using namespace input;
+  using namespace util;
+
+  auto& input_buffer = GetInputBuffer(*window);
+  auto key_enum = static_cast<KeyboardKey>(key);
+  auto&& key_state = input_buffer.GetKeyboardKey(key_enum);
+  key_state = action;
+  auto&& mods_state = input_buffer.GetModifierKeyFlag();
+  mods_state |= static_cast<ModifierKeyFlag>(mods);
+}
+
+void CursorPosCallback(GLFWwindow* window, double xpos, double ypos) {
+  using namespace input;
+
+  auto& input_buffer = GetInputBuffer(*window);
+  auto& cursor_pos = input_buffer.GetCursorPos();
+  cursor_pos.x = static_cast<float>(xpos);
+  cursor_pos.y = static_cast<float>(ypos);
+}
+
 }  // namespace
 
 void Init() { glfwInit(); }
 
-void Create(comp::Window& window) {
-  SetWindowHint(window);
-  auto glfw_win = glfwCreateWindow(window.size.width, window.size.height,
-                                   window.title.c_str(),
-                                   GetMonitorArgument(window), nullptr);
+void Create(comp::Window& win_comp) {
+  SetWindowHint(win_comp);
+  auto glfw_win = glfwCreateWindow(win_comp.size.width, win_comp.size.height,
+                                   win_comp.title.c_str(),
+                                   GetMonitorArgument(win_comp), nullptr);
   if (!glfw_win) {
-    throw std::runtime_error("failed to create window " + window.title);
+    throw std::runtime_error("failed to create window " + win_comp.title);
   }
-  window.window = glfw_win;
-  glfwSetWindowUserPointer(glfw_win, &window);
+
+  win_comp.window = glfw_win;
+  glfwSetWindowUserPointer(glfw_win, &win_comp);
+  glfwSetMouseButtonCallback(glfw_win, MouseButtonCallback);
+  glfwSetKeyCallback(glfw_win, KeyCallback);
+  glfwSetCursorPosCallback(glfw_win, CursorPosCallback);
+
   glfwMakeContextCurrent(glfw_win);
+}
+
+void UpdateInput(comp::Window& win) {
+  using namespace input;
+
+  auto& input_buffer = win.input_buffer;
+  auto next = input_buffer.cursor + 1;
+  input_buffer.cursor = next == input_buffer.kInputBufferSize ? 0 : next;
+
+  for (auto&& buffer : input_buffer.mouse_button_buffer_table) {
+    buffer[input_buffer.cursor] = false;
+  }
+
+  for (auto&& buffer : input_buffer.keyboard_key_buffer_table) {
+    buffer[input_buffer.cursor] = false;
+  }
+
+  input_buffer.modifier_key_buffer[input_buffer.cursor] =
+      static_cast<ModifierKeyFlag>(0);
+
+  glfwPollEvents();
 }
 
 }  // namespace sys

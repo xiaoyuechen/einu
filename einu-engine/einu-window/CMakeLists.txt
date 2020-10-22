@@ -5,7 +5,7 @@ add_library(
   "window_sys.h"
   "window_sys.cpp"
  
-)
+ "internal/glfw_input_def.h")
 
 target_link_libraries(
   einu-window
