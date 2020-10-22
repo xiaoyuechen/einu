@@ -32,7 +32,12 @@ class OneXnentPool {
 
   void Release(Xnent& obj) noexcept {
     auto& comp = reinterpret_cast<Comp&>(obj);
-    comp = pool_.GetValue();
+    auto val = pool_.GetValue();
+    if (val) {
+      comp = *val;
+    } else {
+      comp = Comp{};
+    }
     pool_.Release(comp);
   }
 

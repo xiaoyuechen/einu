@@ -149,7 +149,7 @@ class DynamicPool {
 
   void SetGrowth(GrowthFunc growth) noexcept { growth_ = growth; }
 
-  const_reference GetValue() const noexcept { return *value_; }
+  value_type* GetValue() const noexcept { return value_.get(); }
 
   void GrowExtra(size_type delta_size) {
     if (delta_size == 0) return;

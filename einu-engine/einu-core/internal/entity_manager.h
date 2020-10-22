@@ -60,10 +60,11 @@ class EntityManager final : public IEntityManager {
   void DestroyEntityImpl(EID eid) override {
     auto it = ett_table_.find(eid);
     assert(it != ett_table_.end() && "entity does not exist");
-    DestroyEntityImpl(it);
+    ReleaseEntity(it);
+    ett_table_.erase(it);
   }
 
-  void DestroyEntityImpl(typename EntityTable::iterator it) {
+  void ReleaseEntity(typename EntityTable::iterator it) {
     auto eid = it->first;
     auto [mask, table] = it->second;
     for (auto i = std::size_t{0}; i != mask->size(); ++i) {
@@ -74,7 +75,6 @@ class EntityManager final : public IEntityManager {
     mask->reset();
     ett_data_pool_.Release(std::forward_as_tuple(*mask, *table));
     eid_pool_->Release(eid);
-    ett_table_.erase(it);
   }
 
   Xnent& AddComponentImpl(EID eid, XnentTypeID tid) override {
@@ -143,8 +143,10 @@ class EntityManager final : public IEntityManager {
 
   void ResetImpl() noexcept override {
     for (auto it = ett_table_.begin(); it != ett_table_.end(); ++it) {
-      DestroyEntityImpl(it);
+      ReleaseEntity(it);
     }
+
+    ett_table_.clear();
 
     for (auto i = std::size_t{0}; i != singlenent_table_.size(); ++i) {
       if (singlenent_table_[i]) {
@@ -156,7 +158,6 @@ class EntityManager final : public IEntityManager {
     comp_pool_ = nullptr;
     singlenent_pool_ = nullptr;
     ett_data_pool_.Clear();
-    ett_table_.clear();
     singlenent_table_.fill(nullptr);
   }
 

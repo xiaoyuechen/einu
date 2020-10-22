@@ -23,13 +23,13 @@ struct Window : public Xnent {
   };
 
   Mode mode = Mode::kWindowed;
-  Size size = {0, 0};
-  std::string title = "";
+  Size size = {1280, 720};
+  std::string title = "default title";
   std::size_t monitor_index = 0;
   int sample = 4;
   bool shouldClose = false;
   struct GLFWwindow* window = nullptr;
-  //input::InputBuffer input_buffer;
+  input::InputBuffer input_buffer;
 };
 
 }  // namespace comp

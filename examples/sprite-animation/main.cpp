@@ -2,7 +2,6 @@
 #include <einu-core/entity_view.h>
 #include <einu-window/window_sys.h>
 
-
 int main() {
   using namespace einu;
   using ComponentList = XnentList<window::comp::Window>;
@@ -14,24 +13,23 @@ int main() {
   Engine engine;
 
   auto eid_pool = engine.CreateEIDPool();
-  window::comp::Window win;
-  win.title = "nnn";
-   auto comp_pool = engine.CreateComponentPool();
-   auto ett_mgr = engine.CreateEntityManager();
-  // ett_mgr->SetEIDPool(*eid_pool);
-  // ett_mgr->SetComponentPool(*comp_pool);
+  auto comp_pool = engine.CreateComponentPool();
+  auto ett_mgr = engine.CreateEntityManager();
+  ett_mgr->SetEIDPool(*eid_pool);
+  ett_mgr->SetComponentPool(*comp_pool);
 
-  // auto eid = ett_mgr->CreateEntity();
-  // ett_mgr->AddComponent<window::comp::Window>(eid);
+  auto eid = ett_mgr->CreateEntity();
+  ett_mgr->AddComponent<window::comp::Window>(eid);
 
-  // using WindowEntityView = EntityView<XnentList<window::comp::Window>>;
-  // WindowEntityView window_entity_view;
-  // window_entity_view.View(*ett_mgr);
+  using WindowEntityView = EntityView<XnentList<window::comp::Window>>;
+  WindowEntityView window_entity_view;
+  window_entity_view.View(*ett_mgr);
 
-  // window::sys::Init();
-  // for (auto&& [win] : window_entity_view.Components()) {
-  //  window::sys::Create(win);
-  //}
+  window::sys::Init();
+
+  for (auto&& [win] : window_entity_view.Components()) {
+    window::sys::Create(win);
+  }
 
   return 0;
 }

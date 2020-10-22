@@ -53,6 +53,8 @@ GLFWmonitor* GetMonitorArgument(const comp::Window& window) {
 
 }  // namespace
 
+void Init() { glfwInit(); }
+
 void Create(comp::Window& window) {
   SetWindowHint(window);
   auto glfw_win = glfwCreateWindow(window.size.width, window.size.height,
