@@ -1,18 +1,21 @@
 #pragma once
 
 #include <absl/container/flat_hash_map.h>
+#include <einu-util/object_pool.h>
 
 #include <cassert>
 #include <memory>
 
 #include "einu-core/i_entity_manager.h"
-#include "einu-util/object_pool.h"
 
 namespace einu {
 namespace internal {
 
 template <std::size_t max_comp, std::size_t max_single>
-class EntityManager : public IEntityManager {
+class EntityManager final : public IEntityManager {
+ public:
+  ~EntityManager() { ResetImpl(); }
+
  private:
   using ComponentMask = StaticXnentMask<max_comp>;
   using XnentTable = std::array<Xnent*, max_comp>;
@@ -57,6 +60,11 @@ class EntityManager : public IEntityManager {
   void DestroyEntityImpl(EID eid) override {
     auto it = ett_table_.find(eid);
     assert(it != ett_table_.end() && "entity does not exist");
+    DestroyEntityImpl(it);
+  }
+
+  void DestroyEntityImpl(typename EntityTable::iterator it) {
+    auto eid = it->first;
     auto [mask, table] = it->second;
     for (auto i = std::size_t{0}; i != mask->size(); ++i) {
       if (mask->test(i)) {
@@ -110,6 +118,12 @@ class EntityManager : public IEntityManager {
     return *singlenent_table_[tid];
   }
 
+  void RemoveSinglenentImpl(XnentTypeID tid) override {
+    auto& singlenent = *singlenent_table_[tid];
+    singlenent_pool_->Release(tid, singlenent);
+    singlenent_table_[tid] = nullptr;
+  }
+
   void GetEntitiesWithComponentsImpl(
       EntityBuffer& buffer, const internal::DynamicXnentMask& mask) override {
     auto smask = ToStatic<max_comp>(mask);
@@ -128,6 +142,16 @@ class EntityManager : public IEntityManager {
   }
 
   void ResetImpl() noexcept override {
+    for (auto it = ett_table_.begin(); it != ett_table_.end(); ++it) {
+      DestroyEntityImpl(it);
+    }
+
+    for (auto i = std::size_t{0}; i != singlenent_table_.size(); ++i) {
+      if (singlenent_table_[i]) {
+        RemoveSinglenentImpl(XnentTypeID{i});
+      }
+    }
+
     eid_pool_ = nullptr;
     comp_pool_ = nullptr;
     singlenent_pool_ = nullptr;
@@ -139,9 +163,9 @@ class EntityManager : public IEntityManager {
   IEIDPool* eid_pool_ = nullptr;
   IXnentPool* comp_pool_ = nullptr;
   IXnentPool* singlenent_pool_ = nullptr;
-  EntityDataPool ett_data_pool_;
-  EntityTable ett_table_;
-  XnentTable singlenent_table_;
+  EntityDataPool ett_data_pool_{};
+  EntityTable ett_table_{};
+  XnentTable singlenent_table_{};
 };
 
 }  // namespace internal
