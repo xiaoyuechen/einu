@@ -32,11 +32,11 @@ class IXnentPool {
   Xnent& Acquire(XnentTypeID tid) { return AcquireImpl(tid); }
 
   template <typename T>
-  void Release(const T& comp) noexcept {
+  void Release(T& comp) noexcept {
     ReleaseImpl(GetXnentTypeID<T>(), comp);
   }
 
-  void Release(XnentTypeID tid, const Xnent& comp) noexcept {
+  void Release(XnentTypeID tid, Xnent& comp) noexcept {
     ReleaseImpl(tid, comp);
   }
 
@@ -53,7 +53,7 @@ class IXnentPool {
   virtual void AddPolicyImpl(size_type init_size, const Xnent& value,
                              GrowthFunc growth_func, XnentTypeID id) = 0;
   virtual Xnent& AcquireImpl(XnentTypeID id) = 0;
-  virtual void ReleaseImpl(XnentTypeID id, const Xnent& comp) noexcept = 0;
+  virtual void ReleaseImpl(XnentTypeID id, Xnent& comp) noexcept = 0;
   virtual size_type OnePoolSizeImpl(XnentTypeID id) const noexcept = 0;
 };
 

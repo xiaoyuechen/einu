@@ -141,6 +141,8 @@ class DynamicPool {
 
   void SetGrowth(GrowthFunc growth) noexcept { growth_ = growth; }
 
+  const_reference GetValue() const noexcept { return value_; }
+
   void GrowExtra(size_type delta_size) {
     if (delta_size == 0) return;
     pools_.emplace_back(delta_size, value_);
