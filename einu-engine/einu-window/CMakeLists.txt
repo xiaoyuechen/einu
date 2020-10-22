@@ -5,6 +5,8 @@ add_library(
   "window_sys.h"
   "window_sys.cpp"
   "internal/glfw_input_def.h"
+  "gl_proc.h"
+  "gl_proc.cc"
 )
 
 target_link_libraries(

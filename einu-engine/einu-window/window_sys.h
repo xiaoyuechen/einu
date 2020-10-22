@@ -1,5 +1,6 @@
 #pragma once
 
+#include "einu-window/gl_proc.h"
 #include "einu-window/window_comp.h"
 
 namespace einu {
@@ -19,9 +20,6 @@ void MakeContextCurrent(comp::Window& win);
 void PoolEvents(comp::Window& win);
 
 void SwapBuffer(comp::Window& win);
-
-using GLLoaderProc = void (*)();
-GLLoaderProc GetProcAddress(const char* procname);
 
 }  // namespace sys
 }  // namespace window

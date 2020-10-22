@@ -153,10 +153,6 @@ void SwapBuffer(comp::Window& win) {
   glfwSwapBuffers(win.window);
 }
 
-GLLoaderProc GetProcAddress(const char* procname) {
-  return glfwGetProcAddress(procname);
-}
-
 }  // namespace sys
 }  // namespace window
 }  // namespace einu

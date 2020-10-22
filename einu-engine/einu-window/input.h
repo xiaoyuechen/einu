@@ -197,10 +197,10 @@ struct InputBuffer {
   using BufferMap = std::array<BoolBuffer, GetEnumCount<T>()>;
   using MouseButtonBufferMap = BufferMap<MouseButton>;
   using KeyboardKeyBufferMap = BufferMap<KeyboardKey>;
-  MouseButtonBufferMap mouse_button_buffer_table;
-  KeyboardKeyBufferMap keyboard_key_buffer_table;
-  ModifierKeyBuffer modifier_key_buffer;
-  CursorPosBuffer cursor_pos_buffer;
+  MouseButtonBufferMap mouse_button_buffer_table{};
+  KeyboardKeyBufferMap keyboard_key_buffer_table{};
+  ModifierKeyBuffer modifier_key_buffer{};
+  CursorPosBuffer cursor_pos_buffer{};
 
   std::size_t cursor = 0;
 

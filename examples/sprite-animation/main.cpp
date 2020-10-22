@@ -1,11 +1,13 @@
 #include <einu-core/einu_engine.h>
 #include <einu-core/entity_view.h>
+#include <einu-graphics/render_sys.h>
 #include <einu-window/window_sys.h>
 
 #include <iostream>
 
 int main() {
   using namespace einu;
+
   using ComponentList = XnentList<window::comp::Window>;
   using SinglenentList = XnentList<>;
   using NeedList = NeedList<ComponentList, SinglenentList>;
@@ -29,12 +31,13 @@ int main() {
 
   window::sys::Init();
 
-  for (auto&& [win] : window_entity_view.Components()) {
-    window::sys::Create(win);
-  }
+  window::sys::Create(win_comp);
+  window::sys::MakeContextCurrent(win_comp);
+  graphics::sys::LoadGL();
 
   while (!win_comp.shouldClose) {
     window::sys::PoolEvents(win_comp);
+    window::sys::SwapBuffer(win_comp);
   }
 
   return 0;

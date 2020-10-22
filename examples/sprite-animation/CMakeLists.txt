@@ -5,5 +5,5 @@ add_executable(
 
 target_link_libraries(
   sprite-animation
-  PRIVATE einu-core einu-window
+  PRIVATE einu-core einu-window einu-graphics
 )

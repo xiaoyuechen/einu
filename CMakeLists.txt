@@ -11,7 +11,8 @@ option(EINU_BUILD_EXAMPLES "Build all of einu-engine's own examples." ${EINU_STA
 project(
   einu-engine
   VERSION 0.5
-  LANGUAGES CXX)
+  LANGUAGES CXX
+)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
