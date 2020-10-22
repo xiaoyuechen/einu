@@ -63,6 +63,7 @@ class EntityManager : public IEntityManager {
         comp_pool_->Release(XnentTypeID{i}, *(*table)[i]);
       }
     }
+    mask->reset();
     ett_data_pool_.Release(std::forward_as_tuple(*mask, *table));
     eid_pool_->Release(eid);
     ett_table_.erase(it);
