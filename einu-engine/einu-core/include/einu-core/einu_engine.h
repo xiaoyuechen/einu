@@ -1,6 +1,7 @@
 #pragma once
 
 #include "einu-core/i_eid_pool.h"
+#include "einu-core/internal/eid_pool.h"
 #include "einu-core/internal/entity_manager.h"
 #include "einu-core/internal/xnent_pool.h"
 #include "einu-core/internal/xnent_type_id_register.h"
@@ -45,7 +46,7 @@ class EinuEngine {
   }
 
   std::unique_ptr<IEIDPool> CreateEIDPool() {
-
+    return std::make_unique<EIDPool>();
   }
 
  private:
