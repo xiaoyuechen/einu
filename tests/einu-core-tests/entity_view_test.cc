@@ -1,4 +1,6 @@
 #include <einu-core/entity_view.h>
+#include <einu-core/internal/entity_manager.h>
+#include <einu-core/internal/xnent_type_id_register.h>
 #include <gtest/gtest.h>
 
 #include <array>
@@ -36,6 +38,26 @@ TEST_F(ComponentIteratorTest, pre_increment) {
   auto&& [c0, c1] = *++it;
   EXPECT_EQ(c0.value, c0s[1].value);
   EXPECT_FLOAT_EQ(c1.value, c1s[1].value);
+}
+
+// TODO(Xiaoyue Chen): Mock EntityManager and comprehensively test EntityView
+struct EntityViewTest : public testing::Test {
+  using ComponentList = XnentList<C0, C1>;
+  using EntityView = EntityView<ComponentList>;
+  using ComponentTypeIDRegister = internal::XnentTypeIDRegister<ComponentList>;
+  using EntityManager = internal::EntityManager<2, 0>;
+
+  EntityViewTest() {}
+
+  ComponentTypeIDRegister reg;
+  EntityManager mgr;
+  EntityView view;
+};
+
+TEST_F(EntityViewTest, _) {
+  view.View(mgr);
+  EXPECT_EQ(view.Components().begin(), view.Components().end());
+  EXPECT_EQ(view.EIDs().begin(), view.EIDs().end());
 }
 
 }  // namespace einu
