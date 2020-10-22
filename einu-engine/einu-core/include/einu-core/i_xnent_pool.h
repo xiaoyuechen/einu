@@ -3,18 +3,17 @@
 #include <functional>
 #include <memory>
 
-#include "einu-core/pool_policy.h"
+#include "einu-core/internal/pool_policy.h"
 #include "einu-core/xnent.h"
 #include "einu-core/xnent_type_id.h"
 
 namespace einu {
 
-// TODO(Xiaoyue Chen): hide global state for user in release code
 class IXnentPool {
  public:
   using size_type = std::size_t;
   template <typename Xnent>
-  using Policy = PoolPolicy<Xnent>;
+  using Policy = internal::PoolPolicy<Xnent>;
 
   virtual ~IXnentPool() = default;
 
@@ -51,7 +50,8 @@ class IXnentPool {
 
  protected:
   virtual void AddPolicyImpl(size_type init_size, const Xnent& value,
-                             GrowthFunc growth_func, XnentTypeID id) = 0;
+                             internal::GrowthFunc growth_func,
+                             XnentTypeID id) = 0;
   virtual Xnent& AcquireImpl(XnentTypeID id) = 0;
   virtual void ReleaseImpl(XnentTypeID id, Xnent& comp) noexcept = 0;
   virtual size_type OnePoolSizeImpl(XnentTypeID id) const noexcept = 0;

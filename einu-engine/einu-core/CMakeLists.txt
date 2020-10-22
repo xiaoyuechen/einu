@@ -6,7 +6,7 @@ add_library(
   "include/einu-core/entity_view.h"
   "include/einu-core/i_xnent_pool.h"
   "include/einu-core/need_list.h"
-  "include/einu-core/pool_policy.h" 
+  "include/einu-core/internal/pool_policy.h" 
   "include/einu-core/i_entity_manager.h" 
   "include/einu-core/i_eid_pool.h" 
   "include/einu-core/eid.h"

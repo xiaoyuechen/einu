@@ -1,6 +1,10 @@
 #pragma once
 
+#include <cstddef>
+#include <functional>
+
 namespace einu {
+namespace internal {
 
 using GrowthFunc = std::function<std::size_t(std::size_t)>;
 
@@ -40,4 +44,5 @@ struct PoolPolicy<> {
   GrowthFunc growth_func;
 };
 
+}  // namespace internal
 }  // namespace einu

@@ -2,8 +2,8 @@
 
 #include "einu-core/i_eid_pool.h"
 #include "einu-core/i_xnent_pool.h"
+#include "einu-core/internal/pool_policy.h"
 #include "einu-core/internal/xnent_mask.h"
-#include "einu-core/pool_policy.h"
 #include "einu-core/xnent_list.h"
 
 namespace einu {
@@ -20,9 +20,9 @@ inline void Clear(EntityBuffer& buffer) noexcept {
 
 class IEntityManager {
  public:
-  using Policy = PoolPolicy<>;
+  using Policy = internal::PoolPolicy<>;
 
-  virtual ~IEntityManager() = 0;
+  virtual ~IEntityManager() = default;
 
   void SetEIDPool(IEIDPool& eid_pool) noexcept { SetEIDPoolImpl(eid_pool); }
 
