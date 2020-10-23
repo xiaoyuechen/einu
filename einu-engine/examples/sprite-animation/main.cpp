@@ -35,15 +35,33 @@ int main() {
 
   window::sys::Create(win_comp);
   window::sys::MakeContextCurrent(win_comp);
+
   graphics::sys::LoadGL();
 
+  graphics::sys::Create<graphics::ResourceType::VertexArray>(resource_table,
+                                                             "vao");
+
   graphics::sys::Create<graphics::ResourceType::VertexShader>(
-      resource_table, "vs-1", "shaders/instanced_sprite_vertex_shader.glsl");
+      resource_table, "vshader", "shaders/instanced_sprite_vertex_shader.glsl");
+  graphics::sys::Create<graphics::ResourceType::FragmentShader>(
+      resource_table, "fshader",
+      "shaders/instanced_sprite_fragment_shader.glsl");
+  graphics::sys::Create<graphics::ResourceType::ShaderProgram>(
+      resource_table, "program", "vshader", "fshader");
 
   while (!win_comp.shouldClose) {
     window::sys::PoolEvents(win_comp);
     window::sys::SwapBuffer(win_comp);
   }
+
+  graphics::sys::Destroy<graphics::ResourceType::ShaderProgram>(resource_table,
+                                                                "program");
+  graphics::sys::Destroy<graphics::ResourceType::FragmentShader>(resource_table,
+                                                                 "fshader");
+  graphics::sys::Destroy<graphics::ResourceType::VertexShader>(resource_table,
+                                                               "vshader");
+  graphics::sys::Destroy<graphics::ResourceType::VertexArray>(resource_table,
+                                                              "vao");
 
   return 0;
 }

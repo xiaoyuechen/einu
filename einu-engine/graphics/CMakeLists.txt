@@ -10,6 +10,9 @@ add_library(
   "include/einu-engine/graphics/resource_type.h"
   "src/sys_render.cc"
   "src/sys_resource_shader.cc"
+  "src/sys_resource_vertex_array.cc"
+
+
   "shaders/instanced_sprite_fragment_shader.glsl"
   "shaders/instanced_sprite_vertex_shader.glsl" 
  

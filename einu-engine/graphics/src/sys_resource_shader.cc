@@ -116,6 +116,19 @@ void Destroy<ResourceType::VertexShader>(sgln::ResourceTable& resource_table,
 }
 
 template <>
+void Create<ResourceType::FragmentShader, const char*>(
+    sgln::ResourceTable& resource_table, const char* name,
+    const char* file_name) {
+  CreateShader(ShaderType::Fragment, resource_table, name, file_name);
+}
+
+template <>
+void Destroy<ResourceType::FragmentShader>(sgln::ResourceTable& resource_table,
+                                           const char* name) {
+  DestroyShader(ShaderType::Fragment, resource_table, name);
+}
+
+template <>
 void Create<ResourceType::ShaderProgram, const char*, const char*>(
     sgln::ResourceTable& resource_table, const char* name,
     const char* vshader_name, const char* fshader_name) {
@@ -132,6 +145,8 @@ void Create<ResourceType::ShaderProgram, const char*, const char*>(
   CheckStatus(ShaderOrProgram::Program, program);
   glDetachShader(program, vshader);
   glDetachShader(program, fshader);
+
+  resource_table.table.emplace(Key{Type::ShaderProgram, name}, program);
 }
 
 template <>

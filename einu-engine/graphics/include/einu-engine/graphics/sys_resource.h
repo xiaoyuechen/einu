@@ -16,6 +16,14 @@ void Destroy(sgln::ResourceTable& resource_table, const char* name,
              Args... args);
 
 template <>
+void Create<ResourceType::VertexArray>(sgln::ResourceTable& resource_table,
+                                       const char* name);
+
+template <>
+void Destroy<ResourceType::VertexArray>(sgln::ResourceTable& resource_table,
+                                        const char* name);
+
+template <>
 void Create<ResourceType::VertexShader, const char*>(
     sgln::ResourceTable& resource_table, const char* name,
     const char* file_name);
