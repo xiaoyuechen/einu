@@ -1,8 +1,8 @@
 add_library(
   einu-graphics
-  "render_sys.h"
-  "render_sys.cc"
-)
+  "sys_render.h"
+  "sys_render.cc"
+  "comp_camera.h")
 
 target_include_directories(
   einu-graphics

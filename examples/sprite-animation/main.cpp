@@ -1,7 +1,7 @@
 #include <einu-core/einu_engine.h>
 #include <einu-core/entity_view.h>
-#include <einu-graphics/render_sys.h>
-#include <einu-window/window_sys.h>
+#include <einu-graphics/sys_render.h>
+#include <einu-window/sys_window.h>
 
 #include <iostream>
 

@@ -1,9 +1,9 @@
 add_library(
   einu-window
   "input.h"
-  "window_comp.h"
-  "window_sys.h"
-  "window_sys.cpp"
+  "comp_window.h"
+  "sys_window.h"
+  "sys_window.cpp"
   "internal/glfw_input_def.h"
   "gl_proc.h"
   "gl_proc.cc"

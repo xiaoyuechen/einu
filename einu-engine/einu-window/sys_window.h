@@ -1,7 +1,7 @@
 #pragma once
 
 #include "einu-window/gl_proc.h"
-#include "einu-window/window_comp.h"
+#include "einu-window/comp_window.h"
 
 namespace einu {
 namespace window {
