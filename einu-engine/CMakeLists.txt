@@ -35,3 +35,7 @@ add_subdirectory(core)
 add_subdirectory(window)
 add_subdirectory(graphics)
 add_subdirectory(extern)
+
+if(einu-engine_build_examples)
+  add_subdirectory(examples)
+endif()
