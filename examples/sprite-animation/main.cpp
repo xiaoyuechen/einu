@@ -1,8 +1,8 @@
-#include <einu-core/einu_engine.h>
-#include <einu-core/entity_view.h>
-#include <einu-graphics/sys_render.h>
-#include <einu-graphics/sys_shader.h>
-#include <einu-window/sys_window.h>
+#include <einu-engine/core/einu_engine.h>
+#include <einu-engine/core/entity_view.h>
+#include <einu-engine/graphics/sys_render.h>
+#include <einu-engine/graphics/sys_shader.h>
+#include <einu-engine/window/sys_window.h>
 
 #include <iostream>
 
