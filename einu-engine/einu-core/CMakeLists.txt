@@ -1,6 +1,6 @@
 add_library(einu-core INTERFACE)
 
-target_include_directories(einu-core INTERFACE "${PROJECT_SOURCE_DIR}/einu-engine/")
+target_include_directories(einu-core INTERFACE "${einu_SOURCE_DIR}/einu-engine/")
 
 target_link_libraries(
   einu-core INTERFACE 

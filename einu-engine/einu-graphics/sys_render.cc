@@ -2,7 +2,7 @@
 
 #include <glad/glad.h>
 
-#include <stdexcept>
+#include "einu-graphics/gl_error.h"
 
 namespace einu {
 namespace graphics {
@@ -11,7 +11,7 @@ namespace sys {
 void LoadGL() {
   if (!gladLoadGLLoader(
           reinterpret_cast<GLADloadproc>(window::GetProcAddress))) {
-    throw std::runtime_error("failed to load OpenGL");
+    throw GLError{"Failed to load OpenGL"};
   }
 }
 

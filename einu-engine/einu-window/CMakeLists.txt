@@ -17,5 +17,5 @@ target_link_libraries(
 
 target_include_directories(
   einu-window
-  PUBLIC "${PROJECT_SOURCE_DIR}/einu-engine/"
+  PUBLIC "${einu_SOURCE_DIR}/einu-engine/"
 )
