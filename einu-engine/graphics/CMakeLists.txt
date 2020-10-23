@@ -4,13 +4,22 @@ add_library(
   "include/einu-engine/graphics/components.h" 
   "include/einu-engine/graphics/singlenents.h" 
   "include/einu-engine/graphics/sys_render.h"
-  "include/einu-engine/graphics/sys_shader.h"
+  
   "include/einu-engine/graphics/gl_error.h"
-  "src/sys_shader.cc"
+  "include/einu-engine/graphics/sys_resource.h" 
+  "include/einu-engine/graphics/resource_type.h"
   "src/sys_render.cc"
+  "src/sys_resource_shader.cc"
   "shaders/instanced_sprite_fragment_shader.glsl"
   "shaders/instanced_sprite_vertex_shader.glsl" 
-)
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ )
 
 add_library(einu::graphics ALIAS graphics)
 

@@ -1,7 +1,7 @@
 #include <einu-engine/core/einu_engine.h>
 #include <einu-engine/core/entity_view.h>
 #include <einu-engine/graphics/sys_render.h>
-#include <einu-engine/graphics/sys_shader.h>
+#include <einu-engine/graphics/sys_resource.h>
 #include <einu-engine/window/sys_window.h>
 
 #include <iostream>
@@ -37,9 +37,8 @@ int main() {
   window::sys::MakeContextCurrent(win_comp);
   graphics::sys::LoadGL();
 
-  graphics::sys::CreateShader(graphics::sys::ShaderType::Vertex, "vs-1",
-                              "shaders/instanced_sprite_vertex_shader.glsl",
-                              resource_table);
+  graphics::sys::Create<graphics::ResourceType::VertexShader>(
+      resource_table, "vs-1", "shaders/instanced_sprite_vertex_shader.glsl");
 
   while (!win_comp.shouldClose) {
     window::sys::PoolEvents(win_comp);

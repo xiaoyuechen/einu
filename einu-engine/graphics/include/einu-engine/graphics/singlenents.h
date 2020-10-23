@@ -9,6 +9,8 @@
 #include <string>
 #include <utility>
 
+#include "einu-engine/graphics/resource_type.h"
+
 namespace einu {
 namespace graphics {
 namespace sgln {
@@ -18,17 +20,7 @@ struct Camera : public Xnent {
 };
 
 struct ResourceTable : public Xnent {
-  enum class Type {
-    VertexShader,
-    FragmentShader,
-    ShaderProgram,
-    Texture,
-    VertexArray,
-    VertexBuffer,
-    Count
-  };
-
-  using Key = std::pair<Type, std::string>;
+  using Key = std::pair<ResourceType, std::string>;
   using Value = std::uint32_t;
   using Table = absl::flat_hash_map<Key, Value>;
 

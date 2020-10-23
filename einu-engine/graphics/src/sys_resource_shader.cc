@@ -1,17 +1,19 @@
-#include "einu-engine/graphics/sys_shader.h"
-
 #include <glad/glad.h>
 
+#include <cassert>
 #include <fstream>
 #include <sstream>
 
 #include "einu-engine/graphics/gl_error.h"
+#include "einu-engine/graphics/sys_resource.h"
 
 namespace einu {
 namespace graphics {
 namespace sys {
 
 namespace {
+
+enum class ShaderType { Vertex, Fragment };
 
 enum class ShaderOrProgram { Shader, Program };
 
@@ -51,10 +53,8 @@ void CheckStatus(ShaderOrProgram type, GLuint id) {
   }
 }
 
-}  // namespace
-
-void CreateShader(ShaderType type, const char* name, const char* file_name,
-                  sgln::ResourceTable& resource_table) {
+void CreateShader(ShaderType type, sgln::ResourceTable& resource_table,
+                  const char* name, const char* file_name) {
   auto file = std::ifstream(file_name);
   if (!file.is_open()) {
     throw GLError{"Failed to open shader file"};
@@ -77,20 +77,22 @@ void CreateShader(ShaderType type, const char* name, const char* file_name,
   CheckStatus(ShaderOrProgram::Shader, shader);
 
   auto key = sgln::ResourceTable::Key{};
+  using Type = ResourceType;
+
   key.second = name;
   if (type == ShaderType::Vertex) {
-    key.first = sgln::ResourceTable::Type::VertexShader;
+    key.first = Type::VertexShader;
   } else {
-    key.first = sgln::ResourceTable::Type::FragmentShader;
+    key.first = Type::FragmentShader;
   }
 
   resource_table.table.emplace(std::move(key), shader);
 }
 
-void DestroyShader(ShaderType type, const char* name,
-                   sgln::ResourceTable& resource_table) {
+void DestroyShader(ShaderType type, sgln::ResourceTable& resource_table,
+                   const char* name) {
   using Key = sgln::ResourceTable::Key;
-  using Type = sgln::ResourceTable::Type;
+  using Type = ResourceType;
   auto resource_type =
       type == ShaderType::Vertex ? Type::VertexShader : Type::FragmentShader;
   auto shader_it = resource_table.table.find(Key{resource_type, name});
@@ -98,11 +100,27 @@ void DestroyShader(ShaderType type, const char* name,
   resource_table.table.erase(shader_it);
 }
 
-void CreateProgram(const char* name, const char* vshader_name,
-                   const char* fshader_name,
-                   sgln::ResourceTable& resource_table) {
+}  // namespace
+
+template <>
+void Create<ResourceType::VertexShader, const char*>(
+    sgln::ResourceTable& resource_table, const char* name,
+    const char* file_name) {
+  CreateShader(ShaderType::Vertex, resource_table, name, file_name);
+}
+
+template <>
+void Destroy<ResourceType::VertexShader>(sgln::ResourceTable& resource_table,
+                                         const char* name) {
+  DestroyShader(ShaderType::Vertex, resource_table, name);
+}
+
+template <>
+void Create<ResourceType::ShaderProgram, const char*, const char*>(
+    sgln::ResourceTable& resource_table, const char* name,
+    const char* vshader_name, const char* fshader_name) {
   using Key = sgln::ResourceTable::Key;
-  using Type = sgln::ResourceTable::Type;
+  using Type = ResourceType;
   auto vshader = resource_table.table.at(Key{Type::VertexShader, vshader_name});
   auto fshader =
       resource_table.table.at(Key{Type::FragmentShader, fshader_name});
@@ -116,9 +134,11 @@ void CreateProgram(const char* name, const char* vshader_name,
   glDetachShader(program, fshader);
 }
 
-void DeleteProgram(const char* name, sgln::ResourceTable& resource_table) {
+template <>
+void Destroy<ResourceType::ShaderProgram>(sgln::ResourceTable& resource_table,
+                                          const char* name) {
   using Key = sgln::ResourceTable::Key;
-  using Type = sgln::ResourceTable::Type;
+  using Type = ResourceType;
   auto program_it = resource_table.table.find(Key{Type::ShaderProgram, name});
   glDeleteProgram(program_it->second);
   resource_table.table.erase(program_it);
