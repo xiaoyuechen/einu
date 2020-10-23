@@ -24,6 +24,14 @@ void Destroy<ResourceType::VertexArray>(sgln::ResourceTable& resource_table,
                                         const char* name);
 
 template <>
+void Create<ResourceType::VertexBuffer>(sgln::ResourceTable& resource_table,
+                                        const char* name);
+
+template <>
+void Destroy<ResourceType::VertexBuffer>(sgln::ResourceTable& resource_table,
+                                         const char* name);
+
+template <>
 void Create<ResourceType::VertexShader, const char*>(
     sgln::ResourceTable& resource_table, const char* name,
     const char* file_name);
