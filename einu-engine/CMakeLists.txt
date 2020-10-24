@@ -10,6 +10,8 @@ project(einu-engine LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+cmake_policy(SET CMP0077 NEW)
+
 if(MSVC)
   # /wd4005  macro-redefinition /wd4068  unknown pragma /wd4244  conversion from
   # 'type1' to 'type2' /wd4267  conversion from 'size_t' to 'type2' /wd4800
