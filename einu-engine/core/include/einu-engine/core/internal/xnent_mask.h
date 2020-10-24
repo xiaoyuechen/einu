@@ -35,6 +35,7 @@ class DynamicXnentMask {
   using size_type = std::size_t;
   using initializer_list = std::initializer_list<XnentTypeID>;
 
+  // NOLINTNEXTLINE
   DynamicXnentMask(initializer_list init) {
     size_ = (std::max(init) + 8) / 8;
     data_ = std::make_unique<uint8_t[]>(size_);

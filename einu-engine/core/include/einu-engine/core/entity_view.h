@@ -19,6 +19,7 @@
 #pragma once
 
 #include <tuple>
+#include <vector>
 
 #include "einu-engine/core/i_entity_manager.h"
 #include "einu-engine/core/xnent_list.h"
@@ -33,7 +34,7 @@ class ComponentIterator<XnentList<Comps...>> {
  public:
   using Itr = std::vector<Xnent*>::const_iterator;
 
-  constexpr ComponentIterator(Itr itr) noexcept : itr_(itr) {}
+  constexpr explicit ComponentIterator(Itr itr) noexcept : itr_(itr) {}
 
   constexpr ComponentIterator& operator++() noexcept {
     std::advance(itr_, sizeof...(Comps));
@@ -71,7 +72,7 @@ class ComponentIterator<XnentList<Comps...>> {
 template <typename ComponentList>
 class ComponentBuffer {
  public:
-  constexpr ComponentBuffer(const std::vector<Xnent*>& comps) noexcept
+  constexpr explicit ComponentBuffer(const std::vector<Xnent*>& comps) noexcept
       : comps_(comps) {}
 
   auto begin() const noexcept {
@@ -88,7 +89,8 @@ class ComponentBuffer {
 
 class EIDBuffer {
  public:
-  constexpr EIDBuffer(const std::vector<EID>& eids) noexcept : eids_(eids) {}
+  constexpr explicit EIDBuffer(const std::vector<EID>& eids) noexcept
+      : eids_(eids) {}
 
   auto begin() const noexcept { return eids_.begin(); }
 

@@ -25,7 +25,7 @@
 #include <iostream>
 
 int main() {
-  using namespace einu;
+  using namespace einu;  // NOLINT
 
   using ComponentList = XnentList<window::comp::Window>;
   using SinglenentList = XnentList<graphics::sgln::ResourceTable>;

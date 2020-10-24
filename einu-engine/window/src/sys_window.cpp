@@ -78,33 +78,27 @@ auto& GetInputBuffer(GLFWwindow& window) {
 }
 
 void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
-  using namespace input;
-  using namespace util;
-
   auto& input_buffer = GetInputBuffer(*window);
   auto&& button_state =
-      input_buffer.GetMouseButton(static_cast<MouseButton>(button));
+      input_buffer.GetMouseButton(static_cast<input::MouseButton>(button));
   button_state = action;
   auto&& mods_state = input_buffer.GetModifierKeyFlag();
-  mods_state |= static_cast<ModifierKeyFlag>(mods);
+  using util::operator|=;
+  mods_state |= static_cast<input::ModifierKeyFlag>(mods);
 }
 
 void KeyCallback(GLFWwindow* window, int key, [[maybe_unused]] int scancode,
                  int action, int mods) {
-  using namespace input;
-  using namespace util;
-
   auto& input_buffer = GetInputBuffer(*window);
-  auto key_enum = static_cast<KeyboardKey>(key);
+  auto key_enum = static_cast<input::KeyboardKey>(key);
   auto&& key_state = input_buffer.GetKeyboardKey(key_enum);
   key_state = action;
   auto&& mods_state = input_buffer.GetModifierKeyFlag();
-  mods_state |= static_cast<ModifierKeyFlag>(mods);
+  using util::operator|=;
+  mods_state |= static_cast<input::ModifierKeyFlag>(mods);
 }
 
 void CursorPosCallback(GLFWwindow* window, double xpos, double ypos) {
-  using namespace input;
-
   auto& input_buffer = GetInputBuffer(*window);
   auto& cursor_pos = input_buffer.GetCursorPos();
   cursor_pos.x = static_cast<float>(xpos);
@@ -138,8 +132,6 @@ void MakeContextCurrent(comp::Window& win) {
 namespace {
 
 void ResetCurrentInput(input::InputBuffer& input_buffer) noexcept {
-  using namespace input;
-
   auto next = input_buffer.cursor + 1;
   input_buffer.cursor = next == input_buffer.kInputBufferSize ? 0 : next;
 
@@ -152,7 +144,7 @@ void ResetCurrentInput(input::InputBuffer& input_buffer) noexcept {
   }
 
   input_buffer.modifier_key_buffer[input_buffer.cursor] =
-      static_cast<ModifierKeyFlag>(0);
+      static_cast<input::ModifierKeyFlag>(0);
 }
 
 }  // namespace

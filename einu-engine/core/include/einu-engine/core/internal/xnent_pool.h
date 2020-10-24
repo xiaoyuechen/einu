@@ -22,6 +22,8 @@
 
 #include <array>
 #include <cassert>
+#include <memory>
+#include <utility>
 #include <variant>
 
 #include "einu-engine/core/i_xnent_pool.h"

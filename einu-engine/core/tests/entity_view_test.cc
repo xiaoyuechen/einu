@@ -23,15 +23,15 @@
 
 #include <array>
 
-#include "xnents.h"
+#include "./xnents.h"
 
 namespace einu {
 
 struct ComponentIteratorTest : public testing::Test {
   ComponentIteratorTest() {
-    for (auto i = std::size_t{0}; i != kCompCount; ++i) {
-      c0s[i].value = (int)i;
-      c1s[i].value = (int)i + 0.5f;
+    for (auto i = 0; i != kCompCount; ++i) {
+      c0s[i].value = i;
+      c1s[i].value = i + 0.5f;
       vec.push_back(&c0s[i]);
       vec.push_back(&c1s[i]);
     }

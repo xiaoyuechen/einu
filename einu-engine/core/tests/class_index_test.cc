@@ -21,6 +21,7 @@
 
 #include <array>
 #include <cstdlib>
+#include <random>
 
 namespace einu {
 namespace rtti {
@@ -29,8 +30,10 @@ using U = TypeID::IndexType;
 struct ClassIndexTest : testing::Test {
   ClassIndexTest() {
     srand(time(nullptr));
+    std::default_random_engine generator;
+    std::uniform_int_distribution<int> distribution(1, 1000);
     for (auto& u : arr) {
-      u = rand();
+      u = distribution(generator);
     }
   }
 
@@ -65,7 +68,7 @@ void TestGetClassIndice() {
 }
 
 TEST(ClassIndexStorageTest, GetTypeID) {
-  TestGetClassIndice<char, int, float, double, long long>();
+  TestGetClassIndice<char, int, float, double, std::int64_t>();
 }
 
 }  // namespace rtti

@@ -25,6 +25,7 @@
 #include <numeric>
 #include <optional>
 #include <tuple>
+#include <utility>
 #include <vector>
 
 #include "einu-engine/core/util/bit.h"
@@ -42,7 +43,7 @@ class FixedPoolImpl {
   using reference = std::tuple<Ts&...>;
   using const_reference = std::tuple<const Ts&...>;
 
-  FixedPoolImpl(size_type count)
+  explicit FixedPoolImpl(size_type count)
       : object_arr_tuple_{ObjectArray<Ts>(count)...}, bit_arr_(count, true) {}
 
   FixedPoolImpl(size_type count, const value_type& value)
@@ -110,7 +111,7 @@ class FixedPool<T> {
   using reference = value_type&;
   using const_reference = const value_type&;
 
-  FixedPool(size_type count) : pool_{count} {}
+  explicit FixedPool(size_type count) : pool_{count} {}
 
   FixedPool(size_type count, const value_type& value)
       : pool_{count, std::forward_as_tuple(value)} {}

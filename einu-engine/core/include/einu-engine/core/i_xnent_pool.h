@@ -19,6 +19,7 @@
 #pragma once
 
 #include <memory>
+#include <utility>
 
 #include "einu-engine/core/internal/pool_policy.h"
 #include "einu-engine/core/xnent.h"

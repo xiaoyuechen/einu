@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include <memory>
+
 #include "einu-engine/core/internal/eid_pool.h"
 #include "einu-engine/core/internal/entity_manager.h"
 #include "einu-engine/core/internal/xnent_pool.h"

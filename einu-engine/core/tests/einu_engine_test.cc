@@ -28,7 +28,6 @@ using TestEnginePolicy = EnginePolicy<NeedList<XnentList<C1, C2>, XnentList<>>>;
 
 TEST(EinuEngine, CreateEngineWillRegisterComponents) {
   auto engine = EinuEngine<TestEnginePolicy>();
-  using namespace internal;
   EXPECT_EQ(GetXnentTypeID<C1>(), 0);
   EXPECT_EQ(GetXnentTypeID<C2>(), 1);
 }

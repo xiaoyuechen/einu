@@ -17,6 +17,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #pragma once
+
 #include <einu-engine/core/xnent.h>
 
 namespace einu {
