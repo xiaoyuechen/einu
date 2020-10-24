@@ -8,3 +8,4 @@ repos:
     - id: cmake-format
     - id: cmake-lint
     - id: clang-format
+    - id: cpplint
