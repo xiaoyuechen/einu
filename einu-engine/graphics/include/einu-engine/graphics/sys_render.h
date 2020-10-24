@@ -8,8 +8,6 @@ namespace sys {
 
 void LoadGL();
 
-
-
 }
 }  // namespace graphics
 }  // namespace einu

@@ -10,8 +10,7 @@ class GLError final : public std::exception {
  public:
   GLError() = default;
 
-  explicit GLError(const char* message)
-      : message_{message} {}
+  explicit GLError(const char* message) : message_{message} {}
 
   ~GLError() = default;
 

@@ -22,9 +22,9 @@ struct PoolPolicy<T> {
 
   PoolPolicy(size_type init_size, std::unique_ptr<value_type> value = nullptr,
              GrowthFunc growth_func = DefaultGrowFunc) noexcept
-      : init_size(init_size)
-      , value(std::move(value))
-      , growth_func(growth_func) {}
+      : init_size(init_size),
+        value(std::move(value)),
+        growth_func(growth_func) {}
 
   size_type init_size;
   std::unique_ptr<value_type> value;
@@ -37,8 +37,7 @@ struct PoolPolicy<> {
 
   PoolPolicy(size_type init_size,
              GrowthFunc growth_func = DefaultGrowFunc) noexcept
-      : init_size(init_size)
-      , growth_func(growth_func) {}
+      : init_size(init_size), growth_func(growth_func) {}
 
   size_type init_size;
   GrowthFunc growth_func;

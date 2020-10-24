@@ -15,8 +15,7 @@ class ComponentIterator<XnentList<Comps...>> {
  public:
   using Itr = std::vector<Xnent*>::const_iterator;
 
-  constexpr ComponentIterator(Itr itr) noexcept
-      : itr_(itr) {}
+  constexpr ComponentIterator(Itr itr) noexcept : itr_(itr) {}
 
   constexpr ComponentIterator& operator++() noexcept {
     std::advance(itr_, sizeof...(Comps));
@@ -71,8 +70,7 @@ class ComponentBuffer {
 
 class EIDBuffer {
  public:
-  constexpr EIDBuffer(const std::vector<EID>& eids) noexcept
-      : eids_(eids) {}
+  constexpr EIDBuffer(const std::vector<EID>& eids) noexcept : eids_(eids) {}
 
   auto begin() const noexcept { return eids_.begin(); }
 

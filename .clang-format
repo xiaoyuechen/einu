@@ -6,6 +6,3 @@ BasedOnStyle: Google
 # "int& foo" for this project:
 DerivePointerAlignment: false
 PointerAlignment: Left
-
-BreakConstructorInitializers: BeforeComma
-ConstructorInitializerAllOnOneLineOrOnePerLine: false

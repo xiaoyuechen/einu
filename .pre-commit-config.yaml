@@ -1,0 +1,10 @@
+# A note to contributers: 
+# Run `pre-commit install` command once the repo is cloned
+
+repos:
+  - repo: https://github.com/xiaoyuechen/pre-commit-hooks.git
+    rev: v0.7
+    hooks:
+    - id: cmake-format
+    - id: cmake-lint
+    - id: clang-format

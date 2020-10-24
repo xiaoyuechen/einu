@@ -54,8 +54,7 @@ class XnentPool;
 template <typename... Xnents>
 class XnentPool<XnentList<Xnents...>> final : public IXnentPool {
  public:
-  XnentPool()
-      : pool_table_{OneXnentPool<Xnents>{}...} {}
+  XnentPool() : pool_table_{OneXnentPool<Xnents>{}...} {}
 
  private:
   using TypeList = tmp::TypeList<Xnents...>;
