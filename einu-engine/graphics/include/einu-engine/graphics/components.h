@@ -25,7 +25,7 @@
 
 namespace einu {
 namespace graphics {
-namespace comp {
+namespace cmp {
 
 struct Camera : public Xnent {
   std::uint32_t id;
@@ -33,6 +33,6 @@ struct Camera : public Xnent {
   glm::mat4 view;
 };
 
-}  // namespace comp
+}  // namespace cmp
 }  // namespace graphics
 }  // namespace einu
