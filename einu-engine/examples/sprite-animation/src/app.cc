@@ -71,6 +71,8 @@ void App::Run() {
       "shaders/instanced_sprite_fragment_shader.glsl");
   graphics::sys::Create<graphics::ResourceType::ShaderProgram>(
       resource_table, "program", "vshader", "fshader");
+  graphics::sys::Create<graphics::ResourceType::Texture>(
+      resource_table, "white-triangle", "assets/white-triangle.png");
 
   while (!win_comp.shouldClose) {
     window::sys::PoolEvents(win_comp);

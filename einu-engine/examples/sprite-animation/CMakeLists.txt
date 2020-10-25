@@ -19,3 +19,11 @@ add_custom_command(
   COMMAND ${CMAKE_COMMAND} -E copy_directory ${graphics_source_dir}/shaders
           ${CMAKE_CURRENT_BINARY_DIR}/shaders
   COMMENT "Copying shaders")
+
+add_custom_command(
+  TARGET sprite-animation
+  POST_BUILD
+  COMMAND
+    ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/assets"
+    "${CMAKE_CURRENT_BINARY_DIR}/assets"
+  COMMENT "Copying assets")
