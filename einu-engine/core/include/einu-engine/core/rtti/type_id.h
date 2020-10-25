@@ -50,12 +50,12 @@ struct TypeIDStorage {
 
 template <typename T>
 void SetTypeID(TypeID id) noexcept {
-  internal::TypeIDStorage<std::decay<T>::type>::value = id;
+  internal::TypeIDStorage<typename std::decay<T>::type>::value = id;
 }
 
 template <typename T>
 TypeID GetTypeID() noexcept {
-  return internal::TypeIDStorage<std::decay<T>::type>::value;
+  return internal::TypeIDStorage<typename std::decay<T>::type>::value;
 }
 
 }  // namespace rtti

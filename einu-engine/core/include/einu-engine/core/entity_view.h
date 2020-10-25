@@ -87,9 +87,9 @@ class ComponentBuffer {
   const std::vector<Xnent*>& comps_;
 };
 
-class EIDBuffer {
+class EIDBufferView {
  public:
-  constexpr explicit EIDBuffer(const std::vector<EID>& eids) noexcept
+  constexpr explicit EIDBufferView(const std::vector<EID>& eids) noexcept
       : eids_(eids) {}
 
   auto begin() const noexcept { return eids_.begin(); }
@@ -103,18 +103,20 @@ class EIDBuffer {
 template <typename ComponentList>
 class EntityView {
  public:
-  using ComponentBuffer = ComponentBuffer<ComponentList>;
+  using ComponentBufferView = ComponentBuffer<ComponentList>;
 
   void View(IEntityManager& ett_mgr) {
     Clear(ett_buffer_);
     ett_mgr.GetEntitiesWithComponents(ett_buffer_, ComponentList{});
   }
 
-  ComponentBuffer Components() const noexcept {
-    return ComponentBuffer{ett_buffer_.comps};
+  ComponentBufferView Components() const noexcept {
+    return ComponentBufferView{ett_buffer_.comps};
   }
 
-  EIDBuffer EIDs() const noexcept { return EIDBuffer{ett_buffer_.eids}; }
+  EIDBufferView EIDs() const noexcept {
+    return EIDBufferView{ett_buffer_.eids};
+  }
 
  private:
   EntityBuffer ett_buffer_;

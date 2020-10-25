@@ -144,13 +144,13 @@ constexpr std::size_t DefaultGrowth(std::size_t pool_size) noexcept {
 
 template <typename... Ts>
 class DynamicPool {
-  using FixedPool = FixedPool<Ts...>;
+  using OnePool = FixedPool<Ts...>;
 
  public:
-  using size_type = typename FixedPool::size_type;
-  using value_type = typename FixedPool::value_type;
-  using reference = typename FixedPool::reference;
-  using const_reference = typename FixedPool::const_reference;
+  using size_type = typename OnePool::size_type;
+  using value_type = typename OnePool::value_type;
+  using reference = typename OnePool::reference;
+  using const_reference = typename OnePool::const_reference;
   using GrowthFunc = std::function<size_type(size_type)>;
 
   DynamicPool(size_type count = 0, std::unique_ptr<value_type> value = nullptr,
@@ -214,7 +214,7 @@ class DynamicPool {
   }
 
  private:
-  using PoolList = std::vector<FixedPool>;
+  using PoolList = std::vector<OnePool>;
 
   bool PoolsAllAcquired() const noexcept {
     for (const auto& pool : pools_) {

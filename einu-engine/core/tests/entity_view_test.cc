@@ -60,16 +60,17 @@ TEST_F(ComponentIteratorTest, pre_increment) {
 
 // TODO(Xiaoyue Chen): Mock EntityManager and comprehensively test EntityView
 struct EntityViewTest : public testing::Test {
-  using ComponentList = XnentList<C0, C1>;
-  using EntityView = EntityView<ComponentList>;
-  using ComponentTypeIDRegister = internal::XnentTypeIDRegister<ComponentList>;
-  using EntityManager = internal::EntityManager<2, 0>;
+  using TestComponentList = XnentList<C0, C1>;
+  using TestEntityView = EntityView<TestComponentList>;
+  using ComponentTypeIDRegister =
+      internal::XnentTypeIDRegister<TestComponentList>;
+  using TestEntityManager = internal::EntityManager<2, 0>;
 
   EntityViewTest() {}
 
   ComponentTypeIDRegister reg;
-  EntityManager mgr;
-  EntityView view;
+  TestEntityManager mgr;
+  TestEntityView view;
 };
 
 TEST_F(EntityViewTest, _) {
