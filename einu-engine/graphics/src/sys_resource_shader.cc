@@ -24,6 +24,7 @@
 
 #include "einu-engine/graphics/graphics_error.h"
 #include "einu-engine/graphics/sys_resource.h"
+#include "src/sys_resource_helper.h"
 
 namespace einu {
 namespace graphics {
@@ -32,6 +33,13 @@ namespace sys {
 namespace {
 
 enum class ShaderType { Vertex, Fragment };
+
+ResourceType ToResourceType(ShaderType shader_type) noexcept {
+  auto resource_type = shader_type == ShaderType::Vertex
+                           ? ResourceType::VertexShader
+                           : ResourceType::FragmentShader;
+  return resource_type;
+}
 
 enum class ShaderOrProgram { Shader, Program };
 
@@ -73,49 +81,34 @@ void CheckStatus(ShaderOrProgram type, GLuint id) {
 
 void CreateShader(ShaderType type, sgln::ResourceTable& resource_table,
                   const char* name, const char* file_name) {
-  auto file = std::ifstream(file_name);
-  if (!file.is_open()) {
-    throw GraphicsError{"Failed to open shader file"};
-  }
-  auto buffer = std::stringstream{};
-  buffer << file.rdbuf();
-  auto content = buffer.str();
-  auto cstr = content.c_str();
+  CreateHelper(resource_table, ToResourceType(type), name, [=]() {
+    auto file = std::ifstream(file_name);
+    if (!file.is_open()) {
+      throw GraphicsError{"Failed to open shader file"};
+    }
+    auto buffer = std::stringstream{};
+    buffer << file.rdbuf();
+    auto content = buffer.str();
+    auto cstr = content.c_str();
 
-  auto shader = std::uint32_t{};
-  if (type == ShaderType::Vertex) {
-    shader = glCreateShader(GL_VERTEX_SHADER);
-  } else {
-    shader = glCreateShader(GL_FRAGMENT_SHADER);
-  }
+    auto shader = std::uint32_t{};
+    if (type == ShaderType::Vertex) {
+      shader = glCreateShader(GL_VERTEX_SHADER);
+    } else {
+      shader = glCreateShader(GL_FRAGMENT_SHADER);
+    }
 
-  glShaderSource(shader, 1, &cstr, nullptr);
-  glCompileShader(shader);
+    glShaderSource(shader, 1, &cstr, nullptr);
+    glCompileShader(shader);
 
-  CheckStatus(ShaderOrProgram::Shader, shader);
-
-  auto key = sgln::ResourceTable::Key{};
-  using Type = ResourceType;
-
-  key.second = name;
-  if (type == ShaderType::Vertex) {
-    key.first = Type::VertexShader;
-  } else {
-    key.first = Type::FragmentShader;
-  }
-
-  resource_table.table.emplace(std::move(key), shader);
+    CheckStatus(ShaderOrProgram::Shader, shader);
+    return shader;
+  });
 }
 
 void DestroyShader(ShaderType type, sgln::ResourceTable& resource_table,
                    const char* name) {
-  using Key = sgln::ResourceTable::Key;
-  using Type = ResourceType;
-  auto resource_type =
-      type == ShaderType::Vertex ? Type::VertexShader : Type::FragmentShader;
-  auto shader_it = resource_table.table.find(Key{resource_type, name});
-  glDeleteShader(shader_it->second);
-  resource_table.table.erase(shader_it);
+  DestroyHelper(resource_table, ToResourceType(type), name, glDeleteShader);
 }
 
 }  // namespace
@@ -150,31 +143,30 @@ template <>
 void Create<ResourceType::ShaderProgram, const char*, const char*>(
     sgln::ResourceTable& resource_table, const char* name,
     const char* vshader_name, const char* fshader_name) {
-  using Key = sgln::ResourceTable::Key;
-  using Type = ResourceType;
-  auto vshader = resource_table.table.at(Key{Type::VertexShader, vshader_name});
-  auto fshader =
-      resource_table.table.at(Key{Type::FragmentShader, fshader_name});
+  CreateHelper(resource_table, ResourceType::ShaderProgram, name,
+               [=, &resource_table] {
+                 using Key = sgln::ResourceTable::Key;
+                 auto vshader = resource_table.table.at(
+                     Key{ResourceType::VertexShader, vshader_name});
+                 auto fshader = resource_table.table.at(
+                     Key{ResourceType::FragmentShader, fshader_name});
 
-  auto program = glCreateProgram();
-  glAttachShader(program, vshader);
-  glAttachShader(program, fshader);
-  glLinkProgram(program);
-  CheckStatus(ShaderOrProgram::Program, program);
-  glDetachShader(program, vshader);
-  glDetachShader(program, fshader);
-
-  resource_table.table.emplace(Key{Type::ShaderProgram, name}, program);
+                 auto program = glCreateProgram();
+                 glAttachShader(program, vshader);
+                 glAttachShader(program, fshader);
+                 glLinkProgram(program);
+                 CheckStatus(ShaderOrProgram::Program, program);
+                 glDetachShader(program, vshader);
+                 glDetachShader(program, fshader);
+                 return program;
+               });
 }
 
 template <>
 void Destroy<ResourceType::ShaderProgram>(sgln::ResourceTable& resource_table,
                                           const char* name) {
-  using Key = sgln::ResourceTable::Key;
-  using Type = ResourceType;
-  auto program_it = resource_table.table.find(Key{Type::ShaderProgram, name});
-  glDeleteProgram(program_it->second);
-  resource_table.table.erase(program_it);
+  DestroyHelper(resource_table, ResourceType::ShaderProgram, name,
+                glDeleteProgram);
 }
 
 }  // namespace sys

@@ -29,6 +29,7 @@
 
 #include "einu-engine/graphics/graphics_error.h"
 #include "einu-engine/graphics/sys_resource.h"
+#include "src/sys_resource_helper.h"
 
 namespace einu {
 namespace graphics {
@@ -105,13 +106,19 @@ void Destroy<ResourceType::Texture>(sgln::ResourceTable& resource_table,
 template <>
 void Create<ResourceType::Sampler>(sgln::ResourceTable& resource_table,
                                    const char* name) {
-  GLuint sampler;
-  glGenSamplers(1, &sampler);
+  CreateHelper(resource_table, ResourceType::Sampler, name, [] {
+    GLuint sampler;
+    glGenSamplers(1, &sampler);
+    return sampler;
+  });
 }
 
 template <>
 void Destroy<ResourceType::Sampler>(sgln::ResourceTable& resource_table,
-                                    const char* name);
+                                    const char* name) {
+  DestroyHelper(resource_table, ResourceType::Sampler, name,
+                [](auto sampler) { glDeleteSamplers(1, &sampler); });
+}
 
 }  // namespace sys
 }  // namespace graphics

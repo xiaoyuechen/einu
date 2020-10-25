@@ -13,7 +13,8 @@ add_library(
   "src/sys_resource_vertex_buffer.cc"
   "src/sys_resource_texture.cc"
   "shaders/instanced_sprite_fragment_shader.glsl"
-  "shaders/instanced_sprite_vertex_shader.glsl")
+  "shaders/instanced_sprite_vertex_shader.glsl"
+  "src/sys_resource_helper.h")
 
 add_library(einu::graphics ALIAS graphics)
 
