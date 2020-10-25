@@ -45,7 +45,7 @@ struct Projection {
     PerspectiveAttrib perspective_attrib;
   };
 
-  Type type = Type::ORTHOGRAPHIC;
+  Type type = Type::Orthographic;
   Attribute attrib{OrthographicAttrib{}};
 };
 
@@ -56,7 +56,7 @@ constexpr Projection operator*(float ratio,
                                const Projection& projection) noexcept;
 
 constexpr glm::mat4 ProjectionMatrix(const Projection projection) noexcept {
-  if (type == Projection::Type::ORTHOGRAPHIC) {
+  if (type == Projection::Type::Orthographic) {
     const auto& ortho_attrib = attrib.orthographic_attrib;
     return glm::ortho(ortho_attrib.left, ortho_attrib.right,
                       ortho_attrib.button, ortho_attrib.top, ortho_attrib.near,
@@ -70,7 +70,7 @@ constexpr glm::mat4 ProjectionMatrix(const Projection projection) noexcept {
 
 constexpr Projection operator*(const Projection& projection,
                                float ratio) noexcept {
-  if (projection.type == Projection::Type::ORTHOGRAPHIC) {
+  if (projection.type == Projection::Type::Orthographic) {
     auto copy = projection;
     auto& attrib = copy.attrib.orthographic_attrib;
     attrib.left *= ratio;
