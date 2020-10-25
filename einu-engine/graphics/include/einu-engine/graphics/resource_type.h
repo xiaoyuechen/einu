@@ -28,6 +28,7 @@ enum class ResourceType {
   FragmentShader,
   ShaderProgram,
   Texture,
+  Sampler,
   Count
 };
 

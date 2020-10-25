@@ -22,7 +22,7 @@ set_target_properties(graphics PROPERTIES FOLDER "einu-engine")
 target_include_directories(
   graphics
   PUBLIC "include"
-  PRIVATE "src")
+  PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
 target_link_libraries(
   graphics

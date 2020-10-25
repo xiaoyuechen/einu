@@ -23,7 +23,7 @@
 
 #include <array>
 
-#include "./xnents.h"
+#include "src/xnents.h"
 
 namespace einu {
 

@@ -16,7 +16,7 @@ set_target_properties(window PROPERTIES FOLDER "einu-engine")
 target_include_directories(
   window
   PUBLIC "include"
-  PRIVATE "src")
+  PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
 target_link_libraries(
   window

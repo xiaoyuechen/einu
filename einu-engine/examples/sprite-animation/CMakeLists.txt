@@ -6,7 +6,7 @@ set_target_properties(sprite-animation PROPERTIES FOLDER "einu-engine/examples")
 target_include_directories(
   sprite-animation
   PUBLIC "include"
-  PRIVATE "src")
+  PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
 target_link_libraries(sprite-animation PRIVATE einu::core einu::window
                                                einu::graphics)

@@ -1,17 +1,19 @@
 add_executable(
   core-tests
-  "class_index_test.cc"
-  "object_pool_test.cc"
-  "xnent_mask_test.cc"
-  "einu_engine_test.cc"
-  "need_list_test.cc"
-  "xnents.h"
-  "component_pool_test.cc"
-  "xnent_type_id_register_test.cc"
-  "entity_manager_test.cc"
-  "entity_view_test.cc")
+  "src/class_index_test.cc"
+  "src/object_pool_test.cc"
+  "src/xnent_mask_test.cc"
+  "src/einu_engine_test.cc"
+  "src/need_list_test.cc"
+  "src/xnents.h"
+  "src/component_pool_test.cc"
+  "src/xnent_type_id_register_test.cc"
+  "src/entity_manager_test.cc"
+  "src/entity_view_test.cc")
 
 set_target_properties(core-tests PROPERTIES FOLDER "einu-engine")
+
+target_include_directories(core-tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
 target_link_libraries(core-tests PRIVATE einu::core gtest gtest_main gmock
                                          gmock_main)

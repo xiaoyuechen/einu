@@ -102,6 +102,17 @@ void Destroy<ResourceType::Texture>(sgln::ResourceTable& resource_table,
   resource_table.texture_info_table.erase(name);
 }
 
+template <>
+void Create<ResourceType::Sampler>(sgln::ResourceTable& resource_table,
+                                   const char* name) {
+  GLuint sampler;
+  glGenSamplers(1, &sampler);
+}
+
+template <>
+void Destroy<ResourceType::Sampler>(sgln::ResourceTable& resource_table,
+                                    const char* name);
+
 }  // namespace sys
 }  // namespace graphics
 }  // namespace einu

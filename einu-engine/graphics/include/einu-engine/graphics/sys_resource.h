@@ -85,6 +85,14 @@ template <>
 void Destroy<ResourceType::Texture>(sgln::ResourceTable& resource_table,
                                     const char* name);
 
+template <>
+void Create<ResourceType::Sampler>(sgln::ResourceTable& resource_table,
+                                   const char* name);
+
+template <>
+void Destroy<ResourceType::Sampler>(sgln::ResourceTable& resource_table,
+                                    const char* name);
+
 }  // namespace sys
 }  // namespace graphics
 }  // namespace einu

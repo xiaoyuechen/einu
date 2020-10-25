@@ -19,7 +19,7 @@
 #include <einu-engine/core/internal/xnent_type_id_register.h>
 #include <gtest/gtest.h>
 
-#include "./xnents.h"
+#include "src/xnents.h"
 
 namespace einu {
 namespace internal {
