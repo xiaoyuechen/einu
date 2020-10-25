@@ -14,7 +14,10 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+// along with this program.  If not, see
+// <https://www.gnu.org/licenses/>.
+
+#include "sprite-animation/app.h"
 
 #include <einu-engine/core/einu_engine.h>
 #include <einu-engine/core/entity_view.h>
@@ -24,7 +27,9 @@
 
 #include <iostream>
 
-int main() {
+namespace sprite_animation {
+
+void App::Run() {
   using namespace einu;  // NOLINT
 
   using ComponentList = XnentList<window::comp::Window>;
@@ -80,6 +85,6 @@ int main() {
                                                                "vshader");
   graphics::sys::Destroy<graphics::ResourceType::VertexArray>(resource_table,
                                                               "vao");
-
-  return 0;
 }
+
+}  // namespace sprite_animation

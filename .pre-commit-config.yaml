@@ -6,8 +6,9 @@ repos:
     rev: v0.7.4
     hooks: 
     - id: cmake-format
-      args: [--line-ending=auto]
+      args: [--in-place, --line-ending=auto]
     - id: cmake-lint
+      args: [--disabled-codes=C0327]
     - id: clang-format
     - id: cpplint
       args: [--output=vs7]

@@ -1,11 +1,18 @@
-add_executable(sprite-animation "main.cpp")
+add_executable(sprite-animation "src/main.cc" "include/sprite-animation/app.h"
+                                "src/app.cc")
 
 set_target_properties(sprite-animation PROPERTIES FOLDER "einu-engine/examples")
+
+target_include_directories(
+  sprite-animation
+  PUBLIC "include"
+  PRIVATE "src")
 
 target_link_libraries(sprite-animation PRIVATE einu::core einu::window
                                                einu::graphics)
 
 get_target_property(graphics_source_dir einu::graphics SOURCE_DIR)
+
 add_custom_command(
   TARGET sprite-animation
   POST_BUILD

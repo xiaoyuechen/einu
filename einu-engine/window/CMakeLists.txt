@@ -13,12 +13,12 @@ add_library(einu::window ALIAS window)
 
 set_target_properties(window PROPERTIES FOLDER "einu-engine")
 
-target_link_libraries(
-  window
-  PUBLIC einu::core glm
-  PRIVATE glfw)
-
 target_include_directories(
   window
   PUBLIC "include"
   PRIVATE "src")
+
+target_link_libraries(
+  window
+  PUBLIC einu::core glm
+  PRIVATE glfw)
