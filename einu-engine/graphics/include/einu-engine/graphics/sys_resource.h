@@ -76,6 +76,15 @@ template <>
 void Destroy<ResourceType::ShaderProgram>(sgln::ResourceTable& resource_table,
                                           const char* name);
 
+template <>
+void Create<ResourceType::Texture, const char*>(
+    sgln::ResourceTable& resource_table, const char* name,
+    const char* file_name);
+
+template <>
+void Destroy<ResourceType::Texture>(sgln::ResourceTable& resource_table,
+                                    const char* name);
+
 }  // namespace sys
 }  // namespace graphics
 }  // namespace einu

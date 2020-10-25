@@ -30,6 +30,12 @@
 
 namespace einu {
 namespace graphics {
+
+struct TextureInfo {
+  int width;
+  int height;
+};
+
 namespace sgln {
 
 struct Camera : public Xnent {
@@ -40,8 +46,10 @@ struct ResourceTable : public Xnent {
   using Key = std::pair<ResourceType, std::string>;
   using Value = std::uint32_t;
   using Table = absl::flat_hash_map<Key, Value>;
+  using TextureInfoTable = absl::flat_hash_map<std::string, TextureInfo>;
 
   Table table;
+  TextureInfoTable texture_info_table;
 };
 
 }  // namespace sgln

@@ -20,17 +20,37 @@
 
 #include <glad/glad.h>
 
-#include "einu-engine/graphics/internal/gl_error.h"
+#include <cstdio>
+#include <sstream>
+
+#include "einu-engine/graphics/graphics_error.h"
 
 namespace einu {
 namespace graphics {
 namespace sys {
 
+namespace {
+void PostGLCallCallback(const char* name, void* funcptr, int len_args, ...) {
+  GLenum error_code;
+  error_code = glad_glGetError();
+
+  if (error_code != GL_NO_ERROR) {
+    auto buffer = std::stringstream{};
+    buffer << "ERROR " << error_code << " in " << name << std::endl;
+    throw GraphicsError{std::move(buffer.str())};
+  }
+}
+}  // namespace
+
 void LoadGL() {
   if (!gladLoadGLLoader(
           reinterpret_cast<GLADloadproc>(window::GetProcAddress))) {
-    throw GLError{"Failed to load OpenGL"};
+    throw GraphicsError{"Failed to load OpenGL"};
   }
+
+#ifndef NDEBUG
+  glad_set_post_callback(PostGLCallCallback);
+#endif
 }
 
 }  // namespace sys

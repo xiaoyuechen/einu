@@ -22,7 +22,7 @@
 #include <fstream>
 #include <sstream>
 
-#include "einu-engine/graphics/internal/gl_error.h"
+#include "einu-engine/graphics/graphics_error.h"
 #include "einu-engine/graphics/sys_resource.h"
 
 namespace einu {
@@ -67,7 +67,7 @@ void CheckStatus(ShaderOrProgram type, GLuint id) {
   GLint status = GetStatus(type, id);
   if (status == GL_FALSE) {
     auto error_log = GetInfoLog(type, id);
-    throw GLError(error_log.c_str());
+    throw GraphicsError(error_log.c_str());
   }
 }
 
@@ -75,7 +75,7 @@ void CreateShader(ShaderType type, sgln::ResourceTable& resource_table,
                   const char* name, const char* file_name) {
   auto file = std::ifstream(file_name);
   if (!file.is_open()) {
-    throw GLError{"Failed to open shader file"};
+    throw GraphicsError{"Failed to open shader file"};
   }
   auto buffer = std::stringstream{};
   buffer << file.rdbuf();

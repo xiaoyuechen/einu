@@ -4,13 +4,14 @@ add_library(
   "include/einu-engine/graphics/components.h"
   "include/einu-engine/graphics/singlenents.h"
   "include/einu-engine/graphics/sys_render.h"
-  "include/einu-engine/graphics/internal/gl_error.h"
+  "include/einu-engine/graphics/graphics_error.h"
   "include/einu-engine/graphics/sys_resource.h"
   "include/einu-engine/graphics/resource_type.h"
   "src/sys_render.cc"
   "src/sys_resource_shader.cc"
   "src/sys_resource_vertex_array.cc"
   "src/sys_resource_vertex_buffer.cc"
+  "src/sys_resource_texture.cc"
   "shaders/instanced_sprite_fragment_shader.glsl"
   "shaders/instanced_sprite_vertex_shader.glsl")
 
@@ -26,4 +27,4 @@ target_include_directories(
 target_link_libraries(
   graphics
   PUBLIC einu::core einu::window absl::flat_hash_map
-  PRIVATE glad)
+  PRIVATE glad stb)

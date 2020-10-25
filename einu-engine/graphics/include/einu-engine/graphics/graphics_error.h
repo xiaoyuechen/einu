@@ -20,17 +20,20 @@
 
 #include <exception>
 #include <string>
+#include <utility>
 
 namespace einu {
 namespace graphics {
 
-class GLError final : public std::exception {
+class GraphicsError final : public std::exception {
  public:
-  GLError() = default;
+  GraphicsError() = default;
 
-  explicit GLError(const char* message) : message_{message} {}
+  explicit GraphicsError(const char* message) : message_{message} {}
+  explicit GraphicsError(std::string&& message)
+      : message_{std::move(message)} {}
 
-  ~GLError() = default;
+  ~GraphicsError() = default;
 
   const char* what() const noexcept override { return message_.c_str(); }
 

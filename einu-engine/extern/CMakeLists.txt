@@ -52,6 +52,8 @@ FetchContent_MakeAvailable(abseil-cpp)
 
 add_subdirectory(glad)
 
+add_subdirectory(stb)
+
 # FetchContent_Declare( assimp GIT_REPOSITORY
 # https://github.com/assimp/assimp.git GIT_TAG        v5.0.1 )
 #
