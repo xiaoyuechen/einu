@@ -1,7 +1,7 @@
 add_library(
   window
   "include/einu-engine/window/input.h"
-  "include/einu-engine/window/comp_window.h"
+  "include/einu-engine/window/cmp_window.h"
   "include/einu-engine/window/sys_window.h"
   "include/einu-engine/window/internal/glfw_input_def.h"
   "include/einu-engine/window/gl_proc.h"

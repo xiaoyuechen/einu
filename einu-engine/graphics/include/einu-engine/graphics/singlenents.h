@@ -36,7 +36,7 @@ struct TextureInfo {
   int height;
 };
 
-namespace sgln {
+namespace sgl {
 
 struct Camera : public Xnent {
   std::uint32_t active_camera;
@@ -52,6 +52,6 @@ struct ResourceTable : public Xnent {
   TextureInfoTable texture_info_table;
 };
 
-}  // namespace sgln
+}  // namespace sgl
 }  // namespace graphics
 }  // namespace einu

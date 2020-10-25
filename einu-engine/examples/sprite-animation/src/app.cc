@@ -32,8 +32,8 @@ namespace sprite_animation {
 void App::Run() {
   using namespace einu;  // NOLINT
 
-  using ComponentList = XnentList<window::comp::Window>;
-  using SinglenentList = XnentList<graphics::sgln::ResourceTable>;
+  using ComponentList = XnentList<window::cmp::Window>;
+  using SinglenentList = XnentList<graphics::sgl::ResourceTable>;
   using NeedList = NeedList<ComponentList, SinglenentList>;
   using EnginePolicy = EnginePolicy<NeedList>;
   using Engine = EinuEngine<EnginePolicy>;
@@ -49,10 +49,9 @@ void App::Run() {
   ett_mgr->SetSinglenentPool(*sgln_pool);
 
   auto eid = ett_mgr->CreateEntity();
-  auto& win_comp = ett_mgr->AddComponent<window::comp::Window>(eid);
+  auto& win_comp = ett_mgr->AddComponent<window::cmp::Window>(eid);
 
-  auto& resource_table =
-      ett_mgr->AddSinglenent<graphics::sgln::ResourceTable>();
+  auto& resource_table = ett_mgr->AddSinglenent<graphics::sgl::ResourceTable>();
 
   window::sys::Init();
 

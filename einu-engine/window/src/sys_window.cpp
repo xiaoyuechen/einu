@@ -33,12 +33,12 @@ void Terminate() { glfwTerminate(); }
 
 namespace {
 
-void SetWindowHint(const comp::Window& window) {
+void SetWindowHint(const cmp::Window& window) {
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
   glfwWindowHint(GLFW_SAMPLES, window.sample);
-  if (window.mode == comp::Window::Mode::WindowedFullScreen) {
+  if (window.mode == cmp::Window::Mode::WindowedFullScreen) {
     int count;
     auto monitors = glfwGetMonitors(&count);
     if (window.monitor_index + 1 < count) {
@@ -53,10 +53,10 @@ void SetWindowHint(const comp::Window& window) {
   }
 }
 
-GLFWmonitor* GetMonitorArgument(const comp::Window& window) {
+GLFWmonitor* GetMonitorArgument(const cmp::Window& window) {
   switch (window.mode) {
-    case comp::Window::Mode::WindowedFullScreen:
-    case comp::Window::Mode::FullScreen: {
+    case cmp::Window::Mode::WindowedFullScreen:
+    case cmp::Window::Mode::FullScreen: {
       int count;
       auto monitors = glfwGetMonitors(&count);
       if (window.monitor_index + 1 < count) {
@@ -65,7 +65,7 @@ GLFWmonitor* GetMonitorArgument(const comp::Window& window) {
       auto monitor = monitors[window.monitor_index];
       return monitor;
     }
-    case comp::Window::Mode::Windowed:
+    case cmp::Window::Mode::Windowed:
       return nullptr;
   }
   return nullptr;
@@ -73,7 +73,7 @@ GLFWmonitor* GetMonitorArgument(const comp::Window& window) {
 
 auto& GetInputBuffer(GLFWwindow& window) {
   auto& win_comp =
-      *static_cast<comp::Window*>(glfwGetWindowUserPointer(&window));
+      *static_cast<cmp::Window*>(glfwGetWindowUserPointer(&window));
   return win_comp.input_buffer;
 }
 
@@ -107,7 +107,7 @@ void CursorPosCallback(GLFWwindow* window, double xpos, double ypos) {
 
 }  // namespace
 
-void Create(comp::Window& win_comp) {
+void Create(cmp::Window& win_comp) {
   SetWindowHint(win_comp);
   auto glfw_win = glfwCreateWindow(win_comp.size.width, win_comp.size.height,
                                    win_comp.title.c_str(),
@@ -123,9 +123,9 @@ void Create(comp::Window& win_comp) {
   glfwSetCursorPosCallback(glfw_win, CursorPosCallback);
 }
 
-void Destroy(comp::Window& win) { glfwDestroyWindow(win.window); }
+void Destroy(cmp::Window& win) { glfwDestroyWindow(win.window); }
 
-void MakeContextCurrent(comp::Window& win) {
+void MakeContextCurrent(cmp::Window& win) {
   glfwMakeContextCurrent(win.window);
 }
 
@@ -149,7 +149,7 @@ void ResetCurrentInput(input::InputBuffer& input_buffer) noexcept {
 
 }  // namespace
 
-void PoolEvents(comp::Window& win) {
+void PoolEvents(cmp::Window& win) {
   ResetCurrentInput(win.input_buffer);
   glfwPollEvents();
   win.shouldClose = glfwWindowShouldClose(win.window);
@@ -158,7 +158,7 @@ void PoolEvents(comp::Window& win) {
                          &win.frame_size.height);
 }
 
-void SwapBuffer(comp::Window& win) {
+void SwapBuffer(cmp::Window& win) {
   glfwSwapInterval(win.swap_interval);
   glfwSwapBuffers(win.window);
 }

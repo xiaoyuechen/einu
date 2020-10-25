@@ -79,7 +79,7 @@ void CheckStatus(ShaderOrProgram type, GLuint id) {
   }
 }
 
-void CreateShader(ShaderType type, sgln::ResourceTable& resource_table,
+void CreateShader(ShaderType type, sgl::ResourceTable& resource_table,
                   const char* name, const char* file_name) {
   CreateHelper(resource_table, ToResourceType(type), name, [=]() {
     auto file = std::ifstream(file_name);
@@ -106,7 +106,7 @@ void CreateShader(ShaderType type, sgln::ResourceTable& resource_table,
   });
 }
 
-void DestroyShader(ShaderType type, sgln::ResourceTable& resource_table,
+void DestroyShader(ShaderType type, sgl::ResourceTable& resource_table,
                    const char* name) {
   DestroyHelper(resource_table, ToResourceType(type), name, glDeleteShader);
 }
@@ -115,37 +115,37 @@ void DestroyShader(ShaderType type, sgln::ResourceTable& resource_table,
 
 template <>
 void Create<ResourceType::VertexShader, const char*>(
-    sgln::ResourceTable& resource_table, const char* name,
+    sgl::ResourceTable& resource_table, const char* name,
     const char* file_name) {
   CreateShader(ShaderType::Vertex, resource_table, name, file_name);
 }
 
 template <>
-void Destroy<ResourceType::VertexShader>(sgln::ResourceTable& resource_table,
+void Destroy<ResourceType::VertexShader>(sgl::ResourceTable& resource_table,
                                          const char* name) {
   DestroyShader(ShaderType::Vertex, resource_table, name);
 }
 
 template <>
 void Create<ResourceType::FragmentShader, const char*>(
-    sgln::ResourceTable& resource_table, const char* name,
+    sgl::ResourceTable& resource_table, const char* name,
     const char* file_name) {
   CreateShader(ShaderType::Fragment, resource_table, name, file_name);
 }
 
 template <>
-void Destroy<ResourceType::FragmentShader>(sgln::ResourceTable& resource_table,
+void Destroy<ResourceType::FragmentShader>(sgl::ResourceTable& resource_table,
                                            const char* name) {
   DestroyShader(ShaderType::Fragment, resource_table, name);
 }
 
 template <>
 void Create<ResourceType::ShaderProgram, const char*, const char*>(
-    sgln::ResourceTable& resource_table, const char* name,
+    sgl::ResourceTable& resource_table, const char* name,
     const char* vshader_name, const char* fshader_name) {
   CreateHelper(resource_table, ResourceType::ShaderProgram, name,
                [=, &resource_table] {
-                 using Key = sgln::ResourceTable::Key;
+                 using Key = sgl::ResourceTable::Key;
                  auto vshader = resource_table.table.at(
                      Key{ResourceType::VertexShader, vshader_name});
                  auto fshader = resource_table.table.at(
@@ -163,7 +163,7 @@ void Create<ResourceType::ShaderProgram, const char*, const char*>(
 }
 
 template <>
-void Destroy<ResourceType::ShaderProgram>(sgln::ResourceTable& resource_table,
+void Destroy<ResourceType::ShaderProgram>(sgl::ResourceTable& resource_table,
                                           const char* name) {
   DestroyHelper(resource_table, ResourceType::ShaderProgram, name,
                 glDeleteProgram);

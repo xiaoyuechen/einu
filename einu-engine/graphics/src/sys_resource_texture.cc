@@ -78,7 +78,7 @@ Image::~Image() { stbi_image_free(image_); }
 
 template <>
 void Create<ResourceType::Texture, const char*>(
-    sgln::ResourceTable& resource_table, const char* name,
+    sgl::ResourceTable& resource_table, const char* name,
     const char* file_name) {
   auto img = Image(file_name);
   GLuint texture;
@@ -93,7 +93,7 @@ void Create<ResourceType::Texture, const char*>(
 }
 
 template <>
-void Destroy<ResourceType::Texture>(sgln::ResourceTable& resource_table,
+void Destroy<ResourceType::Texture>(sgl::ResourceTable& resource_table,
                                     const char* name) {
   auto it =
       resource_table.table.find(std::make_pair(ResourceType::Texture, name));
@@ -104,7 +104,7 @@ void Destroy<ResourceType::Texture>(sgln::ResourceTable& resource_table,
 }
 
 template <>
-void Create<ResourceType::Sampler>(sgln::ResourceTable& resource_table,
+void Create<ResourceType::Sampler>(sgl::ResourceTable& resource_table,
                                    const char* name) {
   CreateHelper(resource_table, ResourceType::Sampler, name, [] {
     GLuint sampler;
@@ -114,7 +114,7 @@ void Create<ResourceType::Sampler>(sgln::ResourceTable& resource_table,
 }
 
 template <>
-void Destroy<ResourceType::Sampler>(sgln::ResourceTable& resource_table,
+void Destroy<ResourceType::Sampler>(sgl::ResourceTable& resource_table,
                                     const char* name) {
   DestroyHelper(resource_table, ResourceType::Sampler, name,
                 [](auto sampler) { glDeleteSamplers(1, &sampler); });

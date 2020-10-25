@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include "einu-engine/window/comp_window.h"
+#include "einu-engine/window/cmp_window.h"
 #include "einu-engine/window/gl_proc.h"
 
 namespace einu {
@@ -29,15 +29,15 @@ void Init();
 
 void Terminate();
 
-void Create(comp::Window& win);
+void Create(cmp::Window& win);
 
-void Destroy(comp::Window& win);
+void Destroy(cmp::Window& win);
 
-void MakeContextCurrent(comp::Window& win);
+void MakeContextCurrent(cmp::Window& win);
 
-void PoolEvents(comp::Window& win);
+void PoolEvents(cmp::Window& win);
 
-void SwapBuffer(comp::Window& win);
+void SwapBuffer(cmp::Window& win);
 
 }  // namespace sys
 }  // namespace window
