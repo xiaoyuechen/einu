@@ -1,6 +1,5 @@
 add_library(
   graphics
-  "include/einu-engine/graphics.h"
   "include/einu-engine/graphics/components.h"
   "include/einu-engine/graphics/singlenents.h"
   "include/einu-engine/graphics/sys_render.h"
