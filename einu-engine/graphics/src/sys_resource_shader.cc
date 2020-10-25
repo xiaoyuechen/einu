@@ -22,7 +22,7 @@
 #include <fstream>
 #include <sstream>
 
-#include "einu-engine/graphics/gl_error.h"
+#include "einu-engine/graphics/internal/gl_error.h"
 #include "einu-engine/graphics/sys_resource.h"
 
 namespace einu {

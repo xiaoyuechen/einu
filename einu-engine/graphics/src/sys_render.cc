@@ -20,7 +20,7 @@
 
 #include <glad/glad.h>
 
-#include "einu-engine/graphics/gl_error.h"
+#include "einu-engine/graphics/internal/gl_error.h"
 
 namespace einu {
 namespace graphics {
