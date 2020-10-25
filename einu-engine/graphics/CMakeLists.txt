@@ -7,6 +7,7 @@ add_library(
   "include/einu-engine/graphics/graphics_error.h"
   "include/einu-engine/graphics/sys_resource.h"
   "include/einu-engine/graphics/resource_type.h"
+  "include/einu-engine/graphics/projection.h"
   "include/einu-engine/graphics/color.h"
   "src/sys_render.cc"
   "src/sys_resource_shader.cc"
