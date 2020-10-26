@@ -18,38 +18,12 @@
 
 #pragma once
 
-#include <absl/container/flat_hash_map.h>
-#include <einu-engine/core/xnent.h>
-
-#include <array>
-#include <cstdint>
-#include <string>
-#include <utility>
-
-#include "einu-engine/graphics/resource_type.h"
-
 namespace einu {
 namespace graphics {
-
-struct TextureInfo {
-  int width;
-  int height;
-};
-
 namespace sgl {
 
 struct Camera : public Xnent {
-  std::uint32_t active_camera;
-};
-
-struct ResourceTable : public Xnent {
-  using Key = std::pair<ResourceType, std::string>;
-  using Value = std::uint32_t;
-  using Table = absl::flat_hash_map<Key, Value>;
-  using TextureInfoTable = absl::flat_hash_map<std::string, TextureInfo>;
-
-  Table table;
-  TextureInfoTable texture_info_table;
+  std::uint32_t active_camera = 0;
 };
 
 }  // namespace sgl

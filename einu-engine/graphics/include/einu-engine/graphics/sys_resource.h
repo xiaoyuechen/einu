@@ -19,7 +19,7 @@
 #pragma once
 
 #include "einu-engine/graphics/resource_type.h"
-#include "einu-engine/graphics/singlenents.h"
+#include "einu-engine/graphics/sgl_resource_table.h"
 
 namespace einu {
 namespace graphics {
