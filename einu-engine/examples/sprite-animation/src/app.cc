@@ -21,12 +21,14 @@
 
 #include <einu-engine/core/einu_engine.h>
 #include <einu-engine/core/entity_view.h>
+#include <einu-engine/graphics/cmp_camera.h>
 #include <einu-engine/graphics/sys_render.h>
 #include <einu-engine/graphics/sys_resource.h>
 #include <einu-engine/graphics/sys_sprite_render.h>
 #include <einu-engine/window/sys_window.h>
 
 #include <iostream>
+#include <random>
 
 namespace sprite_animation {
 
@@ -36,7 +38,7 @@ void App::Run() {
   using ComponentList = XnentList<window::cmp::Window, graphics::cmp::Sprite,
                                   common::cmp::Transform>;
   using SinglenentList =
-      XnentList<graphics::sgl::ResourceTable, graphics::sgl::SpriteBatch>;
+      XnentList<graphics::sgl::GLResourceTable, graphics::sgl::SpriteBatch>;
   using NeedList = NeedList<ComponentList, SinglenentList>;
   using EnginePolicy = EnginePolicy<NeedList>;
   using Engine = EinuEngine<EnginePolicy>;
@@ -54,7 +56,8 @@ void App::Run() {
   auto eid = ett_mgr->CreateEntity();
   auto& win_comp = ett_mgr->AddComponent<window::cmp::Window>(eid);
 
-  auto& resource_table = ett_mgr->AddSinglenent<graphics::sgl::ResourceTable>();
+  auto& resource_table =
+      ett_mgr->AddSinglenent<graphics::sgl::GLResourceTable>();
 
   window::sys::Init();
 
@@ -78,7 +81,7 @@ void App::Run() {
   graphics::sys::Create<graphics::ResourceType::Texture>(
       resource_table, "white-triangle", "assets/white-triangle.png");
 
-  using ResourceKey = graphics::sgl::ResourceTable::Key;
+  using ResourceKey = graphics::sgl::GLResourceTable::Key;
 
   auto shader = resource_table.table.at(
       ResourceKey{graphics::ResourceType::ShaderProgram, "program"});
@@ -95,34 +98,44 @@ void App::Run() {
           ResourceKey(graphics::ResourceType::VertexBuffer, "vbo1")),
       resource_table.table.at(
           ResourceKey(graphics::ResourceType::VertexBuffer, "vbo2")));
+
+  std::random_device device;
+  std::mt19937 generator(device());
+  std::uniform_int_distribution<int> distribution_x(0, 1920);
+  std::uniform_int_distribution<int> distribution_y(0, 1080);
+  std::uniform_real_distribution<float> distribution_rotate(0, 360);
+
   for (std::size_t i = 0; i != 100; ++i) {
     auto ett = ett_mgr->CreateEntity();
     auto& sprite = ett_mgr->AddComponent<graphics::cmp::Sprite>(ett);
     sprite.shader = shader;
     sprite.texture = wtri_tex;
-    ett_mgr->AddComponent<common::cmp::Transform>(ett);
+    auto& transform = ett_mgr->AddComponent<common::cmp::Transform>(ett);
+    transform.SetPosition(
+        glm::vec3(distribution_x(generator), distribution_y(generator), 0));
+    transform.SetRotation(glm::quat(
+        glm::vec3(0, 0, glm::radians(distribution_rotate(generator)))));
+    transform.SetScale(glm::vec3(0.05f, 0.1f, 1.f));
   }
 
   auto& s = ett_mgr->GetComponent<graphics::cmp::Sprite>(1);
 
-  auto view =
+  auto ett_view =
       EntityView<XnentList<common::cmp::Transform, graphics::cmp::Sprite>>{};
-  view.View(*ett_mgr);
+  ett_view.View(*ett_mgr);
 
-  for (auto eid : view.EIDs()) {
-    auto shader = ett_mgr->GetComponent<graphics::cmp::Sprite>(eid).shader;
-    std::cout << eid << "<shader>: " << shader << std::endl;
-  }
+  auto proj = graphics::Projection{
+      graphics::Projection::Type::Orthographic,
+      graphics::Projection::OrthographicAttrib{0, 1920, 0, 1080}};
 
-  for (auto&& [transform, sprite] : view.Components()) {
-    int i = 0;
-  }
+  auto cam_mat =
+      graphics::ProjectionMatrix(proj) * graphics::ViewMatrix(graphics::View{});
 
   while (!win_comp.shouldClose) {
-    for (auto&& [transform, sprite] : view.Components()) {
+    for (auto&& [transform, sprite] : ett_view.Components()) {
       graphics::sys::PrepareSpriteBatch(sprite_batch, sprite, transform);
     }
-    graphics::sys::RenderSpriteBatch(sprite_batch, glm::mat4{});
+    graphics::sys::RenderSpriteBatch(sprite_batch, cam_mat);
 
     window::sys::PoolEvents(win_comp);
     window::sys::SwapBuffer(win_comp);

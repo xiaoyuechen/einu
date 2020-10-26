@@ -37,35 +37,59 @@ void PrepareSpriteBatch(sgl::SpriteBatch& sprite_batch,
   // TODO(Xiaoyue Chen): better clearing
   sprite_batch.sprite_table.clear();
 
-  sprite_batch.sprite_table[sprite.shader][sprite.texture][sprite.quad]
-      .emplace_back(sgl::SpriteBatch::Attribs{transform.GetTransform(),
-                                              sprite.color, sprite.tex_coords});
+  // sprite_batch.sprite_table[sprite.shader][sprite.texture][sprite.rect]
+  //    .emplace_back(sgl::SpriteBatch::Attribs{transform.GetTransform(),
+  //                                            sprite.color,
+  //                                            sprite.tex_coords});
 }
 
 void RenderSpriteBatch(const sgl::SpriteBatch& sprite_batch, glm::mat4 cam) {
   // TODO(Xiaoyue Chen): refactor these ugly code
   glBindVertexArray(sprite_batch.vao);
-  glBindBuffer(GL_ARRAY_BUFFER, sprite_batch.quad_vbo);
   for (auto&& same_shader_sprites : sprite_batch.sprite_table) {
     auto shader = same_shader_sprites.first;
     glUseProgram(shader);
+    auto camera = glGetUniformLocation(shader, "u_camera");
+    glUniformMatrix4fv(camera, 1, GL_FALSE, &cam[0][0]);
+
+    glBindBuffer(GL_ARRAY_BUFFER, sprite_batch.quad_vbo);
     auto pos = glGetAttribLocation(shader, "a_pos");
     glEnableVertexAttribArray(pos);
-    glVertexAttribPointer(pos, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
+    glVertexAttribPointer(pos, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, sprite_batch.instance_vbo);
     auto inst_transform = glGetAttribLocation(shader, "a_inst_transform");
-    glEnableVertexAttribArray(inst_transform);
     auto attribs_size = sizeof(sgl::SpriteBatch::Attribs);
-    glVertexAttribPointer(inst_transform, attribs_size / sizeof(float),
-                          GL_FLOAT, GL_FALSE, attribs_size, 0);
-    glVertexAttribDivisor(inst_transform, 1);
+    for (std::size_t i = 0; i != 4; ++i) {
+      auto loc = inst_transform + i;
+      glEnableVertexAttribArray(loc + i);
+      glVertexAttribPointer(
+          loc, 4, GL_FLOAT, GL_FALSE, attribs_size,
+          reinterpret_cast<const void*>(i * 4 * sizeof(float)));
+      glVertexAttribDivisor(loc, 1);
+    }
+
+    auto inst_color = glGetAttribLocation(shader, "a_inst_color");
+    glEnableVertexAttribArray(inst_color);
+    glVertexAttribPointer(inst_color, 4, GL_FLOAT, GL_FALSE, attribs_size,
+                          reinterpret_cast<const void*>(16 * sizeof(float)));
+    glVertexAttribDivisor(inst_color, 1);
+
+    auto inst_tex_coords = glGetAttribLocation(shader, "a_inst_tex_coords");
+    glEnableVertexAttribArray(inst_tex_coords);
+    glVertexAttribPointer(inst_tex_coords, 2, GL_FLOAT, GL_FALSE, attribs_size,
+                          reinterpret_cast<const void*>(20 * sizeof(float)));
+    glVertexAttribDivisor(inst_tex_coords, 1);
+
     for (auto&& same_tex_sprites : same_shader_sprites.second) {
       glBindTexture(GL_TEXTURE_2D, same_tex_sprites.first);
       for (auto&& same_quad_sprites : same_tex_sprites.second) {
-        auto&& quad = same_tex_sprites.first;
+        auto&& quad = same_quad_sprites.first;
         auto&& attribs_arr = same_quad_sprites.second;
-        glBufferData(sprite_batch.quad_vbo, sizeof(Quad), &quad,
-                     GL_STATIC_DRAW);
-        glBufferData(sprite_batch.instance_vbo,
+        glBindBuffer(GL_ARRAY_BUFFER, sprite_batch.quad_vbo);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(quad), &quad, GL_STATIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, sprite_batch.instance_vbo);
+        glBufferData(GL_ARRAY_BUFFER,
                      attribs_arr.size() * sizeof(sgl::SpriteBatch::Attribs),
                      attribs_arr.data(), GL_STATIC_DRAW);
         glDrawArraysInstanced(GL_TRIANGLES, 0, 6, attribs_arr.size());

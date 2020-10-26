@@ -18,37 +18,25 @@
 
 #pragma once
 
-#include <absl/container/flat_hash_map.h>
-#include <einu-engine/common/primitives.h>
-#include <einu-engine/core/xnent.h>
-
 #include <array>
-#include <glm/glm.hpp>
-#include <vector>
 
 namespace einu {
-namespace graphics {
-namespace sgl {
+namespace common {
 
-struct SpriteBatch : public Xnent {
-  struct Attribs {
-    glm::mat4 inst_transform;
-    glm::vec4 inst_color;
-  };
-
-  using AttribsArr = std::vector<Attribs>;
-
-  absl::flat_hash_map<
-      ResourceID,                      // shader id
-      absl::flat_hash_map<ResourceID,  // texture id
-                          absl::flat_hash_map<common::IntRect, AttribsArr>>>
-      sprite_table;
-
-  ResourceID vao;
-  ResourceID quad_vbo;
-  ResourceID instance_vbo;
+template <typename T>
+struct Rect : public std::array<T, 4> {
+  T Left() const noexcept { return (*this)[0]; }
+  T& Left() noexcept { return (*this)[0]; }
+  T Buttom() const noexcept { return (*this)[1]; }
+  T& Buttom() noexcept { return (*this)[1]; }
+  T Width() const noexcept { return (*this)[2]; }
+  T& Width() noexcept { return (*this)[2]; }
+  T Height() const noexcept { return (*this)[3]; }
+  T& Height() noexcept { return (*this)[3]; }
 };
 
-}  // namespace sgl
-}  // namespace graphics
+using FloatRect = Rect<float>;
+using IntRect = Rect<int>;
+
+}  // namespace common
 }  // namespace einu

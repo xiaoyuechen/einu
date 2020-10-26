@@ -26,70 +26,71 @@ namespace graphics {
 namespace sys {
 
 template <ResourceType t, typename... Args>
-void Create(sgl::ResourceTable& resource_table, const char* name, Args... args);
+void Create(sgl::GLResourceTable& resource_table, const char* name,
+            Args... args);
 
 template <ResourceType t, typename... Args>
-void Destroy(sgl::ResourceTable& resource_table, const char* name,
+void Destroy(sgl::GLResourceTable& resource_table, const char* name,
              Args... args);
 
 template <>
-void Create<ResourceType::VertexArray>(sgl::ResourceTable& resource_table,
+void Create<ResourceType::VertexArray>(sgl::GLResourceTable& resource_table,
                                        const char* name);
 
 template <>
-void Destroy<ResourceType::VertexArray>(sgl::ResourceTable& resource_table,
+void Destroy<ResourceType::VertexArray>(sgl::GLResourceTable& resource_table,
                                         const char* name);
 
 template <>
-void Create<ResourceType::VertexBuffer>(sgl::ResourceTable& resource_table,
+void Create<ResourceType::VertexBuffer>(sgl::GLResourceTable& resource_table,
                                         const char* name);
 
 template <>
-void Destroy<ResourceType::VertexBuffer>(sgl::ResourceTable& resource_table,
+void Destroy<ResourceType::VertexBuffer>(sgl::GLResourceTable& resource_table,
                                          const char* name);
 
 template <>
 void Create<ResourceType::VertexShader, const char*>(
-    sgl::ResourceTable& resource_table, const char* name,
+    sgl::GLResourceTable& resource_table, const char* name,
     const char* file_name);
 
 template <>
-void Destroy<ResourceType::VertexShader>(sgl::ResourceTable& resource_table,
+void Destroy<ResourceType::VertexShader>(sgl::GLResourceTable& resource_table,
                                          const char* name);
 
 template <>
 void Create<ResourceType::FragmentShader, const char*>(
-    sgl::ResourceTable& resource_table, const char* name,
+    sgl::GLResourceTable& resource_table, const char* name,
     const char* file_name);
 
 template <>
-void Destroy<ResourceType::FragmentShader>(sgl::ResourceTable& resource_table,
+void Destroy<ResourceType::FragmentShader>(sgl::GLResourceTable& resource_table,
                                            const char* name);
 
 template <>
 void Create<ResourceType::ShaderProgram, const char*, const char*>(
-    sgl::ResourceTable& resource_table, const char* name,
+    sgl::GLResourceTable& resource_table, const char* name,
     const char* vshader_name, const char* fshader_name);
 
 template <>
-void Destroy<ResourceType::ShaderProgram>(sgl::ResourceTable& resource_table,
+void Destroy<ResourceType::ShaderProgram>(sgl::GLResourceTable& resource_table,
                                           const char* name);
 
 template <>
 void Create<ResourceType::Texture, const char*>(
-    sgl::ResourceTable& resource_table, const char* name,
+    sgl::GLResourceTable& resource_table, const char* name,
     const char* file_name);
 
 template <>
-void Destroy<ResourceType::Texture>(sgl::ResourceTable& resource_table,
+void Destroy<ResourceType::Texture>(sgl::GLResourceTable& resource_table,
                                     const char* name);
 
 template <>
-void Create<ResourceType::Sampler>(sgl::ResourceTable& resource_table,
+void Create<ResourceType::Sampler>(sgl::GLResourceTable& resource_table,
                                    const char* name);
 
 template <>
-void Destroy<ResourceType::Sampler>(sgl::ResourceTable& resource_table,
+void Destroy<ResourceType::Sampler>(sgl::GLResourceTable& resource_table,
                                     const char* name);
 
 }  // namespace sys

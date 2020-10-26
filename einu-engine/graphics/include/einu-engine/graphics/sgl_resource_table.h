@@ -38,7 +38,7 @@ struct TextureInfo {
 
 namespace sgl {
 
-struct ResourceTable : public Xnent {
+struct GLResourceTable : public Xnent {
   using Key = std::pair<ResourceType, std::string>;
   using Value = ResourceID;
   using Table = absl::flat_hash_map<Key, Value>;
@@ -47,6 +47,8 @@ struct ResourceTable : public Xnent {
   Table table;
   TextureInfoTable texture_info_table;
 };
+
+struct SpriteTable : public Xnent {};
 
 }  // namespace sgl
 }  // namespace graphics

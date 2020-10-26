@@ -18,12 +18,13 @@
 
 #pragma once
 
+#include <einu-engine/common/primitives.h>
 #include <einu-engine/core/xnent.h>
 
 #include <cstdint>
 
-#include "einu-engine/graphics/quad.h"
 #include "einu-engine/graphics/resource.h"
+#include "einu-engine/graphics/vertex.h"
 
 namespace einu {
 namespace graphics {
@@ -32,9 +33,12 @@ namespace cmp {
 struct Sprite : public Xnent {
   ResourceID shader;
   ResourceID texture;
-  glm::vec4 color;
-  glm::vec2 tex_coords;
-  Quad quad;
+
+  // verts order
+  // 3  ------ 2
+  //   |      |
+  // 0  ------ 1
+  std::array<Vertex, 4> verts;
 };
 
 }  // namespace cmp

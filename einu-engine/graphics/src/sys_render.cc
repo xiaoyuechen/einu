@@ -20,7 +20,6 @@
 
 #include <glad/glad.h>
 
-#include <cstdio>
 #include <sstream>
 
 #include "einu-engine/graphics/graphics_error.h"
@@ -36,7 +35,7 @@ void PostGLCallCallback(const char* name, void* funcptr, int len_args, ...) {
 
   if (error_code != GL_NO_ERROR) {
     auto buffer = std::stringstream{};
-    buffer << "ERROR " << error_code << " in " << name << std::endl;
+    buffer << "ERROR 0x" << std::hex << error_code << " in " << name;
     throw GraphicsError{std::move(buffer.str())};
   }
 }

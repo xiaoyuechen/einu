@@ -18,12 +18,16 @@
 
 #pragma once
 
-#include <array>
+#include <glm/glm.hpp>
 
 namespace einu {
 namespace graphics {
 
-using Quad = std::array<int, 6>;
+struct Vertex {
+  glm::vec3 pos;
+  glm::vec3 color;
+  glm::vec2 uv;
+};
 
-}
+}  // namespace graphics
 }  // namespace einu

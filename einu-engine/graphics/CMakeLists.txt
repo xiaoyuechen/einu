@@ -6,7 +6,6 @@ add_library(
   "include/einu-engine/graphics/graphics_error.h"
   "include/einu-engine/graphics/sys_resource.h"
   "include/einu-engine/graphics/resource.h"
-  "include/einu-engine/graphics/projection.h"
   "include/einu-engine/graphics/cmp_sprite.h"
   "include/einu-engine/graphics/color.h"
   "src/sys_render.cc"
@@ -15,11 +14,10 @@ add_library(
   "src/sys_resource_vertex_buffer.cc"
   "src/sys_resource_texture.cc"
   "src/sys_sprite_render.cc"
-  "shaders/instanced_sprite_fragment_shader.glsl"
-  "shaders/instanced_sprite_vertex_shader.glsl"
+  "shaders/sprite_fragment_shader.glsl"
+  "shaders/sprite_vertex_shader.glsl"
   "src/sys_resource_helper.h"
-  "include/einu-engine/graphics/sgl_camera_state.h"
-  "include/einu-engine/graphics/quad.h")
+  "include/einu-engine/graphics/sgl_camera_state.h")
 
 add_library(einu::graphics ALIAS graphics)
 
