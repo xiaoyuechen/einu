@@ -17,7 +17,8 @@ add_library(
   "shaders/instanced_sprite_fragment_shader.glsl"
   "shaders/instanced_sprite_vertex_shader.glsl"
   "src/sys_resource_helper.h"
-  "include/einu-engine/graphics/sgl_camera.h")
+  "include/einu-engine/graphics/sgl_camera.h"
+  "include/einu-engine/graphics/quad.h")
 
 add_library(einu::graphics ALIAS graphics)
 

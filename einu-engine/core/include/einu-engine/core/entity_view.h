@@ -70,9 +70,10 @@ class ComponentIterator<XnentList<Comps...>> {
 };
 
 template <typename ComponentList>
-class ComponentBuffer {
+class ComponentBufferView {
  public:
-  constexpr explicit ComponentBuffer(const std::vector<Xnent*>& comps) noexcept
+  constexpr explicit ComponentBufferView(
+      const std::vector<Xnent*>& comps) noexcept
       : comps_(comps) {}
 
   auto begin() const noexcept {
@@ -103,7 +104,7 @@ class EIDBufferView {
 template <typename ComponentList>
 class EntityView {
  public:
-  using ComponentBufferView = ComponentBuffer<ComponentList>;
+  using ComponentBufferView = ComponentBufferView<ComponentList>;
 
   void View(IEntityManager& ett_mgr) {
     Clear(ett_buffer_);
@@ -117,6 +118,8 @@ class EntityView {
   EIDBufferView EIDs() const noexcept {
     return EIDBufferView{ett_buffer_.eids};
   }
+
+  auto Size() const noexcept { return ett_buffer_.eids.size(); }
 
  private:
   EntityBuffer ett_buffer_;

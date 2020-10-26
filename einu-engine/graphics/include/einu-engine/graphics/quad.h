@@ -18,35 +18,12 @@
 
 #pragma once
 
-#include <absl/container/flat_hash_map.h>
-#include <einu-engine/core/xnent.h>
-
 #include <array>
-#include <glm/glm.hpp>
-#include <vector>
-
-#include "einu-engine/graphics/cmp_sprite.h"
 
 namespace einu {
 namespace graphics {
-namespace sgl {
 
-struct SpriteBatch : public Xnent {
-  struct Attribs {
-    glm::mat4 inst_transform;
-    glm::vec4 inst_color;
-    glm::vec2 inst_texcoords;
-  };
+using Quad = std::array<int, 6>;
 
-  using AttribsArr = std::vector<Attribs>;
-
-  absl::flat_hash_map<
-      ResourceID,                      // shader id
-      absl::flat_hash_map<ResourceID,  // texture id
-                          absl::flat_hash_map<Quad, AttribsArr>>>
-      sprite_table;
-};
-
-}  // namespace sgl
-}  // namespace graphics
+}
 }  // namespace einu

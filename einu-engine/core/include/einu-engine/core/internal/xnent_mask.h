@@ -37,6 +37,9 @@ class DynamicXnentMask {
 
   // NOLINTNEXTLINE
   DynamicXnentMask(initializer_list init) {
+    if (init.size() == 0) {
+      return;
+    }
     size_ = (std::max(init) + 8) / 8;
     data_ = std::make_unique<uint8_t[]>(size_);
     std::for_each(init.begin(), init.end(), [&](auto id) {
@@ -48,8 +51,8 @@ class DynamicXnentMask {
   size_type SizeInBytes() const noexcept { return size_; }
 
  private:
-  std::unique_ptr<std::uint8_t[]> data_;
-  std::size_t size_;
+  std::unique_ptr<std::uint8_t[]> data_ = nullptr;
+  std::size_t size_ = 0;
 };
 
 namespace detail {

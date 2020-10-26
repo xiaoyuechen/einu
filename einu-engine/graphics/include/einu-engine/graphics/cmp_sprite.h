@@ -23,6 +23,7 @@
 
 #include <cstdint>
 
+#include "einu-engine/graphics/quat.h"
 #include "einu-engine/graphics/resource.h"
 
 namespace einu {
@@ -31,7 +32,9 @@ namespace cmp {
 
 struct Sprite : public Xnent {
   ResourceID texture = ~ResourceID{0};
-  Transform local_transform{Transform::UseCache::No};
+  glm::vec4 color;
+  glm::vec2 tex_coords;
+  Quad quad;
 };
 
 }  // namespace cmp
