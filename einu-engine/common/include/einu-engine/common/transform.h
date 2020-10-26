@@ -27,53 +27,40 @@ using Transform = glm::mat4;
 
 class Transform {
  public:
-  enum class UseCache : std::uint8_t { Yes, No };
-
-  explicit Transform(UseCache use_cache = UseCache::Yes) noexcept {
-    use_cache_ = use_cache;
-  }
-
   glm::vec3 GetPosition() const noexcept { return glm::vec3{transform_[3]}; }
 
   glm::quat GetRotation() const noexcept { return rotation_; }
 
   glm::vec3 GetScale() const noexcept { return scale_; }
 
-  glm::mat4 GetTransform() const noexcept {
-    if (use_cache_) {
-      return transform_;
-    }
-    return glm::translate(position_) * glm::toMat4(rotation_) *
-           glm::scale(scale_);
-  }
+  glm::mat4 GetTransform() const noexcept { return transform_; }
 
   void SetPosition(glm::vec3 position) noexcept {
     memcpy(&transform_[3], &position[0], sizeof(position));
   }
 
   void SetRotation(glm::quat rot) noexcept {
-    if (use_cache_) {
-      auto pos = GetPosition();
-      transform_ = glm::toMat4(rot) * glm::scale(scale_);
-      SetPosition(pos);
-    }
+    auto pos = GetPosition();
+    transform_ = glm::toMat4(rot) * glm::scale(scale_);
+    SetPosition(pos);
     rotation_ = rot;
   }
 
-  void SetScale(glm::vec3 scale) {
-    if (use_cache_) {
-      auto pos = GetPosition();
-      transform_ = glm::toMat4(rotation_) * glm::scale(scale);
-      SetPosition(pos);
-    }
+  void SetScale(glm::vec3 scale) noexcept {
+    auto pos = GetPosition();
+    transform_ = glm::toMat4(rotation_) * glm::scale(scale);
+    SetPosition(pos);
     scale = scale_;
+  }
+
+  void SetTransform(const glm::mat4 transform) noexcept {
+    transform_ = transform;
   }
 
  private:
   glm::quat rotation_{1, 0, 0, 0};
   glm::vec3 scale_{1, 1, 1};
   glm::mat4 transform_{};
-  UseCache use_cache_ = UseCache::Yes;
 };
 
 }  // namespace einu
