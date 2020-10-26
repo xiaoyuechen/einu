@@ -16,27 +16,23 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#pragma once
-
-#include <einu-engine/core/xnent.h>
-
-#include <cstdint>
-
-#include "einu-engine/graphics/quad.h"
-#include "einu-engine/graphics/resource.h"
+#include "einu-engine/graphics/sys_sprite_render.h"
 
 namespace einu {
 namespace graphics {
-namespace cmp {
+namespace sys {
 
-struct Sprite : public Xnent {
-  ResourceID shader;
-  ResourceID texture;
-  glm::vec4 color;
-  glm::vec2 tex_coords;
-  Quad quad;
-};
+void PrepareSpriteBatch(sgl::SpriteBatch& sprite_batch,
+                        const cmp::Sprite& sprite,
+                        const common::cmp::Transform& transform) {
+  // TODO(Xiaoyue Chen): better clearing
+  sprite_batch.sprite_table.clear();
 
-}  // namespace cmp
+  sprite_batch.sprite_table[sprite.shader][sprite.texture][sprite.quad]
+      .emplace_back(sgl::SpriteBatch::Attribs{transform.GetTransform(),
+                                              sprite.color, sprite.tex_coords});
+}
+
+}  // namespace sys
 }  // namespace graphics
 }  // namespace einu

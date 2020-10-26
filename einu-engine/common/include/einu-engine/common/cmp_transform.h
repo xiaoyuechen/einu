@@ -20,14 +20,52 @@
 
 #include <einu-engine/core/xnent.h>
 
-#include "einu-engine/common/transform.h"
+#include <glm/glm.hpp>
+#include <glm/gtx/quaternion.hpp>
+#include <glm/gtx/transform.hpp>
 
 namespace einu {
+namespace common {
 namespace cmp {
 
-struct Transform : public Xnent {
-  einu::Transform local_transform;
+class Transform : public Xnent {
+ public:
+  glm::vec3 GetPosition() const noexcept { return glm::vec3{transform_[3]}; }
+
+  glm::quat GetRotation() const noexcept { return rotation_; }
+
+  glm::vec3 GetScale() const noexcept { return scale_; }
+
+  glm::mat4 GetTransform() const noexcept { return transform_; }
+
+  void SetPosition(glm::vec3 position) noexcept {
+    memcpy(&transform_[3], &position[0], sizeof(position));
+  }
+
+  void SetRotation(glm::quat rot) noexcept {
+    auto pos = GetPosition();
+    transform_ = glm::toMat4(rot) * glm::scale(scale_);
+    SetPosition(pos);
+    rotation_ = rot;
+  }
+
+  void SetScale(glm::vec3 scale) noexcept {
+    auto pos = GetPosition();
+    transform_ = glm::toMat4(rotation_) * glm::scale(scale);
+    SetPosition(pos);
+    scale = scale_;
+  }
+
+  void SetTransform(const glm::mat4 transform) noexcept {
+    transform_ = transform;
+  }
+
+ private:
+  glm::quat rotation_{1, 0, 0, 0};
+  glm::vec3 scale_{1, 1, 1};
+  glm::mat4 transform_{};
 };
 
 }  // namespace cmp
+}  // namespace common
 }  // namespace einu

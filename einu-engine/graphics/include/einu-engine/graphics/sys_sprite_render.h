@@ -18,8 +18,20 @@
 
 #pragma once
 
+#include <einu-engine/common/cmp_transform.h>
+
+#include "einu-engine/graphics/cmp_camera.h"
+#include "einu-engine/graphics/cmp_sprite.h"
+#include "einu-engine/graphics/sgl_sprite_batch.h"
+
 namespace einu {
 namespace graphics {
-namespace sys {}
+namespace sys {
+
+void PrepareSpriteBatch(sgl::SpriteBatch& sprite_batch,
+                        const cmp::Sprite& sprite,
+                        const common::cmp::Transform& transform);
+
+}
 }  // namespace graphics
 }  // namespace einu

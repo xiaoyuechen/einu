@@ -18,11 +18,15 @@
 
 #pragma once
 
+#include <einu-engine/core/xnent.h>
+
+#include <cstdint>
+
 namespace einu {
 namespace graphics {
 namespace sgl {
 
-struct Camera : public Xnent {
+struct CameraState : public Xnent {
   std::uint32_t active_camera = 0;
 };
 
