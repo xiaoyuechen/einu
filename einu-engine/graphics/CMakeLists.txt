@@ -30,5 +30,5 @@ target_include_directories(
 
 target_link_libraries(
   graphics
-  PUBLIC einu::core einu::window absl::flat_hash_map
+  PUBLIC einu::core einu::window einu::common absl::flat_hash_map
   PRIVATE glad stb)

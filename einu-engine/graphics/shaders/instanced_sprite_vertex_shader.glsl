@@ -1,4 +1,5 @@
-//VERTEX SHADER
+// VERTEX SHADER
+
 #version 330 core
 
 // This is an optimized shader for instanced sprites.
@@ -17,8 +18,8 @@ in vec2 a_instance_pos;
 in vec4 a_instance_quat;
 in vec2 a_instance_scale;
 
-uniform mat4 camera;
-uniform mat4 local_transform;
+uniform mat4 u_camera;
+uniform mat4 u_local_transform;
 
 out vec4 f_color;
 out vec2 f_texcoord;
@@ -52,12 +53,12 @@ vec3 Transform(vec3 original_pos, vec3 pos, vec4 quat, vec3 scale) {
 }
 
 void main() {
-  vec3 local_transformed = vec3(local_transform * vec4(a_pos, 0, 1));
+  vec3 local_transformed = vec3(u_local_transform * vec4(a_pos, 0, 1));
   vec3 world_transformed = Transform(local_transformed,
                                      vec3(a_instance_pos, 0),
                                      a_instance_quat,
                                      vec3(a_instance_scale, 0));
-  gl_Position = camera * vec4(world_transformed, 1);
+  gl_Position = u_camera * vec4(world_transformed, 1);
   f_texcoord = a_texcoord;
   f_color = a_instance_color / 255;
 }

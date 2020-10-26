@@ -18,22 +18,20 @@
 
 #pragma once
 
-#include <einu-engine/common/transform.h>
 #include <einu-engine/core/xnent.h>
 
-#include <cstdint>
+#include <vector>
 
-#include "einu-engine/graphics/resource.h"
+#include "einu-engine/graphics/cmp_sprite.h"
 
 namespace einu {
 namespace graphics {
-namespace cmp {
+namespace sgl {
 
-struct Sprite : public Xnent {
-  ResourceID texture = ~ResourceID{0};
-  Transform local_transform{Transform::UseCache::No};
+struct SpriteBatch : public Xnent {
+  std::vector<>
 };
 
-}  // namespace cmp
+}  // namespace sgl
 }  // namespace graphics
 }  // namespace einu
