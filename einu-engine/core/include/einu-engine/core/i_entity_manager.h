@@ -131,12 +131,14 @@ class IEntityManager {
   template <typename ComponentList>
   void GetEntitiesWithComponents(EntityBuffer& buffer,
                                  ComponentList comp_list) {
-    GetEntitiesWithComponentsImpl(buffer, internal::GetXnentMask(comp_list));
+    GetEntitiesWithComponentsImpl(buffer, internal::GetXnentMask(comp_list),
+                                  internal::GetXnentTypeIDArray(comp_list));
   }
 
   void GetEntitiesWithComponents(EntityBuffer& buffer,
-                                 const internal::DynamicXnentMask& mask) {
-    GetEntitiesWithComponentsImpl(buffer, mask);
+                                 const internal::DynamicXnentMask& mask,
+                                 const internal::XnentTypeIDArray& xtid_arr) {
+    GetEntitiesWithComponentsImpl(buffer, mask, xtid_arr);
   }
 
   void Reset() noexcept { ResetImpl(); }
@@ -161,7 +163,8 @@ class IEntityManager {
   virtual const Xnent& GetSinglenentImpl(XnentTypeID tid) const noexcept = 0;
 
   virtual void GetEntitiesWithComponentsImpl(
-      EntityBuffer& buffer, const internal::DynamicXnentMask& mask) = 0;
+      EntityBuffer& buffer, const internal::DynamicXnentMask& mask,
+      const internal::XnentTypeIDArray& xtid_arr) = 0;
 
   virtual void ResetImpl() noexcept = 0;
 };

@@ -28,10 +28,15 @@ namespace einu {
 namespace graphics {
 namespace sys {
 
+void InitSpriteBatch(sgl::SpriteBatch& spite_batch, ResourceID vao,
+                     ResourceID quad_vbo, ResourceID instance_vbo);
+
 void PrepareSpriteBatch(sgl::SpriteBatch& sprite_batch,
                         const cmp::Sprite& sprite,
                         const common::cmp::Transform& transform);
 
-}
+void RenderSpriteBatch(const sgl::SpriteBatch& sprite_batch, glm::mat4 cam);
+
+}  // namespace sys
 }  // namespace graphics
 }  // namespace einu

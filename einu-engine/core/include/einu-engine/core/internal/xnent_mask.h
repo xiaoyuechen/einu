@@ -23,6 +23,7 @@
 #include <cstdint>
 #include <initializer_list>
 #include <memory>
+#include <vector>
 
 #include "einu-engine/core/xnent_list.h"
 #include "einu-engine/core/xnent_type_id.h"
@@ -55,17 +56,31 @@ class DynamicXnentMask {
   std::size_t size_ = 0;
 };
 
+using XnentTypeIDArray = std::vector<XnentTypeID>;
+
 namespace detail {
 template <typename... Ts>
 const DynamicXnentMask& GetXnentMaskImpl(XnentList<Ts...>) {
   static auto& r = *new DynamicXnentMask{GetXnentTypeID<Ts>()...};
   return r;
 }
+
+template <typename... Ts>
+const XnentTypeIDArray& GetXnentTypeIDArrayImpl(XnentList<Ts...>) {
+  static auto& r = *new XnentTypeIDArray{GetXnentTypeID<Ts>()...};
+  return r;
+}
+
 }  // namespace detail
 
 template <typename XnentList>
 const DynamicXnentMask& GetXnentMask(XnentList l) {
   return detail::GetXnentMaskImpl(l);
+}
+
+template <typename XnentList>
+const XnentTypeIDArray& GetXnentTypeIDArray(XnentList l) {
+  return detail::GetXnentTypeIDArrayImpl(l);
 }
 
 template <std::size_t max_comp>

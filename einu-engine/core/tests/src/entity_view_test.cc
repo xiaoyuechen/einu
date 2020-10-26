@@ -16,8 +16,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+#include <einu-engine/core/einu_engine.h>
 #include <einu-engine/core/entity_view.h>
 #include <einu-engine/core/internal/entity_manager.h>
+#include <einu-engine/core/internal/xnent_pool.h>
 #include <einu-engine/core/internal/xnent_type_id_register.h>
 #include <gtest/gtest.h>
 
@@ -60,23 +62,63 @@ TEST_F(ComponentIteratorTest, pre_increment) {
 
 // TODO(Xiaoyue Chen): Mock EntityManager and comprehensively test EntityView
 struct EntityViewTest : public testing::Test {
-  using TestComponentList = XnentList<C0, C1>;
+  using TestComponentList = XnentList<C0, C1, C2>;
   using TestEntityView = EntityView<TestComponentList>;
   using ComponentTypeIDRegister =
       internal::XnentTypeIDRegister<TestComponentList>;
   using TestEntityManager = internal::EntityManager<2, 0>;
+  using TestCompPool = internal::XnentPool<TestComponentList>;
 
-  EntityViewTest() {}
+  using TestPolicy = EnginePolicy<NeedList<TestComponentList, XnentList<>>>;
+  using TestEngine = EinuEngine<TestPolicy>;
 
-  ComponentTypeIDRegister reg;
+  EntityViewTest() {
+    eid_pool = std::move(engine.CreateEIDPool());
+    comp_pool = std::move(engine.CreateComponentPool());
+    ett_mgr = std::move(engine.CreateEntityManager());
+    ett_mgr->SetEIDPool(*eid_pool);
+    ett_mgr->SetComponentPool(*comp_pool);
+  }
+
+  TestEngine engine;
   TestEntityManager mgr;
   TestEntityView view;
+  std::unique_ptr<IEIDPool> eid_pool;
+  std::unique_ptr<IXnentPool> comp_pool;
+  std::unique_ptr<IEntityManager> ett_mgr;
 };
 
 TEST_F(EntityViewTest, _) {
   view.View(mgr);
   EXPECT_EQ(view.Components().begin(), view.Components().end());
   EXPECT_EQ(view.EIDs().begin(), view.EIDs().end());
+}
+
+TEST_F(EntityViewTest, __) {
+  for (std::size_t i = 0; i != 10; ++i) {
+    auto ett = ett_mgr->CreateEntity();
+    auto& c0 = ett_mgr->AddComponent<C0>(ett);
+    c0.value = 666;
+    auto& c1 = ett_mgr->AddComponent<C1>(ett);
+    c1.value = 123.4f;
+  }
+
+  {
+    auto v = EntityView<XnentList<C0, C1>>();
+    v.View(*ett_mgr);
+    for (auto&& [c0, c1] : v.Components()) {
+      EXPECT_EQ(c0.value, 666);
+      EXPECT_FLOAT_EQ(c1.value, 123.4f);
+    }
+  }
+  {
+    auto v = EntityView<XnentList<C1, C0>>();
+    v.View(*ett_mgr);
+    for (auto&& [c1, c0] : v.Components()) {
+      EXPECT_EQ(c0.value, 666);
+      EXPECT_FLOAT_EQ(c1.value, 123.4f);
+    }
+  }
 }
 
 }  // namespace einu

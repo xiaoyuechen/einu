@@ -21,6 +21,7 @@
 #include <absl/container/flat_hash_map.h>
 #include <einu-engine/core/util/object_pool.h>
 
+#include <algorithm>
 #include <cassert>
 #include <memory>
 
@@ -143,18 +144,17 @@ class EntityManager final : public IEntityManager {
   }
 
   void GetEntitiesWithComponentsImpl(
-      EntityBuffer& buffer, const internal::DynamicXnentMask& mask) override {
+      EntityBuffer& buffer, const internal::DynamicXnentMask& mask,
+      const internal::XnentTypeIDArray& xtid_arr) override {
     auto smask = ToStatic<max_comp>(mask);
     for (auto it = ett_table_.begin(); it != ett_table_.end(); ++it) {
       auto [emask, table] = it->second;
       if ((*emask & smask) == smask) {
         auto eid = it->first;
         buffer.eids.push_back(eid);
-        for (auto i = std::size_t{0}; i != emask->size(); ++i) {
-          if (emask->test(i)) {
-            buffer.comps.push_back((*table)[i]);
-          }
-        }
+        std::transform(xtid_arr.begin(), xtid_arr.end(),
+                       std::back_inserter(buffer.comps),
+                       [&table](auto xtid) { return (*table)[xtid]; });
       }
     }
   }

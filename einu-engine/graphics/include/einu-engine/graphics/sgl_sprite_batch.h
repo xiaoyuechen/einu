@@ -45,6 +45,10 @@ struct SpriteBatch : public Xnent {
       absl::flat_hash_map<ResourceID,  // texture id
                           absl::flat_hash_map<Quad, AttribsArr>>>
       sprite_table;
+
+  ResourceID vao;
+  ResourceID quad_vbo;
+  ResourceID instance_vbo;
 };
 
 }  // namespace sgl

@@ -23,6 +23,7 @@
 #include <einu-engine/core/entity_view.h>
 #include <einu-engine/graphics/sys_render.h>
 #include <einu-engine/graphics/sys_resource.h>
+#include <einu-engine/graphics/sys_sprite_render.h>
 #include <einu-engine/window/sys_window.h>
 
 #include <iostream>
@@ -32,8 +33,10 @@ namespace sprite_animation {
 void App::Run() {
   using namespace einu;  // NOLINT
 
-  using ComponentList = XnentList<window::cmp::Window>;
-  using SinglenentList = XnentList<graphics::sgl::ResourceTable>;
+  using ComponentList = XnentList<window::cmp::Window, graphics::cmp::Sprite,
+                                  common::cmp::Transform>;
+  using SinglenentList =
+      XnentList<graphics::sgl::ResourceTable, graphics::sgl::SpriteBatch>;
   using NeedList = NeedList<ComponentList, SinglenentList>;
   using EnginePolicy = EnginePolicy<NeedList>;
   using Engine = EinuEngine<EnginePolicy>;
@@ -62,18 +65,65 @@ void App::Run() {
 
   graphics::sys::Create<graphics::ResourceType::VertexArray>(resource_table,
                                                              "vao");
-
+  graphics::sys::Create<graphics::ResourceType::VertexBuffer>(resource_table,
+                                                              "vbo1");
+  graphics::sys::Create<graphics::ResourceType::VertexBuffer>(resource_table,
+                                                              "vbo2");
   graphics::sys::Create<graphics::ResourceType::VertexShader>(
-      resource_table, "vshader", "shaders/instanced_sprite_vertex_shader.glsl");
+      resource_table, "vshader", "shaders/sprite_vertex_shader.glsl");
   graphics::sys::Create<graphics::ResourceType::FragmentShader>(
-      resource_table, "fshader",
-      "shaders/instanced_sprite_fragment_shader.glsl");
+      resource_table, "fshader", "shaders/sprite_fragment_shader.glsl");
   graphics::sys::Create<graphics::ResourceType::ShaderProgram>(
       resource_table, "program", "vshader", "fshader");
   graphics::sys::Create<graphics::ResourceType::Texture>(
       resource_table, "white-triangle", "assets/white-triangle.png");
 
+  using ResourceKey = graphics::sgl::ResourceTable::Key;
+
+  auto shader = resource_table.table.at(
+      ResourceKey{graphics::ResourceType::ShaderProgram, "program"});
+
+  auto wtri_tex = resource_table.table.at(
+      ResourceKey{graphics::ResourceType::Texture, "white-triangle"});
+
+  auto& sprite_batch = ett_mgr->AddSinglenent<graphics::sgl::SpriteBatch>();
+  graphics::sys::InitSpriteBatch(
+      sprite_batch,
+      resource_table.table.at(
+          ResourceKey(graphics::ResourceType::VertexArray, "vao")),
+      resource_table.table.at(
+          ResourceKey(graphics::ResourceType::VertexBuffer, "vbo1")),
+      resource_table.table.at(
+          ResourceKey(graphics::ResourceType::VertexBuffer, "vbo2")));
+  for (std::size_t i = 0; i != 100; ++i) {
+    auto ett = ett_mgr->CreateEntity();
+    auto& sprite = ett_mgr->AddComponent<graphics::cmp::Sprite>(ett);
+    sprite.shader = shader;
+    sprite.texture = wtri_tex;
+    ett_mgr->AddComponent<common::cmp::Transform>(ett);
+  }
+
+  auto& s = ett_mgr->GetComponent<graphics::cmp::Sprite>(1);
+
+  auto view =
+      EntityView<XnentList<common::cmp::Transform, graphics::cmp::Sprite>>{};
+  view.View(*ett_mgr);
+
+  for (auto eid : view.EIDs()) {
+    auto shader = ett_mgr->GetComponent<graphics::cmp::Sprite>(eid).shader;
+    std::cout << eid << "<shader>: " << shader << std::endl;
+  }
+
+  for (auto&& [transform, sprite] : view.Components()) {
+    int i = 0;
+  }
+
   while (!win_comp.shouldClose) {
+    for (auto&& [transform, sprite] : view.Components()) {
+      graphics::sys::PrepareSpriteBatch(sprite_batch, sprite, transform);
+    }
+    graphics::sys::RenderSpriteBatch(sprite_batch, glm::mat4{});
+
     window::sys::PoolEvents(win_comp);
     window::sys::SwapBuffer(win_comp);
   }
