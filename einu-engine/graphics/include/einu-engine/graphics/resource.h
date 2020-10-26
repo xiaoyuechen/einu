@@ -18,8 +18,12 @@
 
 #pragma once
 
+#include <cstdint>
+
 namespace einu {
 namespace graphics {
+
+using ResourceID = std::uint32_t;
 
 enum class ResourceType {
   VertexArray,

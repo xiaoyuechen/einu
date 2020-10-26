@@ -34,6 +34,7 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 add_subdirectory(extern)
 add_subdirectory(core)
+add_subdirectory(common)
 add_subdirectory(window)
 add_subdirectory(graphics)
 

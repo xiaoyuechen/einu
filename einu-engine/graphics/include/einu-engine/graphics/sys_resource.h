@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include "einu-engine/graphics/resource_type.h"
+#include "einu-engine/graphics/resource.h"
 #include "einu-engine/graphics/sgl_resource_table.h"
 
 namespace einu {

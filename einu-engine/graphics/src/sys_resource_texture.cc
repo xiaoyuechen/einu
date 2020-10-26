@@ -89,7 +89,7 @@ void Create<ResourceType::Texture, const char*>(
   resource_table.table.emplace(std::make_pair(ResourceType::Texture, name),
                                texture);
   resource_table.texture_info_table.emplace(
-      name, TextureInfo{img.Width(), img.Height()});
+      name, TextureInfo{{img.Width(), img.Height()}});
 }
 
 template <>
