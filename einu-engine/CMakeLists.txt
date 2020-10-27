@@ -37,6 +37,7 @@ add_subdirectory(core)
 add_subdirectory(common)
 add_subdirectory(window)
 add_subdirectory(graphics)
+add_subdirectory(ai)
 
 if(EINU_ENGINE_BUILD_EXAMPLES)
   add_subdirectory(examples)
