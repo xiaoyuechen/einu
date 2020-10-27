@@ -19,6 +19,8 @@
 
 #include "sprite-animation/app.h"
 
+#include <einu-engine/common/sys_movement.h>
+#include <einu-engine/common/sys_time.h>
 #include <einu-engine/core/einu_engine.h>
 #include <einu-engine/core/entity_view.h>
 #include <einu-engine/graphics/cmp_camera.h>
@@ -35,10 +37,12 @@ namespace sprite_animation {
 void App::Run() {
   using namespace einu;  // NOLINT
 
-  using ComponentList = XnentList<window::cmp::Window, graphics::cmp::Sprite,
-                                  common::cmp::Transform>;
+  using ComponentList =
+      XnentList<window::cmp::Window, graphics::cmp::Sprite,
+                common::cmp::Transform, common::cmp::Movement>;
   using SinglenentList =
-      XnentList<graphics::sgl::GLResourceTable, graphics::sgl::SpriteBatch>;
+      XnentList<graphics::sgl::GLResourceTable, graphics::sgl::SpriteBatch,
+                common::sgl::Time>;
   using NeedList = NeedList<ComponentList, SinglenentList>;
   using EnginePolicy = EnginePolicy<NeedList>;
   using Engine = EinuEngine<EnginePolicy>;
@@ -55,6 +59,8 @@ void App::Run() {
 
   auto eid = ett_mgr->CreateEntity();
   auto& win_comp = ett_mgr->AddComponent<window::cmp::Window>(eid);
+
+  auto& time = ett_mgr->AddSinglenent<common::sgl::Time>();
 
   auto& resource_table =
       ett_mgr->AddSinglenent<graphics::sgl::GLResourceTable>();
@@ -95,7 +101,7 @@ void App::Run() {
   std::uniform_int_distribution<int> distribution_y(0, 1080);
   std::uniform_real_distribution<float> distribution_rotate(0, 360);
 
-  for (std::size_t i = 0; i != 100; ++i) {
+  for (std::size_t i = 0; i != 1000; ++i) {
     auto ett = ett_mgr->CreateEntity();
     auto& sprite = ett_mgr->AddComponent<graphics::cmp::Sprite>(ett);
     sprite.sprite_name = "sprite";
@@ -105,13 +111,16 @@ void App::Run() {
     transform.SetRotation(glm::quat(
         glm::vec3(0, 0, glm::radians(distribution_rotate(generator)))));
     transform.SetScale(glm::vec3(0.05f, 0.1f, 1.f));
+    auto& movement = ett_mgr->AddComponent<common::cmp::Movement>(ett);
+    movement.direction = glm::vec3(1, 0, 0);
+    movement.speed = 10.f;
   }
 
   auto& s = ett_mgr->GetComponent<graphics::cmp::Sprite>(1);
 
   auto ett_view =
-      EntityView<XnentList<common::cmp::Transform, graphics::cmp::Sprite>>{};
-  ett_view.View(*ett_mgr);
+      EntityView<XnentList<common::cmp::Transform, graphics::cmp::Sprite,
+                           common::cmp::Movement>>{};
 
   auto proj = graphics::Projection{
       graphics::Projection::Type::Orthographic,
@@ -120,10 +129,16 @@ void App::Run() {
   auto cam_mat =
       graphics::ProjectionMatrix(proj) * graphics::ViewMatrix(graphics::View{});
 
+  common::sys::InitTime(time);
   while (!win_comp.shouldClose) {
     graphics::sys::Clear();
 
-    for (auto&& [transform, sprite] : ett_view.Components()) {
+    common::sys::UpdateTime(time);
+    std::cout << "ft: " << common::sgl::DeltaSeconds(time) << std::endl;
+
+    ett_view.View(*ett_mgr);
+    for (auto&& [transform, sprite, movement] : ett_view.Components()) {
+      common::sys::Move(transform, movement, time);
       graphics::sys::PrepareSpriteBatch(resource_table, sprite_batch, sprite,
                                         transform);
     }

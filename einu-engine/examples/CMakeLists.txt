@@ -1,1 +1,2 @@
 add_subdirectory(sprite-animation)
+add_subdirectory(loop-of-life)
