@@ -63,7 +63,7 @@ class Transform : public Xnent {
  private:
   glm::quat rotation_{1, 0, 0, 0};
   glm::vec3 scale_{1, 1, 1};
-  glm::mat4 transform_{};
+  glm::mat4 transform_{1.0f};
 };
 
 }  // namespace cmp

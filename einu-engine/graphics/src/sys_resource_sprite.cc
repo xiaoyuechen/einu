@@ -36,13 +36,14 @@ void CreateSprite(sgl::GLResourceTable& resource_table, const char* name,
   verts[3].pos = verts[0].pos + glm::vec3(0, tex_size.y, 0);
 
   for (auto&& vert : verts) {
-    vert.color = glm::vec3(255, 255, 255);
+    vert.color = glm::vec4(255, 255, 255, 255);
     vert.uv = glm::vec2(vert.pos) / glm::vec2(tex_size);
   }
 }
 
-// TODO(Xiaoyue Chen): implement this function
-void DestroySprite(sgl::GLResourceTable& resource_table, const char* name) {}
+void DestroySprite(sgl::GLResourceTable& resource_table, const char* name) {
+  resource_table.sprite_table.erase(name);
+}
 
 }  // namespace sys
 }  // namespace graphics

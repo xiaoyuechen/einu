@@ -25,7 +25,7 @@ namespace graphics {
 
 struct Vertex {
   glm::vec3 pos;
-  glm::vec3 color;
+  glm::vec4 color;
   glm::vec2 uv;
 };
 

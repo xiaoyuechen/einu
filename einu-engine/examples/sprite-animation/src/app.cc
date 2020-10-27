@@ -80,24 +80,14 @@ void App::Run() {
       resource_table, "program", "vshader", "fshader");
   graphics::sys::Create<graphics::ResourceType::Texture>(
       resource_table, "white-triangle", "assets/white-triangle.png");
-
-  using ResourceKey = graphics::sgl::GLResourceTable::Key;
-
-  auto shader = resource_table.table.at(
-      ResourceKey{graphics::ResourceType::ShaderProgram, "program"});
-
-  auto wtri_tex = resource_table.table.at(
-      ResourceKey{graphics::ResourceType::Texture, "white-triangle"});
+  graphics::sys::CreateSprite(resource_table, "sprite", "program",
+                              "white-triangle");
+  graphics::sys::Create<graphics::ResourceType::Sampler>(resource_table,
+                                                         "sampler");
 
   auto& sprite_batch = ett_mgr->AddSinglenent<graphics::sgl::SpriteBatch>();
-  graphics::sys::InitSpriteBatch(
-      sprite_batch,
-      resource_table.table.at(
-          ResourceKey(graphics::ResourceType::VertexArray, "vao")),
-      resource_table.table.at(
-          ResourceKey(graphics::ResourceType::VertexBuffer, "vbo1")),
-      resource_table.table.at(
-          ResourceKey(graphics::ResourceType::VertexBuffer, "vbo2")));
+  graphics::sys::InitSpriteBatch(resource_table, sprite_batch, "vao", "vbo1",
+                                 "vbo2", "sampler");
 
   std::random_device device;
   std::mt19937 generator(device());
@@ -108,8 +98,7 @@ void App::Run() {
   for (std::size_t i = 0; i != 100; ++i) {
     auto ett = ett_mgr->CreateEntity();
     auto& sprite = ett_mgr->AddComponent<graphics::cmp::Sprite>(ett);
-    sprite.shader = shader;
-    sprite.texture = wtri_tex;
+    sprite.sprite_name = "sprite";
     auto& transform = ett_mgr->AddComponent<common::cmp::Transform>(ett);
     transform.SetPosition(
         glm::vec3(distribution_x(generator), distribution_y(generator), 0));
@@ -132,23 +121,27 @@ void App::Run() {
       graphics::ProjectionMatrix(proj) * graphics::ViewMatrix(graphics::View{});
 
   while (!win_comp.shouldClose) {
+    graphics::sys::Clear();
+
     for (auto&& [transform, sprite] : ett_view.Components()) {
-      graphics::sys::PrepareSpriteBatch(sprite_batch, sprite, transform);
+      graphics::sys::PrepareSpriteBatch(resource_table, sprite_batch, sprite,
+                                        transform);
     }
     graphics::sys::RenderSpriteBatch(sprite_batch, cam_mat);
+    graphics::sys::ClearSpriteBatch(sprite_batch);
 
     window::sys::PoolEvents(win_comp);
     window::sys::SwapBuffer(win_comp);
   }
 
-  graphics::sys::Destroy<graphics::ResourceType::ShaderProgram>(resource_table,
-                                                                "program");
-  graphics::sys::Destroy<graphics::ResourceType::FragmentShader>(resource_table,
-                                                                 "fshader");
-  graphics::sys::Destroy<graphics::ResourceType::VertexShader>(resource_table,
-                                                               "vshader");
-  graphics::sys::Destroy<graphics::ResourceType::VertexArray>(resource_table,
-                                                              "vao");
+  // graphics::sys::Destroy<graphics::ResourceType::ShaderProgram>(resource_table,
+  //                                                              "program");
+  // graphics::sys::Destroy<graphics::ResourceType::FragmentShader>(resource_table,
+  //                                                               "fshader");
+  // graphics::sys::Destroy<graphics::ResourceType::VertexShader>(resource_table,
+  //                                                             "vshader");
+  // graphics::sys::Destroy<graphics::ResourceType::VertexArray>(resource_table,
+  //                                                            "vao");
 }
 
 }  // namespace sprite_animation

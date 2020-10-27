@@ -22,20 +22,30 @@
 
 #include "einu-engine/graphics/cmp_camera.h"
 #include "einu-engine/graphics/cmp_sprite.h"
+#include "einu-engine/graphics/sgl_resource_table.h"
 #include "einu-engine/graphics/sgl_sprite_batch.h"
 
 namespace einu {
 namespace graphics {
 namespace sys {
 
-void InitSpriteBatch(sgl::SpriteBatch& spite_batch, ResourceID vao,
-                     ResourceID quad_vbo, ResourceID instance_vbo);
+void InitSpriteBatch(sgl::GLResourceTable& resource_table,
+                     sgl::SpriteBatch& spite_batch, const char* vao,
+                     const char* quad_vbo, const char* instance_vbo,
+                     const char* sampler);
 
-void PrepareSpriteBatch(sgl::SpriteBatch& sprite_batch,
+void PrepareSpriteBatch(sgl::GLResourceTable& resource_table,
+                        sgl::SpriteBatch& sprite_batch,
                         const cmp::Sprite& sprite,
                         const common::cmp::Transform& transform);
 
-void RenderSpriteBatch(const sgl::SpriteBatch& sprite_batch, glm::mat4 cam);
+void ClearSpriteBatch(sgl::SpriteBatch& sprite_batch);
+
+void RenderSpriteBatch(const sgl::SpriteBatch& sprite_batch,
+                       const glm::mat4& cam);
+
+void HelloTriangleInit();
+void HelloTriangleRender();
 
 }  // namespace sys
 }  // namespace graphics

@@ -26,6 +26,8 @@ namespace sys {
 
 void LoadGL();
 
-}
+void Clear();
+
+}  // namespace sys
 }  // namespace graphics
 }  // namespace einu

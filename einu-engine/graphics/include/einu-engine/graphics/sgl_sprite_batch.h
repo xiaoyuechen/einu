@@ -24,6 +24,7 @@
 
 #include <array>
 #include <glm/glm.hpp>
+#include <string>
 #include <vector>
 
 namespace einu {
@@ -38,15 +39,19 @@ struct SpriteBatch : public Xnent {
 
   using AttribsArr = std::vector<Attribs>;
 
-  absl::flat_hash_map<
-      ResourceID,                      // shader id
-      absl::flat_hash_map<ResourceID,  // texture id
-                          absl::flat_hash_map<common::IntRect, AttribsArr>>>
-      sprite_table;
+  struct SpriteData {
+    ResourceID shader;
+    ResourceID texture;
+    std::array<Vertex, 4> verts;
+    AttribsArr attibs_arr;
+  };
+
+  absl::flat_hash_map<std::string, SpriteData> sprite_table;
 
   ResourceID vao;
   ResourceID quad_vbo;
   ResourceID instance_vbo;
+  ResourceID sampler;
 };
 
 }  // namespace sgl
