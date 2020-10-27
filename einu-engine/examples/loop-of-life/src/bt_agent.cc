@@ -20,6 +20,9 @@
 
 #include <utility>
 
+#include "src/cmp_agent.h"
+#include "src/cmp_health.h"
+
 namespace lol {
 namespace ai {
 namespace bt {
@@ -30,6 +33,30 @@ einu::ai::bt::Root BuildAgentBT() {
   auto& seq = root.AddChild<Sequence>();
   seq.AddChild<MoveTo>();
   return std::move(root);
+}
+
+EatPrey::EatPrey(einu::IEntityManager& ett_mgr) : ett_mgr_{ett_mgr} {}
+
+void Eat(const cmp::Eat& eat, cmp::Health& self_health,
+         cmp::Health& prey_health) {
+  float eaten_health = eat.eat_health_per_attack;
+  if (prey_health.health < eaten_health) {
+    eaten_health = prey_health.health;
+  }
+  AddHealth(prey_health, -eaten_health);
+  AddHealth(self_health, eat.absorption_rate * eaten_health);
+}
+
+Result EatPrey::Run(const ArgPack& args) {
+  auto& hunt = args.GetComponent<cmp::Hunt>();
+  auto& eat = args.GetComponent<cmp::Eat>();
+  auto& health = args.GetComponent<cmp::Health>();
+  auto& prey_health = ett_mgr_.GetComponent<cmp::Health>(hunt.current_prey);
+  Eat(eat, health, prey_health);
+  if (prey_health.health == 0) {
+    return Result::Success;
+  }
+  return Result::Running;
 }
 
 }  // namespace bt

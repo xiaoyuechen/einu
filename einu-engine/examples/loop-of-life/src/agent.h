@@ -22,6 +22,7 @@
 #include <einu-engine/core/util/enum.h>
 
 #include <cstdint>
+#include <glm/glm.hpp>
 
 namespace lol {
 
@@ -32,6 +33,10 @@ enum class AgentType : std::uint8_t {
   Wolf = 1 << 2,
   Crow = 1 << 3,
 };
+
+constexpr AgentType GetSignatureAll() noexcept {
+  return static_cast<AgentType>(~0u);
+}
 
 struct AgentInfo {
   AgentType type = AgentType::None;

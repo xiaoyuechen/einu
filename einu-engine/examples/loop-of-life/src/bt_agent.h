@@ -20,6 +20,7 @@
 
 #include <einu-engine/ai/behavior_tree.h>
 #include <einu-engine/ai/bt_move_to.h>
+#include <einu-engine/core/i_entity_manager.h>
 
 namespace lol {
 namespace ai {
@@ -27,6 +28,49 @@ namespace bt {
 
 einu::ai::bt::Root BuildAgentBT();
 
-}
+using Result = einu::ai::bt::Result;
+using ArgPack = einu::ai::bt::ArgPack;
+using Node = einu::ai::bt::Node;
+
+class EatPrey final : public Node {
+ public:
+  explicit EatPrey(einu::IEntityManager& ett_mgr);
+  Result Run(const ArgPack& args) override;
+
+ private:
+  einu::IEntityManager& ett_mgr_;
+};
+
+class FindPredator final : public Node {
+ public:
+  Result Run(const ArgPack& args) override;
+};
+
+class FindPrey final : public Node {
+ public:
+  Result Run(const ArgPack& args) override;
+};
+
+class HasTargetedPrey final : public Node {
+ public:
+  Result Run(const ArgPack& args) override;
+};
+
+class IsHungry final : public Node {
+ public:
+  Result Run(const ArgPack& args) override;
+};
+
+class TrackPrey final : public Node {
+ public:
+  Result Run(const ArgPack& args) override;
+};
+
+class Escape final : public Node {
+ public:
+  Result Run(const ArgPack& args) override;
+};
+
+}  // namespace bt
 }  // namespace ai
 }  // namespace lol

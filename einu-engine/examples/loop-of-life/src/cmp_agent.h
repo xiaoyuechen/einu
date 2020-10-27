@@ -31,8 +31,6 @@ struct Agent : public einu::Xnent {
   AgentType type = AgentType::None;
 };
 
-AgentType GetSignatureAll() { return static_cast<AgentType>(~0u); }
-
 struct Eat : public einu::Xnent {
   float eat_health_per_attack = 0;
   float absorption_rate = 0.5f;
