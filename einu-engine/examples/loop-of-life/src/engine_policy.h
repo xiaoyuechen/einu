@@ -18,6 +18,7 @@
 
 #pragma once
 
+#include <einu-engine/ai/cmp_destination.h>
 #include <einu-engine/common/cmp_movement.h>
 #include <einu-engine/common/cmp_transform.h>
 #include <einu-engine/common/sgl_time.h>
@@ -37,7 +38,7 @@ namespace lol {
 using ComponentList =
     einu::XnentList<einu::common::cmp::Transform, einu::common::cmp::Movement,
                     einu::window::cmp::Window, einu::graphics::cmp::Sprite,
-                    cmp::AgentType, cmp::Health>;
+                    einu::ai::cmp::Destination, cmp::AgentType, cmp::Health>;
 
 using SinglenentList =
     einu::XnentList<einu::common::sgl::Time,

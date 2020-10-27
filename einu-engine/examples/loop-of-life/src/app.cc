@@ -31,6 +31,7 @@
 #include <iostream>
 #include <random>
 
+#include "src/bt_agent.h"
 #include "src/engine_policy.h"
 
 namespace lol {
@@ -92,8 +93,8 @@ void App::Run() {
   {
     std::random_device device;
     std::mt19937 generator(device());
-    std::uniform_int_distribution<int> distribution_x(0, 1920);
-    std::uniform_int_distribution<int> distribution_y(0, 1080);
+    std::uniform_int_distribution<int> distribution_x(0, win.size.width);
+    std::uniform_int_distribution<int> distribution_y(0, win.size.height);
     std::uniform_real_distribution<float> distribution_rotate(0, 360);
 
     for (std::size_t i = 0; i != 1000; ++i) {
@@ -105,16 +106,19 @@ void App::Run() {
           glm::vec3(distribution_x(generator), distribution_y(generator), 0));
       transform.SetRotation(glm::quat(
           glm::vec3(0, 0, glm::radians(distribution_rotate(generator)))));
-      transform.SetScale(glm::vec3(0.05f, 0.1f, 1.f));
+      transform.SetScale(glm::vec3(0.02f, 0.05f, 1.f));
       auto& movement = ett_mgr->AddComponent<common::cmp::Movement>(ett);
       movement.direction = glm::vec3(1, 0, 0);
       movement.speed = 10.f;
+      movement.max_speed = 10.f;
+      auto& dest = ett_mgr->AddComponent<einu::ai::cmp::Destination>(ett);
+      dest.destination = glm::vec3(100, 100, 0);
     }
   }
 
-  auto ett_view =
-      EntityView<XnentList<common::cmp::Transform, graphics::cmp::Sprite,
-                           common::cmp::Movement>>{};
+  auto ett_view = EntityView<
+      XnentList<common::cmp::Transform, graphics::cmp::Sprite,
+                common::cmp::Movement, einu::ai::cmp::Destination>>{};
 
   auto proj = graphics::Projection{graphics::Projection::Type::Orthographic,
                                    graphics::Projection::OrthographicAttrib{
@@ -124,6 +128,9 @@ void App::Run() {
   auto cam_mat =
       graphics::ProjectionMatrix(proj) * graphics::ViewMatrix(graphics::View{});
 
+  einu::ai::bt::ArgPack bt_args;
+  auto bt = ai::bt::BuildAgentBT();
+
   common::sys::InitTime(time);
   while (!win.shouldClose) {
     graphics::sys::Clear();
@@ -132,7 +139,16 @@ void App::Run() {
     std::cout << "ft: " << common::sgl::DeltaSeconds(time) << std::endl;
 
     ett_view.View(*ett_mgr);
-    for (auto&& [transform, sprite, movement] : ett_view.Components()) {
+
+    // TODO(Xiaoyue Chen): implement zip iterator
+    for (auto [comp_it, eid_it] =
+             std::tuple{ett_view.Components().begin(), ett_view.EIDs().begin()};
+         comp_it != ett_view.Components().end(); ++comp_it, ++eid_it) {
+      bt_args.Set(*eid_it, *comp_it);
+      bt.Run(bt_args);
+    }
+
+    for (auto&& [transform, sprite, movement, dest] : ett_view.Components()) {
       common::sys::Move(transform, movement, time);
       graphics::sys::PrepareSpriteBatch(resource_table, sprite_batch, sprite,
                                         transform);

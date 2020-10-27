@@ -42,7 +42,7 @@ class ArgPack {
   template <typename... Comps>
   void Set(EID eid, std::tuple<Comps&...> comps) {
     cmp_table.clear();
-    (cmp_table[GetXnentTypeID<Comps>()] = &std::get<Comps>(comps), ...);
+    ((cmp_table[GetXnentTypeID<Comps>()] = &std::get<Comps&>(comps)), ...);
   }
 
   template <typename Component>
