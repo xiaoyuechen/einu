@@ -1,4 +1,6 @@
-add_executable(loop-of-life "src/main.cc" "src/app.h" "src/app.cc")
+add_executable(
+  loop-of-life "src/main.cc" "src/app.h" "src/app.cc" "src/cmp_agent_type.h"
+               "src/cmp_health.h" "src/sgl_world_state.h")
 
 target_include_directories(
   loop-of-life
