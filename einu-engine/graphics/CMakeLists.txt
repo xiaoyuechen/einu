@@ -10,6 +10,7 @@ add_library(
   "include/einu-engine/graphics/color.h"
   "src/sys_render.cc"
   "src/sys_resource_shader.cc"
+  "src/sys_resource_sprite.cc"
   "src/sys_resource_vertex_array.cc"
   "src/sys_resource_vertex_buffer.cc"
   "src/sys_resource_texture.cc"

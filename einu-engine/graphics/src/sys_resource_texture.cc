@@ -89,7 +89,7 @@ ResourceID Create<ResourceType::Texture, const char*>(
   resource_table.table.emplace(std::make_pair(ResourceType::Texture, name),
                                texture);
   resource_table.tex_info_table.emplace(
-      name, TextureInfo{texture, {img.Width(), img.Height()}});
+      name, TextureInfo{{img.Width(), img.Height()}});
   return texture;
 }
 

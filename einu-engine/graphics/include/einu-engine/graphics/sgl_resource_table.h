@@ -39,15 +39,11 @@ struct GLResourceTable : public Xnent {
   using Table = absl::flat_hash_map<Key, Value>;
 
   using TextureInfoTable = absl::flat_hash_map<std::string, TextureInfo>;
+  using SpriteTable = absl::flat_hash_map<std::string, Sprite>;
 
   Table table;
   TextureInfoTable tex_info_table;
-};
-
-struct SpriteTable : public Xnent {
-  using Key = std::string;
-  using Table = absl::flat_hash_map<Key, Sprite>;
-  Table table;
+  SpriteTable sprite_table;
 };
 
 }  // namespace sgl

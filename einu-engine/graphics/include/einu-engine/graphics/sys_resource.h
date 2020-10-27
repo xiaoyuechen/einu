@@ -93,6 +93,11 @@ template <>
 void Destroy<ResourceType::Sampler>(sgl::GLResourceTable& resource_table,
                                     const char* name);
 
+void CreateSprite(sgl::GLResourceTable& resource_table, const char* name,
+                  const char* shader_name, const char* tex_name);
+
+void DestroySprite(sgl::GLResourceTable& resource_table, const char* name);
+
 }  // namespace sys
 }  // namespace graphics
 }  // namespace einu

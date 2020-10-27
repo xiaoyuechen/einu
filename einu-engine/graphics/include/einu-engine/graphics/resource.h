@@ -21,6 +21,7 @@
 #include <array>
 #include <cstdint>
 #include <glm/glm.hpp>
+#include <string>
 
 #include "einu-engine/graphics/vertex.h"
 
@@ -41,13 +42,12 @@ enum class ResourceType {
 };
 
 struct TextureInfo {
-  ResourceID texture;
   glm::i32vec2 size;
 };
 
 struct Sprite {
-  ResourceID shader;
-  ResourceID texture;
+  std::string shader;
+  std::string texture;
 
   // verts order
   // 3  ------ 2
