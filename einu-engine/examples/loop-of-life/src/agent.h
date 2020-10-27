@@ -18,34 +18,34 @@
 
 #pragma once
 
+#include <einu-engine/core/eid.h>
 #include <einu-engine/core/util/enum.h>
-#include <einu-engine/core/xnent.h>
+
+#include <cstdint>
 
 namespace lol {
-namespace cmp {
 
-struct AgentType : public einu::Xnent {
-  enum class Type : std::uint8_t {
-    None = 0,
-    Grass = 1 << 0,
-    Sheep = 1 << 1,
-    Wolf = 1 << 2,
-    Crow = 1 << 3,
-  };
-
-  Type type = Type::None;
+enum class AgentType : std::uint8_t {
+  None = 0,
+  Grass = 1 << 0,
+  Sheep = 1 << 1,
+  Wolf = 1 << 2,
+  Crow = 1 << 3,
 };
 
-AgentType::Type GetSignatureAll() { return static_cast<AgentType::Type>(~0u); }
+struct AgentInfo {
+  AgentType type = AgentType::None;
+  glm::vec2 pos{};
+  einu::EID eid = -1;
+};
 
-}  // namespace cmp
 }  // namespace lol
 
 namespace einu {
 namespace util {
 
 template <>
-struct EnableBitMaskOperators<lol::cmp::AgentType::Type> {
+struct EnableBitMaskOperators<lol::AgentType> {
   static constexpr bool enable = true;
 };
 

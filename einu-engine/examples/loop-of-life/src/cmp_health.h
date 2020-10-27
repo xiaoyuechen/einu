@@ -34,5 +34,9 @@ constexpr float AddHealth(Health& comp, float delta) noexcept {
   return comp.health;
 }
 
+struct HealthLoss : einu::Xnent {
+  float loss_speed = 0;
+};
+
 }  // namespace cmp
 }  // namespace lol

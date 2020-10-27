@@ -29,7 +29,7 @@
 #include <einu-engine/graphics/sgl_sprite_batch.h>
 #include <einu-engine/window/cmp_window.h>
 
-#include "src/cmp_agent_type.h"
+#include "src/cmp_agent.h"
 #include "src/cmp_health.h"
 #include "src/sgl_world_state.h"
 
@@ -38,7 +38,7 @@ namespace lol {
 using ComponentList =
     einu::XnentList<einu::common::cmp::Transform, einu::common::cmp::Movement,
                     einu::window::cmp::Window, einu::graphics::cmp::Sprite,
-                    einu::ai::cmp::Destination, cmp::AgentType, cmp::Health>;
+                    einu::ai::cmp::Destination, cmp::Agent, cmp::Health>;
 
 using SinglenentList =
     einu::XnentList<einu::common::sgl::Time,
