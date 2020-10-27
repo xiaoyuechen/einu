@@ -46,8 +46,7 @@ class ArgPack {
 
   template <typename Component>
   Component& GetComponent() const {
-    return static_cast<Component&>(
-        return cmp_table.at(GetXnentTypeID<Component>()));
+    return static_cast<Component&>(*cmp_table.at(GetXnentTypeID<Component>()));
   }
 
   EID GetEID() const noexcept { return eid; }

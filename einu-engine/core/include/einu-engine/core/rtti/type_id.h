@@ -18,8 +18,11 @@
 
 #pragma once
 
+#include <absl/hash/hash.h>
+
 #include <cstddef>
 #include <type_traits>
+#include <utility>
 
 namespace einu {
 namespace rtti {
@@ -32,6 +35,11 @@ class TypeID {
       : index_(index) {}
   operator IndexType&() noexcept { return index_; }
   operator IndexType() const noexcept { return index_; }
+
+  template <typename H>
+  friend H AbslHashValue(H h, const TypeID& v) {
+    return H::combine(std::move(h), v.index_);
+  }
 
  private:
   IndexType index_;

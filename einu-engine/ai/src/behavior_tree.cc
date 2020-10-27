@@ -68,6 +68,7 @@ Result Inverter::Run(const ArgPack& args) {
   if (result == Result::Success) {
     return Result::Failure;
   }
+  return Result::Failure;
 }
 
 Result Succeeder::Run(const ArgPack& args) {
