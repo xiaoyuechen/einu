@@ -60,7 +60,10 @@ void PrepareSpriteBatch(sgl::GLResourceTable& resource_table,
 }
 
 void ClearSpriteBatch(sgl::SpriteBatch& sprite_batch) {
-  sprite_batch.sprite_table.clear();
+  for (auto&& pair : sprite_batch.sprite_table) {
+    auto& sprite_data = pair.second;
+    sprite_data.attibs_arr.clear();
+  }
 }
 
 void SetupUniform(ResourceID shader, const glm::mat4& cam) {
