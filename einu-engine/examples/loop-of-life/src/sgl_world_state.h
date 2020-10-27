@@ -24,12 +24,14 @@
 
 #include <vector>
 
+#include "src/cmp_agent_type.h"
+
 namespace lol {
 namespace sgl {
 
 struct WorldState : public einu::Xnent {
   struct AgentInfo {
-    AgentType type = AgentType::NONE;
+    cmp::AgentType::Type type = cmp::AgentType::Type::None;
     glm::vec2 pos{};
     einu::EID eid = ~einu::EID{0};
   };

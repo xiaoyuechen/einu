@@ -23,15 +23,15 @@
 namespace lol {
 namespace cmp {
 
-struct HealthComponent : einu::Xnent {
+struct Health : einu::Xnent {
   float health = 100.f;
   float max_health = 120.f;
 };
 
-constexpr float AddHealth(HealthComponent& comp, float delta) noexcept {
+constexpr float AddHealth(Health& comp, float delta) noexcept {
   comp.health += delta;
   comp.health = std::clamp(comp.health, 0.f, comp.max_health);
-  return health;
+  return comp.health;
 }
 
 }  // namespace cmp

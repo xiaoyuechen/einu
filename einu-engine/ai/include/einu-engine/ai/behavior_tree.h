@@ -40,7 +40,8 @@ enum class Result {
 class ArgPack {
  public:
   template <typename... Comps>
-  ArgPack(EID eid, std::tuple<Comps&...> comps) {
+  void Set(EID eid, std::tuple<Comps&...> comps) {
+    cmp_table.clear();
     (cmp_table[GetXnentTypeID<Comps>()] = &std::get<Comps>(comps), ...);
   }
 
@@ -62,17 +63,7 @@ class Node {
   virtual Result Run(const ArgPack& args) = 0;
 };
 
-class Root {
- public:
-  explicit Root(std::unique_ptr<Node> child);
-
-  void Run(const ArgPack& args);
-
- private:
-  std::unique_ptr<Node> child_;
-};
-
-class InnerNode : Node {
+class InnerNode : public Node {
  public:
   template <typename T, typename... Args>
   T& AddChild(Args&&... args) {
@@ -89,6 +80,11 @@ class InnerNode : Node {
 
  private:
   std::vector<std::unique_ptr<Node>> children_;
+};
+
+class Root final : public InnerNode {
+ public:
+  Result Run(const ArgPack& args) override;
 };
 
 class Sequence final : public InnerNode {

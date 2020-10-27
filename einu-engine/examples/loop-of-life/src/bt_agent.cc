@@ -16,38 +16,22 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#pragma once
+#include "src/bt_agent.h"
 
-#include <einu-engine/core/util/enum.h>
-#include <einu-engine/core/xnent.h>
+#include <utility>
 
 namespace lol {
-namespace cmp {
+namespace ai {
+namespace bt {
 
-struct AgentType : public einu::Xnent {
-  enum class Type : std::uint8_t {
-    None = 0,
-    Grass = 1 << 0,
-    Sheep = 1 << 1,
-    Wolf = 1 << 2,
-    Crow = 1 << 3,
-  };
+einu::ai::bt::Root BuildAgentBT() {
+  using namespace einu::ai::bt;  // NOLINT
+  auto root = Root();
+  auto& seq = root.AddChild<Sequence>();
+  seq.AddChild<MoveTo>();
+  return std::move(root);
+}
 
-  Type type = Type::None;
-};
-
-AgentType::Type GetSignatureAll() { return static_cast<AgentType::Type>(~0u); }
-
-}  // namespace cmp
+}  // namespace bt
+}  // namespace ai
 }  // namespace lol
-
-namespace einu {
-namespace util {
-
-template <>
-struct EnableBitMaskOperators<lol::cmp::AgentType::Type> {
-  static constexpr bool enable = true;
-};
-
-}  // namespace util
-}  // namespace einu

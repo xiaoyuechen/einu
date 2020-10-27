@@ -26,9 +26,11 @@ namespace einu {
 namespace ai {
 namespace bt {
 
-Root::Root(std::unique_ptr<Node> child) { child_ = std::move(child); }
-
-void Root::Run(const ArgPack& args) { child_->Run(args); }
+Result Root::Run(const ArgPack& args) {
+  auto& child = GetChildren()[0];
+  child->Run(args);
+  return Result::Success;
+}
 
 Result Sequence::Run(const ArgPack& args) {
   for (auto&& child : GetChildren()) {

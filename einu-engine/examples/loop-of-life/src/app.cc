@@ -31,20 +31,12 @@
 #include <iostream>
 #include <random>
 
+#include "src/engine_policy.h"
+
 namespace lol {
 
 void App::Run() {
   using namespace einu;  // NOLINT
-
-  using ComponentList =
-      XnentList<window::cmp::Window, graphics::cmp::Sprite,
-                common::cmp::Transform, common::cmp::Movement>;
-  using SinglenentList =
-      XnentList<graphics::sgl::GLResourceTable, graphics::sgl::SpriteBatch,
-                common::sgl::Time>;
-  using NeedList = NeedList<ComponentList, SinglenentList>;
-  using EnginePolicy = EnginePolicy<NeedList>;
-  using Engine = EinuEngine<EnginePolicy>;
 
   Engine engine;
 
@@ -60,6 +52,8 @@ void App::Run() {
   auto& win = ett_mgr->AddComponent<window::cmp::Window>(eid);
 
   auto& time = ett_mgr->AddSinglenent<common::sgl::Time>();
+  auto& world_state = ett_mgr->AddSinglenent<sgl::WorldState>();
+  world_state.grid = sgl::WorldState::Grid(glm::uvec2{160, 90});
 
   auto& resource_table =
       ett_mgr->AddSinglenent<graphics::sgl::GLResourceTable>();
