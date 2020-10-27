@@ -29,12 +29,13 @@ namespace sys {
 
 using GenFunc = std::function<std::uint32_t()>;
 
-inline void CreateHelper(sgl::GLResourceTable& resource_table,
-                         ResourceType type, const char* name,
-                         GenFunc gen_func) {
+inline ResourceID CreateHelper(sgl::GLResourceTable& resource_table,
+                               ResourceType type, const char* name,
+                               GenFunc gen_func) {
   auto rsc = gen_func();
   using Key = sgl::GLResourceTable::Key;
   resource_table.table.emplace(Key{type, name}, rsc);
+  return rsc;
 }
 
 using DeleteFunc = std::function<void(std::uint32_t)>;

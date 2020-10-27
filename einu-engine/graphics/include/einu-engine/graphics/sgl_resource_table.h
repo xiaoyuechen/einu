@@ -23,7 +23,6 @@
 
 #include <array>
 #include <cstdint>
-#include <glm/glm.hpp>
 #include <string>
 #include <utility>
 
@@ -32,23 +31,24 @@
 namespace einu {
 namespace graphics {
 
-struct TextureInfo {
-  glm::i32vec2 size;
-};
-
 namespace sgl {
 
 struct GLResourceTable : public Xnent {
   using Key = std::pair<ResourceType, std::string>;
   using Value = ResourceID;
   using Table = absl::flat_hash_map<Key, Value>;
+
   using TextureInfoTable = absl::flat_hash_map<std::string, TextureInfo>;
 
   Table table;
-  TextureInfoTable texture_info_table;
+  TextureInfoTable tex_info_table;
 };
 
-struct SpriteTable : public Xnent {};
+struct SpriteTable : public Xnent {
+  using Key = std::string;
+  using Table = absl::flat_hash_map<Key, Sprite>;
+  Table table;
+};
 
 }  // namespace sgl
 }  // namespace graphics

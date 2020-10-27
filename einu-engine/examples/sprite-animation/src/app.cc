@@ -66,12 +66,12 @@ void App::Run() {
 
   graphics::sys::LoadGL();
 
-  graphics::sys::Create<graphics::ResourceType::VertexArray>(resource_table,
-                                                             "vao");
-  graphics::sys::Create<graphics::ResourceType::VertexBuffer>(resource_table,
-                                                              "vbo1");
-  graphics::sys::Create<graphics::ResourceType::VertexBuffer>(resource_table,
-                                                              "vbo2");
+  auto vao = graphics::sys::Create<graphics::ResourceType::VertexArray>(
+      resource_table, "vao");
+  auto vbo1 = graphics::sys::Create<graphics::ResourceType::VertexBuffer>(
+      resource_table, "vbo1");
+  auto vbo2 = graphics::sys::Create<graphics::ResourceType::VertexBuffer>(
+      resource_table, "vbo2");
   graphics::sys::Create<graphics::ResourceType::VertexShader>(
       resource_table, "vshader", "shaders/sprite_vertex_shader.glsl");
   graphics::sys::Create<graphics::ResourceType::FragmentShader>(

@@ -25,14 +25,15 @@ namespace graphics {
 namespace sys {
 
 template <>
-void Create<ResourceType::VertexBuffer>(sgl::GLResourceTable& resource_table,
-                                        const char* name) {
+ResourceID Create<ResourceType::VertexBuffer>(
+    sgl::GLResourceTable& resource_table, const char* name) {
   GLuint vertex_buffer;
   glGenBuffers(1, &vertex_buffer);
 
   using Key = sgl::GLResourceTable::Key;
   resource_table.table.emplace(Key{ResourceType::VertexBuffer, name},
                                vertex_buffer);
+  return vertex_buffer;
 }
 
 template <>

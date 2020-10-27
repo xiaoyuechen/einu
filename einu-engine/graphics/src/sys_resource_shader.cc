@@ -79,9 +79,9 @@ void CheckStatus(ShaderOrProgram type, GLuint id) {
   }
 }
 
-void CreateShader(ShaderType type, sgl::GLResourceTable& resource_table,
-                  const char* name, const char* file_name) {
-  CreateHelper(resource_table, ToResourceType(type), name, [=]() {
+ResourceID CreateShader(ShaderType type, sgl::GLResourceTable& resource_table,
+                        const char* name, const char* file_name) {
+  return CreateHelper(resource_table, ToResourceType(type), name, [=]() {
     auto file = std::ifstream(file_name);
     if (!file.is_open()) {
       throw GraphicsError{"Failed to open shader file"};
@@ -114,10 +114,10 @@ void DestroyShader(ShaderType type, sgl::GLResourceTable& resource_table,
 }  // namespace
 
 template <>
-void Create<ResourceType::VertexShader, const char*>(
+ResourceID Create<ResourceType::VertexShader, const char*>(
     sgl::GLResourceTable& resource_table, const char* name,
     const char* file_name) {
-  CreateShader(ShaderType::Vertex, resource_table, name, file_name);
+  return CreateShader(ShaderType::Vertex, resource_table, name, file_name);
 }
 
 template <>
@@ -127,10 +127,10 @@ void Destroy<ResourceType::VertexShader>(sgl::GLResourceTable& resource_table,
 }
 
 template <>
-void Create<ResourceType::FragmentShader, const char*>(
+ResourceID Create<ResourceType::FragmentShader, const char*>(
     sgl::GLResourceTable& resource_table, const char* name,
     const char* file_name) {
-  CreateShader(ShaderType::Fragment, resource_table, name, file_name);
+  return CreateShader(ShaderType::Fragment, resource_table, name, file_name);
 }
 
 template <>
@@ -140,26 +140,26 @@ void Destroy<ResourceType::FragmentShader>(sgl::GLResourceTable& resource_table,
 }
 
 template <>
-void Create<ResourceType::ShaderProgram, const char*, const char*>(
+ResourceID Create<ResourceType::ShaderProgram, const char*, const char*>(
     sgl::GLResourceTable& resource_table, const char* name,
     const char* vshader_name, const char* fshader_name) {
-  CreateHelper(resource_table, ResourceType::ShaderProgram, name,
-               [=, &resource_table] {
-                 using Key = sgl::GLResourceTable::Key;
-                 auto vshader = resource_table.table.at(
-                     Key{ResourceType::VertexShader, vshader_name});
-                 auto fshader = resource_table.table.at(
-                     Key{ResourceType::FragmentShader, fshader_name});
+  return CreateHelper(resource_table, ResourceType::ShaderProgram, name,
+                      [=, &resource_table] {
+                        using Key = sgl::GLResourceTable::Key;
+                        auto vshader = resource_table.table.at(
+                            Key{ResourceType::VertexShader, vshader_name});
+                        auto fshader = resource_table.table.at(
+                            Key{ResourceType::FragmentShader, fshader_name});
 
-                 auto program = glCreateProgram();
-                 glAttachShader(program, vshader);
-                 glAttachShader(program, fshader);
-                 glLinkProgram(program);
-                 CheckStatus(ShaderOrProgram::Program, program);
-                 glDetachShader(program, vshader);
-                 glDetachShader(program, fshader);
-                 return program;
-               });
+                        auto program = glCreateProgram();
+                        glAttachShader(program, vshader);
+                        glAttachShader(program, fshader);
+                        glLinkProgram(program);
+                        CheckStatus(ShaderOrProgram::Program, program);
+                        glDetachShader(program, vshader);
+                        glDetachShader(program, fshader);
+                        return program;
+                      });
 }
 
 template <>

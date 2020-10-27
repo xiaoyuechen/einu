@@ -77,7 +77,7 @@ Image::~Image() { stbi_image_free(image_); }
 }  // namespace
 
 template <>
-void Create<ResourceType::Texture, const char*>(
+ResourceID Create<ResourceType::Texture, const char*>(
     sgl::GLResourceTable& resource_table, const char* name,
     const char* file_name) {
   auto img = Image(file_name);
@@ -88,8 +88,9 @@ void Create<ResourceType::Texture, const char*>(
                GL_UNSIGNED_BYTE, img.Data());
   resource_table.table.emplace(std::make_pair(ResourceType::Texture, name),
                                texture);
-  resource_table.texture_info_table.emplace(
-      name, TextureInfo{{img.Width(), img.Height()}});
+  resource_table.tex_info_table.emplace(
+      name, TextureInfo{texture, {img.Width(), img.Height()}});
+  return texture;
 }
 
 template <>
@@ -100,13 +101,13 @@ void Destroy<ResourceType::Texture>(sgl::GLResourceTable& resource_table,
   auto texture = it->second;
   glDeleteTextures(1, &texture);
   resource_table.table.erase(it);
-  resource_table.texture_info_table.erase(name);
+  resource_table.tex_info_table.erase(name);
 }
 
 template <>
-void Create<ResourceType::Sampler>(sgl::GLResourceTable& resource_table,
-                                   const char* name) {
-  CreateHelper(resource_table, ResourceType::Sampler, name, [] {
+ResourceID Create<ResourceType::Sampler>(sgl::GLResourceTable& resource_table,
+                                         const char* name) {
+  return CreateHelper(resource_table, ResourceType::Sampler, name, [] {
     GLuint sampler;
     glGenSamplers(1, &sampler);
     return sampler;

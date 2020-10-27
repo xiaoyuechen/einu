@@ -18,7 +18,11 @@
 
 #pragma once
 
+#include <array>
 #include <cstdint>
+#include <glm/glm.hpp>
+
+#include "einu-engine/graphics/vertex.h"
 
 namespace einu {
 namespace graphics {
@@ -34,6 +38,22 @@ enum class ResourceType {
   Texture,
   Sampler,
   Count
+};
+
+struct TextureInfo {
+  ResourceID texture;
+  glm::i32vec2 size;
+};
+
+struct Sprite {
+  ResourceID shader;
+  ResourceID texture;
+
+  // verts order
+  // 3  ------ 2
+  //   |      |
+  // 0  ------ 1
+  std::array<Vertex, 4> verts;
 };
 
 }  // namespace graphics

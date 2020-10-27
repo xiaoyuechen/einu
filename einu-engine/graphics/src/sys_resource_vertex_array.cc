@@ -27,13 +27,14 @@ namespace graphics {
 namespace sys {
 
 template <>
-void Create<ResourceType::VertexArray>(sgl::GLResourceTable& resource_table,
-                                       const char* name) {
+ResourceID Create<ResourceType::VertexArray>(
+    sgl::GLResourceTable& resource_table, const char* name) {
   GLuint vertex_array;
   glGenVertexArrays(1, &vertex_array);
   using Key = sgl::GLResourceTable::Key;
   resource_table.table.emplace(Key{ResourceType::VertexArray, name},
                                vertex_array);
+  return vertex_array;
 }
 
 template <>
