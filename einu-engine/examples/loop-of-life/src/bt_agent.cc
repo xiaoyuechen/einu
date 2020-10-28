@@ -163,7 +163,13 @@ Result IsHungry::Run(const ArgPack& args) {
   return Result::Failure;
 }
 
-Result TrackPrey::Run(const ArgPack& args) { return Result(); }
+Result TrackPrey::Run(const ArgPack& args) {
+  auto&& [dest_comp, hunt_comp] = args.GetComponents(
+      einu::XnentList<einu::ai::cmp::Destination, const cmp::Hunt>{});
+  auto prey_pos = hunt_comp.current_prey.pos;
+  dest_comp.destination = glm::vec3(prey_pos, 0);
+  return Result::Success;
+}
 
 Result Escape::Run(const ArgPack& args) { return Result(); }
 
