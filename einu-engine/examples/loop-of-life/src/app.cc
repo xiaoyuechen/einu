@@ -33,6 +33,7 @@
 
 #include "src/bt_agent.h"
 #include "src/engine_policy.h"
+#include "src/sys_agent_create.h"
 #include "src/sys_world_state.h"
 
 namespace lol {
@@ -100,23 +101,15 @@ void App::Run() {
     std::uniform_int_distribution<int> distribution_y(0, win.size.height);
     std::uniform_real_distribution<float> distribution_rotate(0, 360);
 
-    for (std::size_t i = 0; i != 1000; ++i) {
-      auto ett = ett_mgr->CreateEntity();
-      auto& sprite = ett_mgr->AddComponent<graphics::cmp::Sprite>(ett);
-      sprite.sprite_name = "sprite";
-      auto& transform = ett_mgr->AddComponent<common::cmp::Transform>(ett);
+    for (std::size_t i = 0; i != 100; ++i) {
+      auto transform = common::Transform{};
       transform.SetPosition(
           glm::vec3(distribution_x(generator), distribution_y(generator), 0));
       transform.SetRotation(glm::quat(
           glm::vec3(0, 0, glm::radians(distribution_rotate(generator)))));
       transform.SetScale(glm::vec3(0.02f, 0.05f, 1.f));
-      auto& movement = ett_mgr->AddComponent<common::cmp::Movement>(ett);
-      movement.direction = glm::vec3(1, 0, 0);
-      movement.speed = 10.f;
-      movement.max_speed = 10.f;
-      auto& dest = ett_mgr->AddComponent<einu::ai::cmp::Destination>(ett);
-      dest.destination = glm::vec3(100, 100, 0);
-      ett_mgr->AddComponent<cmp::Agent>(ett).type = AgentType::Sheep;
+      sys::CreateSheep(*ett_mgr, transform, 50, glm::vec4{255, 0, 0, 255},
+                       "sprite");
     }
   }
 

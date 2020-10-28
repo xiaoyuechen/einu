@@ -12,6 +12,8 @@ add_executable(
   "src/bt_agent.h"
   "src/sys_sense.h"
   "src/sys_sense.cc"
+  "src/sys_agent_create.h"
+  "src/sys_agent_create.cc"
   "src/bt_agent.cc")
 
 target_include_directories(

@@ -6,6 +6,7 @@ add_library(
   "include/einu-engine/common/cmp_transform.h"
   "include/einu-engine/common/sgl_time.h"
   "include/einu-engine/common/grid.h"
+  "include/einu-engine/common/transform.h"
   "src/sys_movement.cc")
 
 add_library(einu::common ALIAS common)

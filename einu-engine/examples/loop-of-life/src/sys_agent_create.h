@@ -18,21 +18,15 @@
 
 #pragma once
 
-#include <einu-engine/core/xnent.h>
+#include <einu-engine/common/transform.h>
+#include <einu-engine/core/i_entity_manager.h>
 
-#include "einu-engine/common/transform.h"
+namespace lol {
+namespace sys {
 
-namespace einu {
-namespace common {
-namespace cmp {
+einu::EID CreateSheep(einu::IEntityManager& ett_mgr,
+                      const einu::common::Transform& transform, float max_speed,
+                      const glm::vec4& color, const char* sprite_name);
 
-class Transform : public Xnent, public ::einu::common::Transform {
- public:
-  Transform() = default;
-  explicit Transform(const ::einu::common::Transform& transform)
-      : ::einu::common::Transform{transform} {}
-};
-
-}  // namespace cmp
-}  // namespace common
-}  // namespace einu
+}
+}  // namespace lol
