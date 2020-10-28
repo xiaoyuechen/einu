@@ -69,5 +69,7 @@ void Sense(const sgl::WorldState& world_state, CellBuffer& cell_buffer,
   }
 }
 
+void Forget(cmp::Memory& memory) { memory.memory.clear(); }
+
 }  // namespace sys
 }  // namespace lol

@@ -14,6 +14,8 @@ add_executable(
   "src/sys_sense.cc"
   "src/sys_agent_create.h"
   "src/sys_agent_create.cc"
+  "src/sys_rotate.h"
+  "src/sys_rotate.cc"
   "src/bt_agent.cc")
 
 set_target_properties(loop-of-life PROPERTIES FOLDER "einu-engine/examples")

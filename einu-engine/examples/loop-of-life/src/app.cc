@@ -34,6 +34,8 @@
 #include "src/bt_agent.h"
 #include "src/engine_policy.h"
 #include "src/sys_agent_create.h"
+#include "src/sys_rotate.h"
+#include "src/sys_sense.h"
 #include "src/sys_world_state.h"
 
 namespace lol {
@@ -85,7 +87,6 @@ void App::Run() {
                                         "fshader");
     Create<ResourceType::Texture>(resource_table, "white-triangle",
                                   "assets/white-triangle.png");
-    CreateSprite(resource_table, "sprite", "program", "white-triangle");
     Create<ResourceType::Sampler>(resource_table, "sampler");
   }
 
@@ -100,6 +101,8 @@ void App::Run() {
     std::uniform_int_distribution<int> distribution_y(0, win.size.height);
     std::uniform_real_distribution<float> distribution_rotate(0, 360);
 
+    einu::graphics::sys::CreateSprite(resource_table, sys::kSheepSpriteName,
+                                      "program", "white-triangle");
     for (std::size_t i = 0; i != 100; ++i) {
       auto transform = common::Transform{};
       transform.SetPosition(
@@ -107,7 +110,19 @@ void App::Run() {
       transform.SetRotation(glm::quat(
           glm::vec3(0, 0, glm::radians(distribution_rotate(generator)))));
       transform.SetScale(glm::vec3(0.02f, 0.05f, 1.f));
-      sys::CreateSheep(*ett_mgr, transform, "sprite");
+      sys::CreateSheep(*ett_mgr, transform);
+    }
+
+    einu::graphics::sys::CreateSprite(resource_table, sys::kWolfSpriteName,
+                                      "program", "white-triangle");
+    for (std::size_t i = 0; i != 10; ++i) {
+      auto transform = common::Transform{};
+      transform.SetPosition(
+          glm::vec3(distribution_x(generator), distribution_y(generator), 0));
+      transform.SetRotation(glm::quat(
+          glm::vec3(0, 0, glm::radians(distribution_rotate(generator)))));
+      transform.SetScale(glm::vec3(0.04f, 0.10f, 1.f));
+      sys::CreateWolf(*ett_mgr, transform);
     }
   }
 
@@ -124,6 +139,7 @@ void App::Run() {
   auto cam_mat =
       graphics::ProjectionMatrix(proj) * graphics::ViewMatrix(graphics::View{});
 
+  auto cell_buffer = sys::CellBuffer{};
   auto sheep_view = EntityView<
       XnentList<common::cmp::Transform, graphics::cmp::Sprite,
                 common::cmp::Movement, einu::ai::cmp::Destination, cmp::Agent,
@@ -131,6 +147,9 @@ void App::Run() {
                 cmp::Hunt, cmp::Memory, cmp::Sense, cmp::Wander>>{};
   einu::ai::bt::ArgPack sheep_bt_args;
   auto sheep_bt = ai::bt::BuildSheepBT(*ett_mgr);
+
+  auto move_view = EntityView<
+      XnentList<einu::common::cmp::Transform, einu::common::cmp::Movement>>{};
 
   common::sys::InitTime(time);
 
@@ -150,17 +169,36 @@ void App::Run() {
       sys::UpdateWorldState(world_state, transform, agent, *eid_it);
     }
 
+    for (auto [comp_it, eid_it] = std::tuple{sheep_view.Components().begin(),
+                                             sheep_view.EIDs().begin()};
+         comp_it != sheep_view.Components().end(); ++comp_it, ++eid_it) {
+      auto&& [transform, sprite, movement, destination, agent, eat, evade,
+              health, health_loss, hunger, hunt, memory, sense, wander] =
+          *comp_it;
+      sys::Forget(memory);
+    }
+
     sheep_view.View(*ett_mgr);
     for (auto [comp_it, eid_it] = std::tuple{sheep_view.Components().begin(),
                                              sheep_view.EIDs().begin()};
          comp_it != sheep_view.Components().end(); ++comp_it, ++eid_it) {
+      auto&& [transform, sprite, movement, destination, agent, eat, evade,
+              health, health_loss, hunger, hunt, memory, sense, wander] =
+          *comp_it;
+      sys::Sense(world_state, cell_buffer, sense, transform, memory, *eid_it);
       sheep_bt_args.Set(*eid_it, *comp_it);
       sheep_bt.Run(sheep_bt_args);
     }
 
+    // move and rotate
+    move_view.View(*ett_mgr);
+    for (auto&& [transform, movement] : move_view.Components()) {
+      common::sys::Move(transform, movement, time);
+      sys::Rotate(transform, movement);
+    }
+
     for (auto&& [transform, sprite, movement, dest, agent] :
          ett_view.Components()) {
-      common::sys::Move(transform, movement, time);
       graphics::sys::PrepareSpriteBatch(resource_table, sprite_batch, sprite,
                                         transform);
     }

@@ -27,40 +27,27 @@ namespace common {
 
 class Transform {
  public:
-  glm::vec3 GetPosition() const noexcept { return glm::vec3{transform_[3]}; }
+  glm::vec3 GetPosition() const noexcept { return position_; }
 
   glm::quat GetRotation() const noexcept { return rotation_; }
 
   glm::vec3 GetScale() const noexcept { return scale_; }
 
-  glm::mat4 GetTransform() const noexcept { return transform_; }
-
-  void SetPosition(glm::vec3 position) noexcept {
-    memcpy(&transform_[3], &position[0], sizeof(position));
+  glm::mat4 GetTransform() const noexcept {
+    return glm::translate(position_) * glm::toMat4(rotation_) *
+           glm::scale(scale_);
   }
 
-  void SetRotation(glm::quat rot) noexcept {
-    auto pos = GetPosition();
-    transform_ = glm::toMat4(rot) * glm::scale(scale_);
-    SetPosition(pos);
-    rotation_ = rot;
-  }
+  void SetPosition(glm::vec3 position) noexcept { position_ = position; }
 
-  void SetScale(glm::vec3 scale) noexcept {
-    auto pos = GetPosition();
-    transform_ = glm::toMat4(rotation_) * glm::scale(scale);
-    SetPosition(pos);
-    scale = scale_;
-  }
+  void SetRotation(const glm::quat& rot) noexcept { rotation_ = rot; }
 
-  void SetTransform(const glm::mat4 transform) noexcept {
-    transform_ = transform;
-  }
+  void SetScale(glm::vec3 scale) noexcept { scale_ = scale; }
 
  private:
   glm::quat rotation_{1, 0, 0, 0};
   glm::vec3 scale_{1, 1, 1};
-  glm::mat4 transform_{1.0f};
+  glm::vec3 position_{0, 0, 0};
 };
 
 }  // namespace common

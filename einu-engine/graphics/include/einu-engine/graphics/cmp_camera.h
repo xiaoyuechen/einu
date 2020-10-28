@@ -93,7 +93,7 @@ constexpr Projection operator*(float ratio,
 }
 
 struct View {
-  glm::vec3 position{0, 0, 3}, target{0, 0, 0};
+  glm::vec3 position{0, 0, 10}, target{0, 0, 0};
   glm::vec3 up{0, 1, 0};
 };
 

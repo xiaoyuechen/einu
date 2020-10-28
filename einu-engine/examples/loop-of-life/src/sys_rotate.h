@@ -18,22 +18,14 @@
 
 #pragma once
 
-#include <einu-engine/common/transform.h>
-#include <einu-engine/core/i_entity_manager.h>
+#include <einu-engine/common/cmp_movement.h>
+#include <einu-engine/common/cmp_transform.h>
 
 namespace lol {
 namespace sys {
 
-static constexpr char* kSheepSpriteName = "sheep";
-einu::EID CreateSheep(einu::IEntityManager& ett_mgr,
-                      const einu::common::Transform& transform);
+void Rotate(einu::common::cmp::Transform& transform,
+            einu::common::cmp::Movement& movement);
 
-static constexpr char* kWolfSpriteName = "wolf";
-einu::EID CreateWolf(einu::IEntityManager& ett_mgr,
-                     const einu::common::Transform& transform);
-
-einu::EID CreateGrass(einu::IEntityManager& ett_mgr,
-                      const einu::common::Transform& transform);
-
-}  // namespace sys
+}
 }  // namespace lol

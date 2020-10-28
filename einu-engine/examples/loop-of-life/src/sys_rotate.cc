@@ -16,24 +16,21 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#pragma once
-
-#include <einu-engine/common/transform.h>
-#include <einu-engine/core/i_entity_manager.h>
+#include "src/sys_rotate.h"
 
 namespace lol {
 namespace sys {
 
-static constexpr char* kSheepSpriteName = "sheep";
-einu::EID CreateSheep(einu::IEntityManager& ett_mgr,
-                      const einu::common::Transform& transform);
-
-static constexpr char* kWolfSpriteName = "wolf";
-einu::EID CreateWolf(einu::IEntityManager& ett_mgr,
-                     const einu::common::Transform& transform);
-
-einu::EID CreateGrass(einu::IEntityManager& ett_mgr,
-                      const einu::common::Transform& transform);
+void Rotate(einu::common::cmp::Transform& transform,
+            einu::common::cmp::Movement& movement) {
+  auto dir = movement.direction;
+  if (dir == glm::vec3{}) {
+    return;
+  }
+  auto angle = glm::atan(dir.y, dir.x) - glm::pi<float>() / 2;
+  auto quat = glm::quat{glm::vec3{0, 0, angle}};
+  transform.SetRotation(quat);
+}
 
 }  // namespace sys
 }  // namespace lol
