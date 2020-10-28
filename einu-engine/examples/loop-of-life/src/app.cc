@@ -56,6 +56,9 @@ void App::Run() {
 
   auto eid = ett_mgr->CreateEntity();
   auto& win = ett_mgr->AddComponent<einu::window::cmp::Window>(eid);
+  win.title = "Loop of Life";
+  win.size.width = 1080;
+  win.size.height = 720;
 
   auto& time = ett_mgr->AddSinglenent<einu::sgl::Time>();
   auto& world_state = ett_mgr->AddSinglenent<sgl::WorldState>();
@@ -131,11 +134,10 @@ void App::Run() {
     }
   }
 
-  auto proj =
-      einu::graphics::Projection{einu::graphics::Projection::Type::Orthographic,
-                                 einu::graphics::Projection::OrthographicAttrib{
-                                     0, static_cast<float>(win.size.width), 0,
-                                     static_cast<float>(win.size.height)}};
+  auto proj = einu::graphics::Projection{
+      einu::graphics::Projection::Type::Orthographic,
+      einu::graphics::Projection::OrthographicAttrib{
+          0, static_cast<float>(1920), 0, static_cast<float>(1080)}};
 
   auto cam_mat = einu::graphics::ProjectionMatrix(proj) *
                  einu::graphics::ViewMatrix(einu::graphics::View{});

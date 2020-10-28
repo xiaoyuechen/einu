@@ -38,7 +38,7 @@ inline void Move(const einu::sgl::Time& time,
   auto world_size = world_state.world_size;
   np.x = std::clamp(np.x, 0.f, world_size.x);
   np.y = std::clamp(np.y, 0.f, world_size.y);
-  transform.SetPosition(transform.GetPosition() + dp);
+  transform.SetPosition(np);
   movement.speed = 0.f;
 }
 

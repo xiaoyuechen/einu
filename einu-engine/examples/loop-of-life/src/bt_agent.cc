@@ -208,6 +208,15 @@ Result ChooseRandomDestination::Run(const ArgPack& args) {
   return Result::Success;
 }
 
+Result IsPanicking::Run(const ArgPack& args) {
+  static constexpr float kNotPanickTime = 0.01f;
+  const auto& evade = args.GetComponent<cmp::Evade>();
+  if (evade.remaining_panick_time < kNotPanickTime) {
+    return Result::Failure;
+  }
+  return Result::Success;
+}
+
 }  // namespace bt
 }  // namespace ai
 }  // namespace lol
