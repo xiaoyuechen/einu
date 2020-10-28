@@ -25,12 +25,12 @@ namespace common {
 
 namespace internal {
 
-std::random_device& GetRandomDevice() {
+inline std::random_device& GetRandomDevice() {
   static std::random_device device{};
   return device;
 }
 
-std::mt19937& GetGenerator() {
+inline std::mt19937& GetGenerator() {
   static std::random_device device{};
   static std::mt19937 generator{GetRandomDevice()()};
   return generator;

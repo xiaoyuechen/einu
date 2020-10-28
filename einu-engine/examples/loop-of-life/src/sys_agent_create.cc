@@ -21,6 +21,7 @@
 #include <einu-engine/ai/cmp_destination.h>
 #include <einu-engine/common/cmp_movement.h>
 #include <einu-engine/common/cmp_transform.h>
+#include <einu-engine/common/random.h>
 #include <einu-engine/core/util/enum.h>
 #include <einu-engine/graphics/cmp_sprite.h>
 
@@ -44,7 +45,7 @@ einu::EID CreateSheep(einu::IEntityManager& ett_mgr,
   auto& movement = ett_mgr.AddComponent<einu::common::cmp::Movement>(ett);
   movement.max_speed = 14;
 
-  auto& dest = ett_mgr.AddComponent<einu::ai::cmp::Destination>(ett);
+  ett_mgr.AddComponent<einu::ai::cmp::Destination>(ett);
 
   ett_mgr.AddComponent<cmp::Agent>(ett).type = AgentType::Sheep;
 
@@ -56,7 +57,7 @@ einu::EID CreateSheep(einu::IEntityManager& ett_mgr,
 
   ett_mgr.AddComponent<cmp::Health>(ett);
 
-  ett_mgr.AddComponent<cmp::HealthLoss>(ett).loss_speed = 10.f;
+  ett_mgr.AddComponent<cmp::HealthLoss>(ett).loss_speed = 0.f;
 
   ett_mgr.AddComponent<cmp::Hunger>(ett).health_threashold = 80.f;
 
@@ -71,6 +72,7 @@ einu::EID CreateSheep(einu::IEntityManager& ett_mgr,
   sense.sense_radius = 60.f;
 
   auto& wander = ett_mgr.AddComponent<cmp::Wander>(ett);
+  wander.time_since_last_destination_change = 99999;
   wander.wander_radius = 50;
 
   return ett;
@@ -88,7 +90,7 @@ einu::EID CreateWolf(einu::IEntityManager& ett_mgr,
       einu::common::cmp::Transform{transform};
 
   auto& movement = ett_mgr.AddComponent<einu::common::cmp::Movement>(ett);
-  movement.max_speed = 25;
+  movement.max_speed = 40;
 
   auto& dest = ett_mgr.AddComponent<einu::ai::cmp::Destination>(ett);
 
@@ -104,7 +106,7 @@ einu::EID CreateWolf(einu::IEntityManager& ett_mgr,
 
   ett_mgr.AddComponent<cmp::HealthLoss>(ett).loss_speed = 5.f;
 
-  ett_mgr.AddComponent<cmp::Hunger>(ett).health_threashold = 90.f;
+  ett_mgr.AddComponent<cmp::Hunger>(ett).health_threashold = 95.f;
 
   ett_mgr.AddComponent<cmp::Hunt>(ett).prey_signature = AgentType::Sheep;
 
@@ -116,6 +118,7 @@ einu::EID CreateWolf(einu::IEntityManager& ett_mgr,
   sense.sense_radius = 200.f;
 
   auto& wander = ett_mgr.AddComponent<cmp::Wander>(ett);
+  wander.time_since_last_destination_change = 99999;
   wander.wander_radius = 100;
 
   return ett;
