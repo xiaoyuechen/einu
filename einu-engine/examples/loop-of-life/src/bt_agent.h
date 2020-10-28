@@ -26,7 +26,7 @@ namespace lol {
 namespace ai {
 namespace bt {
 
-einu::ai::bt::Root BuildAgentBT();
+einu::ai::bt::Root BuildSheepBT(einu::IEntityManager& ett_mgr);
 
 using Result = einu::ai::bt::Result;
 using ArgPack = einu::ai::bt::ArgPack;
@@ -69,6 +69,16 @@ class TrackPrey final : public Node {
 class Escape final : public Node {
  public:
   Result Run(const ArgPack& args) override;
+};
+
+class ChooseRandomDestination final : public Node {
+ public:
+  explicit ChooseRandomDestination(einu::IEntityManager& ett_mgr);
+
+  Result Run(const ArgPack& args) override;
+
+ private:
+  einu::IEntityManager& ett_mgr_;
 };
 
 }  // namespace bt

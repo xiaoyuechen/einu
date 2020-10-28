@@ -8,6 +8,8 @@ add_library(
 
 add_library(einu::ai ALIAS ai)
 
+set_target_properties(ai PROPERTIES FOLDER "einu-engine")
+
 target_include_directories(
   ai
   PUBLIC "include"

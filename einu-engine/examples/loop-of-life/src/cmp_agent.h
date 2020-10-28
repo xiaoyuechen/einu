@@ -62,7 +62,7 @@ struct Sense : public einu::Xnent {
 
 struct Wander : public einu::Xnent {
   float time_since_last_destination_change = 0;
-  float destination_change_interval = 1.f;
+  float destination_change_interval = 2.f;
   float wander_radius = 10.f;
 };
 

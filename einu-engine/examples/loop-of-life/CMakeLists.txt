@@ -16,6 +16,8 @@ add_executable(
   "src/sys_agent_create.cc"
   "src/bt_agent.cc")
 
+set_target_properties(loop-of-life PROPERTIES FOLDER "einu-engine/examples")
+
 target_include_directories(
   loop-of-life
   PUBLIC "include"

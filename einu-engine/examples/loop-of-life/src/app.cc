@@ -126,7 +126,7 @@ void App::Run() {
       graphics::ProjectionMatrix(proj) * graphics::ViewMatrix(graphics::View{});
 
   einu::ai::bt::ArgPack bt_args;
-  auto bt = ai::bt::BuildAgentBT();
+  auto bt = ai::bt::BuildSheepBT(*ett_mgr);
 
   common::sys::InitTime(time);
 
