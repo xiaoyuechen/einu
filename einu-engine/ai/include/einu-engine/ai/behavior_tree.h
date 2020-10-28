@@ -20,6 +20,7 @@
 
 #include <absl/container/flat_hash_map.h>
 #include <einu-engine/core/eid.h>
+#include <einu-engine/core/xnent_list.h>
 #include <einu-engine/core/xnent_type_id.h>
 
 #include <memory>
@@ -48,6 +49,11 @@ class ArgPack {
   template <typename Component>
   Component& GetComponent() const {
     return static_cast<Component&>(*cmp_table.at(GetXnentTypeID<Component>()));
+  }
+
+  template <typename... Components>
+  std::tuple<Components&...> GetComponents(XnentList<Components...>) const {
+    return std::forward_as_tuple(GetComponent<Components>()...);
   }
 
   EID GetEID() const noexcept { return eid; }

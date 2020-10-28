@@ -37,7 +37,7 @@ struct Eat : public einu::Xnent {
 };
 
 struct Evade : public einu::Xnent {
-  using Predators = std::vector<einu::EID>;
+  using Predators = std::vector<AgentInfo>;
   AgentType predator_signature = AgentType::None;
   Predators predators;
 };
@@ -48,7 +48,7 @@ struct Hunger : public einu::Xnent {
 
 struct Hunt : public einu::Xnent {
   AgentType prey_signature = AgentType::None;
-  einu::EID current_prey = ~einu::EID{0};
+  AgentInfo current_prey{};
 };
 
 struct Memory : public einu::Xnent {

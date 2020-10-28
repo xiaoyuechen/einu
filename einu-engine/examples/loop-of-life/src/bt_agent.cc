@@ -23,6 +23,8 @@
 #include <einu-engine/common/random.h>
 #include <einu-engine/common/sgl_time.h>
 
+#include <limits>
+#include <optional>
 #include <utility>
 
 #include "src/cmp_agent.h"
@@ -82,13 +84,71 @@ Result EatPrey::Run(const ArgPack& args) {
   auto& hunt = args.GetComponent<cmp::Hunt>();
   auto& eat = args.GetComponent<cmp::Eat>();
   auto& health = args.GetComponent<cmp::Health>();
-  auto& prey_health = ett_mgr_.GetComponent<cmp::Health>(hunt.current_prey);
+  auto& prey_health = ett_mgr_.GetComponent<cmp::Health>(hunt.current_prey.eid);
   Eat(eat, health, prey_health);
   if (prey_health.health == 0) {
     return Result::Success;
   }
   return Result::Running;
 }
+
+Result FindPredator::Run(const ArgPack& args) {
+  auto&& [mem_comp, evade_comp, transform_comp] = args.GetComponents(
+      einu::XnentList<cmp::Memory, cmp::Evade, einu::common::cmp::Transform>{});
+  evade_comp.predators.clear();
+  for (auto&& agent_info : mem_comp.memory) {
+    using einu::util::operator&;
+    if ((evade_comp.predator_signature & agent_info.type) == agent_info.type) {
+      evade_comp.predators.emplace_back(agent_info);
+    }
+  }
+  if (!evade_comp.predators.empty()) {
+    return Result::Success;
+  }
+  return Result::Failure;
+}
+
+std::optional<AgentInfo> FindClosestPrey(const cmp::Memory& mem_comp,
+                                         AgentType prey_signature,
+                                         glm::vec2 pos) {
+  auto prey_distance2 =
+      std::pair{AgentInfo{}, std::numeric_limits<float>::max()};
+  for (auto&& agent_info : mem_comp.memory) {
+    using einu::util::operator&;
+    if ((prey_signature & agent_info.type) == agent_info.type) {
+      auto distance2 = glm::distance2(agent_info.pos, pos);
+      if (distance2 < prey_distance2.second) {
+        prey_distance2.first = agent_info;
+        prey_distance2.second = distance2;
+      }
+    }
+  }
+  if (prey_distance2.first.eid != ~einu::EID{0}) {
+    return prey_distance2.first;
+  }
+  return std::nullopt;
+}
+
+Result FindPrey::Run(const ArgPack& args) {
+  auto&& [mem_comp, transform_comp, hunt_comp] = args.GetComponents(
+      einu::XnentList<const cmp::Memory, const einu::common::cmp::Transform,
+                      cmp::Hunt>{});
+  auto prey = FindClosestPrey(mem_comp, hunt_comp.prey_signature,
+                              transform_comp.GetPosition());
+  if (prey.has_value()) {
+    hunt_comp.current_prey = *prey;
+    return Result::Success;
+  }
+  return Result::Failure;
+}
+
+Result HasTargetedPrey::Run(const ArgPack& args) { return Result(); }
+
+Result IsHungry::Run(const ArgPack& args) { return Result(); }
+
+Result TrackPrey::Run(const ArgPack& args) { return Result(); }
+
+Result Escape::Run(const ArgPack& args) { return Result(); }
 
 ChooseRandomDestination::ChooseRandomDestination(einu::IEntityManager& ett_mgr)
     : ett_mgr_{ett_mgr} {}
