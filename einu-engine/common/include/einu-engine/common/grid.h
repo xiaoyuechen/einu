@@ -22,7 +22,6 @@
 #include <vector>
 
 namespace einu {
-namespace common {
 
 template <typename T>
 class Grid {
@@ -107,5 +106,4 @@ inline std::size_t Grid<T>::GetTotalCellCount() const noexcept {
   return static_cast<std::size_t>(size_.x) * size_.y;
 }
 
-}  // namespace common
 }  // namespace einu

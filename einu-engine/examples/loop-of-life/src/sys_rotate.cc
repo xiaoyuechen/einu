@@ -21,8 +21,7 @@
 namespace lol {
 namespace sys {
 
-void Rotate(einu::common::cmp::Transform& transform,
-            einu::common::cmp::Movement& movement) {
+void Rotate(einu::cmp::Transform& transform, einu::cmp::Movement& movement) {
   auto dir = movement.direction;
   if (dir == glm::vec3{}) {
     return;

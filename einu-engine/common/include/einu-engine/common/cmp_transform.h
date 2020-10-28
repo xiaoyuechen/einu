@@ -23,16 +23,14 @@
 #include "einu-engine/common/transform.h"
 
 namespace einu {
-namespace common {
 namespace cmp {
 
-class Transform : public Xnent, public ::einu::common::Transform {
+class Transform : public Xnent, public ::einu::Transform {
  public:
   Transform() = default;
-  explicit Transform(const ::einu::common::Transform& transform)
-      : ::einu::common::Transform{transform} {}
+  explicit Transform(const ::einu::Transform& transform)
+      : ::einu::Transform{transform} {}
 };
 
 }  // namespace cmp
-}  // namespace common
 }  // namespace einu

@@ -19,7 +19,6 @@
 #include "einu-engine/common/sys_movement.h"
 
 namespace einu {
-namespace common {
 namespace sys {
 
 void Move(cmp::Transform& transform, cmp::Movement& movement,
@@ -29,5 +28,4 @@ void Move(cmp::Transform& transform, cmp::Movement& movement,
 }
 
 }  // namespace sys
-}  // namespace common
 }  // namespace einu

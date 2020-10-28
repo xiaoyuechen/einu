@@ -26,14 +26,14 @@ namespace sys {
 
 static constexpr char* kSheepSpriteName = "sheep";
 einu::EID CreateSheep(einu::IEntityManager& ett_mgr,
-                      const einu::common::Transform& transform);
+                      const einu::Transform& transform);
 
 static constexpr char* kWolfSpriteName = "wolf";
 einu::EID CreateWolf(einu::IEntityManager& ett_mgr,
-                     const einu::common::Transform& transform);
+                     const einu::Transform& transform);
 
 einu::EID CreateGrass(einu::IEntityManager& ett_mgr,
-                      const einu::common::Transform& transform);
+                      const einu::Transform& transform);
 
 }  // namespace sys
 }  // namespace lol

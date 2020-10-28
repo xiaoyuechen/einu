@@ -29,12 +29,11 @@
 namespace lol {
 namespace sys {
 
-inline void Move(const einu::common::sgl::Time& time,
+inline void Move(const einu::sgl::Time& time,
                  const sgl::WorldState& world_state,
-                 einu::common::cmp::Transform& transform,
-                 einu::common::cmp::Movement& movement) {
-  auto dp = movement.direction * movement.speed *
-            einu::common::sgl::DeltaSeconds(time);
+                 einu::cmp::Transform& transform,
+                 einu::cmp::Movement& movement) {
+  auto dp = movement.direction * movement.speed * einu::sgl::DeltaSeconds(time);
   auto np = transform.GetPosition() + dp;
   auto world_size = world_state.world_size;
   np.x = std::clamp(np.x, 0.f, world_size.x);

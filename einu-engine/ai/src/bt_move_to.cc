@@ -28,9 +28,9 @@ namespace ai {
 namespace bt {
 
 Result MoveTo::Run(const ArgPack& args) {
-  const auto& transform = args.GetComponent<const common::cmp::Transform>();
+  const auto& transform = args.GetComponent<const einu::cmp::Transform>();
   const auto& destination = args.GetComponent<const ai::cmp::Destination>();
-  auto& movement = args.GetComponent<common::cmp::Movement>();
+  auto& movement = args.GetComponent<einu::cmp::Movement>();
 
   auto delta = destination.destination - transform.GetPosition();
   if (glm::length2(delta) < glm::pow(destination.tolerance_radius, 2)) {

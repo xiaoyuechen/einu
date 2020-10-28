@@ -44,8 +44,6 @@
 namespace lol {
 
 void App::Run() {
-  using namespace einu;  // NOLINT
-
   Engine engine;
 
   auto eid_pool = engine.CreateEIDPool();
@@ -57,25 +55,30 @@ void App::Run() {
   ett_mgr->SetSinglenentPool(*sgln_pool);
 
   auto eid = ett_mgr->CreateEntity();
-  auto& win = ett_mgr->AddComponent<window::cmp::Window>(eid);
+  auto& win = ett_mgr->AddComponent<einu::window::cmp::Window>(eid);
 
-  auto& time = ett_mgr->AddSinglenent<common::sgl::Time>();
+  auto& time = ett_mgr->AddSinglenent<einu::sgl::Time>();
   auto& world_state = ett_mgr->AddSinglenent<sgl::WorldState>();
   world_state.grid = sgl::WorldState::Grid(glm::uvec2{160, 90});
   world_state.world_size = glm::vec2{win.size.width, win.size.height};
 
   auto& resource_table =
-      ett_mgr->AddSinglenent<graphics::sgl::GLResourceTable>();
+      ett_mgr->AddSinglenent<einu::graphics::sgl::GLResourceTable>();
+
+  auto& sprite_batch =
+      ett_mgr->AddSinglenent<einu::graphics::sgl::SpriteBatch>();
 
   {
-    using namespace window::sys;  // NOLINT
+    using namespace einu::window::sys;  // NOLINT
     Init();
     Create(win);
   }
 
+  { einu::sys::InitTime(time); }
+
   {
-    using namespace graphics::sys;  // NOLINT
-    using ResourceType = graphics::ResourceType;
+    using namespace einu::graphics::sys;  // NOLINT
+    using ResourceType = einu::graphics::ResourceType;
 
     LoadGL(win);
 
@@ -93,9 +96,8 @@ void App::Run() {
     Create<ResourceType::Sampler>(resource_table, "sampler");
   }
 
-  auto& sprite_batch = ett_mgr->AddSinglenent<graphics::sgl::SpriteBatch>();
-  graphics::sys::InitSpriteBatch(resource_table, sprite_batch, "vao", "vbo1",
-                                 "vbo2", "sampler");
+  einu::graphics::sys::InitSpriteBatch(resource_table, sprite_batch, "vao",
+                                       "vbo1", "vbo2", "sampler");
 
   {
     std::random_device device;
@@ -107,7 +109,7 @@ void App::Run() {
     einu::graphics::sys::CreateSprite(resource_table, sys::kSheepSpriteName,
                                       "program", "white-triangle");
     for (std::size_t i = 0; i != 100; ++i) {
-      auto transform = common::Transform{};
+      auto transform = einu::Transform{};
       transform.SetPosition(
           glm::vec3(distribution_x(generator), distribution_y(generator), 0));
       transform.SetRotation(glm::quat(
@@ -119,7 +121,7 @@ void App::Run() {
     einu::graphics::sys::CreateSprite(resource_table, sys::kWolfSpriteName,
                                       "program", "white-triangle");
     for (std::size_t i = 0; i != 10; ++i) {
-      auto transform = common::Transform{};
+      auto transform = einu::Transform{};
       transform.SetPosition(
           glm::vec3(distribution_x(generator), distribution_y(generator), 0));
       transform.SetRotation(glm::quat(
@@ -129,45 +131,43 @@ void App::Run() {
     }
   }
 
-  auto proj = graphics::Projection{graphics::Projection::Type::Orthographic,
-                                   graphics::Projection::OrthographicAttrib{
-                                       0, static_cast<float>(win.size.width), 0,
-                                       static_cast<float>(win.size.height)}};
+  auto proj =
+      einu::graphics::Projection{einu::graphics::Projection::Type::Orthographic,
+                                 einu::graphics::Projection::OrthographicAttrib{
+                                     0, static_cast<float>(win.size.width), 0,
+                                     static_cast<float>(win.size.height)}};
 
-  auto cam_mat =
-      graphics::ProjectionMatrix(proj) * graphics::ViewMatrix(graphics::View{});
+  auto cam_mat = einu::graphics::ProjectionMatrix(proj) *
+                 einu::graphics::ViewMatrix(einu::graphics::View{});
 
   auto cell_buffer = sys::CellBuffer{};
 
   einu::ai::bt::ArgPack sheep_bt_args;
   auto sheep_bt = ai::bt::BuildSheepBT(*ett_mgr);
 
-  auto ett_view =
-      EntityView<XnentList<common::cmp::Transform, graphics::cmp::Sprite,
-                           common::cmp::Movement, einu::ai::cmp::Destination,
-                           cmp::Agent>>{};
+  auto ett_view = einu::EntityView<einu::XnentList<
+      einu::cmp::Transform, einu::graphics::cmp::Sprite, einu::cmp::Movement,
+      einu::ai::cmp::Destination, cmp::Agent>>{};
 
-  auto sheep_view = EntityView<
-      XnentList<common::cmp::Transform, graphics::cmp::Sprite,
-                common::cmp::Movement, einu::ai::cmp::Destination, cmp::Agent,
-                cmp::Eat, cmp::Evade, cmp::Health, cmp::HealthLoss, cmp::Hunger,
-                cmp::Hunt, cmp::Memory, cmp::Sense, cmp::Wander>>{};
+  auto sheep_view = einu::EntityView<einu::XnentList<
+      einu::cmp::Transform, einu::graphics::cmp::Sprite, einu::cmp::Movement,
+      einu::ai::cmp::Destination, cmp::Agent, cmp::Eat, cmp::Evade, cmp::Health,
+      cmp::HealthLoss, cmp::Hunger, cmp::Hunt, cmp::Memory, cmp::Sense,
+      cmp::Wander>>{};
 
   auto health_loss_view =
-      EntityView<XnentList<const cmp::HealthLoss, cmp::Health>>{};
+      einu::EntityView<einu::XnentList<const cmp::HealthLoss, cmp::Health>>{};
 
-  auto destroy_view = EntityView<XnentList<const cmp::Health>>{};
+  auto destroy_view = einu::EntityView<einu::XnentList<const cmp::Health>>{};
 
-  auto move_view = EntityView<
-      XnentList<einu::common::cmp::Transform, einu::common::cmp::Movement>>{};
-
-  common::sys::InitTime(time);
+  auto move_view = einu::EntityView<
+      einu::XnentList<einu::cmp::Transform, einu::cmp::Movement>>{};
 
   while (!win.shouldClose) {
-    graphics::sys::Clear();
+    einu::graphics::sys::Clear();
 
-    common::sys::UpdateTime(time);
-    std::cout << "ft: " << common::sgl::DeltaSeconds(time) << std::endl;
+    einu::sys::UpdateTime(time);
+    std::cout << "ft: " << einu::sgl::DeltaSeconds(time) << std::endl;
 
     ett_view.View(*ett_mgr);
 
@@ -214,11 +214,11 @@ void App::Run() {
 
     for (auto&& [transform, sprite, movement, dest, agent] :
          ett_view.Components()) {
-      graphics::sys::PrepareSpriteBatch(resource_table, sprite_batch, sprite,
-                                        transform);
+      einu::graphics::sys::PrepareSpriteBatch(resource_table, sprite_batch,
+                                              sprite, transform);
     }
-    graphics::sys::RenderSpriteBatch(sprite_batch, cam_mat);
-    graphics::sys::ClearSpriteBatch(sprite_batch);
+    einu::graphics::sys::RenderSpriteBatch(sprite_batch, cam_mat);
+    einu::graphics::sys::ClearSpriteBatch(sprite_batch);
 
     destroy_view.View(*ett_mgr);
     for (auto [comp, eid] = std::make_tuple(destroy_view.Components().begin(),
@@ -228,8 +228,8 @@ void App::Run() {
       sys::Destroy(*ett_mgr, health, *eid);
     }
 
-    window::sys::PoolEvents(win);
-    window::sys::SwapBuffer(win);
+    einu::window::sys::PoolEvents(win);
+    einu::window::sys::SwapBuffer(win);
   }
 }
 

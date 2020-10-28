@@ -21,7 +21,6 @@
 #include <random>
 
 namespace einu {
-namespace common {
 
 namespace internal {
 
@@ -44,5 +43,4 @@ T RandomUniform(const T min, const T max) {
   return distribution(internal::GetGenerator());
 }
 
-}  // namespace common
 }  // namespace einu

@@ -44,7 +44,7 @@ void InitSpriteBatch(sgl::GLResourceTable& resource_table,
 void PrepareSpriteBatch(sgl::GLResourceTable& resource_table,
                         sgl::SpriteBatch& sprite_batch,
                         const cmp::Sprite& sprite,
-                        const common::cmp::Transform& transform) {
+                        const einu::cmp::Transform& transform) {
   using Key = sgl::GLResourceTable::Key;
   auto& sprite_rsc = resource_table.sprite_table.at(sprite.sprite_name);
   auto shader = resource_table.table.at(

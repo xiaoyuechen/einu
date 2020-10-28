@@ -23,12 +23,10 @@
 #include "einu-engine/common/sgl_time.h"
 
 namespace einu {
-namespace common {
 namespace sys {
 
 void Move(cmp::Transform& transform, cmp::Movement& movement,
           const sgl::Time& time);
 
 }
-}  // namespace common
 }  // namespace einu

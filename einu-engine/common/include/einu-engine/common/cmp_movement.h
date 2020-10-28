@@ -23,7 +23,6 @@
 #include <glm/glm.hpp>
 
 namespace einu {
-namespace common {
 namespace cmp {
 
 struct Movement : public Xnent {
@@ -33,5 +32,4 @@ struct Movement : public Xnent {
 };
 
 }  // namespace cmp
-}  // namespace common
 }  // namespace einu

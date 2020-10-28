@@ -32,17 +32,17 @@ namespace lol {
 namespace sys {
 
 einu::EID CreateSheep(einu::IEntityManager& ett_mgr,
-                      const einu::common::Transform& transform) {
+                      const einu::Transform& transform) {
   auto ett = ett_mgr.CreateEntity();
 
   auto& sprite = ett_mgr.AddComponent<einu::graphics::cmp::Sprite>(ett);
   sprite.color = glm::vec4{200, 200, 200, 255};
   sprite.sprite_name = kSheepSpriteName;
 
-  ett_mgr.AddComponent<einu::common::cmp::Transform>(ett) =
-      einu::common::cmp::Transform{transform};
+  ett_mgr.AddComponent<einu::cmp::Transform>(ett) =
+      einu::cmp::Transform{transform};
 
-  auto& movement = ett_mgr.AddComponent<einu::common::cmp::Movement>(ett);
+  auto& movement = ett_mgr.AddComponent<einu::cmp::Movement>(ett);
   movement.max_speed = 14;
 
   ett_mgr.AddComponent<einu::ai::cmp::Destination>(ett);
@@ -79,17 +79,17 @@ einu::EID CreateSheep(einu::IEntityManager& ett_mgr,
 }
 
 einu::EID CreateWolf(einu::IEntityManager& ett_mgr,
-                     const einu::common::Transform& transform) {
+                     const einu::Transform& transform) {
   auto ett = ett_mgr.CreateEntity();
 
   auto& sprite = ett_mgr.AddComponent<einu::graphics::cmp::Sprite>(ett);
   sprite.color = glm::vec4{50, 50, 50, 255};
   sprite.sprite_name = kSheepSpriteName;
 
-  ett_mgr.AddComponent<einu::common::cmp::Transform>(ett) =
-      einu::common::cmp::Transform{transform};
+  ett_mgr.AddComponent<einu::cmp::Transform>(ett) =
+      einu::cmp::Transform{transform};
 
-  auto& movement = ett_mgr.AddComponent<einu::common::cmp::Movement>(ett);
+  auto& movement = ett_mgr.AddComponent<einu::cmp::Movement>(ett);
   movement.max_speed = 40;
 
   auto& dest = ett_mgr.AddComponent<einu::ai::cmp::Destination>(ett);

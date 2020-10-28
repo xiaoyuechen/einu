@@ -24,8 +24,7 @@
 namespace lol {
 namespace sys {
 
-void Rotate(einu::common::cmp::Transform& transform,
-            einu::common::cmp::Movement& movement);
+void Rotate(einu::cmp::Transform& transform, einu::cmp::Movement& movement);
 
 }
 }  // namespace lol

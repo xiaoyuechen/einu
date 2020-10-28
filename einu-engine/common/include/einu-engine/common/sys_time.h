@@ -24,7 +24,6 @@
 #include "einu-engine/common/sgl_time.h"
 
 namespace einu {
-namespace common {
 namespace sys {
 
 inline void InitTime(sgl::Time& time) noexcept {
@@ -37,5 +36,4 @@ inline void UpdateTime(sgl::Time& time) noexcept {
 }
 
 }  // namespace sys
-}  // namespace common
 }  // namespace einu

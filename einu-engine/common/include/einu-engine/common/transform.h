@@ -23,7 +23,6 @@
 #include <glm/gtx/transform.hpp>
 
 namespace einu {
-namespace common {
 
 class Transform {
  public:
@@ -50,5 +49,4 @@ class Transform {
   glm::vec3 position_{0, 0, 0};
 };
 
-}  // namespace common
 }  // namespace einu

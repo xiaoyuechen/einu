@@ -86,6 +86,10 @@ class ChooseRandomDestination final : public Node {
   const einu::IEntityManager& ett_mgr_;
 };
 
+class IsPanicking final : public Node {
+ public:
+};
+
 }  // namespace bt
 }  // namespace ai
 }  // namespace lol

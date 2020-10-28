@@ -25,10 +25,10 @@
 namespace lol {
 namespace sys {
 
-inline void LoseHealth(const einu::common::sgl::Time& time,
+inline void LoseHealth(const einu::sgl::Time& time,
                        const cmp::HealthLoss& health_loss,
                        cmp::Health& health) {
-  auto dh = health_loss.loss_speed * einu::common::sgl::DeltaSeconds(time);
+  auto dh = health_loss.loss_speed * einu::sgl::DeltaSeconds(time);
   cmp::AddHealth(health, -dh);
 }
 

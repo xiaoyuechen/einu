@@ -21,7 +21,6 @@
 #include <array>
 
 namespace einu {
-namespace common {
 
 template <typename T>
 struct Rect : public std::array<T, 4> {
@@ -38,5 +37,4 @@ struct Rect : public std::array<T, 4> {
 using FloatRect = Rect<float>;
 using IntRect = Rect<int>;
 
-}  // namespace common
 }  // namespace einu

@@ -37,12 +37,10 @@ namespace sprite_animation {
 void App::Run() {
   using namespace einu;  // NOLINT
 
-  using ComponentList =
-      XnentList<window::cmp::Window, graphics::cmp::Sprite,
-                common::cmp::Transform, common::cmp::Movement>;
-  using SinglenentList =
-      XnentList<graphics::sgl::GLResourceTable, graphics::sgl::SpriteBatch,
-                common::sgl::Time>;
+  using ComponentList = XnentList<window::cmp::Window, graphics::cmp::Sprite,
+                                  cmp::Transform, cmp::Movement>;
+  using SinglenentList = XnentList<graphics::sgl::GLResourceTable,
+                                   graphics::sgl::SpriteBatch, sgl::Time>;
   using NeedList = NeedList<ComponentList, SinglenentList>;
   using EnginePolicy = EnginePolicy<NeedList>;
   using Engine = EinuEngine<EnginePolicy>;
@@ -60,7 +58,7 @@ void App::Run() {
   auto eid = ett_mgr->CreateEntity();
   auto& win_comp = ett_mgr->AddComponent<window::cmp::Window>(eid);
 
-  auto& time = ett_mgr->AddSinglenent<common::sgl::Time>();
+  auto& time = ett_mgr->AddSinglenent<sgl::Time>();
 
   auto& resource_table =
       ett_mgr->AddSinglenent<graphics::sgl::GLResourceTable>();
@@ -105,22 +103,21 @@ void App::Run() {
     auto ett = ett_mgr->CreateEntity();
     auto& sprite = ett_mgr->AddComponent<graphics::cmp::Sprite>(ett);
     sprite.sprite_name = "sprite";
-    auto& transform = ett_mgr->AddComponent<common::cmp::Transform>(ett);
+    auto& transform = ett_mgr->AddComponent<cmp::Transform>(ett);
     transform.SetPosition(
         glm::vec3(distribution_x(generator), distribution_y(generator), 0));
     transform.SetRotation(glm::quat(
         glm::vec3(0, 0, glm::radians(distribution_rotate(generator)))));
     transform.SetScale(glm::vec3(0.05f, 0.1f, 1.f));
-    auto& movement = ett_mgr->AddComponent<common::cmp::Movement>(ett);
+    auto& movement = ett_mgr->AddComponent<cmp::Movement>(ett);
     movement.direction = glm::vec3(1, 0, 0);
     movement.speed = 10.f;
   }
 
   auto& s = ett_mgr->GetComponent<graphics::cmp::Sprite>(1);
 
-  auto ett_view =
-      EntityView<XnentList<common::cmp::Transform, graphics::cmp::Sprite,
-                           common::cmp::Movement>>{};
+  auto ett_view = EntityView<
+      XnentList<cmp::Transform, graphics::cmp::Sprite, cmp::Movement>>{};
 
   auto proj = graphics::Projection{
       graphics::Projection::Type::Orthographic,
@@ -129,16 +126,16 @@ void App::Run() {
   auto cam_mat =
       graphics::ProjectionMatrix(proj) * graphics::ViewMatrix(graphics::View{});
 
-  common::sys::InitTime(time);
+  sys::InitTime(time);
   while (!win_comp.shouldClose) {
     graphics::sys::Clear();
 
-    common::sys::UpdateTime(time);
-    std::cout << "ft: " << common::sgl::DeltaSeconds(time) << std::endl;
+    sys::UpdateTime(time);
+    std::cout << "ft: " << sgl::DeltaSeconds(time) << std::endl;
 
     ett_view.View(*ett_mgr);
     for (auto&& [transform, sprite, movement] : ett_view.Components()) {
-      common::sys::Move(transform, movement, time);
+      sys::Move(transform, movement, time);
       graphics::sys::PrepareSpriteBatch(resource_table, sprite_batch, sprite,
                                         transform);
     }

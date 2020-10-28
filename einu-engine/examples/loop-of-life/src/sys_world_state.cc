@@ -22,7 +22,7 @@ namespace lol {
 namespace sys {
 
 void UpdateWorldState(sgl::WorldState& world_state,
-                      const einu::common::cmp::Transform& transform,
+                      const einu::cmp::Transform& transform,
                       const cmp::Agent& agent, einu::EID eid) {
   const auto& pos = transform.GetPosition();
   auto grid_coords = GetCoordsInGrid(world_state, pos);

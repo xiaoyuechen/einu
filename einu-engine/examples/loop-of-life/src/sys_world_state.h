@@ -27,7 +27,7 @@ namespace lol {
 namespace sys {
 
 void UpdateWorldState(sgl::WorldState& world_state,
-                      const einu::common::cmp::Transform& transform,
+                      const einu::cmp::Transform& transform,
                       const cmp::Agent& agent, einu::EID eid);
 
 void ClearWorldState(sgl::WorldState& world_state) noexcept;

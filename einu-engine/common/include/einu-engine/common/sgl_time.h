@@ -23,7 +23,6 @@
 #include <chrono>
 
 namespace einu {
-namespace common {
 namespace sgl {
 
 struct Time : public Xnent {
@@ -38,5 +37,4 @@ constexpr float DeltaSeconds(const Time& time) noexcept {
 }
 
 }  // namespace sgl
-}  // namespace common
 }  // namespace einu

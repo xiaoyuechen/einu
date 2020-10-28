@@ -53,7 +53,7 @@ bool IsRelevant(const AgentInfo& agent_info, const glm::vec2& pos,
 }
 
 void Sense(const sgl::WorldState& world_state, CellBuffer& cell_buffer,
-           cmp::Sense& sense, const einu::common::cmp::Transform& transform,
+           cmp::Sense& sense, const einu::cmp::Transform& transform,
            cmp::Memory& memory, einu::EID eid) {
   cell_buffer.clear();
   FlushCellBuffer(world_state, cell_buffer, sense.sense_radius,

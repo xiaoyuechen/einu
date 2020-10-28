@@ -39,7 +39,9 @@ struct Eat : public einu::Xnent {
 struct Evade : public einu::Xnent {
   using Predators = std::vector<AgentInfo>;
   AgentType predator_signature = AgentType::None;
-  Predators predators;
+  Predators predators{};
+  float remaining_panick_time = 0.0f;
+  float max_panick_time = 5.0f;
 };
 
 struct Hunger : public einu::Xnent {

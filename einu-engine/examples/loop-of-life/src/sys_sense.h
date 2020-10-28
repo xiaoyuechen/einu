@@ -31,7 +31,7 @@ namespace sys {
 using CellBuffer = std::vector<const sgl::WorldState::Cell*>;
 
 void Sense(const sgl::WorldState& world_state, CellBuffer& cell_buffer,
-           cmp::Sense& sense, const einu::common::cmp::Transform& transform,
+           cmp::Sense& sense, const einu::cmp::Transform& transform,
            cmp::Memory& memory, einu::EID eid);
 
 void Forget(cmp::Memory& memory);

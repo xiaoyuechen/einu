@@ -37,7 +37,7 @@ void InitSpriteBatch(sgl::GLResourceTable& resource_table,
 void PrepareSpriteBatch(sgl::GLResourceTable& resource_table,
                         sgl::SpriteBatch& sprite_batch,
                         const cmp::Sprite& sprite,
-                        const common::cmp::Transform& transform);
+                        const einu::cmp::Transform& transform);
 
 void ClearSpriteBatch(sgl::SpriteBatch& sprite_batch);
 

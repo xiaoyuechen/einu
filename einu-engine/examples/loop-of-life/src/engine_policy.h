@@ -36,15 +36,14 @@
 namespace lol {
 
 using ComponentList =
-    einu::XnentList<einu::common::cmp::Transform, einu::common::cmp::Movement,
+    einu::XnentList<einu::cmp::Transform, einu::cmp::Movement,
                     einu::window::cmp::Window, einu::graphics::cmp::Sprite,
                     einu::ai::cmp::Destination, cmp::Agent, cmp::Health,
                     cmp::HealthLoss, cmp::Eat, cmp::Evade, cmp::Hunger,
                     cmp::Hunt, cmp::Memory, cmp::Sense, cmp::Wander>;
 
 using SinglenentList =
-    einu::XnentList<einu::common::sgl::Time,
-                    einu::graphics::sgl::GLResourceTable,
+    einu::XnentList<einu::sgl::Time, einu::graphics::sgl::GLResourceTable,
                     einu::graphics::sgl::SpriteBatch, sgl::WorldState>;
 
 using NeedList = einu::NeedList<ComponentList, SinglenentList>;

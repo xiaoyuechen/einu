@@ -95,7 +95,7 @@ Result EatPrey::Run(const ArgPack& args) {
 
 Result FindPredator::Run(const ArgPack& args) {
   auto&& [mem_comp, evade_comp, transform_comp] = args.GetComponents(
-      einu::XnentList<cmp::Memory, cmp::Evade, einu::common::cmp::Transform>{});
+      einu::XnentList<cmp::Memory, cmp::Evade, einu::cmp::Transform>{});
   evade_comp.predators.clear();
   for (auto&& agent_info : mem_comp.memory) {
     using einu::util::operator&;
@@ -132,7 +132,7 @@ std::optional<AgentInfo> FindClosestPrey(const cmp::Memory& mem_comp,
 
 Result FindPrey::Run(const ArgPack& args) {
   auto&& [mem_comp, transform_comp, hunt_comp] = args.GetComponents(
-      einu::XnentList<const cmp::Memory, const einu::common::cmp::Transform,
+      einu::XnentList<const cmp::Memory, const einu::cmp::Transform,
                       cmp::Hunt>{});
   auto prey = FindClosestPrey(mem_comp, hunt_comp.prey_signature,
                               transform_comp.GetPosition());
@@ -174,8 +174,7 @@ Result TrackPrey::Run(const ArgPack& args) {
 
 Result Escape::Run(const ArgPack& args) {
   auto&& [evade, transform, movement] = args.GetComponents(
-      einu::XnentList<cmp::Evade, einu::common::cmp::Transform,
-                      einu::common::cmp::Movement>{});
+      einu::XnentList<cmp::Evade, einu::cmp::Transform, einu::cmp::Movement>{});
   auto dir = glm::vec2{};
   auto pos = glm::vec2{transform.GetPosition()};
   for (auto&& predator : evade.predators) {
@@ -193,15 +192,14 @@ ChooseRandomDestination::ChooseRandomDestination(
 
 Result ChooseRandomDestination::Run(const ArgPack& args) {
   auto& wander = args.GetComponent<cmp::Wander>();
-  auto& transform = args.GetComponent<const einu::common::cmp::Transform>();
+  auto& transform = args.GetComponent<const einu::cmp::Transform>();
   auto& dest = args.GetComponent<einu::ai::cmp::Destination>();
-  auto& time = ett_mgr_.GetSinglenent<const einu::common::sgl::Time>();
+  auto& time = ett_mgr_.GetSinglenent<const einu::sgl::Time>();
 
   if ((wander.time_since_last_destination_change +=
-       einu::common::sgl::DeltaSeconds(time)) >
-      wander.destination_change_interval) {
-    auto wander_dir = glm::vec3(einu::common::RandomUniform(-1.f, 1.f),
-                                einu::common::RandomUniform(-1.f, 1.f), 0);
+       einu::sgl::DeltaSeconds(time)) > wander.destination_change_interval) {
+    auto wander_dir = glm::vec3(einu::RandomUniform(-1.f, 1.f),
+                                einu::RandomUniform(-1.f, 1.f), 0);
     auto delta = wander_dir * wander.wander_radius;
     dest.destination = transform.GetPosition() + delta;
     wander.time_since_last_destination_change = 0;

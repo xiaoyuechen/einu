@@ -33,7 +33,7 @@ namespace sgl {
 
 struct WorldState : public einu::Xnent {
   using Cell = std::vector<AgentInfo>;
-  using Grid = einu::common::Grid<Cell>;
+  using Grid = einu::Grid<Cell>;
 
   Grid grid;
   glm::vec2 world_size;
