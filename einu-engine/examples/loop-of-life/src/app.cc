@@ -34,6 +34,7 @@
 #include "src/bt_agent.h"
 #include "src/engine_policy.h"
 #include "src/sys_agent_create.h"
+#include "src/sys_lose_health.h"
 #include "src/sys_rotate.h"
 #include "src/sys_sense.h"
 #include "src/sys_world_state.h"
@@ -126,11 +127,6 @@ void App::Run() {
     }
   }
 
-  auto ett_view =
-      EntityView<XnentList<common::cmp::Transform, graphics::cmp::Sprite,
-                           common::cmp::Movement, einu::ai::cmp::Destination,
-                           cmp::Agent>>{};
-
   auto proj = graphics::Projection{graphics::Projection::Type::Orthographic,
                                    graphics::Projection::OrthographicAttrib{
                                        0, static_cast<float>(win.size.width), 0,
@@ -140,16 +136,26 @@ void App::Run() {
       graphics::ProjectionMatrix(proj) * graphics::ViewMatrix(graphics::View{});
 
   auto cell_buffer = sys::CellBuffer{};
+
+  einu::ai::bt::ArgPack sheep_bt_args;
+  auto sheep_bt = ai::bt::BuildSheepBT(*ett_mgr);
+
+  auto ett_view =
+      EntityView<XnentList<common::cmp::Transform, graphics::cmp::Sprite,
+                           common::cmp::Movement, einu::ai::cmp::Destination,
+                           cmp::Agent>>{};
+
   auto sheep_view = EntityView<
       XnentList<common::cmp::Transform, graphics::cmp::Sprite,
                 common::cmp::Movement, einu::ai::cmp::Destination, cmp::Agent,
                 cmp::Eat, cmp::Evade, cmp::Health, cmp::HealthLoss, cmp::Hunger,
                 cmp::Hunt, cmp::Memory, cmp::Sense, cmp::Wander>>{};
-  einu::ai::bt::ArgPack sheep_bt_args;
-  auto sheep_bt = ai::bt::BuildSheepBT(*ett_mgr);
 
   auto move_view = EntityView<
       XnentList<einu::common::cmp::Transform, einu::common::cmp::Movement>>{};
+
+  auto health_loss_view =
+      EntityView<XnentList<const cmp::HealthLoss, cmp::Health>>{};
 
   common::sys::InitTime(time);
 
@@ -188,6 +194,11 @@ void App::Run() {
       sys::Sense(world_state, cell_buffer, sense, transform, memory, *eid_it);
       sheep_bt_args.Set(*eid_it, *comp_it);
       sheep_bt.Run(sheep_bt_args);
+    }
+
+    health_loss_view.View(*ett_mgr);
+    for (auto&& [health_loss, health] : health_loss_view.Components()) {
+      sys::LoseHealth(time, health_loss, health);
     }
 
     // move and rotate
