@@ -19,6 +19,7 @@
 #include "src/bt_agent.h"
 
 #include <einu-engine/ai/cmp_destination.h>
+#include <einu-engine/common/cmp_movement.h>
 #include <einu-engine/common/cmp_transform.h>
 #include <einu-engine/common/random.h>
 #include <einu-engine/common/sgl_time.h>
@@ -171,7 +172,20 @@ Result TrackPrey::Run(const ArgPack& args) {
   return Result::Success;
 }
 
-Result Escape::Run(const ArgPack& args) { return Result(); }
+Result Escape::Run(const ArgPack& args) {
+  auto&& [evade, transform, movement] = args.GetComponents(
+      einu::XnentList<cmp::Evade, einu::common::cmp::Transform,
+                      einu::common::cmp::Movement>{});
+  auto dir = glm::vec2{};
+  auto pos = glm::vec2{transform.GetPosition()};
+  for (auto&& predator : evade.predators) {
+    auto delta = pos - predator.pos;
+    dir += delta;
+  }
+  movement.direction = glm::vec3{glm::normalize(dir), 0};
+  movement.speed = movement.max_speed;
+  return Result::Success;
+}
 
 ChooseRandomDestination::ChooseRandomDestination(
     const einu::IEntityManager& ett_mgr)
