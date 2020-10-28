@@ -66,14 +66,13 @@ void App::Run() {
     using namespace window::sys;  // NOLINT
     Init();
     Create(win);
-    MakeContextCurrent(win);
   }
 
   {
     using namespace graphics::sys;  // NOLINT
     using ResourceType = graphics::ResourceType;
 
-    LoadGL();
+    LoadGL(win);
 
     auto vao = Create<ResourceType::VertexArray>(resource_table, "vao");
     auto vbo1 = Create<ResourceType::VertexBuffer>(resource_table, "vbo1");

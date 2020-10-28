@@ -142,15 +142,33 @@ Result FindPrey::Run(const ArgPack& args) {
   return Result::Failure;
 }
 
-Result HasTargetedPrey::Run(const ArgPack& args) { return Result(); }
+HasTargetedPrey::HasTargetedPrey(const einu::IEntityManager& ett_mgr)
+    : ett_mgr_{ett_mgr} {}
 
-Result IsHungry::Run(const ArgPack& args) { return Result(); }
+Result HasTargetedPrey::Run(const ArgPack& args) {
+  auto& hunt_comp = args.GetComponent<const cmp::Hunt>();
+  if (IsValid(hunt_comp.current_prey) &&
+      ett_mgr_.ContainsEntity(hunt_comp.current_prey.eid)) {
+    return Result::Success;
+  }
+  return Result::Failure;
+}
+
+Result IsHungry::Run(const ArgPack& args) {
+  const auto& [health_comp, hunger_comp] =
+      args.GetComponents(einu::XnentList<cmp::Health, cmp::Hunger>{});
+  if (health_comp.health < hunger_comp.health_threashold) {
+    return Result::Success;
+  }
+  return Result::Failure;
+}
 
 Result TrackPrey::Run(const ArgPack& args) { return Result(); }
 
 Result Escape::Run(const ArgPack& args) { return Result(); }
 
-ChooseRandomDestination::ChooseRandomDestination(einu::IEntityManager& ett_mgr)
+ChooseRandomDestination::ChooseRandomDestination(
+    const einu::IEntityManager& ett_mgr)
     : ett_mgr_{ett_mgr} {}
 
 Result ChooseRandomDestination::Run(const ArgPack& args) {

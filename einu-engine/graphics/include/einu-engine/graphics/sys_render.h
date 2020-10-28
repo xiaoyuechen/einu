@@ -18,13 +18,13 @@
 
 #pragma once
 
-#include <einu-engine/window/gl_proc.h>
+#include <einu-engine/window/cmp_window.h>
 
 namespace einu {
 namespace graphics {
 namespace sys {
 
-void LoadGL();
+void LoadGL(window::cmp::Window& window);
 
 void Clear();
 

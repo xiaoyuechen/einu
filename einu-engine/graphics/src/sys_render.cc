@@ -18,6 +18,8 @@
 
 #include "einu-engine/graphics/sys_render.h"
 
+#include <einu-engine/window/gl_proc.h>
+#include <einu-engine/window/sys_window.h>
 #include <glad/glad.h>
 
 #include <sstream>
@@ -41,7 +43,8 @@ void PostGLCallCallback(const char* name, void* funcptr, int len_args, ...) {
 }
 }  // namespace
 
-void LoadGL() {
+void LoadGL(window::cmp::Window& window) {
+  window::sys::MakeContextCurrent(window);
   if (!gladLoadGLLoader(
           reinterpret_cast<GLADloadproc>(window::GetProcAddress))) {
     throw GraphicsError{"Failed to load OpenGL"};

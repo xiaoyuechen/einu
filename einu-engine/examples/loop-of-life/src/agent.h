@@ -44,6 +44,10 @@ struct AgentInfo {
   einu::EID eid = ~einu::EID{0};
 };
 
+constexpr bool IsValid(const AgentInfo& agent_info) noexcept {
+  return agent_info.eid != ~einu::EID{0};
+}
+
 }  // namespace lol
 
 namespace einu {

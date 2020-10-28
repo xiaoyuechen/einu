@@ -53,7 +53,12 @@ class FindPrey final : public Node {
 
 class HasTargetedPrey final : public Node {
  public:
+  explicit HasTargetedPrey(const einu::IEntityManager& ett_mgr);
+
   Result Run(const ArgPack& args) override;
+
+ private:
+  const einu::IEntityManager& ett_mgr_;
 };
 
 class IsHungry final : public Node {
@@ -73,12 +78,12 @@ class Escape final : public Node {
 
 class ChooseRandomDestination final : public Node {
  public:
-  explicit ChooseRandomDestination(einu::IEntityManager& ett_mgr);
+  explicit ChooseRandomDestination(const einu::IEntityManager& ett_mgr);
 
   Result Run(const ArgPack& args) override;
 
  private:
-  einu::IEntityManager& ett_mgr_;
+  const einu::IEntityManager& ett_mgr_;
 };
 
 }  // namespace bt

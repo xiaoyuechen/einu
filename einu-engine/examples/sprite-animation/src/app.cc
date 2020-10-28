@@ -70,7 +70,7 @@ void App::Run() {
   window::sys::Create(win_comp);
   window::sys::MakeContextCurrent(win_comp);
 
-  graphics::sys::LoadGL();
+  graphics::sys::LoadGL(win_comp);
 
   auto vao = graphics::sys::Create<graphics::ResourceType::VertexArray>(
       resource_table, "vao");
