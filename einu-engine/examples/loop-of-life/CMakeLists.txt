@@ -11,6 +11,7 @@ add_executable(
   "src/sys_world_state.h"
   "src/bt_agent.h"
   "src/sys_sense.h"
+  "src/sys_sense.cc"
   "src/bt_agent.cc")
 
 target_include_directories(

@@ -20,14 +20,19 @@
 
 #include <einu-engine/common/cmp_transform.h>
 
+#include <vector>
+
 #include "src/cmp_agent.h"
 #include "src/sgl_world_state.h"
 
 namespace lol {
 namespace sys {
 
-void Sense(const sgl::WorldState& world_state,
-           const einu::common::cmp::Transform& transform, cmp::Memory& memory);
+using CellBuffer = std::vector<const sgl::WorldState::Cell*>;
 
-}
+void Sense(const sgl::WorldState& world_state, CellBuffer& cell_buffer,
+           cmp::Sense& sense, const einu::common::cmp::Transform& transform,
+           cmp::Memory& memory, einu::EID eid);
+
+}  // namespace sys
 }  // namespace lol
