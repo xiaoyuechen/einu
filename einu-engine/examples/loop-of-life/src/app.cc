@@ -36,6 +36,7 @@
 #include "src/sys_agent_create.h"
 #include "src/sys_destroy.h"
 #include "src/sys_lose_health.h"
+#include "src/sys_movement.h"
 #include "src/sys_rotate.h"
 #include "src/sys_sense.h"
 #include "src/sys_world_state.h"
@@ -152,13 +153,13 @@ void App::Run() {
                 cmp::Eat, cmp::Evade, cmp::Health, cmp::HealthLoss, cmp::Hunger,
                 cmp::Hunt, cmp::Memory, cmp::Sense, cmp::Wander>>{};
 
-  auto move_view = EntityView<
-      XnentList<einu::common::cmp::Transform, einu::common::cmp::Movement>>{};
-
   auto health_loss_view =
       EntityView<XnentList<const cmp::HealthLoss, cmp::Health>>{};
 
   auto destroy_view = EntityView<XnentList<const cmp::Health>>{};
+
+  auto move_view = EntityView<
+      XnentList<einu::common::cmp::Transform, einu::common::cmp::Movement>>{};
 
   common::sys::InitTime(time);
 
@@ -207,7 +208,7 @@ void App::Run() {
     // move and rotate
     move_view.View(*ett_mgr);
     for (auto&& [transform, movement] : move_view.Components()) {
-      common::sys::Move(transform, movement, time);
+      sys::Move(time, world_state, transform, movement);
       sys::Rotate(transform, movement);
     }
 

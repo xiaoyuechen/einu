@@ -15,6 +15,7 @@ add_executable(
   "src/sys_agent_create.h"
   "src/sys_agent_create.cc"
   "src/sys_rotate.h"
+  "src/sys_movement.h"
   "src/sys_rotate.cc"
   "src/bt_agent.cc")
 
