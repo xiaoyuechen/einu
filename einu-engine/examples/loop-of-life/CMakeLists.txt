@@ -7,7 +7,10 @@ add_executable(
   "src/agent.h"
   "src/cmp_health.h"
   "src/sgl_world_state.h"
+  "src/sys_world_state.cc"
+  "src/sys_world_state.h"
   "src/bt_agent.h"
+  "src/sys_sense.h"
   "src/bt_agent.cc")
 
 target_include_directories(

@@ -33,6 +33,7 @@
 
 #include "src/bt_agent.h"
 #include "src/engine_policy.h"
+#include "src/sys_world_state.h"
 
 namespace lol {
 
@@ -55,35 +56,37 @@ void App::Run() {
   auto& time = ett_mgr->AddSinglenent<common::sgl::Time>();
   auto& world_state = ett_mgr->AddSinglenent<sgl::WorldState>();
   world_state.grid = sgl::WorldState::Grid(glm::uvec2{160, 90});
+  world_state.world_size = glm::vec2{win.size.width, win.size.height};
 
   auto& resource_table =
       ett_mgr->AddSinglenent<graphics::sgl::GLResourceTable>();
 
   {
-    using namespace window;  // NOLINT
-    sys::Init();
-    sys::Create(win);
-    sys::MakeContextCurrent(win);
+    using namespace window::sys;  // NOLINT
+    Init();
+    Create(win);
+    MakeContextCurrent(win);
   }
 
   {
-    using namespace graphics;  // NOLINT
+    using namespace graphics::sys;  // NOLINT
+    using ResourceType = graphics::ResourceType;
 
-    sys::LoadGL();
+    LoadGL();
 
-    auto vao = sys::Create<ResourceType::VertexArray>(resource_table, "vao");
-    auto vbo1 = sys::Create<ResourceType::VertexBuffer>(resource_table, "vbo1");
-    auto vbo2 = sys::Create<ResourceType::VertexBuffer>(resource_table, "vbo2");
-    sys::Create<ResourceType::VertexShader>(
-        resource_table, "vshader", "shaders/sprite_vertex_shader.glsl");
-    sys::Create<ResourceType::FragmentShader>(
-        resource_table, "fshader", "shaders/sprite_fragment_shader.glsl");
-    sys::Create<ResourceType::ShaderProgram>(resource_table, "program",
-                                             "vshader", "fshader");
-    sys::Create<ResourceType::Texture>(resource_table, "white-triangle",
-                                       "assets/white-triangle.png");
-    sys::CreateSprite(resource_table, "sprite", "program", "white-triangle");
-    sys::Create<ResourceType::Sampler>(resource_table, "sampler");
+    auto vao = Create<ResourceType::VertexArray>(resource_table, "vao");
+    auto vbo1 = Create<ResourceType::VertexBuffer>(resource_table, "vbo1");
+    auto vbo2 = Create<ResourceType::VertexBuffer>(resource_table, "vbo2");
+    Create<ResourceType::VertexShader>(resource_table, "vshader",
+                                       "shaders/sprite_vertex_shader.glsl");
+    Create<ResourceType::FragmentShader>(resource_table, "fshader",
+                                         "shaders/sprite_fragment_shader.glsl");
+    Create<ResourceType::ShaderProgram>(resource_table, "program", "vshader",
+                                        "fshader");
+    Create<ResourceType::Texture>(resource_table, "white-triangle",
+                                  "assets/white-triangle.png");
+    CreateSprite(resource_table, "sprite", "program", "white-triangle");
+    Create<ResourceType::Sampler>(resource_table, "sampler");
   }
 
   auto& sprite_batch = ett_mgr->AddSinglenent<graphics::sgl::SpriteBatch>();
@@ -113,12 +116,14 @@ void App::Run() {
       movement.max_speed = 10.f;
       auto& dest = ett_mgr->AddComponent<einu::ai::cmp::Destination>(ett);
       dest.destination = glm::vec3(100, 100, 0);
+      ett_mgr->AddComponent<cmp::Agent>(ett).type = AgentType::Sheep;
     }
   }
 
-  auto ett_view = EntityView<
-      XnentList<common::cmp::Transform, graphics::cmp::Sprite,
-                common::cmp::Movement, einu::ai::cmp::Destination>>{};
+  auto ett_view =
+      EntityView<XnentList<common::cmp::Transform, graphics::cmp::Sprite,
+                           common::cmp::Movement, einu::ai::cmp::Destination,
+                           cmp::Agent>>{};
 
   auto proj = graphics::Projection{graphics::Projection::Type::Orthographic,
                                    graphics::Projection::OrthographicAttrib{
@@ -132,6 +137,7 @@ void App::Run() {
   auto bt = ai::bt::BuildAgentBT();
 
   common::sys::InitTime(time);
+
   while (!win.shouldClose) {
     graphics::sys::Clear();
 
@@ -140,7 +146,14 @@ void App::Run() {
 
     ett_view.View(*ett_mgr);
 
-    // TODO(Xiaoyue Chen): implement zip iterator
+    sys::ClearWorldState(world_state);
+    for (auto [comp_it, eid_it] =
+             std::tuple{ett_view.Components().begin(), ett_view.EIDs().begin()};
+         comp_it != ett_view.Components().end(); ++comp_it, ++eid_it) {
+      auto&& [transform, sprite, movement, dest, agent] = *comp_it;
+      sys::UpdateWorldState(world_state, transform, agent, *eid_it);
+    }
+
     for (auto [comp_it, eid_it] =
              std::tuple{ett_view.Components().begin(), ett_view.EIDs().begin()};
          comp_it != ett_view.Components().end(); ++comp_it, ++eid_it) {
@@ -148,7 +161,8 @@ void App::Run() {
       bt.Run(bt_args);
     }
 
-    for (auto&& [transform, sprite, movement, dest] : ett_view.Components()) {
+    for (auto&& [transform, sprite, movement, dest, agent] :
+         ett_view.Components()) {
       common::sys::Move(transform, movement, time);
       graphics::sys::PrepareSpriteBatch(resource_table, sprite_batch, sprite,
                                         transform);

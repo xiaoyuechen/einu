@@ -22,6 +22,8 @@
 #include <einu-engine/core/eid.h>
 #include <einu-engine/core/xnent.h>
 
+#include <algorithm>
+#include <glm/glm.hpp>
 #include <vector>
 
 #include "src/agent.h"
@@ -34,7 +36,30 @@ struct WorldState : public einu::Xnent {
   using Grid = einu::common::Grid<Cell>;
 
   Grid grid;
+  glm::vec2 world_size;
 };
+
+inline glm::vec2 GetCellSize(const WorldState& world_state) noexcept {
+  return world_state.world_size / glm::vec2(world_state.grid.GetSize());
+}
+
+inline glm::uvec2 GetCoordsInGrid(const sgl::WorldState& world_state,
+                                  const glm::vec2& pos) {
+  auto san_pos = pos;
+  for (int i = 0; i != san_pos.length(); ++i) {
+    if (san_pos[i] < 0) {
+      san_pos[i] = 0;
+    }
+  }
+  auto cell_size = GetCellSize(world_state);
+  auto grid_size = world_state.grid.GetSize();
+  auto coords = static_cast<glm::uvec2>(san_pos / cell_size);
+  for (int i = 0; i != coords.length(); ++i) {
+    auto& val = coords[i];
+    val = std::clamp(val, 0u, grid_size[i] - 1);
+  }
+  return coords;
+}
 
 }  // namespace sgl
 }  // namespace lol
