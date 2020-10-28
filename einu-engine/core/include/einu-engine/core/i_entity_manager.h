@@ -56,9 +56,11 @@ class IEntityManager {
 
   void SetPolicy(Policy policy) noexcept { SetPolicyImpl(policy); }
 
-  [[nodiscard]] EID CreateEntity() { return CreateEntityImpl(); }
+  EID CreateEntity() { return CreateEntityImpl(); }
 
   void DestroyEntity(EID eid) { DestroyEntityImpl(eid); }
+
+  bool ContainsEntity(EID eid) const { return ContainsEntityImpl(eid); }
 
   template <typename T>
   T& AddComponent(EID eid) {
@@ -151,6 +153,7 @@ class IEntityManager {
 
   virtual EID CreateEntityImpl() = 0;
   virtual void DestroyEntityImpl(EID eid) = 0;
+  virtual bool ContainsEntityImpl(EID eid) const = 0;
 
   virtual Xnent& AddComponentImpl(EID eid, XnentTypeID tid) = 0;
   virtual void RemoveComponentImpl(EID eid, XnentTypeID tid) = 0;

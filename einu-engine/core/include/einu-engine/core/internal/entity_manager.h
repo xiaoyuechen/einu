@@ -76,13 +76,6 @@ class EntityManager final : public IEntityManager {
     return eid;
   }
 
-  void DestroyEntityImpl(EID eid) override {
-    auto it = ett_table_.find(eid);
-    assert(it != ett_table_.end() && "entity does not exist");
-    ReleaseEntity(it);
-    ett_table_.erase(it);
-  }
-
   void ReleaseEntity(typename EntityTable::iterator it) {
     auto eid = it->first;
     auto [mask, table] = it->second;
@@ -94,6 +87,17 @@ class EntityManager final : public IEntityManager {
     mask->reset();
     ett_data_pool_.Release(std::forward_as_tuple(*mask, *table));
     eid_pool_->Release(eid);
+  }
+
+  void DestroyEntityImpl(EID eid) override {
+    auto it = ett_table_.find(eid);
+    assert(it != ett_table_.end() && "entity does not exist");
+    ReleaseEntity(it);
+    ett_table_.erase(it);
+  }
+
+  bool ContainsEntityImpl(EID eid) const override {
+    return ett_table_.contains(eid);
   }
 
   Xnent& AddComponentImpl(EID eid, XnentTypeID tid) override {
