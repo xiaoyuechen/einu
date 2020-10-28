@@ -25,8 +25,8 @@ namespace lol {
 namespace sys {
 
 einu::EID CreateSheep(einu::IEntityManager& ett_mgr,
-                      const einu::common::Transform& transform, float max_speed,
-                      const glm::vec4& color, const char* sprite_name);
+                      const einu::common::Transform& transform,
+                      const char* sprite_name);
 
 }
 }  // namespace lol

@@ -31,7 +31,7 @@ enum class AgentType : std::uint8_t {
   Grass = 1 << 0,
   Sheep = 1 << 1,
   Wolf = 1 << 2,
-  Crow = 1 << 3,
+  Herder = 1 << 3,
 };
 
 constexpr AgentType GetSignatureAll() noexcept {
@@ -41,7 +41,7 @@ constexpr AgentType GetSignatureAll() noexcept {
 struct AgentInfo {
   AgentType type = AgentType::None;
   glm::vec2 pos{};
-  einu::EID eid = -1;
+  einu::EID eid = ~einu::EID{0};
 };
 
 }  // namespace lol

@@ -21,27 +21,59 @@
 #include <einu-engine/ai/cmp_destination.h>
 #include <einu-engine/common/cmp_movement.h>
 #include <einu-engine/common/cmp_transform.h>
+#include <einu-engine/core/util/enum.h>
 #include <einu-engine/graphics/cmp_sprite.h>
 
 #include "src/cmp_agent.h"
+#include "src/cmp_health.h"
 
 namespace lol {
 namespace sys {
 
 einu::EID CreateSheep(einu::IEntityManager& ett_mgr,
-                      const einu::common::Transform& transform, float max_speed,
-                      const glm::vec4& color, const char* sprite_name) {
+                      const einu::common::Transform& transform,
+                      const char* sprite_name) {
   auto ett = ett_mgr.CreateEntity();
+
   auto& sprite = ett_mgr.AddComponent<einu::graphics::cmp::Sprite>(ett);
-  sprite.color = color;
+  sprite.color = glm::vec4{200, 200, 200, 255};
   sprite.sprite_name = sprite_name;
+
   ett_mgr.AddComponent<einu::common::cmp::Transform>(ett) =
       einu::common::cmp::Transform{transform};
+
   auto& movement = ett_mgr.AddComponent<einu::common::cmp::Movement>(ett);
-  movement.max_speed = max_speed;
+  movement.max_speed = 14;
+
   auto& dest = ett_mgr.AddComponent<einu::ai::cmp::Destination>(ett);
   dest.destination = glm::vec3(100, 100, 0);
+
   ett_mgr.AddComponent<cmp::Agent>(ett).type = AgentType::Sheep;
+
+  auto& eat = ett_mgr.AddComponent<cmp::Eat>(ett);
+  eat.eat_health_per_attack = 10.f;
+  eat.absorption_rate = 0.5f;
+
+  ett_mgr.AddComponent<cmp::Evade>(ett).predator_signature = AgentType::Wolf;
+
+  ett_mgr.AddComponent<cmp::Health>(ett);
+
+  ett_mgr.AddComponent<cmp::HealthLoss>(ett).loss_speed = 10.f;
+
+  ett_mgr.AddComponent<cmp::Hunger>(ett).health_threashold = 80.f;
+
+  ett_mgr.AddComponent<cmp::Hunt>(ett).prey_signature = AgentType::Grass;
+
+  ett_mgr.AddComponent<cmp::Memory>(ett);
+
+  auto& sense = ett_mgr.AddComponent<cmp::Sense>(ett);
+  using einu::util::operator|;
+  sense.relevant_type_signature =
+      AgentType::Wolf | AgentType::Grass | AgentType::Herder;
+  sense.sense_radius = 10.f;
+
+  ett_mgr.AddComponent<cmp::Wander>(ett);
+
   return ett;
 }
 

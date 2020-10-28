@@ -108,8 +108,7 @@ void App::Run() {
       transform.SetRotation(glm::quat(
           glm::vec3(0, 0, glm::radians(distribution_rotate(generator)))));
       transform.SetScale(glm::vec3(0.02f, 0.05f, 1.f));
-      sys::CreateSheep(*ett_mgr, transform, 50, glm::vec4{255, 0, 0, 255},
-                       "sprite");
+      sys::CreateSheep(*ett_mgr, transform, "sprite");
     }
   }
 

@@ -48,7 +48,7 @@ struct Hunger : public einu::Xnent {
 
 struct Hunt : public einu::Xnent {
   AgentType prey_signature = AgentType::None;
-  einu::EID current_prey = -1;
+  einu::EID current_prey = ~einu::EID{0};
 };
 
 struct Memory : public einu::Xnent {
