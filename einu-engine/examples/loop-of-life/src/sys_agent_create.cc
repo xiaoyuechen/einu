@@ -46,7 +46,6 @@ einu::EID CreateSheep(einu::IEntityManager& ett_mgr,
   movement.max_speed = 14;
 
   auto& dest = ett_mgr.AddComponent<einu::ai::cmp::Destination>(ett);
-  dest.destination = glm::vec3(100, 100, 0);
 
   ett_mgr.AddComponent<cmp::Agent>(ett).type = AgentType::Sheep;
 
@@ -72,7 +71,8 @@ einu::EID CreateSheep(einu::IEntityManager& ett_mgr,
       AgentType::Wolf | AgentType::Grass | AgentType::Herder;
   sense.sense_radius = 10.f;
 
-  ett_mgr.AddComponent<cmp::Wander>(ett);
+  auto& wander = ett_mgr.AddComponent<cmp::Wander>(ett);
+  wander.wander_radius = 50;
 
   return ett;
 }

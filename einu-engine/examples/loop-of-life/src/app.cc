@@ -124,8 +124,13 @@ void App::Run() {
   auto cam_mat =
       graphics::ProjectionMatrix(proj) * graphics::ViewMatrix(graphics::View{});
 
-  einu::ai::bt::ArgPack bt_args;
-  auto bt = ai::bt::BuildSheepBT(*ett_mgr);
+  auto sheep_view = EntityView<
+      XnentList<common::cmp::Transform, graphics::cmp::Sprite,
+                common::cmp::Movement, einu::ai::cmp::Destination, cmp::Agent,
+                cmp::Eat, cmp::Evade, cmp::Health, cmp::HealthLoss, cmp::Hunger,
+                cmp::Hunt, cmp::Memory, cmp::Sense, cmp::Wander>>{};
+  einu::ai::bt::ArgPack sheep_bt_args;
+  auto sheep_bt = ai::bt::BuildSheepBT(*ett_mgr);
 
   common::sys::InitTime(time);
 
@@ -145,11 +150,12 @@ void App::Run() {
       sys::UpdateWorldState(world_state, transform, agent, *eid_it);
     }
 
-    for (auto [comp_it, eid_it] =
-             std::tuple{ett_view.Components().begin(), ett_view.EIDs().begin()};
-         comp_it != ett_view.Components().end(); ++comp_it, ++eid_it) {
-      bt_args.Set(*eid_it, *comp_it);
-      bt.Run(bt_args);
+    sheep_view.View(*ett_mgr);
+    for (auto [comp_it, eid_it] = std::tuple{sheep_view.Components().begin(),
+                                             sheep_view.EIDs().begin()};
+         comp_it != sheep_view.Components().end(); ++comp_it, ++eid_it) {
+      sheep_bt_args.Set(*eid_it, *comp_it);
+      sheep_bt.Run(sheep_bt_args);
     }
 
     for (auto&& [transform, sprite, movement, dest, agent] :
