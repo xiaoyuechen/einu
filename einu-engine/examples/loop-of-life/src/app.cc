@@ -34,6 +34,7 @@
 #include "src/bt_agent.h"
 #include "src/engine_policy.h"
 #include "src/sys_agent_create.h"
+#include "src/sys_destroy.h"
 #include "src/sys_lose_health.h"
 #include "src/sys_rotate.h"
 #include "src/sys_sense.h"
@@ -157,6 +158,8 @@ void App::Run() {
   auto health_loss_view =
       EntityView<XnentList<const cmp::HealthLoss, cmp::Health>>{};
 
+  auto destroy_view = EntityView<XnentList<const cmp::Health>>{};
+
   common::sys::InitTime(time);
 
   while (!win.shouldClose) {
@@ -215,6 +218,14 @@ void App::Run() {
     }
     graphics::sys::RenderSpriteBatch(sprite_batch, cam_mat);
     graphics::sys::ClearSpriteBatch(sprite_batch);
+
+    destroy_view.View(*ett_mgr);
+    for (auto [comp, eid] = std::make_tuple(destroy_view.Components().begin(),
+                                            destroy_view.EIDs().begin());
+         comp != destroy_view.Components().end(); ++comp, ++eid) {
+      auto& [health] = *comp;
+      sys::Destroy(*ett_mgr, health, *eid);
+    }
 
     window::sys::PoolEvents(win);
     window::sys::SwapBuffer(win);
