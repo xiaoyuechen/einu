@@ -34,8 +34,8 @@ struct Cell : public einu::Xnent {
 };
 
 struct Starchaser : public einu::Xnent {
-  enum class State { Collecting, Selling, GoingHome, Enroute };
-  State state = State::Collecting;
+  enum class State { None, Collecting, Selling, GoingHome, Resting, Done };
+  State state = State::None;
 };
 
 struct StarPocket : public einu::Xnent {
@@ -44,6 +44,8 @@ struct StarPocket : public einu::Xnent {
 
 struct Energy : public einu::Xnent {
   float energy = 100.f;
+  float energy_lost_rate = 20.f;
+  float energy_gain_rate = 50.f;
   float fatigue_threshold = 50.f;
   float max_energy = 100.f;
 };

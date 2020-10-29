@@ -57,10 +57,12 @@ std::vector<glm::uvec2> FindNeighbours(const sgl::WorldState::Grid& grid,
 
 void ConstructPath(cmp::PathFinding& path_finding,
                    cmp::PathFinding::Node last) {
+  path_finding.path.clear();
   for (cmp::PathFinding::Node* node = &last; node != nullptr;
        node = node->parent) {
     path_finding.path.push_back(node->pos);
   }
+  path_finding.path.pop_back();
 }
 
 void FindPathImpl(sgl::WorldState& world_state,

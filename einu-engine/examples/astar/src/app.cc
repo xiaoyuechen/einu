@@ -43,6 +43,21 @@
 
 namespace astar {
 
+bool IsCellEmpty(const einu::IEntityManager& ett_mgr,
+                 const sgl::WorldState& world_state, glm::uvec2 cell) {
+  einu::EID eids[] = {world_state.spaceship_eid, world_state.star_eid,
+                      world_state.traiding_post_eid};
+  for (auto eid : eids) {
+    if (eid == ~einu::EID{0}) continue;
+    auto pos = ett_mgr.GetComponent<einu::cmp::Transform>(eid).GetPosition();
+    auto grid_pos = sgl::GetCoordsInGrid(world_state, glm::vec2(pos));
+    if (grid_pos == cell) {
+      return false;
+    }
+  }
+  return true;
+}
+
 void App::Run() {
   // init engine
   Engine engine;
@@ -198,8 +213,7 @@ void App::Run() {
         auto pos = glm::vec3(cell_size.x * x, cell_size.y * y, 0);
         auto transform = einu::Transform{};
         transform.SetPosition(pos + glm::vec3(3, 3, 0));
-        if (glm::vec2(transform.GetPosition()) !=
-            world_state.trading_post_pos) {
+        if (IsCellEmpty(*ett_mgr, world_state, glm::uvec2(x, y))) {
           transform.SetScale(glm::vec3(0.2f, 0.2f, 0));
           sys::CreateSpaceship(*ett_mgr, transform);
           created = true;
@@ -220,9 +234,7 @@ void App::Run() {
         auto pos = glm::vec3(cell_size.x * x, cell_size.y * y, 0);
         auto transform = einu::Transform{};
         transform.SetPosition(pos + glm::vec3(3, 3, 0));
-        if (glm::vec2(transform.GetPosition()) !=
-                world_state.trading_post_pos &&
-            glm::vec2(transform.GetPosition()) != world_state.space_ship_pos) {
+        if (IsCellEmpty(*ett_mgr, world_state, glm::uvec2(x, y))) {
           transform.SetScale(glm::vec3(0.2f, 0.2f, 0));
           sys::CreateStar(*ett_mgr, transform);
           created = true;
@@ -244,10 +256,7 @@ void App::Run() {
         auto pos = glm::vec3(cell_size.x * x, cell_size.y * y, 0);
         auto transform = einu::Transform{};
         transform.SetPosition(pos + glm::vec3(3, 3, 0));
-        if (glm::vec2(transform.GetPosition()) !=
-                world_state.trading_post_pos &&
-            glm::vec2(transform.GetPosition()) != world_state.space_ship_pos &&
-            glm::vec2(transform.GetPosition()) != world_state.star_pos) {
+        if (IsCellEmpty(*ett_mgr, world_state, glm::uvec2(x, y))) {
           transform.SetScale(glm::vec3(0.02f, 0.05f, 0));
           starchaser = sys::CreateStarchaser(*ett_mgr, transform);
           created = true;

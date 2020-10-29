@@ -75,7 +75,6 @@ einu::EID CreateSpaceship(einu::IEntityManager& ett_mgr,
 
   auto& world_state = ett_mgr.GetSinglenent<sgl::WorldState>();
   world_state.spaceship_eid = ett;
-  world_state.space_ship_pos = transform.GetPosition();
 
   auto& sprite = ett_mgr.AddComponent<einu::graphics::cmp::Sprite>(ett);
   sprite.color = glm::vec4{50, 255, 255, 255};
@@ -93,7 +92,6 @@ einu::EID CreateTradingPost(einu::IEntityManager& ett_mgr,
 
   auto& world_state = ett_mgr.GetSinglenent<sgl::WorldState>();
   world_state.traiding_post_eid = ett;
-  world_state.trading_post_pos = transform.GetPosition();
 
   auto& sprite = ett_mgr.AddComponent<einu::graphics::cmp::Sprite>(ett);
   sprite.color = glm::vec4{255, 0, 0, 255};
@@ -111,7 +109,6 @@ einu::EID CreateStar(einu::IEntityManager& ett_mgr,
 
   auto& world_state = ett_mgr.GetSinglenent<sgl::WorldState>();
   world_state.star_eid = ett;
-  world_state.star_pos = transform.GetPosition();
 
   auto& sprite = ett_mgr.AddComponent<einu::graphics::cmp::Sprite>(ett);
   sprite.color = glm::vec4{255, 255, 0, 255};
@@ -132,7 +129,7 @@ einu::EID CreateStarchaser(einu::IEntityManager& ett_mgr,
   transform_cmp.SetPosition(transform_cmp.GetPosition() + glm::vec3(offset, 0));
 
   auto& movement = ett_mgr.AddComponent<einu::cmp::Movement>(ett);
-  movement.max_speed = 20.f;
+  movement.max_speed = 60.f;
 
   auto& sprite = ett_mgr.AddComponent<einu::graphics::cmp::Sprite>(ett);
   sprite.color = glm::vec4{255, 255, 0, 255};

@@ -18,6 +18,8 @@
 
 #include "src/sys_starchaser.h"
 
+#include <einu-engine/common/sgl_time.h>
+
 #include <glm/glm.hpp>
 
 #include "src/sys_find_path.h"
@@ -46,23 +48,152 @@ void MoveAlongPath(const sgl::WorldState& world_state,
   }
 }
 
+bool HasReached(const sgl::WorldState& world_state, glm::vec2 pos,
+                glm::vec2 target) noexcept {
+  static constexpr float kReachRange = 50.0f;
+  // glm::vec2 offset = sgl::GetCellSize(world_state) / 2.f;
+  return glm::distance(pos, target) < kReachRange;
+}
+
+void CollectStar(einu::IEntityManager& ett_mgr, einu::EID eid) {
+  auto& world_state = ett_mgr.GetSinglenent<sgl::WorldState>();
+  auto& transform = ett_mgr.GetComponent<einu::cmp::Transform>(eid);
+  auto& movement = ett_mgr.GetComponent<einu::cmp::Movement>(eid);
+  auto& path_finding = ett_mgr.GetComponent<cmp::PathFinding>(eid);
+  auto& starchaser = ett_mgr.GetComponent<cmp::Starchaser>(eid);
+  auto star_pos =
+      ett_mgr.GetComponent<einu::cmp::Transform>(world_state.star_eid)
+          .GetPosition();
+
+  using State = cmp::Starchaser::State;
+
+  if (path_finding.path.size() == 0) {
+    if (HasReached(world_state, transform.GetPosition(), star_pos)) {
+      starchaser.state = State::Selling;
+    } else {
+      FindPath(world_state, path_finding, transform.GetPosition(), star_pos);
+    }
+  } else {
+    MoveAlongPath(world_state, transform, movement, path_finding);
+  }
+}
+
+void SellStar(einu::IEntityManager& ett_mgr, einu::EID eid) {
+  auto& world_state = ett_mgr.GetSinglenent<sgl::WorldState>();
+  auto& transform = ett_mgr.GetComponent<einu::cmp::Transform>(eid);
+  auto& movement = ett_mgr.GetComponent<einu::cmp::Movement>(eid);
+  auto& path_finding = ett_mgr.GetComponent<cmp::PathFinding>(eid);
+  auto& starchaser = ett_mgr.GetComponent<cmp::Starchaser>(eid);
+  auto& energy = ett_mgr.GetComponent<cmp::Energy>(eid);
+  auto& time = ett_mgr.GetSinglenent<einu::sgl::Time>();
+  auto& star_transform =
+      ett_mgr.GetComponent<einu::cmp::Transform>(world_state.star_eid);
+  auto& trading_post_transform =
+      ett_mgr.GetComponent<einu::cmp::Transform>(world_state.traiding_post_eid);
+
+  energy.energy -= energy.energy_lost_rate * einu::sgl::DeltaSeconds(time);
+
+  using State = cmp::Starchaser::State;
+
+  if (energy.energy < energy.fatigue_threshold) {
+    path_finding.path.clear();
+    starchaser.state = State::GoingHome;
+  } else {
+    if (path_finding.path.size() == 0) {
+      if (HasReached(world_state, trading_post_transform.GetPosition(),
+                     transform.GetPosition())) {
+        starchaser.state = State::Done;
+      } else {
+        FindPath(world_state, path_finding, transform.GetPosition(),
+                 trading_post_transform.GetPosition());
+      }
+    } else {
+      MoveAlongPath(world_state, transform, movement, path_finding);
+      star_transform.SetPosition(transform.GetPosition());
+    }
+  }
+}
+
+void GoHome(einu::IEntityManager& ett_mgr, einu::EID eid) {
+  auto& world_state = ett_mgr.GetSinglenent<sgl::WorldState>();
+  auto& transform = ett_mgr.GetComponent<einu::cmp::Transform>(eid);
+  auto& movement = ett_mgr.GetComponent<einu::cmp::Movement>(eid);
+  auto& path_finding = ett_mgr.GetComponent<cmp::PathFinding>(eid);
+  auto& starchaser = ett_mgr.GetComponent<cmp::Starchaser>(eid);
+  auto& energy = ett_mgr.GetComponent<cmp::Energy>(eid);
+  auto& time = ett_mgr.GetSinglenent<einu::sgl::Time>();
+  auto& star_transform =
+      ett_mgr.GetComponent<einu::cmp::Transform>(world_state.star_eid);
+  auto& home_pos =
+      ett_mgr.GetComponent<einu::cmp::Transform>(world_state.spaceship_eid)
+          .GetPosition();
+
+  using State = cmp::Starchaser::State;
+
+  if (path_finding.path.size() == 0) {
+    if (HasReached(world_state, home_pos, transform.GetPosition())) {
+      starchaser.state = State::Resting;
+    } else {
+      FindPath(world_state, path_finding, transform.GetPosition(), home_pos);
+    }
+  } else {
+    MoveAlongPath(world_state, transform, movement, path_finding);
+  }
+}
+
+void Rest(einu::IEntityManager& ett_mgr, einu::EID eid) {
+  auto& world_state = ett_mgr.GetSinglenent<sgl::WorldState>();
+  auto& transform = ett_mgr.GetComponent<einu::cmp::Transform>(eid);
+  auto& movement = ett_mgr.GetComponent<einu::cmp::Movement>(eid);
+  auto& path_finding = ett_mgr.GetComponent<cmp::PathFinding>(eid);
+  auto& starchaser = ett_mgr.GetComponent<cmp::Starchaser>(eid);
+  auto& energy = ett_mgr.GetComponent<cmp::Energy>(eid);
+  auto& time = ett_mgr.GetSinglenent<einu::sgl::Time>();
+  auto& star_transform =
+      ett_mgr.GetComponent<einu::cmp::Transform>(world_state.star_eid);
+
+  using State = cmp::Starchaser::State;
+
+  energy.energy += energy.energy_gain_rate * einu::sgl::DeltaSeconds(time);
+
+  if (energy.energy >= energy.max_energy) {
+    starchaser.state = State::Collecting;
+  }
+}
+
 void RunStarChaserFSM(einu::IEntityManager& ett_mgr, einu::EID eid) {
   auto& world_state = ett_mgr.GetSinglenent<sgl::WorldState>();
   auto& transform = ett_mgr.GetComponent<einu::cmp::Transform>(eid);
   auto& movement = ett_mgr.GetComponent<einu::cmp::Movement>(eid);
   auto& path_finding = ett_mgr.GetComponent<cmp::PathFinding>(eid);
   auto& starchaser = ett_mgr.GetComponent<cmp::Starchaser>(eid);
-  if (starchaser.state == cmp::Starchaser::State::Collecting) {
-    FindPath(world_state, path_finding, transform.GetPosition(),
-             world_state.star_pos);
-    starchaser.state = cmp::Starchaser::State::Enroute;
-  } else if (starchaser.state == cmp::Starchaser::State::Enroute) {
-    if (path_finding.path.size() == 0) {
-      return;
-    }
-    MoveAlongPath(world_state, transform, movement, path_finding);
+
+  using State = cmp::Starchaser::State;
+  switch (starchaser.state) {
+    case State::None:
+      starchaser.state = State::Collecting;
+      break;
+
+    case State::Collecting:
+      CollectStar(ett_mgr, eid);
+      break;
+
+    case State::Selling:
+      SellStar(ett_mgr, eid);
+      break;
+
+    case State::GoingHome:
+      GoHome(ett_mgr, eid);
+      break;
+
+    case State::Resting:
+      Rest(ett_mgr, eid);
+      break;
+
+    default:
+      break;
   }
-}
+}  // namespace sys
 
 }  // namespace sys
 }  // namespace astar
