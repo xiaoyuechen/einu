@@ -36,7 +36,7 @@ einu::EID CreateSheep(einu::IEntityManager& ett_mgr,
   auto ett = ett_mgr.CreateEntity();
 
   auto& sprite = ett_mgr.AddComponent<einu::graphics::cmp::Sprite>(ett);
-  sprite.color = glm::vec4{200, 200, 200, 255};
+  sprite.color = glm::vec4{255, 255, 255, 255};
   sprite.sprite_name = kSheepSpriteName;
 
   ett_mgr.AddComponent<einu::cmp::Transform>(ett) =
@@ -65,11 +65,14 @@ einu::EID CreateSheep(einu::IEntityManager& ett_mgr,
 
   ett_mgr.AddComponent<cmp::Memory>(ett);
 
+  auto& panick = ett_mgr.AddComponent<cmp::Panick>(ett);
+  panick.max_panick_time = 1.0f;
+
   auto& sense = ett_mgr.AddComponent<cmp::Sense>(ett);
   using einu::util::operator|;
   sense.relevant_type_signature =
       AgentType::Wolf | AgentType::Grass | AgentType::Herder;
-  sense.sense_radius = 60.f;
+  sense.sense_radius = 100.f;
 
   auto& wander = ett_mgr.AddComponent<cmp::Wander>(ett);
   wander.time_since_last_destination_change = 99999;
@@ -83,21 +86,21 @@ einu::EID CreateWolf(einu::IEntityManager& ett_mgr,
   auto ett = ett_mgr.CreateEntity();
 
   auto& sprite = ett_mgr.AddComponent<einu::graphics::cmp::Sprite>(ett);
-  sprite.color = glm::vec4{50, 50, 50, 255};
-  sprite.sprite_name = kSheepSpriteName;
+  sprite.color = glm::vec4{100, 100, 100, 255};
+  sprite.sprite_name = kWolfSpriteName;
 
   ett_mgr.AddComponent<einu::cmp::Transform>(ett) =
       einu::cmp::Transform{transform};
 
   auto& movement = ett_mgr.AddComponent<einu::cmp::Movement>(ett);
-  movement.max_speed = 40;
+  movement.max_speed = 60;
 
   auto& dest = ett_mgr.AddComponent<einu::ai::cmp::Destination>(ett);
 
   ett_mgr.AddComponent<cmp::Agent>(ett).type = AgentType::Wolf;
 
   auto& eat = ett_mgr.AddComponent<cmp::Eat>(ett);
-  eat.eat_health_per_attack = 30.f;
+  eat.eat_health_per_attack = 10.f;
   eat.absorption_rate = 0.3f;
 
   ett_mgr.AddComponent<cmp::Evade>(ett).predator_signature = AgentType::Herder;
@@ -106,11 +109,14 @@ einu::EID CreateWolf(einu::IEntityManager& ett_mgr,
 
   ett_mgr.AddComponent<cmp::HealthLoss>(ett).loss_speed = 5.f;
 
-  ett_mgr.AddComponent<cmp::Hunger>(ett).health_threashold = 95.f;
+  ett_mgr.AddComponent<cmp::Hunger>(ett).health_threashold = 120.f;
 
   ett_mgr.AddComponent<cmp::Hunt>(ett).prey_signature = AgentType::Sheep;
 
   ett_mgr.AddComponent<cmp::Memory>(ett);
+
+  auto& panick = ett_mgr.AddComponent<cmp::Panick>(ett);
+  panick.max_panick_time = 3.0f;
 
   auto& sense = ett_mgr.AddComponent<cmp::Sense>(ett);
   using einu::util::operator|;

@@ -114,7 +114,7 @@ void SetupInstanceAttribs(ResourceID shader, ResourceID inst_vbo,
   glVertexAttribDivisor(inst_color, 1);
 
   glBufferData(GL_ARRAY_BUFFER,
-               attrib_arr.size() * sizeof(sgl::SpriteBatch::AttribsArr),
+               attrib_arr.size() * sizeof(sgl::SpriteBatch::Attribs),
                attrib_arr.data(), GL_STATIC_DRAW);
 }
 
@@ -126,7 +126,6 @@ void RenderSpriteBatch(const sgl::SpriteBatch& sprite_batch,
   glSamplerParameteri(sampler, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
   glSamplerParameteri(sampler, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
   glSamplerParameteri(sampler, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-  glEnable(GL_DEPTH_TEST);
 
   for (auto&& pair : sprite_batch.sprite_table) {
     auto&& sprite_data = pair.second;

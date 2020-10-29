@@ -18,11 +18,11 @@
 
 #pragma once
 
-#include <absl/container/flat_hash_map.h>
 #include <einu-engine/core/util/object_pool.h>
 
 #include <algorithm>
 #include <cassert>
+#include <map>
 #include <memory>
 
 #include "einu-engine/core/i_entity_manager.h"
@@ -30,6 +30,7 @@
 namespace einu {
 namespace internal {
 
+// TODO(Xiaoyue Chen): use hash table + sorted array for entity storage/caching
 template <std::size_t max_comp, std::size_t max_single>
 class EntityManager final : public IEntityManager {
  public:
@@ -44,7 +45,7 @@ class EntityManager final : public IEntityManager {
     XnentTable* comp_table;
   };
 
-  using EntityTable = absl::flat_hash_map<EID, EntityData>;
+  using EntityTable = std::map<EID, EntityData>;
   using EntityDataPool = util::DynamicPool<ComponentMask, XnentTable>;
   using SinglenentTable = std::array<std::unique_ptr<Xnent>, max_single>;
 
@@ -97,7 +98,7 @@ class EntityManager final : public IEntityManager {
   }
 
   bool ContainsEntityImpl(EID eid) const override {
-    return ett_table_.contains(eid);
+    return ett_table_.find(eid) != ett_table_.end();
   }
 
   Xnent& AddComponentImpl(EID eid, XnentTypeID tid) override {

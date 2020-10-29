@@ -40,6 +40,11 @@ struct Evade : public einu::Xnent {
   using Predators = std::vector<AgentInfo>;
   AgentType predator_signature = AgentType::None;
   Predators predators{};
+  glm::vec2 evade_dest{};
+  float evade_dist = 200.f;
+};
+
+struct Panick : public einu::Xnent {
   float remaining_panick_time = 0.0f;
   float max_panick_time = 5.0f;
 };

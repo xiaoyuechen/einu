@@ -72,7 +72,7 @@ class TrackPrey final : public Node {
   Result Run(const ArgPack& args) override;
 };
 
-class Escape final : public Node {
+class ChooseEvadeDestination final : public Node {
  public:
   Result Run(const ArgPack& args) override;
 };
@@ -90,6 +90,20 @@ class ChooseRandomDestination final : public Node {
 class IsPanicking final : public Node {
  public:
   Result Run(const ArgPack& args) override;
+};
+
+class StartPanick final : public Node {
+ public:
+  Result Run(const ArgPack& args) override;
+};
+
+class ReducePanick final : public Node {
+ public:
+  ReducePanick(const einu::sgl::Time& time);
+  Result Run(const ArgPack& args) override;
+
+ private:
+  const einu::sgl::Time& time_;
 };
 
 }  // namespace bt

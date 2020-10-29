@@ -41,10 +41,23 @@ einu::ai::bt::Root BuildSheepBT(einu::IEntityManager& ett_mgr) {
   {
     auto& slc = root.AddChild<Selector>();
     {
+      auto& panick_seq = slc.AddChild<Sequence>();
+      {
+        panick_seq.AddChild<IsPanicking>();
+        panick_seq.AddChild<ReducePanick>(
+            ett_mgr.GetSinglenent<const einu::sgl::Time>());
+        auto& successor = panick_seq.AddChild<Succeeder>();
+        { successor.AddChild<FindPredator>(); }
+        panick_seq.AddChild<ChooseEvadeDestination>();
+        panick_seq.AddChild<MoveTo>();
+      }
+
       auto& evade_seq = slc.AddChild<Sequence>();
       {
         evade_seq.AddChild<FindPredator>();
-        evade_seq.AddChild<Escape>();
+        evade_seq.AddChild<StartPanick>();
+        evade_seq.AddChild<ChooseEvadeDestination>();
+        evade_seq.AddChild<MoveTo>();
       }
 
       auto& hunt_seq = slc.AddChild<Sequence>();
@@ -172,17 +185,20 @@ Result TrackPrey::Run(const ArgPack& args) {
   return Result::Success;
 }
 
-Result Escape::Run(const ArgPack& args) {
-  auto&& [evade, transform, movement] = args.GetComponents(
-      einu::XnentList<cmp::Evade, einu::cmp::Transform, einu::cmp::Movement>{});
-  auto dir = glm::vec2{};
-  auto pos = glm::vec2{transform.GetPosition()};
-  for (auto&& predator : evade.predators) {
-    auto delta = pos - predator.pos;
-    dir += delta;
+Result ChooseEvadeDestination::Run(const ArgPack& args) {
+  auto&& [evade, transform, dest] =
+      args.GetComponents(einu::XnentList<cmp::Evade, einu::cmp::Transform,
+                                         einu::ai::cmp::Destination>{});
+  if (evade.predators.size() != 0) {
+    auto dir = glm::vec2{};
+    auto pos = glm::vec2{transform.GetPosition()};
+    for (auto&& predator : evade.predators) {
+      auto delta = pos - predator.pos;
+      dir += delta;
+    }
+    dir = glm::normalize(dir);
+    dest.destination = glm::vec3(dir, 0) * evade.evade_dist;
   }
-  movement.direction = glm::vec3{glm::normalize(dir), 0};
-  movement.speed = movement.max_speed;
   return Result::Success;
 }
 
@@ -210,10 +226,24 @@ Result ChooseRandomDestination::Run(const ArgPack& args) {
 
 Result IsPanicking::Run(const ArgPack& args) {
   static constexpr float kNotPanickTime = 0.01f;
-  const auto& evade = args.GetComponent<cmp::Evade>();
-  if (evade.remaining_panick_time < kNotPanickTime) {
+  const auto& panick = args.GetComponent<cmp::Panick>();
+  if (panick.remaining_panick_time < kNotPanickTime) {
     return Result::Failure;
   }
+  return Result::Success;
+}
+
+Result StartPanick::Run(const ArgPack& args) {
+  auto& panick = args.GetComponent<cmp::Panick>();
+  panick.remaining_panick_time = panick.max_panick_time;
+  return Result::Success;
+}
+
+ReducePanick::ReducePanick(const einu::sgl::Time& time) : time_{time} {}
+
+Result ReducePanick::Run(const ArgPack& args) {
+  auto& panick = args.GetComponent<cmp::Panick>();
+  panick.remaining_panick_time -= einu::sgl::DeltaSeconds(time_);
   return Result::Success;
 }
 
