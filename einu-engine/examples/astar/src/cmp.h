@@ -18,6 +18,7 @@
 
 #pragma once
 
+#include <einu-engine/core/eid.h>
 #include <einu-engine/core/xnent.h>
 
 #include <glm/glm.hpp>
@@ -27,6 +28,21 @@ namespace cmp {
 
 struct Cell : public einu::Xnent {
   glm::ivec2 pos;
+};
+
+struct Starchaser : public einu::Xnent {
+  enum class State { Collecting, Selling, GoingHome };
+  State state = State::Collecting;
+};
+
+struct StarPocket : public einu::Xnent {
+  einu::EID star_eid = ~einu::EID{0};
+};
+
+struct Energy : public einu::Xnent {
+  float energy = 100.f;
+  float fatigue_threshold = 50.f;
+  float max_energy = 100.f;
 };
 
 }  // namespace cmp

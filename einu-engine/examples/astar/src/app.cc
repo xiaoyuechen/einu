@@ -108,11 +108,17 @@ void App::Run() {
     InitSpriteBatch(resource_table, sprite_batch, "vao", "vbo1", "vbo2",
                     "sampler");
 
-    CreateSprite(resource_table, sys::kCellFrameSpriteName, "program",
+    CreateSprite(resource_table, sys::kCellFrameSprite, "program",
                  "white-frame");
 
-    CreateSprite(resource_table, sys::kCellBlockSpriteName, "program",
+    CreateSprite(resource_table, sys::kCellBlockSprite, "program",
                  "white-cross");
+
+    CreateSprite(resource_table, sys::kSpaceshipSprite, "program",
+                 "white-circle");
+
+    CreateSprite(resource_table, sys::kTradingPostSprite, "program",
+                 "white-circle");
   }
 
   // init grid
@@ -120,8 +126,47 @@ void App::Run() {
     std::srand(std::time(nullptr));
     for (std::size_t i = 0; i != world_state.grid.GetSize().x; ++i) {
       for (std::size_t j = 0; j != world_state.grid.GetSize().y; ++j) {
-        std::uint8_t blocked = std::rand() % 2;
+        std::uint8_t blocked = std::rand() % 4;
+        blocked = blocked > 1 ? 1 : blocked;
         world_state.grid[i][j].state = static_cast<CellState>(blocked);
+      }
+    }
+  }
+
+  // create trading post
+  {
+    bool created = false;
+    while (!created) {
+      auto x = std::rand() % world_state.grid.GetSize().x;
+      auto y = std::rand() % world_state.grid.GetSize().y;
+      auto& cell = world_state.grid[x][y];
+      if (cell.state != CellState::Blocked) {
+        auto cell_size = sgl::GetCellSize(world_state);
+        auto pos = glm::vec3(cell_size.x * x, cell_size.y * y, 0);
+        auto transform = einu::Transform{};
+        transform.SetPosition(pos + glm::vec3(3, 3, 0));
+        transform.SetScale(glm::vec3(0.2f, 0.2f, 0));
+        sys::CreateTradingPost(*ett_mgr, transform);
+        created = true;
+      }
+    }
+  }
+
+  // create spaceship
+  {
+    bool created = false;
+    while (!created) {
+      auto x = std::rand() % world_state.grid.GetSize().x;
+      auto y = std::rand() % world_state.grid.GetSize().y;
+      auto& cell = world_state.grid[x][y];
+      if (cell.state != CellState::Blocked) {
+        auto cell_size = sgl::GetCellSize(world_state);
+        auto pos = glm::vec3(cell_size.x * x, cell_size.y * y, 0);
+        auto transform = einu::Transform{};
+        transform.SetPosition(pos + glm::vec3(3, 3, 0));
+        transform.SetScale(glm::vec3(0.2f, 0.2f, 0));
+        sys::CreateSpaceship(*ett_mgr, transform);
+        created = true;
       }
     }
   }

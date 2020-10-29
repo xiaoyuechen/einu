@@ -24,13 +24,21 @@
 namespace astar {
 namespace sys {
 
-static constexpr char* kCellFrameSpriteName = "cell-frame";
+static constexpr char* kCellFrameSprite = "cell-frame";
 einu::EID CreateCellFrame(einu::IEntityManager& ett_mgr,
                           const einu::Transform& transform);
 
-static constexpr char* kCellBlockSpriteName = "cell-block";
+static constexpr char* kCellBlockSprite = "cell-block";
 einu::EID CreateCellBlock(einu::IEntityManager& ett_mgr,
                           const einu::Transform& transform);
+
+static constexpr char* kSpaceshipSprite = "spaceship";
+einu::EID CreateSpaceship(einu::IEntityManager& ett_mgr,
+                          const einu::Transform& transform);
+
+static constexpr char* kTradingPostSprite = "spaceship";
+einu::EID CreateTradingPost(einu::IEntityManager& ett_mgr,
+                            const einu::Transform& transform);
 
 }  // namespace sys
 }  // namespace astar

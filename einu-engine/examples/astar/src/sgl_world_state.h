@@ -36,6 +36,8 @@ struct WorldState : public einu::Xnent {
 
   Grid grid{};
   glm::vec2 world_size{};
+  glm::vec2 trading_post_pos;
+  glm::vec2 space_ship_pos;
 };
 
 inline glm::vec2 GetCellSize(const WorldState& world_state) noexcept {

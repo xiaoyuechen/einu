@@ -29,7 +29,7 @@
 #include <einu-engine/graphics/sgl_sprite_batch.h>
 #include <einu-engine/window/cmp_window.h>
 
-#include "src/cmp_cell.h"
+#include "src/cmp.h"
 #include "src/sgl_world_state.h"
 
 namespace astar {

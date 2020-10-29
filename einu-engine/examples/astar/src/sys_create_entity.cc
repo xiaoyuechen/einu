@@ -25,7 +25,7 @@
 #include <einu-engine/core/util/enum.h>
 #include <einu-engine/graphics/cmp_sprite.h>
 
-#include "src/cmp_cell.h"
+#include "src/cmp.h"
 #include "src/sgl_world_state.h"
 
 namespace astar {
@@ -40,7 +40,7 @@ einu::EID CreateCellFrame(einu::IEntityManager& ett_mgr,
 
   auto& sprite = ett_mgr.AddComponent<einu::graphics::cmp::Sprite>(ett);
   sprite.color = glm::vec4{255, 255, 255, 255};
-  sprite.sprite_name = kCellFrameSpriteName;
+  sprite.sprite_name = kCellFrameSprite;
 
   return ett;
 }
@@ -59,7 +59,42 @@ einu::EID CreateCellBlock(einu::IEntityManager& ett_mgr,
 
   auto& sprite = ett_mgr.AddComponent<einu::graphics::cmp::Sprite>(ett);
   sprite.color = glm::vec4{255, 255, 255, 255};
-  sprite.sprite_name = kCellBlockSpriteName;
+  sprite.sprite_name = kCellBlockSprite;
+
+  return ett;
+}
+
+einu::EID CreateSpaceship(einu::IEntityManager& ett_mgr,
+                          const einu::Transform& transform) {
+  auto ett = ett_mgr.CreateEntity();
+
+  ett_mgr.AddComponent<einu::cmp::Transform>(ett) =
+      einu::cmp::Transform{transform};
+
+  auto& world_state = ett_mgr.GetSinglenent<sgl::WorldState>();
+
+  world_state.space_ship_pos = transform.GetPosition();
+
+  auto& sprite = ett_mgr.AddComponent<einu::graphics::cmp::Sprite>(ett);
+  sprite.color = glm::vec4{50, 255, 255, 255};
+  sprite.sprite_name = kSpaceshipSprite;
+
+  return ett;
+}
+
+einu::EID CreateTradingPost(einu::IEntityManager& ett_mgr,
+                            const einu::Transform& transform) {
+  auto ett = ett_mgr.CreateEntity();
+
+  ett_mgr.AddComponent<einu::cmp::Transform>(ett) =
+      einu::cmp::Transform{transform};
+
+  auto& world_state = ett_mgr.GetSinglenent<sgl::WorldState>();
+  world_state.trading_post_pos = transform.GetPosition();
+
+  auto& sprite = ett_mgr.AddComponent<einu::graphics::cmp::Sprite>(ett);
+  sprite.color = glm::vec4{255, 255, 0, 255};
+  sprite.sprite_name = kTradingPostSprite;
 
   return ett;
 }
