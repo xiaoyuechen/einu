@@ -194,8 +194,9 @@ einu::EID CreateGrass(einu::IEntityManager& ett_mgr,
 
   auto& sense = ett_mgr.AddComponent<cmp::Sense>(ett);
   using einu::util::operator|;
-  sense.relevant_type_signature = GetSignatureAll();
-  sense.sense_radius = 10.f;
+  sense.relevant_type_signature =
+      AgentType::Grass | AgentType::Herder | AgentType::Sheep | AgentType::Wolf;
+  sense.sense_radius = 15.f;
 
   return ett;
 }

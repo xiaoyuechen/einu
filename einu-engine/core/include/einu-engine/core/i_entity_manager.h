@@ -114,7 +114,7 @@ class IEntityManager {
 
   template <typename T>
   T& GetSinglenent() noexcept {
-    return static_cast<const T&>(GetSinglenentImpl(GetXnentTypeID<T>()));
+    return static_cast<T&>(GetSinglenentImpl(GetXnentTypeID<T>()));
   }
 
   Xnent& GetSinglenent(XnentTypeID tid) noexcept {

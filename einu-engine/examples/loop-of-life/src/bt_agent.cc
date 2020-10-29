@@ -83,9 +83,6 @@ einu::ai::bt::Root BuildSheepBT(einu::IEntityManager& ett_mgr) {
       }
     }
   }
-
-  auto& seq = root.AddChild<Sequence>();
-  seq.AddChild<MoveTo>();
   return std::move(root);
 }
 
@@ -111,8 +108,22 @@ einu::ai::bt::Root BuildHerderBT(einu::IEntityManager& ett_mgr) {
     }
   }
 
-  auto& seq = root.AddChild<Sequence>();
-  seq.AddChild<MoveTo>();
+  return std::move(root);
+}
+
+einu::ai::bt::Root BuildGrassBT(einu::IEntityManager& ett_mgr) {
+  using namespace einu::ai::bt;  // NOLINT
+  auto root = Root();
+  {
+    auto& seq = root.AddChild<Sequence>();
+    {
+      auto& not_trampled = seq.AddChild<Inverter>();
+      { not_trampled.AddChild<CanSeeOtherAgent>(); }
+      seq.AddChild<GainHealth>(ett_mgr.GetSinglenent<einu::sgl::Time>());
+      seq.AddChild<CanReproduce>();
+      seq.AddChild<Reproduce>(ett_mgr);
+    }
+  }
   return std::move(root);
 }
 
@@ -312,6 +323,24 @@ Result Reproduce::Run(const ArgPack& args) {
   }
   health.health *= (1.f - reproduce.cost_health_ratio);
   ett_mgr_.GetComponent<cmp::Health>(ett).health = reproduce.new_born_health;
+  return Result::Success;
+}
+
+GainHealth::GainHealth(const einu::sgl::Time& time) : time_{time} {}
+
+Result GainHealth::Run(const ArgPack& args) {
+  auto& [health, gain_health] =
+      args.GetComponents(einu::XnentList<cmp::Health, const cmp::GainHealth>{});
+  cmp::AddHealth(health, gain_health.gain_health_per_second *
+                             einu::sgl::DeltaSeconds(time_));
+  return Result::Success;
+}
+
+Result CanSeeOtherAgent::Run(const ArgPack& args) {
+  auto& memory = args.GetComponent<const cmp::Memory>();
+  if (memory.memory.size() == 0) {
+    return Result::Failure;
+  }
   return Result::Success;
 }
 

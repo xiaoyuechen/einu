@@ -31,6 +31,8 @@ einu::ai::bt::Root BuildSheepBT(einu::IEntityManager& ett_mgr);
 
 einu::ai::bt::Root BuildHerderBT(einu::IEntityManager& ett_mgr);
 
+einu::ai::bt::Root BuildGrassBT(einu::IEntityManager& ett_mgr);
+
 using Result = einu::ai::bt::Result;
 using ArgPack = einu::ai::bt::ArgPack;
 using Node = einu::ai::bt::Node;
@@ -120,6 +122,20 @@ class Reproduce final : public Node {
 
  private:
   einu::IEntityManager& ett_mgr_;
+};
+
+class GainHealth final : public Node {
+ public:
+  GainHealth(const einu::sgl::Time& time);
+  Result Run(const ArgPack& args) override;
+
+ private:
+  const einu::sgl::Time& time_;
+};
+
+class CanSeeOtherAgent final : public Node {
+ public:
+  Result Run(const ArgPack& args) override;
 };
 
 }  // namespace bt

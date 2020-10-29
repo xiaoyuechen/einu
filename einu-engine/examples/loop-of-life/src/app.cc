@@ -202,9 +202,17 @@ void App::Run() {
   einu::ai::bt::ArgPack herder_bt_args;
   auto herder_bt = ai::bt::BuildHerderBT(*ett_mgr);
 
+  einu::ai::bt::ArgPack grass_bt_args;
+  auto grass_bt = ai::bt::BuildGrassBT(*ett_mgr);
+
   auto destroy_view = einu::EntityView<einu::XnentList<const cmp::Health>>{};
 
   auto forget_view = einu::EntityView<einu::XnentList<cmp::Memory>>{};
+
+  auto grass_view = einu::EntityView<
+      einu::XnentList<einu::cmp::Transform, cmp::Agent, cmp::Health,
+                      cmp::HealthLoss, cmp::GainHealth, cmp::Memory,
+                      cmp::Reproduce, cmp::Sense, cmp::GrassTag>>{};
 
   auto health_loss_view =
       einu::EntityView<einu::XnentList<const cmp::HealthLoss, cmp::Health>>{};
@@ -222,6 +230,9 @@ void App::Run() {
       einu::ai::cmp::Destination, cmp::Agent, cmp::Eat, cmp::Evade, cmp::Health,
       cmp::HealthLoss, cmp::Hunger, cmp::Hunt, cmp::Memory, cmp::Panick,
       cmp::Reproduce, cmp::Sense, cmp::Wander>>{};
+
+  auto sense_view = einu::EntityView<
+      einu::XnentList<einu::cmp::Transform, cmp::Sense, cmp::Memory>>{};
 
   auto sprite_render_view = einu::EntityView<
       einu::XnentList<einu::cmp::Transform, einu::graphics::cmp::Sprite>>{};
@@ -252,14 +263,26 @@ void App::Run() {
       sys::Forget(memory);
     }
 
+    sense_view.View(*ett_mgr);
+    for (auto [comps, eid] = std::tuple{sense_view.Components().begin(),
+                                        sense_view.EIDs().begin()};
+         comps != sense_view.Components().end(); ++comps, ++eid) {
+      auto&& [transform, sense, memory] = *comps;
+      sys::Sense(world_state, cell_buffer, sense, transform, memory, *eid);
+    }
+
+    grass_view.View(*ett_mgr);
+    for (auto [comps, eid] = std::tuple{grass_view.Components().begin(),
+                                        grass_view.EIDs().begin()};
+         comps != grass_view.Components().end(); ++comps, ++eid) {
+      grass_bt_args.Set(*eid, *comps);
+      grass_bt.Run(grass_bt_args);
+    }
+
     sheep_view.View(*ett_mgr);
     for (auto [comp_it, eid_it] = std::tuple{sheep_view.Components().begin(),
                                              sheep_view.EIDs().begin()};
          comp_it != sheep_view.Components().end(); ++comp_it, ++eid_it) {
-      auto& comps = *comp_it;
-      sys::Sense(world_state, cell_buffer, std::get<cmp::Sense&>(comps),
-                 std::get<einu::cmp::Transform&>(comps),
-                 std::get<cmp::Memory&>(comps), *eid_it);
       sheep_bt_args.Set(*eid_it, *comp_it);
       sheep_bt.Run(sheep_bt_args);
     }
@@ -268,10 +291,6 @@ void App::Run() {
     for (auto [comp_it, eid_it] = std::tuple{herder_view.Components().begin(),
                                              herder_view.EIDs().begin()};
          comp_it != herder_view.Components().end(); ++comp_it, ++eid_it) {
-      auto& comps = *comp_it;
-      sys::Sense(world_state, cell_buffer, std::get<cmp::Sense&>(comps),
-                 std::get<einu::cmp::Transform&>(comps),
-                 std::get<cmp::Memory&>(comps), *eid_it);
       herder_bt_args.Set(*eid_it, *comp_it);
       herder_bt.Run(herder_bt_args);
     }
