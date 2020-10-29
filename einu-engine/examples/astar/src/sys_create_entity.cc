@@ -25,14 +25,14 @@
 #include <einu-engine/core/util/enum.h>
 #include <einu-engine/graphics/cmp_sprite.h>
 
+#include "src/cmp_cell.h"
 #include "src/sgl_world_state.h"
 
-namespace einu {
-namespace {}
-}  // namespace einu
+namespace astar {
+namespace sys {
 
-einu::EID astar::sys::CreateCellFrame(einu::IEntityManager& ett_mgr,
-                                      const einu::Transform& transform) {
+einu::EID CreateCellFrame(einu::IEntityManager& ett_mgr,
+                          const einu::Transform& transform) {
   auto ett = ett_mgr.CreateEntity();
 
   ett_mgr.AddComponent<einu::cmp::Transform>(ett) =
@@ -42,5 +42,27 @@ einu::EID astar::sys::CreateCellFrame(einu::IEntityManager& ett_mgr,
   sprite.color = glm::vec4{255, 255, 255, 255};
   sprite.sprite_name = kCellFrameSpriteName;
 
-  return einu::EID();
+  return ett;
 }
+
+einu::EID CreateCellBlock(einu::IEntityManager& ett_mgr,
+                          const einu::Transform& transform) {
+  auto ett = ett_mgr.CreateEntity();
+
+  ett_mgr.AddComponent<einu::cmp::Transform>(ett) =
+      einu::cmp::Transform{transform};
+
+  auto& world_state = ett_mgr.GetSinglenent<sgl::WorldState>();
+  auto& cell = ett_mgr.AddComponent<cmp::Cell>(ett);
+  cell.pos =
+      sgl::GetCoordsInGrid(world_state, glm::vec2(transform.GetPosition()));
+
+  auto& sprite = ett_mgr.AddComponent<einu::graphics::cmp::Sprite>(ett);
+  sprite.color = glm::vec4{255, 255, 255, 255};
+  sprite.sprite_name = kCellBlockSpriteName;
+
+  return ett;
+}
+
+}  // namespace sys
+}  // namespace astar

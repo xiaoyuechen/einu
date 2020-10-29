@@ -9,6 +9,8 @@ add_executable(
   "src/sys_movement.h"
   "src/sys_rotate.h"
   "src/sys_rotate.cc"
+  "src/sys_cell.h"
+  "src/sys_cell.cc"
   "src/sys_create_entity.cc"
   "src/sys_create_entity.h")
 

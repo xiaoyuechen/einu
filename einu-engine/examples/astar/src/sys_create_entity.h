@@ -28,5 +28,9 @@ static constexpr char* kCellFrameSpriteName = "cell-frame";
 einu::EID CreateCellFrame(einu::IEntityManager& ett_mgr,
                           const einu::Transform& transform);
 
+static constexpr char* kCellBlockSpriteName = "cell-block";
+einu::EID CreateCellBlock(einu::IEntityManager& ett_mgr,
+                          const einu::Transform& transform);
+
 }  // namespace sys
 }  // namespace astar

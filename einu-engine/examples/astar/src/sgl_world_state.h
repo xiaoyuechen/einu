@@ -34,8 +34,8 @@ namespace sgl {
 struct WorldState : public einu::Xnent {
   using Grid = einu::Grid<Cell>;
 
-  Grid grid;
-  glm::vec2 world_size;
+  Grid grid{};
+  glm::vec2 world_size{};
 };
 
 inline glm::vec2 GetCellSize(const WorldState& world_state) noexcept {

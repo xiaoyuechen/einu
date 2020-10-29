@@ -18,18 +18,16 @@
 
 #pragma once
 
-#include <einu-engine/core/eid.h>
+#include <einu-engine/graphics/cmp_sprite.h>
 
-#include <cstdint>
-#include <vector>
+#include "src/cmp_cell.h"
+#include "src/sgl_world_state.h"
 
 namespace astar {
+namespace sys {
 
-enum class CellState : std::uint8_t { Blocked, Clear };
+void UpdateCell(const sgl::WorldState& world_state, const cmp::Cell& cell,
+                einu::graphics::cmp::Sprite& sprite);
 
-struct Cell {
-  CellState state = CellState::Clear;
-  std::vector<einu::EID> eids;
-};
-
+}
 }  // namespace astar

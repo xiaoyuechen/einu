@@ -16,20 +16,20 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#pragma once
-
-#include <einu-engine/core/eid.h>
-
-#include <cstdint>
-#include <vector>
+#include "src/sys_cell.h"
 
 namespace astar {
+namespace sys {
 
-enum class CellState : std::uint8_t { Blocked, Clear };
+void UpdateCell(const sgl::WorldState& world_state, const cmp::Cell& cell,
+                einu::graphics::cmp::Sprite& sprite) {
+  auto& c = world_state.grid[cell.pos.x][cell.pos.y];
+  if (c.state == CellState::Clear) {
+    sprite.color.a = 0;
+  } else {
+    sprite.color.a = 255;
+  }
+}
 
-struct Cell {
-  CellState state = CellState::Clear;
-  std::vector<einu::EID> eids;
-};
-
+}  // namespace sys
 }  // namespace astar

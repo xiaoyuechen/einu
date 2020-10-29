@@ -18,6 +18,7 @@
 
 #include "src/app.h"
 
+#include <einu-engine/common/random.h>
 #include <einu-engine/common/sys_movement.h>
 #include <einu-engine/common/sys_time.h>
 #include <einu-engine/core/einu_engine.h>
@@ -28,10 +29,12 @@
 #include <einu-engine/graphics/sys_sprite_render.h>
 #include <einu-engine/window/sys_window.h>
 
+#include <cstdlib>
 #include <iostream>
 #include <random>
 
 #include "src/engine_policy.h"
+#include "src/sys_cell.h"
 #include "src/sys_create_entity.h"
 #include "src/sys_movement.h"
 #include "src/sys_rotate.h"
@@ -58,8 +61,8 @@ void App::Run() {
 
   auto& time = ett_mgr->AddSinglenent<einu::sgl::Time>();
   auto& world_state = ett_mgr->AddSinglenent<sgl::WorldState>();
-  world_state.grid = sgl::WorldState::Grid(glm::uvec2{16, 16});
-  world_state.world_size = glm::vec2{16 * 32, 16 * 32};
+  world_state.grid = sgl::WorldState::Grid(glm::uvec2{12, 12});
+  world_state.world_size = glm::vec2{12 * 32, 12 * 32};
 
   auto& resource_table =
       ett_mgr->AddSinglenent<einu::graphics::sgl::GLResourceTable>();
@@ -107,6 +110,20 @@ void App::Run() {
 
     CreateSprite(resource_table, sys::kCellFrameSpriteName, "program",
                  "white-frame");
+
+    CreateSprite(resource_table, sys::kCellBlockSpriteName, "program",
+                 "white-cross");
+  }
+
+  // init grid
+  {
+    std::srand(std::time(nullptr));
+    for (std::size_t i = 0; i != world_state.grid.GetSize().x; ++i) {
+      for (std::size_t j = 0; j != world_state.grid.GetSize().y; ++j) {
+        std::uint8_t blocked = std::rand() % 2;
+        world_state.grid[i][j].state = static_cast<CellState>(blocked);
+      }
+    }
   }
 
   // create entities
@@ -122,6 +139,7 @@ void App::Run() {
         auto transform = einu::Transform{};
         transform.SetPosition(pos);
         sys::CreateCellFrame(*ett_mgr, transform);
+        sys::CreateCellBlock(*ett_mgr, transform);
       }
     }
   }
@@ -143,6 +161,9 @@ void App::Run() {
   auto sprite_render_view = einu::EntityView<
       einu::XnentList<einu::cmp::Transform, einu::graphics::cmp::Sprite>>{};
 
+  auto cell_view = einu::EntityView<
+      einu::XnentList<einu::graphics::cmp::Sprite, const cmp::Cell>>{};
+
   // game loop
   while (!win.shouldClose) {
     einu::window::sys::PoolEvents(win);
@@ -156,6 +177,11 @@ void App::Run() {
     for (auto&& [transform, movement] : move_view.Components()) {
       sys::Move(time, world_state, transform, movement);
       sys::Rotate(transform, movement);
+    }
+
+    cell_view.View(*ett_mgr);
+    for (auto&& [sprite, cell] : cell_view.Components()) {
+      sys::UpdateCell(world_state, cell, sprite);
     }
 
     // render sprites
