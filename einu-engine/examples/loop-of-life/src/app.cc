@@ -44,6 +44,7 @@
 namespace lol {
 
 void App::Run() {
+  // init engine
   Engine engine;
 
   auto eid_pool = engine.CreateEIDPool();
@@ -79,6 +80,7 @@ void App::Run() {
 
   { einu::sys::InitTime(time); }
 
+  // init graphics
   {
     using namespace einu::graphics::sys;  // NOLINT
     using ResourceType = einu::graphics::ResourceType;
@@ -133,11 +135,12 @@ void App::Run() {
       vert.pos.x -= static_cast<float>(circle_tex_info.size.x) / 2;
       vert.pos.y -= static_cast<float>(circle_tex_info.size.y) / 2;
     }
+
+    InitSpriteBatch(resource_table, sprite_batch, "vao", "vbo1", "vbo2",
+                    "sampler");
   }
 
-  einu::graphics::sys::InitSpriteBatch(resource_table, sprite_batch, "vao",
-                                       "vbo1", "vbo2", "sampler");
-
+  // create entities
   {
     std::random_device device;
     std::mt19937 generator(device());
@@ -186,6 +189,7 @@ void App::Run() {
     }
   }
 
+  // camera
   auto proj = einu::graphics::Projection{
       einu::graphics::Projection::Type::Orthographic,
       einu::graphics::Projection::OrthographicAttrib{
@@ -194,8 +198,10 @@ void App::Run() {
   auto cam_mat = einu::graphics::ProjectionMatrix(proj) *
                  einu::graphics::ViewMatrix(einu::graphics::View{});
 
+  // world state need this
   auto cell_buffer = sys::CellBuffer{};
 
+  // behavior trees
   einu::ai::bt::ArgPack sheep_bt_args;
   auto sheep_bt = ai::bt::BuildSheepBT(*ett_mgr);
 
@@ -205,6 +211,7 @@ void App::Run() {
   einu::ai::bt::ArgPack grass_bt_args;
   auto grass_bt = ai::bt::BuildGrassBT(*ett_mgr);
 
+  // views
   auto destroy_view = einu::EntityView<einu::XnentList<const cmp::Health>>{};
 
   auto forget_view = einu::EntityView<einu::XnentList<cmp::Memory>>{};
@@ -240,6 +247,7 @@ void App::Run() {
   auto world_state_view =
       einu::EntityView<einu::XnentList<einu::cmp::Transform, cmp::Agent>>{};
 
+  // game loop
   while (!win.shouldClose) {
     einu::window::sys::PoolEvents(win);
     einu::graphics::sys::Clear();
@@ -248,6 +256,7 @@ void App::Run() {
     std::cout << "ft: " << einu::sgl::DeltaSeconds(time) << std::endl;
 
     // TODO(Xiaoyue Chen): implement zip iterator
+    // update world state
     world_state_view.View(*ett_mgr);
     sys::ClearWorldState(world_state);
     for (auto [comp_it, eid_it] =
@@ -258,11 +267,13 @@ void App::Run() {
       sys::UpdateWorldState(world_state, transform, agent, *eid_it);
     }
 
+    // clear all agents memory
     forget_view.View(*ett_mgr);
     for (auto&& [memory] : forget_view.Components()) {
       sys::Forget(memory);
     }
 
+    // all agents sense
     sense_view.View(*ett_mgr);
     for (auto [comps, eid] = std::tuple{sense_view.Components().begin(),
                                         sense_view.EIDs().begin()};
@@ -271,6 +282,7 @@ void App::Run() {
       sys::Sense(world_state, cell_buffer, sense, transform, memory, *eid);
     }
 
+    // run grass behavior tree
     grass_view.View(*ett_mgr);
     for (auto [comps, eid] = std::tuple{grass_view.Components().begin(),
                                         grass_view.EIDs().begin()};
@@ -279,6 +291,7 @@ void App::Run() {
       grass_bt.Run(grass_bt_args);
     }
 
+    // run sheep/wolf behavior tree
     sheep_view.View(*ett_mgr);
     for (auto [comp_it, eid_it] = std::tuple{sheep_view.Components().begin(),
                                              sheep_view.EIDs().begin()};
@@ -287,6 +300,7 @@ void App::Run() {
       sheep_bt.Run(sheep_bt_args);
     }
 
+    // run herder behavior tree
     herder_view.View(*ett_mgr);
     for (auto [comp_it, eid_it] = std::tuple{herder_view.Components().begin(),
                                              herder_view.EIDs().begin()};
@@ -295,6 +309,7 @@ void App::Run() {
       herder_bt.Run(herder_bt_args);
     }
 
+    // lose health
     health_loss_view.View(*ett_mgr);
     for (auto&& [health_loss, health] : health_loss_view.Components()) {
       sys::LoseHealth(time, health_loss, health);
@@ -327,6 +342,8 @@ void App::Run() {
 
     einu::window::sys::SwapBuffer(win);
   }
+
+  // TODO(Xiaoyue Chen): clean up
 }
 
 }  // namespace lol

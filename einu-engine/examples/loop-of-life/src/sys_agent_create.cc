@@ -27,6 +27,7 @@
 
 #include "src/cmp_agent.h"
 #include "src/cmp_health.h"
+#include "src/sgl_world_state.h"
 
 namespace lol {
 namespace sys {
@@ -55,6 +56,16 @@ einu::EID CreateAgent<AgentType::Herder>(einu::IEntityManager& ett_mgr,
   return CreateHerder(ett_mgr, transform);
 }
 
+void ClampPosition(const einu::IEntityManager& ett_mgr,
+                   einu::Transform& transform) {
+  const auto& world_state = ett_mgr.GetSinglenent<sgl::WorldState>();
+  auto world_size = glm::vec2(world_state.world_size);
+  auto pos = transform.GetPosition();
+  pos.x = std::clamp(pos.x, 0.f, world_size.x);
+  pos.y = std::clamp(pos.y, 0.f, world_size.y);
+  transform.SetPosition(pos);
+}
+
 einu::EID CreateSheep(einu::IEntityManager& ett_mgr,
                       const einu::Transform& transform) {
   auto ett = ett_mgr.CreateEntity();
@@ -63,8 +74,10 @@ einu::EID CreateSheep(einu::IEntityManager& ett_mgr,
   sprite.color = glm::vec4{255, 255, 255, 255};
   sprite.sprite_name = kSheepSpriteName;
 
+  auto spawn_tranform = transform;
+  ClampPosition(ett_mgr, spawn_tranform);
   ett_mgr.AddComponent<einu::cmp::Transform>(ett) =
-      einu::cmp::Transform{transform};
+      einu::cmp::Transform{spawn_tranform};
 
   auto& movement = ett_mgr.AddComponent<einu::cmp::Movement>(ett);
   movement.max_speed = 14;
@@ -174,8 +187,10 @@ einu::EID CreateGrass(einu::IEntityManager& ett_mgr,
   sprite.color = glm::vec4{50, 255, 50, 255};
   sprite.sprite_name = kGrassSpriteName;
 
+  auto spawn_tranform = transform;
+  ClampPosition(ett_mgr, spawn_tranform);
   ett_mgr.AddComponent<einu::cmp::Transform>(ett) =
-      einu::cmp::Transform{transform};
+      einu::cmp::Transform{spawn_tranform};
 
   ett_mgr.AddComponent<cmp::Agent>(ett).type = AgentType::Grass;
 
