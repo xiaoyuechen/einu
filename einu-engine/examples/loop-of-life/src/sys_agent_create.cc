@@ -50,16 +50,16 @@ einu::EID CreateSheep(einu::IEntityManager& ett_mgr,
   ett_mgr.AddComponent<cmp::Agent>(ett).type = AgentType::Sheep;
 
   auto& eat = ett_mgr.AddComponent<cmp::Eat>(ett);
-  eat.eat_health_per_attack = 10.f;
+  eat.eat_health_per_attack = 120.f;
   eat.absorption_rate = 0.5f;
 
   ett_mgr.AddComponent<cmp::Evade>(ett).predator_signature = AgentType::Wolf;
 
   ett_mgr.AddComponent<cmp::Health>(ett);
 
-  ett_mgr.AddComponent<cmp::HealthLoss>(ett).loss_speed = 0.f;
+  ett_mgr.AddComponent<cmp::HealthLoss>(ett).loss_speed = 5.f;
 
-  ett_mgr.AddComponent<cmp::Hunger>(ett).health_threashold = 80.f;
+  ett_mgr.AddComponent<cmp::Hunger>(ett).health_threashold = 100.f;
 
   ett_mgr.AddComponent<cmp::Hunt>(ett).prey_signature = AgentType::Grass;
 
@@ -100,7 +100,7 @@ einu::EID CreateWolf(einu::IEntityManager& ett_mgr,
   ett_mgr.AddComponent<cmp::Agent>(ett).type = AgentType::Wolf;
 
   auto& eat = ett_mgr.AddComponent<cmp::Eat>(ett);
-  eat.eat_health_per_attack = 10.f;
+  eat.eat_health_per_attack = 100.f;
   eat.absorption_rate = 0.3f;
 
   ett_mgr.AddComponent<cmp::Evade>(ett).predator_signature = AgentType::Herder;
@@ -126,6 +126,33 @@ einu::EID CreateWolf(einu::IEntityManager& ett_mgr,
   auto& wander = ett_mgr.AddComponent<cmp::Wander>(ett);
   wander.time_since_last_destination_change = 99999;
   wander.wander_radius = 100;
+
+  return ett;
+}
+
+einu::EID CreateGrass(einu::IEntityManager& ett_mgr,
+                      const einu::Transform& transform) {
+  auto ett = ett_mgr.CreateEntity();
+
+  auto& sprite = ett_mgr.AddComponent<einu::graphics::cmp::Sprite>(ett);
+  sprite.color = glm::vec4{50, 255, 50, 255};
+  sprite.sprite_name = kGrassSpriteName;
+
+  ett_mgr.AddComponent<einu::cmp::Transform>(ett) =
+      einu::cmp::Transform{transform};
+
+  ett_mgr.AddComponent<cmp::Agent>(ett).type = AgentType::Grass;
+
+  ett_mgr.AddComponent<cmp::Health>(ett);
+
+  ett_mgr.AddComponent<cmp::HealthLoss>(ett).loss_speed = 0.f;
+
+  ett_mgr.AddComponent<cmp::Memory>(ett);
+
+  auto& sense = ett_mgr.AddComponent<cmp::Sense>(ett);
+  using einu::util::operator|;
+  sense.relevant_type_signature = GetSignatureAll();
+  sense.sense_radius = 10.f;
 
   return ett;
 }

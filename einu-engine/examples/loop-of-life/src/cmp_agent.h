@@ -46,7 +46,7 @@ struct Evade : public einu::Xnent {
 
 struct Panick : public einu::Xnent {
   float remaining_panick_time = 0.0f;
-  float max_panick_time = 0.0f;
+  float max_panick_time = 3.0f;
 };
 
 struct Hunger : public einu::Xnent {

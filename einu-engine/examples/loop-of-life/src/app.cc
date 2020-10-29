@@ -95,23 +95,35 @@ void App::Run() {
     Create<ResourceType::ShaderProgram>(resource_table, "program", "vshader",
                                         "fshader");
     Create<ResourceType::Texture>(resource_table, "white-triangle",
-                                  "assets/white-triangle.png");
+                                  "assets/white_triangle.png");
+    Create<ResourceType::Texture>(resource_table, "white-circle",
+                                  "assets/white_circle.png");
     Create<ResourceType::Sampler>(resource_table, "sampler");
 
-    auto& tex_info = resource_table.tex_info_table.at("white-triangle");
+    auto& triangle_tex_info =
+        resource_table.tex_info_table.at("white-triangle");
 
     CreateSprite(resource_table, sys::kSheepSpriteName, "program",
                  "white-triangle");
     auto& sheep_sprite = resource_table.sprite_table.at(sys::kSheepSpriteName);
     for (auto&& vert : sheep_sprite.verts) {
-      vert.pos.x -= static_cast<float>(tex_info.size.x) / 2;
+      vert.pos.x -= static_cast<float>(triangle_tex_info.size.x) / 2;
     }
 
     einu::graphics::sys::CreateSprite(resource_table, sys::kWolfSpriteName,
                                       "program", "white-triangle");
     auto& wolf_sprite = resource_table.sprite_table.at(sys::kWolfSpriteName);
     for (auto&& vert : wolf_sprite.verts) {
-      vert.pos.x -= static_cast<float>(tex_info.size.x) / 2;
+      vert.pos.x -= static_cast<float>(triangle_tex_info.size.x) / 2;
+    }
+
+    auto& circle_tex_info = resource_table.tex_info_table.at("white-circle");
+    einu::graphics::sys::CreateSprite(resource_table, sys::kGrassSpriteName,
+                                      "program", "white-circle");
+    auto& grass_sprite = resource_table.sprite_table.at(sys::kGrassSpriteName);
+    for (auto&& vert : grass_sprite.verts) {
+      vert.pos.x -= static_cast<float>(circle_tex_info.size.x) / 2;
+      vert.pos.y -= static_cast<float>(circle_tex_info.size.y) / 2;
     }
   }
 
@@ -125,6 +137,16 @@ void App::Run() {
     std::uniform_int_distribution<int> distribution_y(0, win.size.height);
     std::uniform_real_distribution<float> distribution_rotate(0, 360);
 
+    for (std::size_t i = 0; i != 500; ++i) {
+      auto transform = einu::Transform{};
+      transform.SetPosition(
+          glm::vec3(distribution_x(generator), distribution_y(generator), 0));
+      transform.SetRotation(glm::quat(
+          glm::vec3(0, 0, glm::radians(distribution_rotate(generator)))));
+      transform.SetScale(glm::vec3(0.1f, 0.1f, 1.f));
+      sys::CreateGrass(*ett_mgr, transform);
+    }
+
     for (std::size_t i = 0; i != 100; ++i) {
       auto transform = einu::Transform{};
       transform.SetPosition(
@@ -135,7 +157,7 @@ void App::Run() {
       sys::CreateSheep(*ett_mgr, transform);
     }
 
-    for (std::size_t i = 0; i != 10; ++i) {
+    for (std::size_t i = 0; i != 5; ++i) {
       auto transform = einu::Transform{};
       transform.SetPosition(
           glm::vec3(distribution_x(generator), distribution_y(generator), 0));
@@ -182,6 +204,9 @@ void App::Run() {
   auto sprite_render_view = einu::EntityView<
       einu::XnentList<einu::cmp::Transform, einu::graphics::cmp::Sprite>>{};
 
+  auto world_state_view =
+      einu::EntityView<einu::XnentList<einu::cmp::Transform, cmp::Agent>>{};
+
   while (!win.shouldClose) {
     einu::window::sys::PoolEvents(win);
     einu::graphics::sys::Clear();
@@ -191,11 +216,14 @@ void App::Run() {
 
     ett_view.View(*ett_mgr);
 
+    // TODO(Xiaoyue Chen): implement zip iterator
+    world_state_view.View(*ett_mgr);
     sys::ClearWorldState(world_state);
     for (auto [comp_it, eid_it] =
-             std::tuple{ett_view.Components().begin(), ett_view.EIDs().begin()};
-         comp_it != ett_view.Components().end(); ++comp_it, ++eid_it) {
-      auto&& [transform, sprite, movement, dest, agent] = *comp_it;
+             std::tuple{world_state_view.Components().begin(),
+                        world_state_view.EIDs().begin()};
+         comp_it != world_state_view.Components().end(); ++comp_it, ++eid_it) {
+      auto&& [transform, agent] = *comp_it;
       sys::UpdateWorldState(world_state, transform, agent, *eid_it);
     }
 

@@ -32,6 +32,7 @@ static constexpr char* kWolfSpriteName = "wolf";
 einu::EID CreateWolf(einu::IEntityManager& ett_mgr,
                      const einu::Transform& transform);
 
+static constexpr char* kGrassSpriteName = "grass";
 einu::EID CreateGrass(einu::IEntityManager& ett_mgr,
                       const einu::Transform& transform);
 
