@@ -30,6 +30,7 @@
 
 #include "src/cmp_agent.h"
 #include "src/cmp_health.h"
+#include "src/sys_agent_create.h"
 
 namespace lol {
 namespace ai {
@@ -272,6 +273,31 @@ ReducePanick::ReducePanick(const einu::sgl::Time& time) : time_{time} {}
 Result ReducePanick::Run(const ArgPack& args) {
   auto& panick = args.GetComponent<cmp::Panick>();
   panick.remaining_panick_time -= einu::sgl::DeltaSeconds(time_);
+  return Result::Success;
+}
+
+Result CanReproduce::Run(const ArgPack& args) {
+  const auto& [health, reproduce] =
+      args.GetComponents(einu::XnentList<cmp::Health, cmp::Reproduce>{});
+  if (health.health > reproduce.health_threadhold) {
+    return Result::Success;
+  }
+  return Result::Failure;
+}
+
+Reproduce::Reproduce(einu::IEntityManager& ett_mgr) : ett_mgr_{ett_mgr} {}
+
+Result Reproduce::Run(const ArgPack& args) {
+  auto&& [agent, transform, health, reproduce] =
+      args.GetComponents(einu::XnentList<cmp::Agent, einu::cmp::Transform,
+                                         cmp::Health, cmp::Reproduce>{});
+  auto spawn_pos = transform.GetPosition() + glm::vec3(reproduce.offset, 0);
+  auto spawn_transform = reproduce.transform;
+  spawn_transform.SetPosition(spawn_pos);
+  if (agent.type == AgentType::Grass) {
+    sys::CreateGrass(ett_mgr_, spawn_transform);
+  } else if (agent.type == AgentType::Sheep) {
+  }
   return Result::Success;
 }
 

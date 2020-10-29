@@ -31,6 +31,30 @@
 namespace lol {
 namespace sys {
 
+template <>
+einu::EID CreateAgent<AgentType::Sheep>(einu::IEntityManager& ett_mgr,
+                                        const einu::Transform& transform) {
+  return CreateSheep(ett_mgr, transform);
+}
+
+template <>
+einu::EID CreateAgent<AgentType::Wolf>(einu::IEntityManager& ett_mgr,
+                                       const einu::Transform& transform) {
+  return CreateWolf(ett_mgr, transform);
+}
+
+template <>
+einu::EID CreateAgent<AgentType::Grass>(einu::IEntityManager& ett_mgr,
+                                        const einu::Transform& transform) {
+  return CreateGrass(ett_mgr, transform);
+}
+
+template <>
+einu::EID CreateAgent<AgentType::Herder>(einu::IEntityManager& ett_mgr,
+                                         const einu::Transform& transform) {
+  return CreateHerder(ett_mgr, transform);
+}
+
 einu::EID CreateSheep(einu::IEntityManager& ett_mgr,
                       const einu::Transform& transform) {
   auto ett = ett_mgr.CreateEntity();

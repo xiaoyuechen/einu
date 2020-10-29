@@ -108,6 +108,20 @@ class ReducePanick final : public Node {
   const einu::sgl::Time& time_;
 };
 
+class CanReproduce final : public Node {
+ public:
+  Result Run(const ArgPack& args) override;
+};
+
+class Reproduce final : public Node {
+ public:
+  Reproduce(einu::IEntityManager& ett_mgr);
+  Result Run(const ArgPack& args) override;
+
+ private:
+  einu::IEntityManager& ett_mgr_;
+};
+
 }  // namespace bt
 }  // namespace ai
 }  // namespace lol

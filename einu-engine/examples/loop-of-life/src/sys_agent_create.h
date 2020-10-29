@@ -21,8 +21,30 @@
 #include <einu-engine/common/transform.h>
 #include <einu-engine/core/i_entity_manager.h>
 
+#include "src/agent.h"
+
 namespace lol {
 namespace sys {
+
+template <AgentType t>
+einu::EID CreateAgent(einu::IEntityManager& ett_mgr,
+                      const einu::Transform& transform);
+
+template <>
+einu::EID CreateAgent<AgentType::Sheep>(einu::IEntityManager& ett_mgr,
+                                        const einu::Transform& transform);
+
+template <>
+einu::EID CreateAgent<AgentType::Wolf>(einu::IEntityManager& ett_mgr,
+                                       const einu::Transform& transform);
+
+template <>
+einu::EID CreateAgent<AgentType::Grass>(einu::IEntityManager& ett_mgr,
+                                        const einu::Transform& transform);
+
+template <>
+einu::EID CreateAgent<AgentType::Herder>(einu::IEntityManager& ett_mgr,
+                                         const einu::Transform& transform);
 
 static constexpr char* kSheepSpriteName = "sheep";
 einu::EID CreateSheep(einu::IEntityManager& ett_mgr,

@@ -66,6 +66,17 @@ struct Memory : public einu::Xnent {
   std::vector<AgentInfo> memory;
 };
 
+struct Reproduce : public einu::Xnent {
+  einu::Transform transform{};
+  glm::vec2 offset = {50, 0};
+  float health_threadhold = 120;
+  float cost_health_ratio = 0.5f;
+};
+
+struct GainHealth : public einu::Xnent {
+  float gain_health_per_second = 5;
+};
+
 struct Sense : public einu::Xnent {
   AgentType relevant_type_signature = AgentType::None;
   float sense_radius = 0;
