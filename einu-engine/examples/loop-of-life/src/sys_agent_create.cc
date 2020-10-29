@@ -72,7 +72,7 @@ einu::EID CreateSheep(einu::IEntityManager& ett_mgr,
   using einu::util::operator|;
   sense.relevant_type_signature =
       AgentType::Wolf | AgentType::Grass | AgentType::Herder;
-  sense.sense_radius = 100.f;
+  sense.sense_radius = 200.f;
 
   auto& wander = ett_mgr.AddComponent<cmp::Wander>(ett);
   wander.time_since_last_destination_change = 99999;
@@ -93,7 +93,7 @@ einu::EID CreateWolf(einu::IEntityManager& ett_mgr,
       einu::cmp::Transform{transform};
 
   auto& movement = ett_mgr.AddComponent<einu::cmp::Movement>(ett);
-  movement.max_speed = 60;
+  movement.max_speed = 40;
 
   auto& dest = ett_mgr.AddComponent<einu::ai::cmp::Destination>(ett);
 

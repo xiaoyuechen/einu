@@ -197,7 +197,8 @@ Result ChooseEvadeDestination::Run(const ArgPack& args) {
       dir += delta;
     }
     dir = glm::normalize(dir);
-    dest.destination = glm::vec3(dir, 0) * evade.evade_dist;
+    dest.destination =
+        transform.GetPosition() + glm::vec3(dir, 0) * evade.evade_dist;
   }
   return Result::Success;
 }
