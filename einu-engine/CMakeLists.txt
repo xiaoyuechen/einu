@@ -2,8 +2,7 @@ cmake_minimum_required(VERSION 3.14)
 
 option(EINU_ENGINE_BUILD_TESTS "Build all of EINU Engine's own tests." OFF)
 
-option(EINU_ENGINE_BUILD_EXAMPLES "Build all of EINU Engine's own examples."
-       OFF)
+option(EINU_ENGINE_BUILD_EXAMPLES "Build all of EINU Engine's own examples." ON)
 
 project(einu-engine LANGUAGES CXX)
 
