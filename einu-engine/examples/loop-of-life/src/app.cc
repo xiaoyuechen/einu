@@ -117,6 +117,14 @@ void App::Run() {
       vert.pos.x -= static_cast<float>(triangle_tex_info.size.x) / 2;
     }
 
+    einu::graphics::sys::CreateSprite(resource_table, sys::kHerderSpriteName,
+                                      "program", "white-triangle");
+    auto& herder_sprite =
+        resource_table.sprite_table.at(sys::kHerderSpriteName);
+    for (auto&& vert : herder_sprite.verts) {
+      vert.pos.x -= static_cast<float>(triangle_tex_info.size.x) / 2;
+    }
+
     auto& circle_tex_info = resource_table.tex_info_table.at("white-circle");
     einu::graphics::sys::CreateSprite(resource_table, sys::kGrassSpriteName,
                                       "program", "white-circle");
@@ -166,6 +174,16 @@ void App::Run() {
       transform.SetScale(glm::vec3(0.04f, 0.10f, 1.f));
       sys::CreateWolf(*ett_mgr, transform);
     }
+
+    for (std::size_t i = 0; i != 2; ++i) {
+      auto transform = einu::Transform{};
+      transform.SetPosition(
+          glm::vec3(distribution_x(generator), distribution_y(generator), 0));
+      transform.SetRotation(glm::quat(
+          glm::vec3(0, 0, glm::radians(distribution_rotate(generator)))));
+      transform.SetScale(glm::vec3(0.05f, 0.06f, 1.f));
+      sys::CreateHerder(*ett_mgr, transform);
+    }
   }
 
   auto proj = einu::graphics::Projection{
@@ -181,6 +199,9 @@ void App::Run() {
   einu::ai::bt::ArgPack sheep_bt_args;
   auto sheep_bt = ai::bt::BuildSheepBT(*ett_mgr);
 
+  einu::ai::bt::ArgPack herder_bt_args;
+  auto herder_bt = ai::bt::BuildHerderBT(*ett_mgr);
+
   auto destroy_view = einu::EntityView<einu::XnentList<const cmp::Health>>{};
 
   auto forget_view = einu::EntityView<einu::XnentList<cmp::Memory>>{};
@@ -191,6 +212,11 @@ void App::Run() {
 
   auto health_loss_view =
       einu::EntityView<einu::XnentList<const cmp::HealthLoss, cmp::Health>>{};
+
+  auto herder_view = einu::EntityView<einu::XnentList<
+      einu::cmp::Transform, einu::graphics::cmp::Sprite, einu::cmp::Movement,
+      einu::ai::cmp::Destination, cmp::Agent, cmp::Eat, cmp::Health, cmp::Hunt,
+      cmp::Memory, cmp::Sense, cmp::Wander>>{};
 
   auto move_view = einu::EntityView<
       einu::XnentList<einu::cmp::Transform, einu::cmp::Movement>>{};
@@ -242,6 +268,18 @@ void App::Run() {
                  std::get<cmp::Memory&>(comps), *eid_it);
       sheep_bt_args.Set(*eid_it, *comp_it);
       sheep_bt.Run(sheep_bt_args);
+    }
+
+    herder_view.View(*ett_mgr);
+    for (auto [comp_it, eid_it] = std::tuple{herder_view.Components().begin(),
+                                             herder_view.EIDs().begin()};
+         comp_it != herder_view.Components().end(); ++comp_it, ++eid_it) {
+      auto& comps = *comp_it;
+      sys::Sense(world_state, cell_buffer, std::get<cmp::Sense&>(comps),
+                 std::get<einu::cmp::Transform&>(comps),
+                 std::get<cmp::Memory&>(comps), *eid_it);
+      herder_bt_args.Set(*eid_it, *comp_it);
+      herder_bt.Run(herder_bt_args);
     }
 
     health_loss_view.View(*ett_mgr);

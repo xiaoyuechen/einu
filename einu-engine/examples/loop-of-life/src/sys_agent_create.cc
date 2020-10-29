@@ -116,7 +116,7 @@ einu::EID CreateWolf(einu::IEntityManager& ett_mgr,
   ett_mgr.AddComponent<cmp::Memory>(ett);
 
   auto& panick = ett_mgr.AddComponent<cmp::Panick>(ett);
-  panick.max_panick_time = 3.0f;
+  panick.max_panick_time = 10.0f;
 
   auto& sense = ett_mgr.AddComponent<cmp::Sense>(ett);
   using einu::util::operator|;
@@ -153,6 +153,45 @@ einu::EID CreateGrass(einu::IEntityManager& ett_mgr,
   using einu::util::operator|;
   sense.relevant_type_signature = GetSignatureAll();
   sense.sense_radius = 10.f;
+
+  return ett;
+}
+
+einu::EID CreateHerder(einu::IEntityManager& ett_mgr,
+                       const einu::Transform& transform) {
+  auto ett = ett_mgr.CreateEntity();
+
+  auto& sprite = ett_mgr.AddComponent<einu::graphics::cmp::Sprite>(ett);
+  sprite.color = glm::vec4{255, 255, 0, 255};
+  sprite.sprite_name = kHerderSpriteName;
+
+  ett_mgr.AddComponent<einu::cmp::Transform>(ett) =
+      einu::cmp::Transform{transform};
+
+  auto& movement = ett_mgr.AddComponent<einu::cmp::Movement>(ett);
+  movement.max_speed = 30;
+
+  ett_mgr.AddComponent<einu::ai::cmp::Destination>(ett);
+
+  ett_mgr.AddComponent<cmp::Agent>(ett).type = AgentType::Herder;
+
+  auto& eat = ett_mgr.AddComponent<cmp::Eat>(ett);
+  eat.eat_health_per_attack = 1.f;
+  eat.absorption_rate = 0.5f;
+
+  ett_mgr.AddComponent<cmp::Health>(ett);
+
+  ett_mgr.AddComponent<cmp::Hunt>(ett).prey_signature = AgentType::Wolf;
+
+  ett_mgr.AddComponent<cmp::Memory>(ett);
+
+  auto& sense = ett_mgr.AddComponent<cmp::Sense>(ett);
+  sense.relevant_type_signature = AgentType::Wolf;
+  sense.sense_radius = 1000.f;
+
+  auto& wander = ett_mgr.AddComponent<cmp::Wander>(ett);
+  wander.time_since_last_destination_change = 99999;
+  wander.wander_radius = 50;
 
   return ett;
 }

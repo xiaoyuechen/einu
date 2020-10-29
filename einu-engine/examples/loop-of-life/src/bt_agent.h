@@ -29,6 +29,8 @@ namespace bt {
 
 einu::ai::bt::Root BuildSheepBT(einu::IEntityManager& ett_mgr);
 
+einu::ai::bt::Root BuildHerderBT(einu::IEntityManager& ett_mgr);
+
 using Result = einu::ai::bt::Result;
 using ArgPack = einu::ai::bt::ArgPack;
 using Node = einu::ai::bt::Node;

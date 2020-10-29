@@ -36,5 +36,9 @@ static constexpr char* kGrassSpriteName = "grass";
 einu::EID CreateGrass(einu::IEntityManager& ett_mgr,
                       const einu::Transform& transform);
 
+static constexpr char* kHerderSpriteName = "herder";
+einu::EID CreateHerder(einu::IEntityManager& ett_mgr,
+                       const einu::Transform& transform);
+
 }  // namespace sys
 }  // namespace lol

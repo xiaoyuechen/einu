@@ -82,6 +82,33 @@ einu::ai::bt::Root BuildSheepBT(einu::IEntityManager& ett_mgr) {
   return std::move(root);
 }
 
+einu::ai::bt::Root BuildHerderBT(einu::IEntityManager& ett_mgr) {
+  using namespace einu::ai::bt;  // NOLINT
+  auto root = Root();
+  {
+    auto& slc = root.AddChild<Selector>();
+    {
+      auto& hunt_seq = slc.AddChild<Sequence>();
+      {
+        hunt_seq.AddChild<FindPrey>();
+        hunt_seq.AddChild<TrackPrey>();
+        hunt_seq.AddChild<MoveTo>();
+        hunt_seq.AddChild<EatPrey>(ett_mgr);
+      }
+
+      auto& wander_seq = slc.AddChild<Sequence>();
+      {
+        wander_seq.AddChild<ChooseRandomDestination>(ett_mgr);
+        wander_seq.AddChild<MoveTo>();
+      }
+    }
+  }
+
+  auto& seq = root.AddChild<Sequence>();
+  seq.AddChild<MoveTo>();
+  return std::move(root);
+}
+
 EatPrey::EatPrey(einu::IEntityManager& ett_mgr) : ett_mgr_{ett_mgr} {}
 
 void Eat(const cmp::Eat& eat, cmp::Health& self_health,
