@@ -16,11 +16,20 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#include "src/app.h"
+#include "src/sys_rotate.h"
 
-int main() {
-  astar::App app{};
-  app.Run();
+namespace astar {
+namespace sys {
 
-  return 0;
+void Rotate(einu::cmp::Transform& transform, einu::cmp::Movement& movement) {
+  auto dir = movement.direction;
+  if (dir == glm::vec3{}) {
+    return;
+  }
+  auto angle = glm::atan(dir.y, dir.x) - glm::pi<float>() / 2;
+  auto quat = glm::quat{glm::vec3{0, 0, angle}};
+  transform.SetRotation(quat);
 }
+
+}  // namespace sys
+}  // namespace astar

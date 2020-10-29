@@ -16,11 +16,17 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#include "src/app.h"
+#pragma once
 
-int main() {
-  astar::App app{};
-  app.Run();
+#include <einu-engine/common/transform.h>
+#include <einu-engine/core/i_entity_manager.h>
 
-  return 0;
-}
+namespace astar {
+namespace sys {
+
+static constexpr char* kCellFrameSpriteName = "cell-frame";
+einu::EID CreateCellFrame(einu::IEntityManager& ett_mgr,
+                          const einu::Transform& transform);
+
+}  // namespace sys
+}  // namespace astar

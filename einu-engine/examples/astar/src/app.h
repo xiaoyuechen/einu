@@ -16,11 +16,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#include "src/app.h"
+#pragma once
 
-int main() {
-  astar::App app{};
-  app.Run();
+namespace astar {
 
-  return 0;
-}
+class App {
+ public:
+  void Run();
+};
+
+}  // namespace astar

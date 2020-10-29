@@ -16,11 +16,18 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#include "src/app.h"
+#pragma once
 
-int main() {
-  astar::App app{};
-  app.Run();
+#include <einu-engine/core/xnent.h>
 
-  return 0;
-}
+#include <glm/glm.hpp>
+
+namespace astar {
+namespace cmp {
+
+struct Cell : public einu::Xnent {
+  glm::ivec2 pos;
+};
+
+}  // namespace cmp
+}  // namespace astar

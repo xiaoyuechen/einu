@@ -1,4 +1,16 @@
-add_executable(astar "src/main.cc")
+add_executable(
+  astar
+  "src/main.cc"
+  "src/app.h"
+  "src/app.cc"
+  "src/cell.h"
+  "src/sgl_world_state.h"
+  "src/engine_policy.h"
+  "src/sys_movement.h"
+  "src/sys_rotate.h"
+  "src/sys_rotate.cc"
+  "src/sys_create_entity.cc"
+  "src/sys_create_entity.h")
 
 set_target_properties(astar PROPERTIES FOLDER "einu-engine/examples")
 

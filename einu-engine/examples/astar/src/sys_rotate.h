@@ -16,11 +16,15 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#include "src/app.h"
+#pragma once
 
-int main() {
-  astar::App app{};
-  app.Run();
+#include <einu-engine/common/cmp_movement.h>
+#include <einu-engine/common/cmp_transform.h>
 
-  return 0;
+namespace astar {
+namespace sys {
+
+void Rotate(einu::cmp::Transform& transform, einu::cmp::Movement& movement);
+
 }
+}  // namespace astar

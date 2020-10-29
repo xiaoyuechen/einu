@@ -16,11 +16,20 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#include "src/app.h"
+#pragma once
 
-int main() {
-  astar::App app{};
-  app.Run();
+#include <einu-engine/core/eid.h>
 
-  return 0;
-}
+#include <cstdint>
+#include <vector>
+
+namespace astar {
+
+enum class CellState : std::uint8_t { Blocked, Clear };
+
+struct Cell {
+  CellState state;
+  std::vector<einu::EID> eids;
+};
+
+}  // namespace astar
