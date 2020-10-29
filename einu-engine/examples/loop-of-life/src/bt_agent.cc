@@ -297,6 +297,11 @@ Result Reproduce::Run(const ArgPack& args) {
   if (agent.type == AgentType::Grass) {
     sys::CreateGrass(ett_mgr_, spawn_transform);
   } else if (agent.type == AgentType::Sheep) {
+    sys::CreateSheep(ett_mgr_, spawn_transform);
+  } else if (agent.type == AgentType::Wolf) {
+    sys::CreateWolf(ett_mgr_, spawn_transform);
+  } else {
+    return Result::Failure;
   }
   return Result::Success;
 }
