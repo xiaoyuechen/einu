@@ -36,6 +36,7 @@
 #include "src/engine_policy.h"
 #include "src/sys_cell.h"
 #include "src/sys_create_entity.h"
+#include "src/sys_find_path.h"
 #include "src/sys_movement.h"
 #include "src/sys_rotate.h"
 
@@ -135,6 +136,24 @@ void App::Run() {
     }
   }
 
+  // create cells
+  {
+    auto cell_size = sgl::GetCellSize(world_state);
+    auto transform = einu::Transform{};
+    sys::CreateCellFrame(*ett_mgr, transform);
+
+    for (std::size_t i = 0; i != world_state.grid.GetSize().x; ++i) {
+      for (std::size_t j = 0; j != world_state.grid.GetSize().y; ++j) {
+        auto cell_size = sgl::GetCellSize(world_state);
+        auto pos = glm::vec3(i * cell_size.x, j * cell_size.y, 0);
+        auto transform = einu::Transform{};
+        transform.SetPosition(pos);
+        world_state.grid[i][j].eid = sys::CreateCellFrame(*ett_mgr, transform);
+        sys::CreateCellBlock(*ett_mgr, transform);
+      }
+    }
+  }
+
   // create trading post
   {
     bool created = false;
@@ -199,24 +218,6 @@ void App::Run() {
     }
   }
 
-  // create entities
-  {
-    auto cell_size = sgl::GetCellSize(world_state);
-    auto transform = einu::Transform{};
-    sys::CreateCellFrame(*ett_mgr, transform);
-
-    for (std::size_t i = 0; i != world_state.grid.GetSize().x; ++i) {
-      for (std::size_t j = 0; j != world_state.grid.GetSize().y; ++j) {
-        auto cell_size = sgl::GetCellSize(world_state);
-        auto pos = glm::vec3(i * cell_size.x, j * cell_size.y, 0);
-        auto transform = einu::Transform{};
-        transform.SetPosition(pos);
-        sys::CreateCellFrame(*ett_mgr, transform);
-        sys::CreateCellBlock(*ett_mgr, transform);
-      }
-    }
-  }
-
   // camera
   auto proj =
       einu::graphics::Projection{einu::graphics::Projection::Type::Orthographic,
@@ -237,6 +238,14 @@ void App::Run() {
   auto cell_view = einu::EntityView<
       einu::XnentList<einu::graphics::cmp::Sprite, const cmp::Cell>>{};
 
+  // test
+  auto path_finding = cmp::PathFinding{};
+  for (std::size_t i = 0; i != world_state.grid.GetSize().x; ++i) {
+    auto j = 1;
+    path_finding.path.push_back(glm::uvec2(i, j));
+  }
+  path_finding.path.push_back(glm::uvec2(5, 2));
+
   // game loop
   while (!win.shouldClose) {
     einu::window::sys::PoolEvents(win);
@@ -255,6 +264,8 @@ void App::Run() {
     for (auto&& [sprite, cell] : cell_view.Components()) {
       sys::UpdateCell(world_state, cell, sprite);
     }
+
+    sys::RenderPath(*ett_mgr, path_finding);
 
     // render sprites
     sprite_render_view.View(*ett_mgr);

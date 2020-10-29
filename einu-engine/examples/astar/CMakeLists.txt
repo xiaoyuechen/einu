@@ -12,6 +12,8 @@ add_executable(
   "src/sys_cell.h"
   "src/sys_cell.cc"
   "src/cmp.h"
+  "src/sys_find_path.h"
+  "src/sys_find_path.cc"
   "src/sys_create_entity.cc"
   "src/sys_create_entity.h")
 

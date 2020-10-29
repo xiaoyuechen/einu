@@ -29,6 +29,7 @@ enum class CellState : std::uint8_t { Blocked, Clear };
 
 struct Cell {
   CellState state = CellState::Clear;
+  einu::EID eid;
 };
 
 }  // namespace astar

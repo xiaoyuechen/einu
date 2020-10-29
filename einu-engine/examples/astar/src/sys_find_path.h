@@ -18,48 +18,19 @@
 
 #pragma once
 
-#include <einu-engine/core/eid.h>
-#include <einu-engine/core/xnent.h>
+#include <einu-engine/core/i_entity_manager.h>
 
-#include <glm/glm.hpp>
-#include <vector>
+#include "src/cmp.h"
+#include "src/sgl_world_state.h"
 
 namespace astar {
-namespace cmp {
+namespace sys {
 
-struct Cell : public einu::Xnent {
-  glm::ivec2 pos;
-};
+void FindPath(sgl::WorldState& world_state, cmp::PathFinding& path_finding,
+              glm::vec2 start, glm::vec2 dest);
 
-struct Starchaser : public einu::Xnent {
-  enum class State { Collecting, Selling, GoingHome };
-  State state = State::Collecting;
-};
+void RenderPath(einu::IEntityManager& ett_mgr,
+                const cmp::PathFinding& path_finding);
 
-struct StarPocket : public einu::Xnent {
-  einu::EID star_eid = ~einu::EID{0};
-};
-
-struct Energy : public einu::Xnent {
-  float energy = 100.f;
-  float fatigue_threshold = 50.f;
-  float max_energy = 100.f;
-};
-
-struct PathFinding : public einu::Xnent {
-  struct Node {
-    glm::uvec2 pos;
-    Node* parent = nullptr;
-    float f = 0.0f;
-  };
-
-  using NodeList = std::vector<Node>;
-
-  NodeList open_list;
-  NodeList closed_list;
-  Node destination;
-  std::vector<glm::uvec2> path;
-};
-
-}  // namespace cmp
+}  // namespace sys
 }  // namespace astar
