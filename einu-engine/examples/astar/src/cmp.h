@@ -27,12 +27,14 @@
 namespace astar {
 namespace cmp {
 
+struct CellFrameTag : public einu::Xnent {};
+
 struct Cell : public einu::Xnent {
   glm::ivec2 pos;
 };
 
 struct Starchaser : public einu::Xnent {
-  enum class State { Collecting, Selling, GoingHome };
+  enum class State { Collecting, Selling, GoingHome, Enroute };
   State state = State::Collecting;
 };
 
@@ -48,8 +50,13 @@ struct Energy : public einu::Xnent {
 
 struct PathFinding : public einu::Xnent {
   struct Node {
+    Node() = default;
+    Node(glm::uvec2 pos, Node* parent) : pos(pos), parent(parent) {}
+
     glm::uvec2 pos;
     Node* parent = nullptr;
+    float g = 0.0f;
+    float h = 0.0f;
     float f = 0.0f;
   };
 
@@ -57,7 +64,8 @@ struct PathFinding : public einu::Xnent {
 
   NodeList open_list;
   NodeList closed_list;
-  Node destination;
+  glm::uvec2 start;
+  glm::uvec2 destination;
   std::vector<glm::uvec2> path;
 };
 

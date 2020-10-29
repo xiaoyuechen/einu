@@ -16,24 +16,24 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#include "src/sys_cell.h"
+#pragma once
+
+#include <einu-engine/common/cmp_movement.h>
+#include <einu-engine/common/cmp_transform.h>
+#include <einu-engine/core/i_entity_manager.h>
+
+#include "src/cmp.h"
+#include "src/sgl_world_state.h"
 
 namespace astar {
 namespace sys {
 
-void UpdateCellBlock(const sgl::WorldState& world_state, const cmp::Cell& cell,
-                     einu::graphics::cmp::Sprite& sprite) {
-  auto& c = world_state.grid[cell.pos.x][cell.pos.y];
-  if (c.state == CellState::Clear) {
-    sprite.color.a = 0;
-  } else {
-    sprite.color.a = 255;
-  }
-}
+void MoveAlongPath(const sgl::WorldState& world_state,
+                   const einu::cmp::Transform& transform,
+                   einu::cmp::Movement& movement,
+                   cmp::PathFinding& path_finding);
 
-void UpdateCellFrame(einu::graphics::cmp::Sprite& sprite) {
-  sprite.color = glm::vec4{255, 255, 255, 255};
-}
+void RunStarChaserFSM(einu::IEntityManager& ett_mgr, einu::EID eid);
 
 }  // namespace sys
 }  // namespace astar

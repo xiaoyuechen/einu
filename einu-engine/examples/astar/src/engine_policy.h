@@ -37,7 +37,8 @@ namespace astar {
 using ComponentList =
     einu::XnentList<einu::cmp::Transform, einu::cmp::Movement,
                     einu::window::cmp::Window, einu::graphics::cmp::Sprite,
-                    cmp::Cell, cmp::PathFinding>;
+                    cmp::Cell, cmp::PathFinding, cmp::Starchaser, cmp::Energy,
+                    cmp::StarPocket, cmp::CellFrameTag>;
 
 using SinglenentList =
     einu::XnentList<einu::sgl::Time, einu::graphics::sgl::GLResourceTable,

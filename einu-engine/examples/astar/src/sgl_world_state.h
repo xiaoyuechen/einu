@@ -36,8 +36,11 @@ struct WorldState : public einu::Xnent {
 
   Grid grid{};
   glm::vec2 world_size{};
+  einu::EID traiding_post_eid;
   glm::vec2 trading_post_pos;
+  einu::EID spaceship_eid;
   glm::vec2 space_ship_pos;
+  einu::EID star_eid;
   glm::vec2 star_pos;
 };
 

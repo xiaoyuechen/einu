@@ -42,6 +42,8 @@ einu::EID CreateCellFrame(einu::IEntityManager& ett_mgr,
   sprite.color = glm::vec4{255, 255, 255, 255};
   sprite.sprite_name = kCellFrameSprite;
 
+  ett_mgr.AddComponent<cmp::CellFrameTag>(ett);
+
   return ett;
 }
 
@@ -72,7 +74,7 @@ einu::EID CreateSpaceship(einu::IEntityManager& ett_mgr,
       einu::cmp::Transform{transform};
 
   auto& world_state = ett_mgr.GetSinglenent<sgl::WorldState>();
-
+  world_state.spaceship_eid = ett;
   world_state.space_ship_pos = transform.GetPosition();
 
   auto& sprite = ett_mgr.AddComponent<einu::graphics::cmp::Sprite>(ett);
@@ -90,6 +92,7 @@ einu::EID CreateTradingPost(einu::IEntityManager& ett_mgr,
       einu::cmp::Transform{transform};
 
   auto& world_state = ett_mgr.GetSinglenent<sgl::WorldState>();
+  world_state.traiding_post_eid = ett;
   world_state.trading_post_pos = transform.GetPosition();
 
   auto& sprite = ett_mgr.AddComponent<einu::graphics::cmp::Sprite>(ett);
@@ -107,6 +110,7 @@ einu::EID CreateStar(einu::IEntityManager& ett_mgr,
       einu::cmp::Transform{transform};
 
   auto& world_state = ett_mgr.GetSinglenent<sgl::WorldState>();
+  world_state.star_eid = ett;
   world_state.star_pos = transform.GetPosition();
 
   auto& sprite = ett_mgr.AddComponent<einu::graphics::cmp::Sprite>(ett);
@@ -120,17 +124,23 @@ einu::EID CreateStarchaser(einu::IEntityManager& ett_mgr,
                            const einu::Transform& transform) {
   auto ett = ett_mgr.CreateEntity();
 
-  ett_mgr.AddComponent<einu::cmp::Transform>(ett) =
-      einu::cmp::Transform{transform};
-
   auto& world_state = ett_mgr.GetSinglenent<sgl::WorldState>();
-  world_state.star_pos = transform.GetPosition();
+  glm::vec2 offset = sgl::GetCellSize(world_state) / 2.f;
+
+  auto& transform_cmp = ett_mgr.AddComponent<einu::cmp::Transform>(ett) =
+      einu::cmp::Transform{transform};
+  transform_cmp.SetPosition(transform_cmp.GetPosition() + glm::vec3(offset, 0));
+
+  auto& movement = ett_mgr.AddComponent<einu::cmp::Movement>(ett);
+  movement.max_speed = 20.f;
 
   auto& sprite = ett_mgr.AddComponent<einu::graphics::cmp::Sprite>(ett);
   sprite.color = glm::vec4{255, 255, 0, 255};
   sprite.sprite_name = kStarchaserSprite;
 
   ett_mgr.AddComponent<cmp::Starchaser>(ett);
+
+  ett_mgr.AddComponent<cmp::PathFinding>(ett);
 
   ett_mgr.AddComponent<cmp::StarPocket>(ett);
 

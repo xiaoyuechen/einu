@@ -26,8 +26,10 @@
 namespace astar {
 namespace sys {
 
-void UpdateCell(const sgl::WorldState& world_state, const cmp::Cell& cell,
-                einu::graphics::cmp::Sprite& sprite);
+void UpdateCellBlock(const sgl::WorldState& world_state, const cmp::Cell& cell,
+                     einu::graphics::cmp::Sprite& sprite);
 
-}
+void UpdateCellFrame(einu::graphics::cmp::Sprite& sprite);
+
+}  // namespace sys
 }  // namespace astar

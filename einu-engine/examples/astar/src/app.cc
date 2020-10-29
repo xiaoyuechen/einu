@@ -39,6 +39,7 @@
 #include "src/sys_find_path.h"
 #include "src/sys_movement.h"
 #include "src/sys_rotate.h"
+#include "src/sys_starchaser.h"
 
 namespace astar {
 
@@ -122,6 +123,18 @@ void App::Run() {
                  "white-circle");
 
     CreateSprite(resource_table, sys::kStarSprite, "program", "white-circle");
+
+    CreateSprite(resource_table, sys::kStarchaserSprite, "program",
+                 "white-triangle");
+
+    auto& triangle_tex_info =
+        resource_table.tex_info_table.at("white-triangle");
+
+    auto& starchaser_sprite =
+        resource_table.sprite_table.at(sys::kStarchaserSprite);
+    for (auto&& vert : starchaser_sprite.verts) {
+      vert.pos.x -= static_cast<float>(triangle_tex_info.size.x) / 2.f;
+    }
   }
 
   // init grid
@@ -218,6 +231,31 @@ void App::Run() {
     }
   }
 
+  // create starchaser
+  auto starchaser = einu::EID{};
+  {
+    bool created = false;
+    while (!created) {
+      auto x = std::rand() % world_state.grid.GetSize().x;
+      auto y = std::rand() % world_state.grid.GetSize().y;
+      auto& cell = world_state.grid[x][y];
+      if (cell.state != CellState::Blocked) {
+        auto cell_size = sgl::GetCellSize(world_state);
+        auto pos = glm::vec3(cell_size.x * x, cell_size.y * y, 0);
+        auto transform = einu::Transform{};
+        transform.SetPosition(pos + glm::vec3(3, 3, 0));
+        if (glm::vec2(transform.GetPosition()) !=
+                world_state.trading_post_pos &&
+            glm::vec2(transform.GetPosition()) != world_state.space_ship_pos &&
+            glm::vec2(transform.GetPosition()) != world_state.star_pos) {
+          transform.SetScale(glm::vec3(0.02f, 0.05f, 0));
+          starchaser = sys::CreateStarchaser(*ett_mgr, transform);
+          created = true;
+        }
+      }
+    }
+  }
+
   // camera
   auto proj =
       einu::graphics::Projection{einu::graphics::Projection::Type::Orthographic,
@@ -238,13 +276,8 @@ void App::Run() {
   auto cell_view = einu::EntityView<
       einu::XnentList<einu::graphics::cmp::Sprite, const cmp::Cell>>{};
 
-  // test
-  auto path_finding = cmp::PathFinding{};
-  for (std::size_t i = 0; i != world_state.grid.GetSize().x; ++i) {
-    auto j = 1;
-    path_finding.path.push_back(glm::uvec2(i, j));
-  }
-  path_finding.path.push_back(glm::uvec2(5, 2));
+  auto cell_frame_view = einu::EntityView<
+      einu::XnentList<einu::graphics::cmp::Sprite, const cmp::CellFrameTag>>{};
 
   // game loop
   while (!win.shouldClose) {
@@ -253,6 +286,18 @@ void App::Run() {
 
     einu::sys::UpdateTime(time);
 
+    cell_view.View(*ett_mgr);
+    for (auto&& [sprite, cell] : cell_view.Components()) {
+      sys::UpdateCellBlock(world_state, cell, sprite);
+    }
+
+    cell_frame_view.View(*ett_mgr);
+    for (auto&& [sprite, cell_frame_tag] : cell_frame_view.Components()) {
+      sys::UpdateCellFrame(sprite);
+    }
+
+    sys::RunStarChaserFSM(*ett_mgr, starchaser);
+
     // move and rotate
     move_view.View(*ett_mgr);
     for (auto&& [transform, movement] : move_view.Components()) {
@@ -260,12 +305,8 @@ void App::Run() {
       sys::Rotate(transform, movement);
     }
 
-    cell_view.View(*ett_mgr);
-    for (auto&& [sprite, cell] : cell_view.Components()) {
-      sys::UpdateCell(world_state, cell, sprite);
-    }
-
-    sys::RenderPath(*ett_mgr, path_finding);
+    sys::RenderPath(*ett_mgr,
+                    ett_mgr->GetComponent<cmp::PathFinding>(starchaser));
 
     // render sprites
     sprite_render_view.View(*ett_mgr);
