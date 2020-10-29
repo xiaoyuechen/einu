@@ -116,7 +116,7 @@ einu::EID CreateWolf(einu::IEntityManager& ett_mgr,
   ett_mgr.AddComponent<cmp::Memory>(ett);
 
   auto& panick = ett_mgr.AddComponent<cmp::Panick>(ett);
-  panick.max_panick_time = 10.0f;
+  panick.max_panick_time = 1.0f;
 
   auto& sense = ett_mgr.AddComponent<cmp::Sense>(ett);
   using einu::util::operator|;
@@ -160,6 +160,8 @@ einu::EID CreateGrass(einu::IEntityManager& ett_mgr,
 einu::EID CreateHerder(einu::IEntityManager& ett_mgr,
                        const einu::Transform& transform) {
   auto ett = ett_mgr.CreateEntity();
+
+  ett_mgr.AddComponent<cmp::HerderTag>(ett);
 
   auto& sprite = ett_mgr.AddComponent<einu::graphics::cmp::Sprite>(ett);
   sprite.color = glm::vec4{255, 255, 0, 255};

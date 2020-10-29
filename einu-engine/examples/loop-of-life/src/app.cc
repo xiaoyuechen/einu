@@ -216,7 +216,7 @@ void App::Run() {
   auto herder_view = einu::EntityView<einu::XnentList<
       einu::cmp::Transform, einu::graphics::cmp::Sprite, einu::cmp::Movement,
       einu::ai::cmp::Destination, cmp::Agent, cmp::Eat, cmp::Health, cmp::Hunt,
-      cmp::Memory, cmp::Sense, cmp::Wander>>{};
+      cmp::Memory, cmp::Sense, cmp::Wander, cmp::HerderTag>>{};
 
   auto move_view = einu::EntityView<
       einu::XnentList<einu::cmp::Transform, einu::cmp::Movement>>{};

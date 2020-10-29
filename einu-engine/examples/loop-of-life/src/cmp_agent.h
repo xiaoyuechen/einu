@@ -31,6 +31,10 @@ struct Agent : public einu::Xnent {
   AgentType type = AgentType::None;
 };
 
+struct GrassTag : public einu::Xnent {};
+
+struct HerderTag : public einu::Xnent {};
+
 struct Eat : public einu::Xnent {
   float eat_health_per_attack = 0;
   float absorption_rate = 0.5f;
