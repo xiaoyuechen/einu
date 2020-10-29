@@ -177,8 +177,8 @@ void App::Run() {
 
     for (std::size_t i = 0; i != 2; ++i) {
       auto transform = einu::Transform{};
-      transform.SetPosition(
-          glm::vec3(distribution_x(generator), distribution_y(generator), 0));
+      transform.SetPosition(glm::vec3(i * world_state.world_size.x,
+                                      i * world_state.world_size.y, 0));
       transform.SetRotation(glm::quat(
           glm::vec3(0, 0, glm::radians(distribution_rotate(generator)))));
       transform.SetScale(glm::vec3(0.05f, 0.06f, 1.f));
