@@ -40,5 +40,13 @@ static constexpr char* kTradingPostSprite = "spaceship";
 einu::EID CreateTradingPost(einu::IEntityManager& ett_mgr,
                             const einu::Transform& transform);
 
+static constexpr char* kStarSprite = "star";
+einu::EID CreateStar(einu::IEntityManager& ett_mgr,
+                     const einu::Transform& transform);
+
+static constexpr char* kStarchaserSprite = "starchaser";
+einu::EID CreateStarchaser(einu::IEntityManager& ett_mgr,
+                           const einu::Transform& transform);
+
 }  // namespace sys
 }  // namespace astar

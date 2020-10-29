@@ -93,8 +93,48 @@ einu::EID CreateTradingPost(einu::IEntityManager& ett_mgr,
   world_state.trading_post_pos = transform.GetPosition();
 
   auto& sprite = ett_mgr.AddComponent<einu::graphics::cmp::Sprite>(ett);
-  sprite.color = glm::vec4{255, 255, 0, 255};
+  sprite.color = glm::vec4{255, 0, 0, 255};
   sprite.sprite_name = kTradingPostSprite;
+
+  return ett;
+}
+
+einu::EID CreateStar(einu::IEntityManager& ett_mgr,
+                     const einu::Transform& transform) {
+  auto ett = ett_mgr.CreateEntity();
+
+  ett_mgr.AddComponent<einu::cmp::Transform>(ett) =
+      einu::cmp::Transform{transform};
+
+  auto& world_state = ett_mgr.GetSinglenent<sgl::WorldState>();
+  world_state.star_pos = transform.GetPosition();
+
+  auto& sprite = ett_mgr.AddComponent<einu::graphics::cmp::Sprite>(ett);
+  sprite.color = glm::vec4{255, 255, 0, 255};
+  sprite.sprite_name = kStarSprite;
+
+  return ett;
+}
+
+einu::EID CreateStarchaser(einu::IEntityManager& ett_mgr,
+                           const einu::Transform& transform) {
+  auto ett = ett_mgr.CreateEntity();
+
+  ett_mgr.AddComponent<einu::cmp::Transform>(ett) =
+      einu::cmp::Transform{transform};
+
+  auto& world_state = ett_mgr.GetSinglenent<sgl::WorldState>();
+  world_state.star_pos = transform.GetPosition();
+
+  auto& sprite = ett_mgr.AddComponent<einu::graphics::cmp::Sprite>(ett);
+  sprite.color = glm::vec4{255, 255, 0, 255};
+  sprite.sprite_name = kStarchaserSprite;
+
+  ett_mgr.AddComponent<cmp::Starchaser>(ett);
+
+  ett_mgr.AddComponent<cmp::StarPocket>(ett);
+
+  ett_mgr.AddComponent<cmp::Energy>(ett);
 
   return ett;
 }

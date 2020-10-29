@@ -119,6 +119,8 @@ void App::Run() {
 
     CreateSprite(resource_table, sys::kTradingPostSprite, "program",
                  "white-circle");
+
+    CreateSprite(resource_table, sys::kStarSprite, "program", "white-circle");
   }
 
   // init grid
@@ -164,9 +166,35 @@ void App::Run() {
         auto pos = glm::vec3(cell_size.x * x, cell_size.y * y, 0);
         auto transform = einu::Transform{};
         transform.SetPosition(pos + glm::vec3(3, 3, 0));
-        transform.SetScale(glm::vec3(0.2f, 0.2f, 0));
-        sys::CreateSpaceship(*ett_mgr, transform);
-        created = true;
+        if (glm::vec2(transform.GetPosition()) !=
+            world_state.trading_post_pos) {
+          transform.SetScale(glm::vec3(0.2f, 0.2f, 0));
+          sys::CreateSpaceship(*ett_mgr, transform);
+          created = true;
+        }
+      }
+    }
+  }
+
+  // create star
+  {
+    bool created = false;
+    while (!created) {
+      auto x = std::rand() % world_state.grid.GetSize().x;
+      auto y = std::rand() % world_state.grid.GetSize().y;
+      auto& cell = world_state.grid[x][y];
+      if (cell.state != CellState::Blocked) {
+        auto cell_size = sgl::GetCellSize(world_state);
+        auto pos = glm::vec3(cell_size.x * x, cell_size.y * y, 0);
+        auto transform = einu::Transform{};
+        transform.SetPosition(pos + glm::vec3(3, 3, 0));
+        if (glm::vec2(transform.GetPosition()) !=
+                world_state.trading_post_pos &&
+            glm::vec2(transform.GetPosition()) != world_state.space_ship_pos) {
+          transform.SetScale(glm::vec3(0.2f, 0.2f, 0));
+          sys::CreateStar(*ett_mgr, transform);
+          created = true;
+        }
       }
     }
   }
@@ -215,7 +243,6 @@ void App::Run() {
     einu::graphics::sys::Clear();
 
     einu::sys::UpdateTime(time);
-    std::cout << "ft: " << einu::sgl::DeltaSeconds(time) << std::endl;
 
     // move and rotate
     move_view.View(*ett_mgr);
