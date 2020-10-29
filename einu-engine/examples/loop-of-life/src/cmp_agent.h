@@ -68,9 +68,10 @@ struct Memory : public einu::Xnent {
 
 struct Reproduce : public einu::Xnent {
   einu::Transform transform{};
-  glm::vec2 offset = {50, 0};
-  float health_threadhold = 120;
+  glm::vec2 offset = {40, 0};
+  float health_threadhold = 110;
   float cost_health_ratio = 0.5f;
+  float new_born_health = 50.f;
 };
 
 struct GainHealth : public einu::Xnent {

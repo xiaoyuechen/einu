@@ -92,6 +92,11 @@ einu::EID CreateSheep(einu::IEntityManager& ett_mgr,
   auto& panick = ett_mgr.AddComponent<cmp::Panick>(ett);
   panick.max_panick_time = 1.0f;
 
+  auto& reproduce = ett_mgr.AddComponent<cmp::Reproduce>(ett);
+  reproduce.health_threadhold = 110;
+  reproduce.cost_health_ratio = 0.4f;
+  reproduce.transform = transform;
+
   auto& sense = ett_mgr.AddComponent<cmp::Sense>(ett);
   using einu::util::operator|;
   sense.relevant_type_signature =
@@ -125,7 +130,7 @@ einu::EID CreateWolf(einu::IEntityManager& ett_mgr,
 
   auto& eat = ett_mgr.AddComponent<cmp::Eat>(ett);
   eat.eat_health_per_attack = 100.f;
-  eat.absorption_rate = 0.3f;
+  eat.absorption_rate = 0.4f;
 
   ett_mgr.AddComponent<cmp::Evade>(ett).predator_signature = AgentType::Herder;
 
@@ -141,6 +146,11 @@ einu::EID CreateWolf(einu::IEntityManager& ett_mgr,
 
   auto& panick = ett_mgr.AddComponent<cmp::Panick>(ett);
   panick.max_panick_time = 1.0f;
+
+  auto& reproduce = ett_mgr.AddComponent<cmp::Reproduce>(ett);
+  reproduce.health_threadhold = 110;
+  reproduce.cost_health_ratio = 0.3f;
+  reproduce.transform = transform;
 
   auto& sense = ett_mgr.AddComponent<cmp::Sense>(ett);
   using einu::util::operator|;
@@ -158,6 +168,8 @@ einu::EID CreateGrass(einu::IEntityManager& ett_mgr,
                       const einu::Transform& transform) {
   auto ett = ett_mgr.CreateEntity();
 
+  ett_mgr.AddComponent<cmp::GrassTag>(ett);
+
   auto& sprite = ett_mgr.AddComponent<einu::graphics::cmp::Sprite>(ett);
   sprite.color = glm::vec4{50, 255, 50, 255};
   sprite.sprite_name = kGrassSpriteName;
@@ -167,11 +179,18 @@ einu::EID CreateGrass(einu::IEntityManager& ett_mgr,
 
   ett_mgr.AddComponent<cmp::Agent>(ett).type = AgentType::Grass;
 
+  ett_mgr.AddComponent<cmp::GainHealth>(ett);
+
   ett_mgr.AddComponent<cmp::Health>(ett);
 
-  ett_mgr.AddComponent<cmp::HealthLoss>(ett).loss_speed = 0.f;
+  ett_mgr.AddComponent<cmp::HealthLoss>(ett).loss_speed = 1.f;
 
   ett_mgr.AddComponent<cmp::Memory>(ett);
+
+  auto& reproduce = ett_mgr.AddComponent<cmp::Reproduce>(ett);
+  reproduce.health_threadhold = 110;
+  reproduce.cost_health_ratio = 0.5f;
+  reproduce.transform = transform;
 
   auto& sense = ett_mgr.AddComponent<cmp::Sense>(ett);
   using einu::util::operator|;

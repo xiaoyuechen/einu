@@ -61,6 +61,12 @@ einu::ai::bt::Root BuildSheepBT(einu::IEntityManager& ett_mgr) {
         evade_seq.AddChild<MoveTo>();
       }
 
+      auto& reproduce_seq = slc.AddChild<Sequence>();
+      {
+        reproduce_seq.AddChild<CanReproduce>();
+        reproduce_seq.AddChild<Reproduce>(ett_mgr);
+      }
+
       auto& hunt_seq = slc.AddChild<Sequence>();
       {
         hunt_seq.AddChild<IsHungry>();
@@ -294,15 +300,18 @@ Result Reproduce::Run(const ArgPack& args) {
   auto spawn_pos = transform.GetPosition() + glm::vec3(reproduce.offset, 0);
   auto spawn_transform = reproduce.transform;
   spawn_transform.SetPosition(spawn_pos);
+  auto ett = einu::EID{};
   if (agent.type == AgentType::Grass) {
-    sys::CreateGrass(ett_mgr_, spawn_transform);
+    ett = sys::CreateGrass(ett_mgr_, spawn_transform);
   } else if (agent.type == AgentType::Sheep) {
-    sys::CreateSheep(ett_mgr_, spawn_transform);
+    ett = sys::CreateSheep(ett_mgr_, spawn_transform);
   } else if (agent.type == AgentType::Wolf) {
-    sys::CreateWolf(ett_mgr_, spawn_transform);
+    ett = sys::CreateWolf(ett_mgr_, spawn_transform);
   } else {
     return Result::Failure;
   }
+  health.health *= (1.f - reproduce.cost_health_ratio);
+  ett_mgr_.GetComponent<cmp::Health>(ett).health = reproduce.new_born_health;
   return Result::Success;
 }
 

@@ -206,10 +206,6 @@ void App::Run() {
 
   auto forget_view = einu::EntityView<einu::XnentList<cmp::Memory>>{};
 
-  auto ett_view = einu::EntityView<einu::XnentList<
-      einu::cmp::Transform, einu::graphics::cmp::Sprite, einu::cmp::Movement,
-      einu::ai::cmp::Destination, cmp::Agent>>{};
-
   auto health_loss_view =
       einu::EntityView<einu::XnentList<const cmp::HealthLoss, cmp::Health>>{};
 
@@ -225,7 +221,7 @@ void App::Run() {
       einu::cmp::Transform, einu::graphics::cmp::Sprite, einu::cmp::Movement,
       einu::ai::cmp::Destination, cmp::Agent, cmp::Eat, cmp::Evade, cmp::Health,
       cmp::HealthLoss, cmp::Hunger, cmp::Hunt, cmp::Memory, cmp::Panick,
-      cmp::Sense, cmp::Wander>>{};
+      cmp::Reproduce, cmp::Sense, cmp::Wander>>{};
 
   auto sprite_render_view = einu::EntityView<
       einu::XnentList<einu::cmp::Transform, einu::graphics::cmp::Sprite>>{};
@@ -239,8 +235,6 @@ void App::Run() {
 
     einu::sys::UpdateTime(time);
     std::cout << "ft: " << einu::sgl::DeltaSeconds(time) << std::endl;
-
-    ett_view.View(*ett_mgr);
 
     // TODO(Xiaoyue Chen): implement zip iterator
     world_state_view.View(*ett_mgr);
