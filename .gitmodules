@@ -1,3 +1,0 @@
-[submodule "einu-engine/extern/tracy/tracy"]
-	path = einu-engine/extern/tracy/tracy
-	url = https://github.com/wolfpld/tracy.git
