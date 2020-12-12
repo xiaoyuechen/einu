@@ -26,7 +26,7 @@
 namespace einu {
 namespace rtti {
 
-using U = TypeID::IndexType;
+using U = TypeID;
 struct ClassIndexTest : testing::Test {
   ClassIndexTest() {
     srand(time(nullptr));
@@ -47,13 +47,6 @@ TEST_F(ClassIndexTest, DefaultConstructor) { EXPECT_EQ(TypeID(), max); }
 TEST_F(ClassIndexTest, Constructor) {
   for (auto u : arr) {
     EXPECT_EQ(TypeID(u), u);
-  }
-}
-
-TEST_F(ClassIndexTest, IsAssigned) {
-  EXPECT_FALSE(IsAssigned(TypeID()));
-  for (auto u : arr) {
-    EXPECT_TRUE(IsAssigned(TypeID(u)));
   }
 }
 
