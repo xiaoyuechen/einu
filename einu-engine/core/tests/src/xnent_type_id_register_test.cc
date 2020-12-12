@@ -34,9 +34,9 @@ TEST(XnentTypeIDRegisterTest, _) {
     EXPECT_EQ(GetXnentTypeID<C2>(), 2);
   }
 
-  EXPECT_EQ(GetXnentTypeID<C0>(), XnentTypeID{});
-  EXPECT_EQ(GetXnentTypeID<C1>(), XnentTypeID{});
-  EXPECT_EQ(GetXnentTypeID<C2>(), XnentTypeID{});
+  EXPECT_EQ(GetXnentTypeID<C0>(), -1);
+  EXPECT_EQ(GetXnentTypeID<C1>(), -1);
+  EXPECT_EQ(GetXnentTypeID<C2>(), -1);
 }
 
 }  // namespace internal

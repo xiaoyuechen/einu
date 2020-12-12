@@ -42,17 +42,9 @@ struct ClassIndexTest : testing::Test {
   U max = ~U(0);
 };
 
-TEST_F(ClassIndexTest, DefaultConstructor) { EXPECT_EQ(TypeID(), max); }
-
-TEST_F(ClassIndexTest, Constructor) {
-  for (auto u : arr) {
-    EXPECT_EQ(TypeID(u), u);
-  }
-}
-
 template <typename T>
 void TestGetClassIndex() {
-  EXPECT_EQ(GetTypeID<T>(), TypeID());
+  EXPECT_EQ(GetTypeID<T>(), -1);
 }
 
 template <typename... Ts>
