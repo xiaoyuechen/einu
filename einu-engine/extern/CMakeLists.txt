@@ -1,4 +1,5 @@
 option(FETCH_GOOGLETEST OFF)
+option(FETCH_TRACY OFF)
 
 include(FetchContent)
 
@@ -60,3 +61,7 @@ add_subdirectory(stb)
 # set(ASSIMP_BUILD_TESTS OFF)
 #
 # FetchContent_MakeAvailable(assimp)
+
+if(FETCH_TRACY)
+  add_subdirectory(tracy)
+endif()
