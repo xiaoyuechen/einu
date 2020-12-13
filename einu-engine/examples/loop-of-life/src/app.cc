@@ -327,7 +327,7 @@ void App::Run() {
     for (auto [comp, eid] = std::make_tuple(destroy_view.Components().begin(),
                                             destroy_view.EIDs().begin());
          comp != destroy_view.Components().end(); ++comp, ++eid) {
-      auto& [health] = *comp;
+      auto&& [health] = *comp;
       sys::Destroy(*ett_mgr, health, *eid);
     }
 

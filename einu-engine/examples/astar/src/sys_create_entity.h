@@ -24,27 +24,27 @@
 namespace astar {
 namespace sys {
 
-static constexpr char* kCellFrameSprite = "cell-frame";
+static constexpr const char* kCellFrameSprite = "cell-frame";
 einu::EID CreateCellFrame(einu::IEntityManager& ett_mgr,
                           const einu::Transform& transform);
 
-static constexpr char* kCellBlockSprite = "cell-block";
+static constexpr const char* kCellBlockSprite = "cell-block";
 einu::EID CreateCellBlock(einu::IEntityManager& ett_mgr,
                           const einu::Transform& transform);
 
-static constexpr char* kSpaceshipSprite = "spaceship";
+static constexpr const char* kSpaceshipSprite = "spaceship";
 einu::EID CreateSpaceship(einu::IEntityManager& ett_mgr,
                           const einu::Transform& transform);
 
-static constexpr char* kTradingPostSprite = "spaceship";
+static constexpr const char* kTradingPostSprite = "spaceship";
 einu::EID CreateTradingPost(einu::IEntityManager& ett_mgr,
                             const einu::Transform& transform);
 
-static constexpr char* kStarSprite = "star";
+static constexpr const char* kStarSprite = "star";
 einu::EID CreateStar(einu::IEntityManager& ett_mgr,
                      const einu::Transform& transform);
 
-static constexpr char* kStarchaserSprite = "starchaser";
+static constexpr const char* kStarchaserSprite = "starchaser";
 einu::EID CreateStarchaser(einu::IEntityManager& ett_mgr,
                            const einu::Transform& transform);
 

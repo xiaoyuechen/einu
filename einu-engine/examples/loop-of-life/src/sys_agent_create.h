@@ -18,9 +18,8 @@
 
 #pragma once
 
-#include <einu-engine/common/transform.h>
-#include <einu-engine/core/i_entity_manager.h>
-
+#include "einu-engine/common/transform.h"
+#include "einu-engine/core/i_entity_manager.h"
 #include "src/agent.h"
 
 namespace lol {
@@ -46,19 +45,19 @@ template <>
 einu::EID CreateAgent<AgentType::Herder>(einu::IEntityManager& ett_mgr,
                                          const einu::Transform& transform);
 
-static constexpr char* kSheepSpriteName = "sheep";
+static constexpr const char* kSheepSpriteName = "sheep";
 einu::EID CreateSheep(einu::IEntityManager& ett_mgr,
                       const einu::Transform& transform);
 
-static constexpr char* kWolfSpriteName = "wolf";
+static constexpr const char* kWolfSpriteName = "wolf";
 einu::EID CreateWolf(einu::IEntityManager& ett_mgr,
                      const einu::Transform& transform);
 
-static constexpr char* kGrassSpriteName = "grass";
+static constexpr const char* kGrassSpriteName = "grass";
 einu::EID CreateGrass(einu::IEntityManager& ett_mgr,
                       const einu::Transform& transform);
 
-static constexpr char* kHerderSpriteName = "herder";
+static constexpr const char* kHerderSpriteName = "herder";
 einu::EID CreateHerder(einu::IEntityManager& ett_mgr,
                        const einu::Transform& transform);
 

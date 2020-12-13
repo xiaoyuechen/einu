@@ -124,7 +124,7 @@ void GoHome(einu::IEntityManager& ett_mgr, einu::EID eid) {
   auto& time = ett_mgr.GetSinglenent<einu::sgl::Time>();
   auto& star_transform =
       ett_mgr.GetComponent<einu::cmp::Transform>(world_state.star_eid);
-  auto& home_pos =
+  auto home_pos =
       ett_mgr.GetComponent<einu::cmp::Transform>(world_state.spaceship_eid)
           .GetPosition();
 

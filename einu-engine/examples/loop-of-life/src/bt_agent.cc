@@ -329,7 +329,7 @@ Result Reproduce::Run(const ArgPack& args) {
 GainHealth::GainHealth(const einu::sgl::Time& time) : time_{time} {}
 
 Result GainHealth::Run(const ArgPack& args) {
-  auto& [health, gain_health] =
+  auto&& [health, gain_health] =
       args.GetComponents(einu::XnentList<cmp::Health, const cmp::GainHealth>{});
   cmp::AddHealth(health, gain_health.gain_health_per_second *
                              einu::sgl::DeltaSeconds(time_));

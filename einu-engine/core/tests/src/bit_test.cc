@@ -31,7 +31,7 @@ struct MaskExpect {
 };
 
 static constexpr MaskExpect kMaskExpects[] = {
-    {-1, 0},
+    {~0llu, 0},
     {0b1llu << 62, 1},
     {0b001011llu << 58, 2},
     {0b1, 63},
