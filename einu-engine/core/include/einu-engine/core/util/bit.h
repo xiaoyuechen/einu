@@ -19,8 +19,10 @@
 #pragma once
 
 #include <algorithm>
+#include <cstddef>
 #include <cstdint>
 #include <optional>
+#include <utility>
 #include <vector>
 
 #ifdef _MSC_VER
@@ -107,6 +109,67 @@ inline std::optional<int> CountLeftZero(const std::uint64_t* begin,
 }
 
 #endif
+
+class BitVector {
+ public:
+  using size_type = std::size_t;
+  static constexpr const std::size_t kWordBits = sizeof(size_type) * 8;
+
+  explicit BitVector(size_type count = 0, bool value = false)
+      : mask_(BitToWordCount(count), value ? ~0 : 0), size_{count} {}
+
+  size_type size() const noexcept { return size_; }
+
+  std::optional<int> countl_zero() const noexcept {
+    auto clz = CountLeftZero(mask_.data(), mask_.data() + mask_.size());
+    if (clz.has_value() && clz <= size_) {
+      return clz;
+    }
+    return std::nullopt;
+  }
+
+  bool test(size_type pos) const noexcept {
+    auto bit_mask = GetBitMask(pos);
+    return (mask_[pos / kWordBits] & bit_mask) == bit_mask;
+  }
+
+  void set(size_type pos) noexcept {
+    mask_[pos / kWordBits] |= GetBitMask(pos);
+  }
+
+  void reset(size_type pos) noexcept {
+    mask_[pos / kWordBits] &= ~GetBitMask(pos);
+  }
+
+  void resize(size_type count, bool value = false) {
+    if (size_ < count) {
+      auto bit_vec = BitVector{count, value};
+      std::copy(mask_.begin(), mask_.end(), bit_vec.mask_.begin());
+      auto end_mask = ~size_type(0);
+      end_mask >>= (size_ % kWordBits);
+      if (value)
+        bit_vec.mask_[size_ / kWordBits] |= end_mask;
+      else
+        bit_vec.mask_[size_ / kWordBits] &= ~end_mask;
+      *this = std::move(bit_vec);
+    } else if (size_ > count) {
+      size_ = count;
+      mask_.resize(BitToWordCount(count));
+    }
+  }
+
+ private:
+  constexpr size_type GetBitMask(size_type pos) const noexcept {
+    return (~(~size_type(0) >> 1) >> (pos % kWordBits));
+  }
+
+  constexpr size_type BitToWordCount(size_type count) const noexcept {
+    return (count + kWordBits - 1) / kWordBits;
+  }
+
+  std::vector<size_type> mask_;
+  size_type size_;
+};
 
 }  // namespace util
 }  // namespace einu

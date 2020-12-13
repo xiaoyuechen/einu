@@ -47,7 +47,7 @@ TEST_P(CountLeftZero64Test, Test) {
   EXPECT_EQ(mask_data.clz, CountLeftZero(mask_data.mask));
 }
 
-INSTANTIATE_TEST_SUITE_P(, CountLeftZero64Test,
+INSTANTIATE_TEST_SUITE_P(CountLeftZeroTest, CountLeftZero64Test,
                          testing::ValuesIn(k64MaskExpects));
 
 static constexpr MaskExpect<uint32_t> k32MaskExpects[] = {
@@ -65,7 +65,7 @@ TEST_P(CountLeftZero32Test, Test) {
   EXPECT_EQ(mask_data.clz, CountLeftZero(mask_data.mask));
 }
 
-INSTANTIATE_TEST_SUITE_P(, CountLeftZero32Test,
+INSTANTIATE_TEST_SUITE_P(CountLeftZeroTest, CountLeftZero32Test,
                          testing::ValuesIn(k32MaskExpects));
 
 template <typename Mask>
@@ -91,7 +91,7 @@ TEST_P(CountLeftZeroRange64Test, Test) {
   EXPECT_EQ(range_mask_expect.clz, CountLeftZero(begin, end));
 }
 
-INSTANTIATE_TEST_SUITE_P(, CountLeftZeroRange64Test,
+INSTANTIATE_TEST_SUITE_P(CountLeftZeroTest, CountLeftZeroRange64Test,
                          testing::ValuesIn(kRangeMask64Expects));
 
 static const RangeMaskExpect<std::uint32_t> kRangeMask32Expects[] = {
@@ -111,8 +111,93 @@ TEST_P(CountLeftZeroRange32Test, Test) {
   EXPECT_EQ(range_mask_expect.clz, CountLeftZero(begin, end));
 }
 
-INSTANTIATE_TEST_SUITE_P(, CountLeftZeroRange32Test,
+INSTANTIATE_TEST_SUITE_P(CountLeftZeroTest, CountLeftZeroRange32Test,
                          testing::ValuesIn(kRangeMask32Expects));
+
+struct BitVectorInitTestExpect {
+  std::size_t count;
+  bool value;
+};
+
+struct BitVectorInitTest
+    : public testing::TestWithParam<BitVectorInitTestExpect> {};
+
+TEST_P(BitVectorInitTest, Test) {
+  auto [count, value] = GetParam();
+  auto vec = BitVector(count, value);
+  EXPECT_EQ(vec.size(), count);
+  if (count == 0) {
+    EXPECT_EQ(vec.countl_zero(), std::nullopt);
+  } else {
+    if (value) {
+      EXPECT_EQ(vec.countl_zero(), 0);
+    } else {
+      EXPECT_EQ(vec.countl_zero(), std::nullopt);
+    }
+  }
+}
+
+static constexpr const BitVectorInitTestExpect kBitVectorInitTestExpects[] = {
+    {0, false}, {0, true}, {66, false}, {66, true}, {999, false}, {999, true}};
+
+INSTANTIATE_TEST_SUITE_P(BitVectorTest, BitVectorInitTest,
+                         testing::ValuesIn(kBitVectorInitTestExpects));
+
+struct BitVectorSetResetTest
+    : public testing::TestWithParam<std::vector<std::size_t>> {
+  BitVector vec{1000, false};
+};
+
+TEST_P(BitVectorSetResetTest, Test) {
+  auto poses = GetParam();
+  for (auto pos : poses) {
+    EXPECT_FALSE(vec.test(pos));
+    vec.set(pos);
+    EXPECT_TRUE(vec.test(pos));
+  }
+
+  for (auto pos : poses) {
+    EXPECT_TRUE(vec.test(pos));
+  }
+
+  for (auto pos : poses) {
+    vec.reset(pos);
+    EXPECT_FALSE(vec.test(pos));
+  }
+
+  for (auto pos : poses) {
+    EXPECT_FALSE(vec.test(pos));
+  }
+}
+
+static const std::vector<std::size_t> kBitVectorSetResetTestData[] = {
+    {0, 1, 2, 3, 4}, {0, 64, 128}, {62, 63, 64, 65}, {568, 2, 999, 833}};
+
+INSTANTIATE_TEST_SUITE_P(BitVectorTest, BitVectorSetResetTest,
+                         testing::ValuesIn(kBitVectorSetResetTestData));
+
+TEST(BitVectorTest, ResizeDown) {
+  auto vec = BitVector(120, false);
+  vec.set(63);
+  vec.resize(64);
+  EXPECT_EQ(vec.size(), 64);
+  EXPECT_TRUE(vec.test(63));
+  EXPECT_FALSE(vec.test(62));
+  EXPECT_EQ(vec.countl_zero(), 63);
+}
+
+TEST(BitVectorTest, ResizeUp) {
+  auto vec = BitVector(120, false);
+  vec.set(119);
+  EXPECT_TRUE(vec.test(119));
+  vec.resize(150);
+  EXPECT_EQ(vec.size(), 150);
+  EXPECT_FALSE(vec.test(118));
+  EXPECT_TRUE(vec.test(119));
+  EXPECT_FALSE(vec.test(120));
+  EXPECT_FALSE(vec.test(149));
+  EXPECT_EQ(vec.countl_zero(), 119);
+}
 
 }  // namespace util
 }  // namespace einu
