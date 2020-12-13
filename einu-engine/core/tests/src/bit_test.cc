@@ -16,28 +16,36 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#include <einu-engine/core/internal/xnent_type_id_register.h>
-#include <gtest/gtest.h>
+#include "einu-engine/core/util/bit.h"
 
-#include "src/xnents.h"
+#include <cstddef>
+
+#include "gtest/gtest.h"
 
 namespace einu {
-namespace internal {
+namespace util {
 
-TEST(XnentTypeIDRegisterTest, _) {
-  using XnentList = XnentList<C0, C1, C2>;
+struct MaskExpect {
+  uint64_t mask;
+  int clz;
+};
 
-  {
-    XnentTypeIDRegister<XnentList> reg;
-    EXPECT_EQ(GetXnentTypeID<C0>(), 0);
-    EXPECT_EQ(GetXnentTypeID<C1>(), 1);
-    EXPECT_EQ(GetXnentTypeID<C2>(), 2);
-  }
+static constexpr MaskExpect kMaskExpects[] = {
+    {-1, 0},
+    {0b1llu << 62, 1},
+    {0b001011llu << 58, 2},
+    {0b1, 63},
+};
 
-  EXPECT_EQ(GetXnentTypeID<C0>(), -1);
-  EXPECT_EQ(GetXnentTypeID<C1>(), -1);
-  EXPECT_EQ(GetXnentTypeID<C2>(), -1);
+struct CountLeftZeroTest : public testing::TestWithParam<MaskExpect> {};
+
+TEST_P(CountLeftZeroTest, Test) {
+  auto& mask_data = GetParam();
+  EXPECT_EQ(mask_data.clz, CountLeftZero(mask_data.mask));
 }
 
-}  // namespace internal
+INSTANTIATE_TEST_SUITE_P(Instance, CountLeftZeroTest,
+                         testing::ValuesIn(kMaskExpects));
+
+}  // namespace util
 }  // namespace einu

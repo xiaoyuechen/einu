@@ -1,8 +1,9 @@
-option(FETCH_GOOGLETEST OFF)
+option(EINU_FETCH_GOOGLETEST OFF)
+option(EINU_FETCH_EASY_PROFILER OFF)
 
 include(FetchContent)
 
-if(FETCH_GOOGLETEST)
+if(EINU_FETCH_GOOGLETEST)
   FetchContent_Declare(
     googletest
     GIT_REPOSITORY https://github.com/google/googletest.git
@@ -29,7 +30,6 @@ FetchContent_Declare(
   glfw
   GIT_REPOSITORY https://github.com/glfw/glfw.git
   GIT_TAG 3.3.2)
-
 set(GLFW_BUILD_EXAMPLES OFF)
 set(GLFW_BUILD_TESTS OFF)
 set(GLFW_BUILD_DOCS OFF)
@@ -40,14 +40,12 @@ FetchContent_Declare(
   glm
   GIT_REPOSITORY https://github.com/g-truc/glm.git
   GIT_TAG 0.9.9.8)
-
 FetchContent_MakeAvailable(glm)
 
 FetchContent_Declare(
   abseil-cpp
   GIT_REPOSITORY https://github.com/abseil/abseil-cpp.git
   GIT_TAG 20200923.2)
-
 FetchContent_MakeAvailable(abseil-cpp)
 
 add_subdirectory(glad)
@@ -60,3 +58,12 @@ add_subdirectory(stb)
 # set(ASSIMP_BUILD_TESTS OFF)
 #
 # FetchContent_MakeAvailable(assimp)
+
+if(EINU_FETCH_EASY_PROFILER)
+  FetchContent_Declare(
+    easy-profiler
+    GIT_REPOSITORY https://github.com/yse/easy_profiler.git
+    GIT_TAG v2.1.0)
+  set(EASY_PROFILER_NO_GUI ON)
+  FetchContent_MakeAvailable(easy-profiler)
+endif()

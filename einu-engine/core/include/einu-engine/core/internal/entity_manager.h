@@ -18,14 +18,13 @@
 
 #pragma once
 
-#include <einu-engine/core/util/object_pool.h>
-
 #include <algorithm>
 #include <cassert>
 #include <map>
 #include <memory>
 
 #include "einu-engine/core/i_entity_manager.h"
+#include "einu-engine/core/util/object_pool.h"
 
 namespace einu {
 namespace internal {

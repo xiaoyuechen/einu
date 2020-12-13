@@ -26,6 +26,10 @@
 #include "einu-engine/core/internal/xnent_mask.h"
 #include "einu-engine/core/xnent_list.h"
 
+#ifdef EINU_CORE_PROFILE
+#include "easy/profiler.h"
+#endif
+
 namespace einu {
 
 struct EntityBuffer {
@@ -56,83 +60,153 @@ class IEntityManager {
 
   void SetPolicy(Policy policy) noexcept { SetPolicyImpl(policy); }
 
-  EID CreateEntity() { return CreateEntityImpl(); }
+  EID CreateEntity() {
+#ifdef EINU_CORE_PROFILE
+    EASY_FUNCTION();
+#endif
+    return CreateEntityImpl();
+  }
 
-  void DestroyEntity(EID eid) { DestroyEntityImpl(eid); }
+  void DestroyEntity(EID eid) {
+#ifdef EINU_CORE_PROFILE
+    EASY_FUNCTION();
+#endif
+    DestroyEntityImpl(eid);
+  }
 
-  bool ContainsEntity(EID eid) const { return ContainsEntityImpl(eid); }
+  bool ContainsEntity(EID eid) const {
+#ifdef EINU_CORE_PROFILE
+    EASY_FUNCTION();
+#endif
+    return ContainsEntityImpl(eid);
+  }
 
   template <typename T>
   T& AddComponent(EID eid) {
+#ifdef EINU_CORE_PROFILE
+    EASY_FUNCTION();
+#endif
     return static_cast<T&>(AddComponentImpl(eid, GetXnentTypeID<T>()));
   }
 
   Xnent& AddComponent(EID eid, XnentTypeID tid) {
+#ifdef EINU_CORE_PROFILE
+    EASY_FUNCTION();
+#endif
     return AddComponentImpl(eid, tid);
   }
 
   template <typename T>
   void RemoveComponent(EID eid) {
+#ifdef EINU_CORE_PROFILE
+    EASY_FUNCTION();
+#endif
     RemoveComponentImpl(eid, GetXnentTypeID<T>());
   }
 
   void RemoveComponent(EID eid, XnentTypeID tid) {
+#ifdef EINU_CORE_PROFILE
+    EASY_FUNCTION();
+#endif
     RemoveComponentImpl(eid, tid);
   }
 
   template <typename T>
   T& GetComponent(EID eid) {
+#ifdef EINU_CORE_PROFILE
+    EASY_FUNCTION();
+#endif
     return static_cast<T&>(GetComponentImpl(eid, GetXnentTypeID<T>()));
   }
 
   Xnent& GetComponent(EID eid, XnentTypeID tid) {
+#ifdef EINU_CORE_PROFILE
+    EASY_FUNCTION();
+#endif
     return GetComponentImpl(eid, tid);
   }
 
   template <typename T>
   const T& GetComponent(EID eid) const {
+#ifdef EINU_CORE_PROFILE
+    EASY_FUNCTION();
+#endif
     return static_cast<const T&>(GetComponentImpl(eid, GetXnentTypeID<T>()));
   }
 
   const Xnent& GetComponent(EID eid, XnentTypeID tid) const {
+#ifdef EINU_CORE_PROFILE
+    EASY_FUNCTION();
+#endif
     return GetComponentImpl(eid, tid);
   }
 
   template <typename T>
   T& AddSinglenent() {
+#ifdef EINU_CORE_PROFILE
+    EASY_FUNCTION();
+#endif
     return static_cast<T&>(AddSinglenentImpl(GetXnentTypeID<T>()));
   }
 
-  Xnent& AddSinglenent(XnentTypeID tid) { return AddSinglenentImpl(tid); }
+  Xnent& AddSinglenent(XnentTypeID tid) {
+#ifdef EINU_CORE_PROFILE
+    EASY_FUNCTION();
+#endif
+    return AddSinglenentImpl(tid);
+  }
 
   template <typename T>
   void RemoveSinglenent() {
+#ifdef EINU_CORE_PROFILE
+    EASY_FUNCTION();
+#endif
     RemoveSinglenentImpl(GetXnentTypeID<T>());
   }
 
-  void RemoveSinglenent(XnentTypeID tid) { RemoveSinglenentImpl(tid); }
+  void RemoveSinglenent(XnentTypeID tid) {
+#ifdef EINU_CORE_PROFILE
+    EASY_FUNCTION();
+#endif
+    RemoveSinglenentImpl(tid);
+  }
 
   template <typename T>
   T& GetSinglenent() noexcept {
+#ifdef EINU_CORE_PROFILE
+    EASY_FUNCTION();
+#endif
     return static_cast<T&>(GetSinglenentImpl(GetXnentTypeID<T>()));
   }
 
   Xnent& GetSinglenent(XnentTypeID tid) noexcept {
+#ifdef EINU_CORE_PROFILE
+    EASY_FUNCTION();
+#endif
     return GetSinglenentImpl(tid);
   }
 
   template <typename T>
   const T& GetSinglenent() const noexcept {
+#ifdef EINU_CORE_PROFILE
+    EASY_FUNCTION();
+#endif
     return static_cast<const T&>(GetSinglenentImpl(GetXnentTypeID<T>()));
   }
 
   const Xnent& GetSinglenent(XnentTypeID tid) const noexcept {
+#ifdef EINU_CORE_PROFILE
+    EASY_FUNCTION();
+#endif
     return GetSinglenentImpl(tid);
   }
 
   template <typename ComponentList>
   void GetEntitiesWithComponents(EntityBuffer& buffer,
                                  ComponentList comp_list) {
+#ifdef EINU_CORE_PROFILE
+    EASY_FUNCTION();
+#endif
     GetEntitiesWithComponentsImpl(buffer, internal::GetXnentMask(comp_list),
                                   internal::GetXnentTypeIDArray(comp_list));
   }
@@ -140,6 +214,9 @@ class IEntityManager {
   void GetEntitiesWithComponents(EntityBuffer& buffer,
                                  const internal::DynamicXnentMask& mask,
                                  const internal::XnentTypeIDArray& xtid_arr) {
+#ifdef EINU_CORE_PROFILE
+    EASY_FUNCTION();
+#endif
     GetEntitiesWithComponentsImpl(buffer, mask, xtid_arr);
   }
 

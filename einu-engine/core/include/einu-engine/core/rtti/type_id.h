@@ -18,52 +18,38 @@
 
 #pragma once
 
-#include <absl/hash/hash.h>
-
+#include <cassert>
 #include <cstddef>
 #include <type_traits>
-#include <utility>
 
 namespace einu {
 namespace rtti {
 
-class TypeID {
- public:
-  using IndexType = std::size_t;
-
-  constexpr explicit TypeID(IndexType index = ~IndexType(0)) noexcept
-      : index_(index) {}
-  operator IndexType&() noexcept { return index_; }
-  operator IndexType() const noexcept { return index_; }
-
-  template <typename H>
-  friend H AbslHashValue(H h, const TypeID& v) {
-    return H::combine(std::move(h), v.index_);
-  }
-
- private:
-  IndexType index_;
-};
-
-inline bool IsAssigned(TypeID id) noexcept { return id != TypeID(); }
+using TypeID = std::size_t;
 
 namespace internal {
 
 template <typename T>
 struct TypeIDStorage {
-  inline static TypeID value = TypeID();
+  inline static TypeID value = -1;
 };
 
 }  // namespace internal
 
 template <typename T>
+TypeID GetTypeID() noexcept {
+  return internal::TypeIDStorage<typename std::decay<T>::type>::value;
+}
+
+template <typename T>
 void SetTypeID(TypeID id) noexcept {
+  assert(GetTypeID<T>() == -1 && "type id is already assigned");
   internal::TypeIDStorage<typename std::decay<T>::type>::value = id;
 }
 
 template <typename T>
-TypeID GetTypeID() noexcept {
-  return internal::TypeIDStorage<typename std::decay<T>::type>::value;
+void ResetTypeID(TypeID id) noexcept {
+  internal::TypeIDStorage<typename std::decay<T>::type>::value = -1;
 }
 
 }  // namespace rtti

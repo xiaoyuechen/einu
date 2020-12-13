@@ -29,6 +29,7 @@ struct TypeList {};
 
 template <typename TypeList>
 struct Size;
+
 template <typename... Ts>
 struct Size<TypeList<Ts...>> {
   static constexpr std::size_t value = sizeof...(Ts);
@@ -36,10 +37,17 @@ struct Size<TypeList<Ts...>> {
 
 template <typename TypeList, std::size_t index>
 struct TypeAt;
-template <std::size_t index, typename... Ts>
-struct TypeAt<TypeList<Ts...>, index> {
-  static_assert(index < Size<TypeList<Ts...>>::value && "index out of bound");
-  using Type = typename std::tuple_element<index, std::tuple<Ts...>>::type;
+
+template <typename Head, typename... Tail>
+struct TypeAt<TypeList<Head, Tail...>, 0> {
+  using Type = Head;
+};
+
+template <std::size_t index, typename Head, typename... Tail>
+struct TypeAt<TypeList<Head, Tail...>, index> {
+  static_assert(index < Size<TypeList<Head, Tail...>>::value &&
+                "index out of bound");
+  using Type = typename TypeAt<TypeList<Tail...>, index - 1>::Type;
 };
 
 template <typename TypeList, typename T>

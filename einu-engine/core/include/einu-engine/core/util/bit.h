@@ -19,6 +19,7 @@
 #pragma once
 
 #include <algorithm>
+#include <cstdint>
 #include <vector>
 
 namespace einu {
@@ -39,6 +40,16 @@ inline std::size_t FindFirstSet(
     std::vector<std::uint8_t>::const_iterator end) noexcept {
   auto it = std::find(begin, end, true);
   return std::distance(begin, it);
+}
+
+inline int CountLeftZero(std::uint64_t x) noexcept {
+#ifdef _MSC_VER
+  int clz;
+  _BitScanForward64(reinterpret_cast<unsigned long*>(&clz), x);  // NOLINT
+  return clz;
+#else
+  return __builtin_clzll(x);
+#endif
 }
 
 }  // namespace util

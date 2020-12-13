@@ -26,6 +26,10 @@
 #include "einu-engine/core/internal/xnent_type_id_register.h"
 #include "einu-engine/core/need_list.h"
 
+#ifdef EINU_CORE_PROFILE
+#include "easy/profiler.h"
+#endif
+
 namespace einu {
 
 template <typename NeedList>
@@ -52,7 +56,20 @@ class EinuEngine {
     return tmp::Size<typename ToTypeList<SinglenentList>::Type>::value;
   }
 
-  EinuEngine() noexcept {}
+  EinuEngine() {
+#ifdef EINU_CORE_PROFILE
+    EASY_MAIN_THREAD;
+    EASY_PROFILER_ENABLE;
+    profiler::startListen();
+#endif
+  }
+
+  ~EinuEngine() {
+#ifdef EINU_CORE_PROFILE
+    profiler::stopListen();
+    profiler::dumpBlocksToFile("test_profile.prof");
+#endif
+  }
 
   std::unique_ptr<IXnentPool> CreateComponentPool() {
     using ComponentPool = internal::XnentPool<EngineComponentList>;
