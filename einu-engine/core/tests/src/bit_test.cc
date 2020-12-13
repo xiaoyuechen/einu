@@ -50,10 +50,10 @@ INSTANTIATE_TEST_SUITE_P(, CountLeftZero64Test,
                          testing::ValuesIn(k64MaskExpects));
 
 static constexpr MaskExpect<uint32_t> k32MaskExpects[] = {
-    {~0lu, 0},
-    {0b1lu << 30, 1},
-    {0x0200fffflu, 6},
-    {0b1, 31},
+    {~0u, 0},
+    {0b1u << 30, 1},
+    {0x0200ffffu, 6},
+    {0b1u, 31},
 };
 
 struct CountLeftZero32Test

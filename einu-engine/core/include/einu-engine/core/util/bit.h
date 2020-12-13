@@ -56,7 +56,7 @@ inline int CountLeftZero(std::uint32_t x) noexcept {
   _BitScanReverse(&index, x);
   return 31 ^ static_cast<int>(index);
 #else
-  return __builtin_clzl(x);
+  return __builtin_clz(x);
 #endif
 }
 
