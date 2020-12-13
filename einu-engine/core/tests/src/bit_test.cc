@@ -67,5 +67,31 @@ TEST_P(CountLeftZero32Test, Test) {
 INSTANTIATE_TEST_SUITE_P(, CountLeftZero32Test,
                          testing::ValuesIn(k32MaskExpects));
 
+template <typename Mask>
+struct RangeMaskExpect {
+  Mask masks[10]{};
+  std::optional<int> clz;
+};
+
+static constexpr const RangeMaskExpect<std::uint64_t> kRangeMask64Expects[] = {
+    {{0x0}, std::nullopt},
+    {{0x0, 0x0, 0x0}, std::nullopt},
+    {{0x0, 0x0, 0x1, 0xfff}, 64 * 3 - 1},
+    {{0x0, 0x1ull << 63, 0x0, 0x0, 0xf}, 64},
+    {{0x1ull << 63, 0x0, 0x0, 0xf}, 0}};
+
+struct CountLeftZeroRange64Test
+    : public testing::TestWithParam<RangeMaskExpect<std::uint64_t>> {};
+
+TEST_P(CountLeftZeroRange64Test, Test) {
+  auto& range_mask_expect = GetParam();
+  auto begin = range_mask_expect.masks;
+  auto end = begin + sizeof(range_mask_expect.masks) / sizeof(std::uint64_t);
+  EXPECT_EQ(range_mask_expect.clz, CountLeftZero(begin, end));
+}
+
+INSTANTIATE_TEST_SUITE_P(, CountLeftZeroRange64Test,
+                         testing::ValuesIn(kRangeMask64Expects));
+
 }  // namespace util
 }  // namespace einu

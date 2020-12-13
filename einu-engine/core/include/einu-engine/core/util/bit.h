@@ -20,6 +20,7 @@
 
 #include <algorithm>
 #include <cstdint>
+#include <optional>
 #include <vector>
 
 #ifdef _MSC_VER
@@ -32,6 +33,14 @@
 
 namespace einu {
 namespace util {
+
+int CountLeftZero(std::uint32_t x) noexcept;
+std::optional<int> CountLeftZero(const std::uint32_t* begin,
+                                 const std::uint32_t* end) noexcept;
+
+int CountLeftZero(std::uint64_t x) noexcept;
+std::optional<int> CountLeftZero(const std::uint64_t* begin,
+                                 const std::uint64_t* end) noexcept;
 
 // TODO(Xiaoyue Chen): This is extremely slow. Use architecture specific ffs
 // instruction instead.
@@ -50,6 +59,21 @@ inline std::size_t FindFirstSet(
   return std::distance(begin, it);
 }
 
+namespace internal {
+
+template <typename Mask>
+std::optional<int> CountLeftZero(Mask* begin, Mask* end) noexcept {
+  for (auto iter = begin; iter != end; ++iter) {
+    if (*iter != 0) {
+      return 8 * sizeof(Mask) * (iter - begin) +
+             ::einu::util::CountLeftZero(*iter);
+    }
+  }
+  return std::nullopt;
+}
+
+}  // namespace internal
+
 inline int CountLeftZero(std::uint32_t x) noexcept {
 #ifdef _MSC_VER
   unsigned long index;  // NOLINT
@@ -60,7 +84,13 @@ inline int CountLeftZero(std::uint32_t x) noexcept {
 #endif
 }
 
+inline std::optional<int> CountLeftZero(const std::uint32_t* begin,
+                                        const std::uint32_t* end) noexcept {
+  return internal::CountLeftZero(begin, end);
+}
+
 #if _WIN64 || __x86_64__ || __ppc64__
+
 inline int CountLeftZero(std::uint64_t x) noexcept {
 #ifdef _MSC_VER
   unsigned long index;  // NOLINT
@@ -70,6 +100,12 @@ inline int CountLeftZero(std::uint64_t x) noexcept {
   return __builtin_clzll(x);
 #endif
 }
+
+inline std::optional<int> CountLeftZero(const std::uint64_t* begin,
+                                        const std::uint64_t* end) noexcept {
+  return internal::CountLeftZero(begin, end);
+}
+
 #endif
 
 }  // namespace util
