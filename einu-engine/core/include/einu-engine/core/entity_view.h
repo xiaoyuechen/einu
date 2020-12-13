@@ -104,15 +104,15 @@ class EIDBufferView {
 template <typename ComponentList>
 class EntityView {
  public:
-  using ComponentBufferView = ComponentBufferView<ComponentList>;
+  using ComponentsView = ComponentBufferView<ComponentList>;
 
   void View(IEntityManager& ett_mgr) {
     Clear(ett_buffer_);
     ett_mgr.GetEntitiesWithComponents(ett_buffer_, ComponentList{});
   }
 
-  ComponentBufferView Components() const noexcept {
-    return ComponentBufferView{ett_buffer_.comps};
+  ComponentsView Components() const noexcept {
+    return ComponentsView{ett_buffer_.comps};
   }
 
   EIDBufferView EIDs() const noexcept {

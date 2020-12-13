@@ -54,13 +54,11 @@ struct Projection {
   Attribute attrib{OrthographicAttrib{}};
 };
 
-constexpr glm::mat4 ProjectionMatrix(const Projection& projection) noexcept;
-constexpr Projection operator*(const Projection& projection,
-                               float ratio) noexcept;
-constexpr Projection operator*(float ratio,
-                               const Projection& projection) noexcept;
+glm::mat4 ProjectionMatrix(const Projection& projection) noexcept;
+Projection operator*(const Projection& projection, float ratio) noexcept;
+Projection operator*(float ratio, const Projection& projection) noexcept;
 
-constexpr glm::mat4 ProjectionMatrix(const Projection& projection) noexcept {
+inline glm::mat4 ProjectionMatrix(const Projection& projection) noexcept {
   if (projection.type == Projection::Type::Orthographic) {
     const auto& ortho_attrib = projection.attrib.orthographic_attrib;
     return glm::ortho(ortho_attrib.left, ortho_attrib.right,
@@ -73,8 +71,8 @@ constexpr glm::mat4 ProjectionMatrix(const Projection& projection) noexcept {
   }
 }
 
-constexpr Projection operator*(const Projection& projection,
-                               float ratio) noexcept {
+inline Projection operator*(const Projection& projection,
+                            float ratio) noexcept {
   if (projection.type == Projection::Type::Orthographic) {
     auto copy = projection;
     auto& attrib = copy.attrib.orthographic_attrib;
@@ -87,8 +85,8 @@ constexpr Projection operator*(const Projection& projection,
   return projection;
 }
 
-constexpr Projection operator*(float ratio,
-                               const Projection& projection) noexcept {
+inline Projection operator*(float ratio,
+                            const Projection& projection) noexcept {
   return projection * ratio;
 }
 
