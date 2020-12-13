@@ -25,27 +25,47 @@
 namespace einu {
 namespace util {
 
+template <typename Mask>
 struct MaskExpect {
-  uint64_t mask;
+  Mask mask;
   int clz;
 };
 
-static constexpr MaskExpect kMaskExpects[] = {
+static constexpr MaskExpect<uint64_t> k64MaskExpects[] = {
     {~0llu, 0},
     {0b1llu << 62, 1},
     {0b001011llu << 58, 2},
     {0b1, 63},
 };
 
-struct CountLeftZeroTest : public testing::TestWithParam<MaskExpect> {};
+struct CountLeftZero64Test
+    : public testing::TestWithParam<MaskExpect<uint64_t>> {};
 
-TEST_P(CountLeftZeroTest, Test) {
+TEST_P(CountLeftZero64Test, Test) {
   auto& mask_data = GetParam();
   EXPECT_EQ(mask_data.clz, CountLeftZero(mask_data.mask));
 }
 
-INSTANTIATE_TEST_SUITE_P(Instance, CountLeftZeroTest,
-                         testing::ValuesIn(kMaskExpects));
+INSTANTIATE_TEST_SUITE_P(, CountLeftZero64Test,
+                         testing::ValuesIn(k64MaskExpects));
+
+static constexpr MaskExpect<uint32_t> k32MaskExpects[] = {
+    {~0lu, 0},
+    {0b1lu << 30, 1},
+    {0x0200fffflu, 6},
+    {0b1, 31},
+};
+
+struct CountLeftZero32Test
+    : public testing::TestWithParam<MaskExpect<uint32_t>> {};
+
+TEST_P(CountLeftZero32Test, Test) {
+  auto& mask_data = GetParam();
+  EXPECT_EQ(mask_data.clz, CountLeftZero(mask_data.mask));
+}
+
+INSTANTIATE_TEST_SUITE_P(, CountLeftZero32Test,
+                         testing::ValuesIn(k32MaskExpects));
 
 }  // namespace util
 }  // namespace einu

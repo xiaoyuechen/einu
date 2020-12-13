@@ -22,6 +22,14 @@
 #include <cstdint>
 #include <vector>
 
+#ifdef _MSC_VER
+#include <intrin.h>
+#pragma intrinsic(_BitScanReverse)
+#if _WIN64
+#pragma intrinsic(_BitScanReverse64)
+#endif
+#endif
+
 namespace einu {
 namespace util {
 
@@ -42,15 +50,27 @@ inline std::size_t FindFirstSet(
   return std::distance(begin, it);
 }
 
+inline int CountLeftZero(std::uint32_t x) noexcept {
+#ifdef _MSC_VER
+  unsigned long index;  // NOLINT
+  _BitScanReverse(&index, x);
+  return 31 ^ static_cast<int>(index);
+#else
+  return __builtin_clzl(x);
+#endif
+}
+
+#if _WIN64 || __x86_64__ || __ppc64__
 inline int CountLeftZero(std::uint64_t x) noexcept {
 #ifdef _MSC_VER
-  int clz;
-  _BitScanForward64(reinterpret_cast<unsigned long*>(&clz), x);  // NOLINT
-  return clz;
+  unsigned long index;  // NOLINT
+  _BitScanReverse64(&index, x);
+  return 63 ^ static_cast<int>(index);
 #else
   return __builtin_clzll(x);
 #endif
 }
+#endif
 
 }  // namespace util
 }  // namespace einu
