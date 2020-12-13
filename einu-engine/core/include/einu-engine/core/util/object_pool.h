@@ -56,8 +56,8 @@ class FixedPoolImpl {
   FixedPoolImpl& operator=(FixedPoolImpl&&) = default;
 
   size_type Size() const noexcept { return bit_arr_.size(); }
-  size_type FreePos() const noexcept {
-    return FindFirstSet(bit_arr_.begin(), bit_arr_.end());
+  std::optional<size_type> FreePos() const noexcept {
+    return bit_arr_.countl_zero();
   }
 
   bool Has(const_reference obj) const noexcept {
@@ -67,8 +67,8 @@ class FixedPoolImpl {
 
   [[nodiscard]] reference Acquire() noexcept {
     auto free_pos = FreePos();
-    assert(free_pos != bit_arr_.size() && "no object available");
-    return Acquire(free_pos);
+    assert(free_pos.has_value() && "no object available");
+    return Acquire(*free_pos);
   }
 
   [[nodiscard]] reference Acquire(size_type pos_hint) noexcept {
@@ -89,8 +89,7 @@ class FixedPoolImpl {
   using ObjectArray = std::vector<T>;
 
   std::tuple<ObjectArray<Ts>...> object_arr_tuple_;
-  // TODO(Xiaoyue Chen): replace bit_array_ with a real bit array
-  std::vector<std::uint8_t> bit_arr_;
+  util::BitVector bit_arr_;
 };
 
 }  // namespace internal
@@ -117,7 +116,7 @@ class FixedPool<T> {
       : pool_{count, std::forward_as_tuple(value)} {}
 
   size_type Size() const noexcept { return pool_.Size(); }
-  size_type FreePos() const noexcept { return pool_.FreePos(); }
+  std::optional<size_type> FreePos() const noexcept { return pool_.FreePos(); }
   bool Has(const_reference obj) const noexcept { return pool_.Has(obj); }
   [[nodiscard]] reference Acquire() noexcept {
     return std::get<0>(pool_.Acquire());
@@ -135,7 +134,7 @@ class FixedPool<T> {
 
 template <typename FixedPool>
 bool AllAcquired(const FixedPool& pool) noexcept {
-  return pool.FreePos() == pool.Size();
+  return !pool.FreePos().has_value();
 }
 
 constexpr std::size_t DefaultGrowth(std::size_t pool_size) noexcept {
@@ -185,8 +184,9 @@ class DynamicPool {
     std::size_t free_pos;
     auto free_pool_it = std::find_if(pools_.begin(), pools_.end(),
                                      [&free_pos](const auto& pool) {
-                                       free_pos = pool.FreePos();
-                                       return free_pos != pool.Size();
+                                       auto free_pos_op = pool.FreePos();
+                                       free_pos = free_pos_op.value_or(0);
+                                       return free_pos_op.has_value();
                                      });
     assert(free_pool_it != pools_.end() &&
            "no pool is free (maybe growth function is wrong)");

@@ -52,7 +52,9 @@ TEST_F(FixedPoolTest, free_pos_move_right_after_acquire) {
   std::for_each(acquired.begin(), acquired.end(), [&](auto&& v) {
     v = &pool.Acquire();
     auto free_pos = pool.FreePos();
-    EXPECT_TRUE(pre_free_pos < free_pos);
+    if (free_pos.has_value()) {
+      EXPECT_TRUE(pre_free_pos < free_pos);
+    }
     pre_free_pos = free_pos;
   });
   EXPECT_TRUE(AllAcquired(pool));

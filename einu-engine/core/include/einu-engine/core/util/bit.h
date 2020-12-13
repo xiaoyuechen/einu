@@ -37,34 +37,17 @@ namespace einu {
 namespace util {
 
 int CountLeftZero(std::uint32_t x) noexcept;
-std::optional<int> CountLeftZero(const std::uint32_t* begin,
-                                 const std::uint32_t* end) noexcept;
+std::optional<std::size_t> CountLeftZero(const std::uint32_t* begin,
+                                         const std::uint32_t* end) noexcept;
 
 int CountLeftZero(std::uint64_t x) noexcept;
-std::optional<int> CountLeftZero(const std::uint64_t* begin,
-                                 const std::uint64_t* end) noexcept;
-
-// TODO(Xiaoyue Chen): This is extremely slow. Use architecture specific ffs
-// instruction instead.
-// std::size_t FindFirstSet(std::vector<bool>::const_iterator begin,
-//                         std::vector<bool>::const_iterator end) noexcept {
-//  auto it = std::find(begin, end, true);
-//  return std::distance(begin, it);
-//}
-
-// TODO(Xiaoyue Chen): This is a temporary solution. It uses more memory. We
-// need to support an actual bit array.
-inline std::size_t FindFirstSet(
-    std::vector<std::uint8_t>::const_iterator begin,
-    std::vector<std::uint8_t>::const_iterator end) noexcept {
-  auto it = std::find(begin, end, true);
-  return std::distance(begin, it);
-}
+std::optional<std::size_t> CountLeftZero(const std::uint64_t* begin,
+                                         const std::uint64_t* end) noexcept;
 
 namespace internal {
 
 template <typename Mask>
-std::optional<int> CountLeftZero(Mask* begin, Mask* end) noexcept {
+std::optional<std::size_t> CountLeftZero(Mask* begin, Mask* end) noexcept {
   for (auto iter = begin; iter != end; ++iter) {
     if (*iter != 0) {
       return 8 * sizeof(Mask) * (iter - begin) +
@@ -86,8 +69,8 @@ inline int CountLeftZero(std::uint32_t x) noexcept {
 #endif
 }
 
-inline std::optional<int> CountLeftZero(const std::uint32_t* begin,
-                                        const std::uint32_t* end) noexcept {
+inline std::optional<std::size_t> CountLeftZero(
+    const std::uint32_t* begin, const std::uint32_t* end) noexcept {
   return internal::CountLeftZero(begin, end);
 }
 
@@ -103,8 +86,8 @@ inline int CountLeftZero(std::uint64_t x) noexcept {
 #endif
 }
 
-inline std::optional<int> CountLeftZero(const std::uint64_t* begin,
-                                        const std::uint64_t* end) noexcept {
+inline std::optional<std::size_t> CountLeftZero(
+    const std::uint64_t* begin, const std::uint64_t* end) noexcept {
   return internal::CountLeftZero(begin, end);
 }
 
@@ -113,6 +96,31 @@ inline std::optional<int> CountLeftZero(const std::uint64_t* begin,
 class BitVector {
  public:
   using size_type = std::size_t;
+  class reference;
+  using const_reference = bool;
+
+  class reference {
+   public:
+    operator bool() const noexcept { return vec_.test(pos_); }
+
+    reference& operator=(bool x) noexcept {
+      if (x)
+        vec_.set(pos_);
+      else
+        vec_.reset(pos_);
+      return *this;
+    }
+
+   private:
+    reference(BitVector& vec, BitVector::size_type pos) noexcept
+        : vec_{vec}, pos_{pos} {}
+
+    BitVector& vec_;
+    BitVector::size_type pos_;
+
+    friend class BitVector;
+  };
+
   static constexpr const std::size_t kWordBits = sizeof(size_type) * 8;
 
   explicit BitVector(size_type count = 0, bool value = false)
@@ -120,9 +128,9 @@ class BitVector {
 
   size_type size() const noexcept { return size_; }
 
-  std::optional<int> countl_zero() const noexcept {
+  std::optional<size_type> countl_zero() const noexcept {
     auto clz = CountLeftZero(mask_.data(), mask_.data() + mask_.size());
-    if (clz.has_value() && clz <= size_) {
+    if (clz.has_value() && clz < size_) {
       return clz;
     }
     return std::nullopt;
@@ -140,6 +148,10 @@ class BitVector {
   void reset(size_type pos) noexcept {
     mask_[pos / kWordBits] &= ~GetBitMask(pos);
   }
+
+  const_reference operator[](size_type pos) const noexcept { return test(pos); }
+
+  reference operator[](size_type pos) noexcept { return reference{*this, pos}; }
 
   void resize(size_type count, bool value = false) {
     if (size_ < count) {
