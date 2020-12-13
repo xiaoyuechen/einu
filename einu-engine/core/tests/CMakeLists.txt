@@ -1,15 +1,16 @@
 add_executable(
   core-tests
+  "src/bit_test.cc"
   "src/class_index_test.cc"
+  "src/component_pool_test.cc"
+  "src/einu_engine_test.cc"
+  "src/entity_manager_test.cc"
+  "src/entity_view_test.cc"
+  "src/need_list_test.cc"
   "src/object_pool_test.cc"
   "src/xnent_mask_test.cc"
-  "src/einu_engine_test.cc"
-  "src/need_list_test.cc"
-  "src/xnents.h"
-  "src/component_pool_test.cc"
   "src/xnent_type_id_register_test.cc"
-  "src/entity_manager_test.cc"
-  "src/entity_view_test.cc")
+  "src/xnents.h")
 
 set_target_properties(core-tests PROPERTIES FOLDER "einu-engine")
 
