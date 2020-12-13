@@ -1,9 +1,9 @@
-option(FETCH_GOOGLETEST OFF)
-option(FETCH_EASY_PROFILER OFF)
+option(EINU_FETCH_GOOGLETEST OFF)
+option(EINU_FETCH_EASY_PROFILER OFF)
 
 include(FetchContent)
 
-if(FETCH_GOOGLETEST)
+if(EINU_FETCH_GOOGLETEST)
   FetchContent_Declare(
     googletest
     GIT_REPOSITORY https://github.com/google/googletest.git
@@ -59,7 +59,7 @@ add_subdirectory(stb)
 #
 # FetchContent_MakeAvailable(assimp)
 
-if(FETCH_EASY_PROFILER)
+if(EINU_FETCH_EASY_PROFILER)
   FetchContent_Declare(
     easy-profiler
     GIT_REPOSITORY https://github.com/yse/easy_profiler.git
