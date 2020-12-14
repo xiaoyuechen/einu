@@ -185,8 +185,9 @@ class DynamicPool {
     auto free_pos = pools_bit_array_.countl_zero();
     assert(free_pos.has_value() &&
            "no pool is free (maybe growth function is wrong)");
-    auto& obj = pools_[*free_pos].Acquire();
-    pools_bit_array_[*free_pos] = pools_[*free_pos].FreePos().has_value();
+    auto& pool = pools_[*free_pos];
+    auto&& obj = pool.Acquire();
+    pools_bit_array_[*free_pos] = pool.FreePos().has_value();
     return obj;
   }
 
