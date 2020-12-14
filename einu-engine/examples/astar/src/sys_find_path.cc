@@ -18,11 +18,11 @@
 
 #include "src/sys_find_path.h"
 
-#include <einu-engine/graphics/cmp_sprite.h>
-
 #include <algorithm>
 #include <array>
 #include <vector>
+
+#include "einu-engine/graphics/cmp_sprite.h"
 
 namespace astar {
 namespace sys {

@@ -18,9 +18,8 @@
 
 #pragma once
 
-#include <einu-engine/core/xnent.h>
-
-#include <glm/glm.hpp>
+#include "einu-engine/core/xnent.h"
+#include "glm/glm.hpp"
 
 namespace einu {
 namespace cmp {

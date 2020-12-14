@@ -18,11 +18,11 @@
 
 #pragma once
 
-#include <einu-engine/core/eid.h>
-#include <einu-engine/core/util/enum.h>
-
 #include <cstdint>
-#include <glm/glm.hpp>
+
+#include "einu-engine/core/eid.h"
+#include "einu-engine/core/util/enum.h"
+#include "glm/glm.hpp"
 
 namespace lol {
 

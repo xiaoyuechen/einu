@@ -20,8 +20,9 @@
 
 #include <array>
 #include <cstdint>
-#include <glm/glm.hpp>
 #include <initializer_list>
+
+#include "glm/glm.hpp"
 
 namespace einu {
 namespace graphics {

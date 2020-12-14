@@ -18,13 +18,12 @@
 
 #pragma once
 
-#include <einu-engine/core/util/enum.h>
-
 #include <array>
 #include <bitset>
-#include <glm/glm.hpp>
 
+#include "einu-engine/core/util/enum.h"
 #include "einu-engine/window/internal/glfw_input_def.h"
+#include "glm/glm.hpp"
 
 namespace einu {
 namespace window {

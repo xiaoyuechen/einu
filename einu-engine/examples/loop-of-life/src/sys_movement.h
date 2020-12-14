@@ -18,12 +18,11 @@
 
 #pragma once
 
-#include <einu-engine/common/cmp_movement.h>
-#include <einu-engine/common/cmp_transform.h>
-#include <einu-engine/common/sgl_time.h>
-
 #include <algorithm>
 
+#include "einu-engine/common/cmp_movement.h"
+#include "einu-engine/common/cmp_transform.h"
+#include "einu-engine/common/sgl_time.h"
 #include "src/sgl_world_state.h"
 
 namespace lol {

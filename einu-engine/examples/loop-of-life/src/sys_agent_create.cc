@@ -18,13 +18,12 @@
 
 #include "src/sys_agent_create.h"
 
-#include <einu-engine/ai/cmp_destination.h>
-#include <einu-engine/common/cmp_movement.h>
-#include <einu-engine/common/cmp_transform.h>
-#include <einu-engine/common/random.h>
-#include <einu-engine/core/util/enum.h>
-#include <einu-engine/graphics/cmp_sprite.h>
-
+#include "einu-engine/ai/cmp_destination.h"
+#include "einu-engine/common/cmp_movement.h"
+#include "einu-engine/common/cmp_transform.h"
+#include "einu-engine/common/random.h"
+#include "einu-engine/core/util/enum.h"
+#include "einu-engine/graphics/cmp_sprite.h"
 #include "src/cmp_agent.h"
 #include "src/cmp_health.h"
 #include "src/sgl_world_state.h"

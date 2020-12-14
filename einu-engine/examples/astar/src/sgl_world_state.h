@@ -18,14 +18,13 @@
 
 #pragma once
 
-#include <einu-engine/common/grid.h>
-#include <einu-engine/core/eid.h>
-#include <einu-engine/core/xnent.h>
-
 #include <algorithm>
-#include <glm/glm.hpp>
 #include <vector>
 
+#include "einu-engine/common/grid.h"
+#include "einu-engine/core/eid.h"
+#include "einu-engine/core/xnent.h"
+#include "glm/glm.hpp"
 #include "src/cell.h"
 
 namespace astar {

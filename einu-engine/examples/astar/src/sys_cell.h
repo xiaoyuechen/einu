@@ -18,8 +18,7 @@
 
 #pragma once
 
-#include <einu-engine/graphics/cmp_sprite.h>
-
+#include "einu-engine/graphics/cmp_sprite.h"
 #include "src/cmp.h"
 #include "src/sgl_world_state.h"
 

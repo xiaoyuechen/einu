@@ -18,11 +18,11 @@
 
 #pragma once
 
-#include <einu-engine/core/eid.h>
-#include <einu-engine/core/xnent.h>
-
-#include <glm/glm.hpp>
 #include <vector>
+
+#include "einu-engine/core/eid.h"
+#include "einu-engine/core/xnent.h"
+#include "glm/glm.hpp"
 
 namespace astar {
 namespace cmp {

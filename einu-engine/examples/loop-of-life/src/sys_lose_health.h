@@ -18,8 +18,7 @@
 
 #pragma once
 
-#include <einu-engine/common/sgl_time.h>
-
+#include "einu-engine/common/sgl_time.h"
 #include "src/cmp_health.h"
 
 namespace lol {

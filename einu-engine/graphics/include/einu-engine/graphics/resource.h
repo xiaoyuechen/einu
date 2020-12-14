@@ -20,10 +20,10 @@
 
 #include <array>
 #include <cstdint>
-#include <glm/glm.hpp>
 #include <string>
 
 #include "einu-engine/graphics/vertex.h"
+#include "glm/glm.hpp"
 
 namespace einu {
 namespace graphics {

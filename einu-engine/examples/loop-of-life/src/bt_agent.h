@@ -18,10 +18,10 @@
 
 #pragma once
 
-#include <einu-engine/ai/behavior_tree.h>
-#include <einu-engine/ai/bt_move_to.h>
-#include <einu-engine/common/sgl_time.h>
-#include <einu-engine/core/i_entity_manager.h>
+#include "einu-engine/ai/behavior_tree.h"
+#include "einu-engine/ai/bt_move_to.h"
+#include "einu-engine/common/sgl_time.h"
+#include "einu-engine/core/i_entity_manager.h"
 
 namespace lol {
 namespace ai {

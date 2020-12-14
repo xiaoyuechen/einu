@@ -18,11 +18,10 @@
 
 #pragma once
 
-#include <einu-engine/core/xnent.h>
-
 #include <cstddef>
 #include <string>
 
+#include "einu-engine/core/xnent.h"
 #include "einu-engine/window/input.h"
 
 struct GLFWwindow;

@@ -18,10 +18,9 @@
 
 #pragma once
 
-#include <einu-engine/common/cmp_movement.h>
-#include <einu-engine/common/cmp_transform.h>
-#include <einu-engine/core/i_entity_manager.h>
-
+#include "einu-engine/common/cmp_movement.h"
+#include "einu-engine/common/cmp_transform.h"
+#include "einu-engine/core/i_entity_manager.h"
 #include "src/cmp.h"
 #include "src/sgl_world_state.h"
 

@@ -18,13 +18,13 @@
 
 #include "einu-engine/graphics/sys_render.h"
 
-#include <einu-engine/window/gl_proc.h>
-#include <einu-engine/window/sys_window.h>
 #include <glad/glad.h>
 
 #include <sstream>
 
 #include "einu-engine/graphics/graphics_error.h"
+#include "einu-engine/window/gl_proc.h"
+#include "einu-engine/window/sys_window.h"
 
 namespace einu {
 namespace graphics {

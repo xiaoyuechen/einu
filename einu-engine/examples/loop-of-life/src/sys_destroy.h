@@ -18,8 +18,7 @@
 
 #pragma once
 
-#include <einu-engine/core/i_entity_manager.h>
-
+#include "einu-engine/core/i_entity_manager.h"
 #include "src/cmp_health.h"
 
 namespace lol {

@@ -18,17 +18,16 @@
 
 #pragma once
 
-#include <einu-engine/ai/cmp_destination.h>
-#include <einu-engine/common/cmp_movement.h>
-#include <einu-engine/common/cmp_transform.h>
-#include <einu-engine/common/sgl_time.h>
-#include <einu-engine/core/einu_engine.h>
-#include <einu-engine/core/xnent_list.h>
-#include <einu-engine/graphics/cmp_sprite.h>
-#include <einu-engine/graphics/sgl_resource_table.h>
-#include <einu-engine/graphics/sgl_sprite_batch.h>
-#include <einu-engine/window/cmp_window.h>
-
+#include "einu-engine/ai/cmp_destination.h"
+#include "einu-engine/common/cmp_movement.h"
+#include "einu-engine/common/cmp_transform.h"
+#include "einu-engine/common/sgl_time.h"
+#include "einu-engine/core/einu_engine.h"
+#include "einu-engine/core/xnent_list.h"
+#include "einu-engine/graphics/cmp_sprite.h"
+#include "einu-engine/graphics/sgl_resource_table.h"
+#include "einu-engine/graphics/sgl_sprite_batch.h"
+#include "einu-engine/window/cmp_window.h"
 #include "src/cmp.h"
 #include "src/sgl_world_state.h"
 

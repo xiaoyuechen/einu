@@ -18,9 +18,9 @@
 
 #pragma once
 
-#include <einu-engine/core/xnent.h>
-
 #include <chrono>
+
+#include "einu-engine/core/xnent.h"
 
 namespace einu {
 namespace sgl {

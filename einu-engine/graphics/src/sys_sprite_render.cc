@@ -20,7 +20,7 @@
 
 #include <glad/glad.h>
 
-#include <glm/gtc/type_ptr.hpp>
+#include "glm/gtc/type_ptr.hpp"
 
 namespace einu {
 namespace graphics {

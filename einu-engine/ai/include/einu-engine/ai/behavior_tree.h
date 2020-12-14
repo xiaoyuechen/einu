@@ -18,15 +18,15 @@
 
 #pragma once
 
-#include <absl/container/flat_hash_map.h>
-#include <einu-engine/core/eid.h>
-#include <einu-engine/core/xnent_list.h>
-#include <einu-engine/core/xnent_type_id.h>
-
 #include <memory>
 #include <tuple>
 #include <utility>
 #include <vector>
+
+#include "absl/container/flat_hash_map.h"
+#include "einu-engine/core/eid.h"
+#include "einu-engine/core/xnent_list.h"
+#include "einu-engine/core/xnent_type_id.h"
 
 namespace einu {
 namespace ai {

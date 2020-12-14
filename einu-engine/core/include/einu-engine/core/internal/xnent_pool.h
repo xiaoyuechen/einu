@@ -18,8 +18,6 @@
 
 #pragma once
 
-#include <einu-engine/core/util/object_pool.h>
-
 #include <array>
 #include <cassert>
 #include <memory>
@@ -27,6 +25,7 @@
 #include <variant>
 
 #include "einu-engine/core/i_xnent_pool.h"
+#include "einu-engine/core/util/object_pool.h"
 #include "einu-engine/core/xnent_list.h"
 
 namespace einu {

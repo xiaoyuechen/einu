@@ -16,14 +16,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#include <einu-engine/core/internal/xnent_pool.h>
-#include <einu-engine/core/tmp/static_algo.h>
-#include <einu-engine/core/tmp/type_list.h>
-#include <gtest/gtest.h>
-
 #include <tuple>
 #include <vector>
 
+#include "einu-engine/core/internal/xnent_pool.h"
+#include "einu-engine/core/tmp/static_algo.h"
+#include "einu-engine/core/tmp/type_list.h"
+#include "gtest/gtest.h"
 #include "src/xnents.h"
 
 namespace einu {

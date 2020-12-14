@@ -18,12 +18,11 @@
 
 #pragma once
 
-#include <einu-engine/core/xnent.h>
-
-#include <glm/glm.hpp>
 #include <string>
 
+#include "einu-engine/core/xnent.h"
 #include "einu-engine/graphics/resource.h"
+#include "glm/glm.hpp"
 
 namespace einu {
 namespace graphics {

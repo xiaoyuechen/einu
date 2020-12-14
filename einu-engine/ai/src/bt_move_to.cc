@@ -18,10 +18,9 @@
 
 #include "einu-engine/ai/bt_move_to.h"
 
-#include <einu-engine/common/cmp_movement.h>
-#include <einu-engine/common/cmp_transform.h>
-
 #include "einu-engine/ai/cmp_destination.h"
+#include "einu-engine/common/cmp_movement.h"
+#include "einu-engine/common/cmp_transform.h"
 
 namespace einu {
 namespace ai {

@@ -18,16 +18,15 @@
 
 #include "src/bt_agent.h"
 
-#include <einu-engine/ai/cmp_destination.h>
-#include <einu-engine/common/cmp_movement.h>
-#include <einu-engine/common/cmp_transform.h>
-#include <einu-engine/common/random.h>
-#include <einu-engine/common/sgl_time.h>
-
 #include <limits>
 #include <optional>
 #include <utility>
 
+#include "einu-engine/ai/cmp_destination.h"
+#include "einu-engine/common/cmp_movement.h"
+#include "einu-engine/common/cmp_transform.h"
+#include "einu-engine/common/random.h"
+#include "einu-engine/common/sgl_time.h"
 #include "src/cmp_agent.h"
 #include "src/cmp_health.h"
 #include "src/sys_agent_create.h"

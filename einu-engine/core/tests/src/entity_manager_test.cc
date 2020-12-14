@@ -16,13 +16,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#include <einu-engine/core/entity_view.h>
-#include <einu-engine/core/internal/eid_pool.h>
-#include <einu-engine/core/internal/entity_manager.h>
-#include <einu-engine/core/internal/xnent_pool.h>
-#include <einu-engine/core/internal/xnent_type_id_register.h>
-#include <gtest/gtest.h>
+#include "einu-engine/core/internal/entity_manager.h"
 
+#include "einu-engine/core/entity_view.h"
+#include "einu-engine/core/internal/eid_pool.h"
+#include "einu-engine/core/internal/xnent_pool.h"
+#include "einu-engine/core/internal/xnent_type_id_register.h"
+#include "gtest/gtest.h"
 #include "src/xnents.h"
 
 namespace einu {

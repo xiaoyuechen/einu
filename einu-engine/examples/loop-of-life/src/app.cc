@@ -18,19 +18,18 @@
 
 #include "src/app.h"
 
-#include <einu-engine/common/sys_movement.h>
-#include <einu-engine/common/sys_time.h>
-#include <einu-engine/core/einu_engine.h>
-#include <einu-engine/core/entity_view.h>
-#include <einu-engine/graphics/cmp_camera.h>
-#include <einu-engine/graphics/sys_render.h>
-#include <einu-engine/graphics/sys_resource.h>
-#include <einu-engine/graphics/sys_sprite_render.h>
-#include <einu-engine/window/sys_window.h>
-
 #include <iostream>
 #include <random>
 
+#include "einu-engine/common/sys_movement.h"
+#include "einu-engine/common/sys_time.h"
+#include "einu-engine/core/einu_engine.h"
+#include "einu-engine/core/entity_view.h"
+#include "einu-engine/graphics/cmp_camera.h"
+#include "einu-engine/graphics/sys_render.h"
+#include "einu-engine/graphics/sys_resource.h"
+#include "einu-engine/graphics/sys_sprite_render.h"
+#include "einu-engine/window/sys_window.h"
 #include "src/bt_agent.h"
 #include "src/engine_policy.h"
 #include "src/sys_agent_create.h"

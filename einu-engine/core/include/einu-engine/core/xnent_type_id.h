@@ -18,11 +18,10 @@
 
 #pragma once
 
-#include <einu-engine/core/rtti/type_id.h>
-
 #include <cassert>
 #include <type_traits>
 
+#include "einu-engine/core/rtti/type_id.h"
 #include "einu-engine/core/xnent.h"
 
 namespace einu {

@@ -18,10 +18,8 @@
 
 #include "src/sys_starchaser.h"
 
-#include <einu-engine/common/sgl_time.h>
-
-#include <glm/glm.hpp>
-
+#include "einu-engine/common/sgl_time.h"
+#include "glm/glm.hpp"
 #include "src/sys_find_path.h"
 
 namespace astar {

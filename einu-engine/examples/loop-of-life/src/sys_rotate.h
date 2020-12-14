@@ -18,8 +18,8 @@
 
 #pragma once
 
-#include <einu-engine/common/cmp_movement.h>
-#include <einu-engine/common/cmp_transform.h>
+#include "einu-engine/common/cmp_movement.h"
+#include "einu-engine/common/cmp_transform.h"
 
 namespace lol {
 namespace sys {

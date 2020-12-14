@@ -19,11 +19,11 @@
 #pragma once
 
 #include <cstdint>
-#include <glm/glm.hpp>
-#include <glm/gtx/quaternion.hpp>
-#include <glm/gtx/transform.hpp>
 
 #include "einu-engine/core/xnent.h"
+#include "glm/glm.hpp"
+#include "glm/gtx/quaternion.hpp"
+#include "glm/gtx/transform.hpp"
 
 namespace einu {
 namespace graphics {
