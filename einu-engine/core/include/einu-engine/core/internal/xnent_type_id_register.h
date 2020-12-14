@@ -32,14 +32,14 @@ class XnentTypeIDRegister {
   XnentTypeIDRegister() noexcept {
     RequireUnique();
 
-    tmp::StaticFor<kCount>([](auto i) {
+    tmp::static_for<0, kCount>([](auto i) {
       using Xnent = typename tmp::TypeAt<TypeList, i>::Type;
       SetXnentTypeID<Xnent>(XnentTypeID{i});
     });
   }
 
   ~XnentTypeIDRegister() noexcept {
-    tmp::StaticFor<kCount>([](auto i) {
+    tmp::static_for<0, kCount>([](auto i) {
       using Xnent = typename tmp::TypeAt<TypeList, i>::Type;
       ResetXnentTypeID<Xnent>();
     });
@@ -50,7 +50,7 @@ class XnentTypeIDRegister {
   static constexpr std::size_t kCount = tmp::Size<TypeList>::value;
 
   static constexpr void RequireUnique() noexcept {
-    tmp::StaticFor<kCount>([](auto i) {
+    tmp::static_for<0, kCount>([](auto i) {
       using Xnent = typename tmp::TypeAt<TypeList, i>::Type;
       static_assert(tmp::CountType<TypeList, Xnent>::value == 1 &&
                     "Xnents must be unique");

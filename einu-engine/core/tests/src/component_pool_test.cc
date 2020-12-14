@@ -53,7 +53,7 @@ struct ComponentPoolTest : public testing::Test {
 };
 
 TEST_F(ComponentPoolTest, a_new_pool_is_empty) {
-  tmp::StaticFor<kCount>([&](auto i) {
+  tmp::static_for<0, kCount>([&](auto i) {
     using Comp =
         typename tmp::TypeAt<typename ToTypeList<ComponentList>::Type, i>::Type;
     EXPECT_EQ(pool.OnePoolSize(XnentTypeID{i}), 0);
@@ -61,7 +61,7 @@ TEST_F(ComponentPoolTest, a_new_pool_is_empty) {
 }
 
 TEST_F(ComponentPoolTest, add_policy_will_grow_pool_size) {
-  tmp::StaticFor<kCount>([&](auto i) {
+  tmp::static_for<0, kCount>([&](auto i) {
     pool.AddPolicy(std::move(std::get<i>(policy_tuple)), XnentTypeID{i});
     using Comp =
         typename tmp::TypeAt<typename ToTypeList<ComponentList>::Type, i>::Type;
@@ -72,7 +72,7 @@ TEST_F(ComponentPoolTest, add_policy_will_grow_pool_size) {
 
 TEST_F(ComponentPoolTest,
        pool_size_would_grow_correctly_only_after_aquired_more_than_init_size) {
-  tmp::StaticFor<kCount>([&](auto i) {
+  tmp::static_for<0, kCount>([&](auto i) {
     using Comp =
         typename tmp::TypeAt<typename ToTypeList<ComponentList>::Type, i>::Type;
     auto&& policy = std::get<ComponentPoolPolicy<Comp>>(policy_tuple);
@@ -90,7 +90,7 @@ TEST_F(ComponentPoolTest,
 }
 
 TEST_F(ComponentPoolTest, acquire_release_aquire_would_not_make_pool_grow) {
-  tmp::StaticFor<kCount>([&](auto i) {
+  tmp::static_for<0, kCount>([&](auto i) {
     using Comp =
         typename tmp::TypeAt<typename ToTypeList<ComponentList>::Type, i>::Type;
     auto&& policy = std::get<ComponentPoolPolicy<Comp>>(policy_tuple);

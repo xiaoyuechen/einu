@@ -25,16 +25,18 @@ namespace einu {
 namespace tmp {
 
 namespace internal {
-template <typename Predicate, std::size_t... Is>
-constexpr void StaticForImpl(Predicate&& pred, std::index_sequence<Is...>) {
-  (pred(std::integral_constant<std::size_t, Is>{}), ...);
+
+template <std::size_t begin, typename Fn, std::size_t... Is>
+constexpr void static_for_impl(Fn&& fn, std::index_sequence<Is...>) {
+  (fn(std::integral_constant<std::size_t, begin + Is>{}), ...);
 }
+
 }  // namespace internal
 
-template <std::size_t count, typename Predicate>
-constexpr void StaticFor(Predicate&& pred) {
-  internal::StaticForImpl(std::forward<Predicate>(pred),
-                          std::make_index_sequence<count>{});
+template <std::size_t begin, std::size_t end, typename Fn>
+constexpr void static_for(Fn&& fn) {
+  internal::static_for_impl<begin>(std::forward<Fn>(fn),
+                                   std::make_index_sequence<end - begin>{});
 }
 
 }  // namespace tmp
