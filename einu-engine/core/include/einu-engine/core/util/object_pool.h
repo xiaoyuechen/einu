@@ -174,6 +174,7 @@ class DynamicPool {
     } else {
       pools_.emplace_back(delta_size);
     }
+    pools_bit_array_.resize(pools_bit_array_.size() + delta_size, true);
   }
 
   [[nodiscard]] reference Acquire() {
@@ -181,16 +182,12 @@ class DynamicPool {
       GrowExtra(growth_(Size()));
     }
 
-    std::size_t free_pos;
-    auto free_pool_it = std::find_if(pools_.begin(), pools_.end(),
-                                     [&free_pos](const auto& pool) {
-                                       auto free_pos_op = pool.FreePos();
-                                       free_pos = free_pos_op.value_or(0);
-                                       return free_pos_op.has_value();
-                                     });
-    assert(free_pool_it != pools_.end() &&
+    auto free_pos = pools_bit_array_.countl_zero();
+    assert(free_pos.has_value() &&
            "no pool is free (maybe growth function is wrong)");
-    return free_pool_it->Acquire(free_pos);
+    auto& obj = pools_[*free_pos].Acquire();
+    pools_bit_array_[*free_pos] = pools_[*free_pos].FreePos().has_value();
+    return obj;
   }
 
   void Release(const_reference obj) noexcept {
@@ -199,6 +196,7 @@ class DynamicPool {
                      [&obj](const auto& pool) { return pool.Has(obj); });
     assert(pool_it != pools_.end() && "object does not belong to this pool");
     pool_it->Release(obj);
+    pools_bit_array_.set(pool_it - pools_.begin());
   }
 
   size_type Size() const noexcept {
@@ -211,6 +209,7 @@ class DynamicPool {
     value_.reset();
     growth_ = DefaultGrowth;
     pools_.clear();
+    pools_bit_array_.clear();
   }
 
  private:
@@ -226,6 +225,7 @@ class DynamicPool {
   std::unique_ptr<value_type> value_ = nullptr;
   GrowthFunc growth_;
   PoolList pools_;
+  BitVector pools_bit_array_;
 };
 
 }  // namespace util

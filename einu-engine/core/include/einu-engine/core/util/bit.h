@@ -121,12 +121,14 @@ class BitVector {
     friend class BitVector;
   };
 
-  static constexpr const std::size_t kWordBits = sizeof(size_type) * 8;
+  static constexpr const size_type kWordBits = sizeof(size_type) * 8;
 
   explicit BitVector(size_type count = 0, bool value = false)
       : mask_(BitToWordCount(count), value ? ~0 : 0), size_{count} {}
 
   size_type size() const noexcept { return size_; }
+
+  size_type capacity() const noexcept { return mask_.size() * kWordBits; }
 
   std::optional<size_type> countl_zero() const noexcept {
     auto clz = CountLeftZero(mask_.data(), mask_.data() + mask_.size());
@@ -155,19 +157,20 @@ class BitVector {
 
   void resize(size_type count, bool value = false) {
     if (size_ < count) {
-      auto bit_vec = BitVector{count, value};
-      std::copy(mask_.begin(), mask_.end(), bit_vec.mask_.begin());
-      auto end_mask = ~size_type(0);
-      end_mask >>= (size_ % kWordBits);
-      if (value)
-        bit_vec.mask_[size_ / kWordBits] |= end_mask;
-      else
-        bit_vec.mask_[size_ / kWordBits] &= ~end_mask;
-      *this = std::move(bit_vec);
+      mask_.resize(BitToWordCount(count), value ? -1 : 0);
+      FixGrowthBorder(size_, value);
+      size_ = count;
     } else if (size_ > count) {
       size_ = count;
       mask_.resize(BitToWordCount(count));
     }
+  }
+
+  void push_back(bool value) { resize(size_ + 1, value); }
+
+  void clear() noexcept {
+    mask_.clear();
+    size_ = 0;
   }
 
  private:
@@ -177,6 +180,15 @@ class BitVector {
 
   constexpr size_type BitToWordCount(size_type count) const noexcept {
     return (count + kWordBits - 1) / kWordBits;
+  }
+
+  void FixGrowthBorder(size_type old_size, bool value) noexcept {
+    auto end_mask = ~size_type(0);
+    end_mask >>= (old_size % kWordBits);
+    if (value)
+      mask_[old_size / kWordBits] |= end_mask;
+    else
+      mask_[old_size / kWordBits] &= ~end_mask;
   }
 
   std::vector<size_type> mask_;
