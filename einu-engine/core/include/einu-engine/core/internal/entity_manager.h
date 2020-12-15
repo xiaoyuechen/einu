@@ -21,7 +21,6 @@
 #include <algorithm>
 #include <cassert>
 #include <map>
-#include <memory>
 
 #include "einu-engine/core/i_entity_manager.h"
 #include "einu-engine/core/util/object_pool.h"
@@ -46,7 +45,7 @@ class EntityManager final : public IEntityManager {
 
   using EntityTable = std::map<EID, EntityData>;
   using EntityDataPool = util::DynamicPool<ComponentMask, XnentTable>;
-  using SinglenentTable = std::array<std::unique_ptr<Xnent>, max_single>;
+  using SinglenentTable = std::array<Xnent, max_single>;
 
   void SetEIDPoolImpl(IEIDPool& eid_pool) noexcept override {
     assert(!eid_pool_ && "eid pool is already set");
