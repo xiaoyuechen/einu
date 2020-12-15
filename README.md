@@ -10,8 +10,8 @@ The repository contains the EINU Engine C++ library code. EINU Engine is an open
 - [Links](#links)
 
 <a name="about"></a>
-## About Abseil
+## About EINU
 
-EINU is not Unity/Unreal. EINU is now uncomparable to Unity/Unreal.
+EINU is not Unity/Unreal.
 
 While einu does not have very extensive functionalities at the moment, it is small, clean, efficient and easy to use.
