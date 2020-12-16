@@ -39,7 +39,7 @@ void FlushCellBuffer(const sgl::WorldState& world_state,
 
 bool IsRelevant(const AgentInfo& agent_info, const glm::vec2& pos,
                 const cmp::Sense& sense_comp, einu::EID eid) {
-  using namespace einu::util;  // NOLINT
+  using namespace bpp;  // NOLINT
   if (eid == agent_info.eid) return false;
   if ((agent_info.type & sense_comp.relevant_type_signature) ==
       agent_info.type) {

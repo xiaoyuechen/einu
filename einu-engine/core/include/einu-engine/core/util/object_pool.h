@@ -28,7 +28,7 @@
 #include <utility>
 #include <vector>
 
-#include "einu-engine/core/util/bit.h"
+#include "bitplusplus/bit_vector.h"
 
 namespace einu {
 namespace util {
@@ -57,7 +57,7 @@ class FixedPoolImpl {
 
   size_type Size() const noexcept { return bit_arr_.size(); }
   std::optional<size_type> FreePos() const noexcept {
-    return bit_arr_.countl_zero();
+    return bit_arr_.CountZero<bpp::From::Left>();
   }
 
   bool Has(const_reference obj) const noexcept {
@@ -89,7 +89,7 @@ class FixedPoolImpl {
   using ObjectArray = std::vector<T>;
 
   std::tuple<ObjectArray<Ts>...> object_arr_tuple_;
-  util::BitVector bit_arr_;
+  bpp::BitVector bit_arr_;
 };
 
 }  // namespace internal
@@ -182,7 +182,7 @@ class DynamicPool {
       GrowExtra(growth_(Size()));
     }
 
-    auto free_pos = pools_bit_array_.countl_zero();
+    auto free_pos = pools_bit_array_.CountZero<bpp::From::Left>();
     assert(free_pos.has_value() &&
            "no pool is free (maybe growth function is wrong)");
     auto& pool = pools_[*free_pos];
@@ -197,7 +197,7 @@ class DynamicPool {
                      [&obj](const auto& pool) { return pool.Has(obj); });
     assert(pool_it != pools_.end() && "object does not belong to this pool");
     pool_it->Release(obj);
-    pools_bit_array_.set(pool_it - pools_.begin());
+    pools_bit_array_.set<bpp::From::Left>(pool_it - pools_.begin());
   }
 
   size_type Size() const noexcept {
@@ -226,7 +226,7 @@ class DynamicPool {
   std::unique_ptr<value_type> value_ = nullptr;
   GrowthFunc growth_;
   PoolList pools_;
-  BitVector pools_bit_array_;
+  bpp::BitVector pools_bit_array_;
 };
 
 }  // namespace util

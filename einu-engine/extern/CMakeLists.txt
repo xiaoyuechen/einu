@@ -3,6 +3,12 @@ option(EINU_FETCH_EASY_PROFILER OFF)
 
 include(FetchContent)
 
+FetchContent_Declare(
+  bitplusplus
+  GIT_REPOSITORY https://github.com/xiaoyuechen/bitplusplus.git
+  GIT_TAG v0.1.1)
+FetchContent_MakeAvailable(bitplusplus)
+
 if(EINU_FETCH_GOOGLETEST)
   FetchContent_Declare(
     googletest

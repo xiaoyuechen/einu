@@ -1,6 +1,5 @@
 add_executable(
   core-tests
-  "src/bit_test.cc"
   "src/class_index_test.cc"
   "src/component_pool_test.cc"
   "src/einu_engine_test.cc"

@@ -18,11 +18,11 @@
 
 #include "src/sys_agent_create.h"
 
+#include "bitplusplus/enum.h"
 #include "einu-engine/ai/cmp_destination.h"
 #include "einu-engine/common/cmp_movement.h"
 #include "einu-engine/common/cmp_transform.h"
 #include "einu-engine/common/random.h"
-#include "einu-engine/core/util/enum.h"
 #include "einu-engine/graphics/cmp_sprite.h"
 #include "src/cmp_agent.h"
 #include "src/cmp_health.h"
@@ -110,7 +110,7 @@ einu::EID CreateSheep(einu::IEntityManager& ett_mgr,
   reproduce.transform = transform;
 
   auto& sense = ett_mgr.AddComponent<cmp::Sense>(ett);
-  using einu::util::operator|;
+  using bpp::operator|;
   sense.relevant_type_signature =
       AgentType::Wolf | AgentType::Grass | AgentType::Herder;
   sense.sense_radius = 200.f;
@@ -165,7 +165,7 @@ einu::EID CreateWolf(einu::IEntityManager& ett_mgr,
   reproduce.transform = transform;
 
   auto& sense = ett_mgr.AddComponent<cmp::Sense>(ett);
-  using einu::util::operator|;
+  using bpp::operator|;
   sense.relevant_type_signature = AgentType::Sheep | AgentType::Herder;
   sense.sense_radius = 200.f;
 
@@ -207,7 +207,7 @@ einu::EID CreateGrass(einu::IEntityManager& ett_mgr,
   reproduce.transform = transform;
 
   auto& sense = ett_mgr.AddComponent<cmp::Sense>(ett);
-  using einu::util::operator|;
+  using bpp::operator|;
   sense.relevant_type_signature =
       AgentType::Grass | AgentType::Herder | AgentType::Sheep | AgentType::Wolf;
   sense.sense_radius = 15.f;

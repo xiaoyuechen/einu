@@ -155,7 +155,7 @@ Result FindPredator::Run(const ArgPack& args) {
       einu::XnentList<cmp::Memory, cmp::Evade, einu::cmp::Transform>{});
   evade_comp.predators.clear();
   for (auto&& agent_info : mem_comp.memory) {
-    using einu::util::operator&;
+    using bpp::operator&;
     if ((evade_comp.predator_signature & agent_info.type) == agent_info.type) {
       evade_comp.predators.emplace_back(agent_info);
     }
@@ -172,7 +172,7 @@ std::optional<AgentInfo> FindClosestPrey(const cmp::Memory& mem_comp,
   auto prey_distance2 =
       std::pair{AgentInfo{}, std::numeric_limits<float>::max()};
   for (auto&& agent_info : mem_comp.memory) {
-    using einu::util::operator&;
+    using bpp::operator&;
     if ((prey_signature & agent_info.type) == agent_info.type) {
       auto distance2 = glm::distance2(agent_info.pos, pos);
       if (distance2 < prey_distance2.second) {

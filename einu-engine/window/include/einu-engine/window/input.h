@@ -21,7 +21,7 @@
 #include <array>
 #include <bitset>
 
-#include "einu-engine/core/util/enum.h"
+#include "bitplusplus/enum.h"
 #include "einu-engine/window/internal/glfw_input_def.h"
 #include "glm/glm.hpp"
 
@@ -271,13 +271,13 @@ struct InputBuffer {
 
 }  // namespace input
 }  // namespace window
+}  // namespace einu
 
-namespace util {
+namespace bpp {
 
 template <>
-struct EnableBitMaskOperators<window::input::ModifierKeyFlag> {
+struct EnableBitWiseOperators<einu::window::input::ModifierKeyFlag> {
   static constexpr bool enable = true;
 };
 
-}  // namespace util
-}  // namespace einu
+}  // namespace bpp

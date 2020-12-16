@@ -20,8 +20,8 @@
 
 #include <cstdint>
 
+#include "bitplusplus/enum.h"
 #include "einu-engine/core/eid.h"
-#include "einu-engine/core/util/enum.h"
 #include "glm/glm.hpp"
 
 namespace lol {
@@ -50,13 +50,11 @@ constexpr bool IsValid(const AgentInfo& agent_info) noexcept {
 
 }  // namespace lol
 
-namespace einu {
-namespace util {
+namespace bpp {
 
 template <>
-struct EnableBitMaskOperators<lol::AgentType> {
+struct EnableBitWiseOperators<lol::AgentType> {
   static constexpr bool enable = true;
 };
 
-}  // namespace util
-}  // namespace einu
+}  // namespace bpp

@@ -83,7 +83,7 @@ void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
       input_buffer.GetMouseButton(static_cast<input::MouseButton>(button));
   button_state = action;
   auto&& mods_state = input_buffer.GetModifierKeyFlag();
-  using util::operator|=;
+  using bpp::operator|=;
   mods_state |= static_cast<input::ModifierKeyFlag>(mods);
 }
 
@@ -94,7 +94,7 @@ void KeyCallback(GLFWwindow* window, int key, [[maybe_unused]] int scancode,
   auto&& key_state = input_buffer.GetKeyboardKey(key_enum);
   key_state = action;
   auto&& mods_state = input_buffer.GetModifierKeyFlag();
-  using util::operator|=;
+  using bpp::operator|=;
   mods_state |= static_cast<input::ModifierKeyFlag>(mods);
 }
 
