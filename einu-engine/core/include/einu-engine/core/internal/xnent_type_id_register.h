@@ -18,10 +18,10 @@
 
 #pragma once
 
-#include "einu-engine/core/tmp/static_algo.h"
-#include "einu-engine/core/tmp/type_list.h"
 #include "einu-engine/core/xnent_list.h"
 #include "einu-engine/core/xnent_type_id.h"
+#include "tplusplus/static_algo.h"
+#include "tplusplus/type_list.h"
 
 namespace einu {
 namespace internal {
@@ -32,27 +32,27 @@ class XnentTypeIDRegister {
   XnentTypeIDRegister() noexcept {
     RequireUnique();
 
-    tmp::static_for<0, kCount>([](auto i) {
-      using Xnent = typename tmp::TypeAt<TypeList, i>::Type;
+    tpp::static_for<0, kCount>([](auto i) {
+      using Xnent = typename tpp::TypeAt<TypeList, i>::Type;
       SetXnentTypeID<Xnent>(XnentTypeID{i});
     });
   }
 
   ~XnentTypeIDRegister() noexcept {
-    tmp::static_for<0, kCount>([](auto i) {
-      using Xnent = typename tmp::TypeAt<TypeList, i>::Type;
+    tpp::static_for<0, kCount>([](auto i) {
+      using Xnent = typename tpp::TypeAt<TypeList, i>::Type;
       ResetXnentTypeID<Xnent>();
     });
   }
 
  private:
   using TypeList = typename ToTypeList<XnentList>::Type;
-  static constexpr std::size_t kCount = tmp::Size<TypeList>::value;
+  static constexpr std::size_t kCount = tpp::Size<TypeList>::value;
 
   static constexpr void RequireUnique() noexcept {
-    tmp::static_for<0, kCount>([](auto i) {
-      using Xnent = typename tmp::TypeAt<TypeList, i>::Type;
-      static_assert(tmp::CountType<TypeList, Xnent>::value == 1 &&
+    tpp::static_for<0, kCount>([](auto i) {
+      using Xnent = typename tpp::TypeAt<TypeList, i>::Type;
+      static_assert(tpp::CountType<TypeList, Xnent>::value == 1 &&
                     "Xnents must be unique");
     });
   }

@@ -9,6 +9,12 @@ FetchContent_Declare(
   GIT_TAG v0.1.1)
 FetchContent_MakeAvailable(bitplusplus)
 
+FetchContent_Declare(
+  tplusplus
+  GIT_REPOSITORY https://github.com/xiaoyuechen/tplusplus.git
+  GIT_TAG origin/master)
+FetchContent_MakeAvailable(tplusplus)
+
 if(EINU_FETCH_GOOGLETEST)
   FetchContent_Declare(
     googletest

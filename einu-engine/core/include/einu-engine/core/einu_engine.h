@@ -50,10 +50,10 @@ class EinuEngine {
   using SinglenentList = typename EngineNeedList::SinglenentList;
 
   static constexpr std::size_t ComponentCount() noexcept {
-    return tmp::Size<typename ToTypeList<EngineComponentList>::Type>::value;
+    return tpp::Size<typename ToTypeList<EngineComponentList>::Type>::value;
   }
   static constexpr std::size_t SinglenentCount() noexcept {
-    return tmp::Size<typename ToTypeList<SinglenentList>::Type>::value;
+    return tpp::Size<typename ToTypeList<SinglenentList>::Type>::value;
   }
 
   EinuEngine() {

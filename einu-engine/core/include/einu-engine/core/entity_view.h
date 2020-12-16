@@ -62,8 +62,8 @@ class ComponentIterator<XnentList<Comps...>> {
  private:
   template <typename T>
   T& DeRef() const noexcept {
-    using TypeList = tmp::TypeList<Comps...>;
-    return static_cast<T&>(**std::next(itr_, tmp::IndexOf<TypeList, T>::value));
+    using TypeList = tpp::TypeList<Comps...>;
+    return static_cast<T&>(**std::next(itr_, tpp::IndexOf<TypeList, T>::value));
   }
 
   Itr itr_;

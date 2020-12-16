@@ -76,9 +76,9 @@ class XnentPool<XnentList<Xnents...>> final : public IXnentPool {
   XnentPool() : pool_table_{OneXnentPool<Xnents>{}...} {}
 
  private:
-  using TypeList = tmp::TypeList<Xnents...>;
+  using TypeList = tpp::TypeList<Xnents...>;
   using PoolVariant = std::variant<OneXnentPool<Xnents>...>;
-  using PoolTable = std::array<PoolVariant, tmp::Size<TypeList>::value>;
+  using PoolTable = std::array<PoolVariant, tpp::Size<TypeList>::value>;
 
   void AddPolicyImpl(size_type init_size, std::unique_ptr<Xnent> value,
                      GrowthFunc growth_func, XnentTypeID id) override {

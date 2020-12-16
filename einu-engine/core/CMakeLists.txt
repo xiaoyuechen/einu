@@ -6,7 +6,7 @@ add_library(einu::core ALIAS core)
 
 target_include_directories(core INTERFACE "include")
 
-target_link_libraries(core INTERFACE absl::flat_hash_map bitplusplus)
+target_link_libraries(core INTERFACE absl::flat_hash_map bitplusplus tplusplus)
 
 if(EINU_CORE_PROFILE)
   target_link_libraries(core INTERFACE easy_profiler)

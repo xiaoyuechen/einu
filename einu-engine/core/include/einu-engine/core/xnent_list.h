@@ -20,8 +20,8 @@
 
 #include <type_traits>
 
-#include "einu-engine/core/tmp/type_list.h"
 #include "einu-engine/core/xnent.h"
+#include "tplusplus/type_list.h"
 
 namespace einu {
 
@@ -36,9 +36,9 @@ struct ToTypeList;
 
 template <typename... Xnents>
 struct ToTypeList<XnentList<Xnents...>> {
-  using Type = tmp::TypeList<Xnents...>;
+  using Type = tpp::TypeList<Xnents...>;
 };
 
-// tmp::TypeList<Components...>;
+// tpp::TypeList<Components...>;
 
 }  // namespace einu
