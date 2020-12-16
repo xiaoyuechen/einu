@@ -12,7 +12,7 @@ FetchContent_MakeAvailable(bitplusplus)
 FetchContent_Declare(
   tplusplus
   GIT_REPOSITORY https://github.com/xiaoyuechen/tplusplus.git
-  GIT_TAG origin/master)
+  GIT_TAG v0.1)
 FetchContent_MakeAvailable(tplusplus)
 
 if(EINU_FETCH_GOOGLETEST)
