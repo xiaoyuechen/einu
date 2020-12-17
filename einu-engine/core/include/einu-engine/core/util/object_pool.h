@@ -46,10 +46,6 @@ class FixedPoolImpl {
   explicit FixedPoolImpl(size_type count)
       : object_arr_tuple_{ObjectArray<Ts>(count)...}, bit_arr_(count, true) {}
 
-  FixedPoolImpl(size_type count, const value_type& value)
-      : object_arr_tuple_{ObjectArray<Ts>(count, std::get<Ts>(value))...},
-        bit_arr_(count, true) {}
-
   FixedPoolImpl(const FixedPoolImpl&) = delete;
   FixedPoolImpl& operator=(const FixedPoolImpl&) = delete;
   FixedPoolImpl(FixedPoolImpl&&) = default;
@@ -78,9 +74,10 @@ class FixedPoolImpl {
         std::get<ObjectArray<Ts>>(object_arr_tuple_)[pos_hint]...);
   }
 
-  void Release(const_reference obj) noexcept {
+  void Release(reference obj) noexcept {
     auto idx = &std::get<0>(obj) - std::get<0>(object_arr_tuple_).data();
     assert(!bit_arr_[idx] && "object is already released");
+    obj = value_type{};
     bit_arr_[idx] = true;
   }
 
@@ -112,9 +109,6 @@ class FixedPool<T> {
 
   explicit FixedPool(size_type count) : pool_{count} {}
 
-  FixedPool(size_type count, const value_type& value)
-      : pool_{count, std::forward_as_tuple(value)} {}
-
   size_type Size() const noexcept { return pool_.Size(); }
   std::optional<size_type> FreePos() const noexcept { return pool_.FreePos(); }
   bool Has(const_reference obj) const noexcept { return pool_.Has(obj); }
@@ -124,7 +118,7 @@ class FixedPool<T> {
   [[nodiscard]] reference Acquire(size_type pos_hint) noexcept {
     return std::get<0>(pool_.Acquire(pos_hint));
   }
-  void Release(const_reference obj) noexcept {
+  void Release(reference obj) noexcept {
     pool_.Release(std::forward_as_tuple(obj));
   }
 
@@ -152,28 +146,16 @@ class DynamicPool {
   using const_reference = typename OnePool::const_reference;
   using GrowthFunc = std::function<size_type(size_type)>;
 
-  DynamicPool(size_type count = 0, std::unique_ptr<value_type> value = nullptr,
-              GrowthFunc growth = DefaultGrowth) {
-    SetValue(std::move(value));
+  explicit DynamicPool(size_type count = 0, GrowthFunc growth = DefaultGrowth) {
     SetGrowth(growth);
     GrowExtra(count);
   }
 
-  void SetValue(std::unique_ptr<value_type> value) noexcept {
-    value_ = std::move(value);
-  }
-
   void SetGrowth(GrowthFunc growth) noexcept { growth_ = growth; }
 
-  value_type* GetValue() const noexcept { return value_.get(); }
-
   void GrowExtra(size_type delta_size) {
-    if (delta_size == 0) return;
-    if (value_) {
-      pools_.emplace_back(delta_size, *value_);
-    } else {
-      pools_.emplace_back(delta_size);
-    }
+    if (delta_size <= 0) return;
+    pools_.emplace_back(delta_size);
     pools_bit_array_.resize(pools_bit_array_.size() + delta_size, true);
   }
 
@@ -191,7 +173,7 @@ class DynamicPool {
     return obj;
   }
 
-  void Release(const_reference obj) noexcept {
+  void Release(reference obj) noexcept {
     auto pool_it =
         std::find_if(pools_.begin(), pools_.end(),
                      [&obj](const auto& pool) { return pool.Has(obj); });
@@ -207,7 +189,6 @@ class DynamicPool {
   }
 
   void Clear() noexcept {
-    value_.reset();
     growth_ = DefaultGrowth;
     pools_.clear();
     pools_bit_array_.clear();
@@ -223,7 +204,6 @@ class DynamicPool {
     return true;
   }
 
-  std::unique_ptr<value_type> value_ = nullptr;
   GrowthFunc growth_;
   PoolList pools_;
   bpp::BitVector pools_bit_array_;

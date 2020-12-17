@@ -44,7 +44,7 @@ inline void Clear(EntityBuffer& buffer) noexcept {
 
 class IEntityManager {
  public:
-  using Policy = internal::PoolPolicy<>;
+  using Policy = internal::PoolPolicy;
 
   virtual ~IEntityManager() = default;
 

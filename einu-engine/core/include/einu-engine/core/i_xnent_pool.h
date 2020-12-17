@@ -30,15 +30,17 @@ namespace einu {
 class IXnentPool {
  public:
   using size_type = std::size_t;
-  template <typename Xnent>
-  using Policy = internal::PoolPolicy<Xnent>;
+  using Policy = internal::PoolPolicy;
 
   virtual ~IXnentPool() = default;
 
+  void AddPolicy(Policy&& policy, XnentTypeID id) {
+    AddPolicyImpl(policy.init_size, policy.growth_func, id);
+  }
+
   template <typename T>
-  void AddPolicy(Policy<T>&& policy, XnentTypeID id = GetXnentTypeID<T>()) {
-    AddPolicyImpl(policy.init_size, std::move(policy.value), policy.growth_func,
-                  id);
+  void AddPolicy(Policy&& policy) {
+    AddPolicyImpl(policy.init_size, policy.growth_func, GetXnentTypeID<T>());
   }
 
   template <typename T>
@@ -67,7 +69,7 @@ class IXnentPool {
   }
 
  protected:
-  virtual void AddPolicyImpl(size_type init_size, std::unique_ptr<Xnent> value,
+  virtual void AddPolicyImpl(size_type init_size,
                              internal::GrowthFunc growth_func,
                              XnentTypeID id) = 0;
   virtual Xnent& AcquireImpl(XnentTypeID id) = 0;

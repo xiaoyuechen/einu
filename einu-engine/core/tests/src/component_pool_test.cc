@@ -32,7 +32,7 @@ struct ComponentPoolTest : public testing::Test {
   using ComponentList = XnentList<C0, C1, C2, C3>;
   using ComponentPool = XnentPool<ComponentList>;
   template <typename Comp>
-  using ComponentPoolPolicy = ComponentPool::Policy<Comp>;
+  using ComponentPoolPolicy = ComponentPool::Policy;
   template <typename Complist>
   struct PolicyTuple;
   template <typename... Xnents>
@@ -45,8 +45,7 @@ struct ComponentPoolTest : public testing::Test {
   ComponentPool pool;
   PolicyTuple<ComponentList>::Type policy_tuple{
       ComponentPoolPolicy<C0>{0},
-      ComponentPoolPolicy<C1>{300, std::make_unique<C1>(),
-                              [](auto size) { return size * 3; }},
+      ComponentPoolPolicy<C1>{300, [](auto size) { return size * 3; }},
       ComponentPoolPolicy<C2>{123},
       ComponentPoolPolicy<C3>{666},
   };
@@ -75,7 +74,7 @@ TEST_F(ComponentPoolTest,
   tpp::static_for<0, kCount>([&](auto i) {
     using Comp =
         typename tpp::TypeAt<typename ToTypeList<ComponentList>::Type, i>::Type;
-    auto&& policy = std::get<ComponentPoolPolicy<Comp>>(policy_tuple);
+    auto&& policy = std::get<i>(policy_tuple);
     pool.AddPolicy(std::move(policy), XnentTypeID{i});
 
     auto init_size = policy.init_size;
@@ -93,7 +92,7 @@ TEST_F(ComponentPoolTest, acquire_release_aquire_would_not_make_pool_grow) {
   tpp::static_for<0, kCount>([&](auto i) {
     using Comp =
         typename tpp::TypeAt<typename ToTypeList<ComponentList>::Type, i>::Type;
-    auto&& policy = std::get<ComponentPoolPolicy<Comp>>(policy_tuple);
+    auto&& policy = std::get<i>(policy_tuple);
     pool.AddPolicy(std::move(policy), XnentTypeID{i});
 
     auto acquired = std::vector<Xnent*>{};
